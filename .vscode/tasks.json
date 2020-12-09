@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "jai build",
+            "type": "shell",
+            "command": "c:\\jai\\bin\\jai.exe",
+            "args": ["${file}"],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "clear": true,
+                "showReuseMessage": false
+            },
+            "problemMatcher": {
+                "owner": "jai",
+                "fileLocation": ["absolute"],
+                "pattern": {
+                  "regexp": "^[^:]*:(.*):(\\d+),(\\d+):\\s+(Warning|Error):\\s+(.*)$",
+                  "file": 1,
+                  "line": 2,
+                  "column": 3,
+                  "severity": 4,
+                  "message": 5,
+                  "code": 6
+                }
+            }
+        }
+    ]
+}
