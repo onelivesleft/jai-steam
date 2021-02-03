@@ -1,0 +1,1 @@
+steam_remotestorage : *ISteamRemoteStorage; 

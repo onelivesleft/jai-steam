@@ -1,0 +1,1 @@
+steam_gameserver : *ISteamGameServer; 

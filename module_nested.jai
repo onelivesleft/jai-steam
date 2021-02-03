@@ -18,43 +18,43 @@ Failed to init steam, this coule be for one of the following reasons:
         return false;
     }
 
-    steam_applist            = SteamAPI_SteamAppList_v001();
-    steam_apps               = SteamAPI_SteamApps_v008();
-    steam_apps               = SteamAPI_SteamGameServerApps_v008();
-    steam_controller         = SteamAPI_SteamController_v007();
-    steam_friends            = SteamAPI_SteamFriends_v017();
-    steam_gamesearch         = SteamAPI_SteamGameSearch_v001();
-    steam_gameserver         = SteamAPI_SteamGameServer_v013();
-    steam_gameserverstats    = SteamAPI_SteamGameServerStats_v001();
-    steam_htmlsurface        = SteamAPI_SteamHTMLSurface_v005();
-    steam_http               = SteamAPI_SteamGameServerHTTP_v003();
-    steam_http               = SteamAPI_SteamHTTP_v003();
-    steam_input              = SteamAPI_SteamInput_v001();
-    steam_inventory          = SteamAPI_SteamGameServerInventory_v003();
-    steam_inventory          = SteamAPI_SteamInventory_v003();
-    steam_matchmaking        = SteamAPI_SteamMatchmaking_v009();
-    steam_matchmakingservers = SteamAPI_SteamMatchmakingServers_v002();
-    steam_music              = SteamAPI_SteamMusic_v001();
-    steam_musicremote        = SteamAPI_SteamMusicRemote_v001();
-    steam_networking         = SteamAPI_SteamGameServerNetworking_v006();
-    steam_networking         = SteamAPI_SteamNetworking_v006();
-    steam_networkingmessages = SteamAPI_SteamGameServerNetworkingMessages_v002();
-    steam_networkingmessages = SteamAPI_SteamNetworkingMessages_v002();
-    steam_networkingsockets  = SteamAPI_SteamGameServerNetworkingSockets_v009();
-    steam_networkingsockets  = SteamAPI_SteamNetworkingSockets_v009();
-    steam_networkingutils    = SteamAPI_SteamNetworkingUtils_v003();
-    steam_parentalsettings   = SteamAPI_SteamParentalSettings_v001();
-    steam_parties            = SteamAPI_SteamParties_v002();
-    steam_remoteplay         = SteamAPI_SteamRemotePlay_v001();
-    steam_remotestorage      = SteamAPI_SteamRemoteStorage_v014();
-    steam_screenshots        = SteamAPI_SteamScreenshots_v003();
-    steam_ugc                = SteamAPI_SteamGameServerUGC_v014();
-    steam_ugc                = SteamAPI_SteamUGC_v014();
-    steam_user               = SteamAPI_SteamUser_v021();
-    steam_userstats          = SteamAPI_SteamUserStats_v012();
-    steam_utils              = SteamAPI_SteamGameServerUtils_v010();
-    steam_utils              = SteamAPI_SteamUtils_v010();
-    steam_video              = SteamAPI_SteamVideo_v002();
+    steam_applist                      = SteamAPI_SteamAppList_v001();
+    steam_apps                         = SteamAPI_SteamApps_v008();
+    steam_controller                   = SteamAPI_SteamController_v007();
+    steam_friends                      = SteamAPI_SteamFriends_v017();
+    steam_gamesearch                   = SteamAPI_SteamGameSearch_v001();
+    steam_gameserver                   = SteamAPI_SteamGameServer_v013();
+    steam_gameserverapps               = SteamAPI_SteamGameServerApps_v008();
+    steam_gameserverhttp               = SteamAPI_SteamGameServerHTTP_v003();
+    steam_gameserverinventory          = SteamAPI_SteamGameServerInventory_v003();
+    steam_gameservernetworking         = SteamAPI_SteamGameServerNetworking_v006();
+    steam_gameservernetworkingmessages = SteamAPI_SteamGameServerNetworkingMessages_v002();
+    steam_gameservernetworkingsockets  = SteamAPI_SteamGameServerNetworkingSockets_v009();
+    steam_gameserverstats              = SteamAPI_SteamGameServerStats_v001();
+    steam_gameserverugc                = SteamAPI_SteamGameServerUGC_v014();
+    steam_gameserverutils              = SteamAPI_SteamGameServerUtils_v010();
+    steam_htmlsurface                  = SteamAPI_SteamHTMLSurface_v005();
+    steam_http                         = SteamAPI_SteamHTTP_v003();
+    steam_input                        = SteamAPI_SteamInput_v001();
+    steam_inventory                    = SteamAPI_SteamInventory_v003();
+    steam_matchmaking                  = SteamAPI_SteamMatchmaking_v009();
+    steam_matchmakingservers           = SteamAPI_SteamMatchmakingServers_v002();
+    steam_music                        = SteamAPI_SteamMusic_v001();
+    steam_musicremote                  = SteamAPI_SteamMusicRemote_v001();
+    steam_networking                   = SteamAPI_SteamNetworking_v006();
+    steam_networkingmessages           = SteamAPI_SteamNetworkingMessages_v002();
+    steam_networkingsockets            = SteamAPI_SteamNetworkingSockets_v009();
+    steam_networkingutils              = SteamAPI_SteamNetworkingUtils_v003();
+    steam_parentalsettings             = SteamAPI_SteamParentalSettings_v001();
+    steam_parties                      = SteamAPI_SteamParties_v002();
+    steam_remoteplay                   = SteamAPI_SteamRemotePlay_v001();
+    steam_remotestorage                = SteamAPI_SteamRemoteStorage_v014();
+    steam_screenshots                  = SteamAPI_SteamScreenshots_v003();
+    steam_ugc                          = SteamAPI_SteamUGC_v014();
+    steam_user                         = SteamAPI_SteamUser_v021();
+    steam_userstats                    = SteamAPI_SteamUserStats_v012();
+    steam_utils                        = SteamAPI_SteamUtils_v010();
+    steam_video                        = SteamAPI_SteamVideo_v002();
 }
 
 
@@ -66,47 +66,7 @@ Shutdown :: () {
 
 #scope_file
 
-steam_user              : *ISteamUser;
-steam_friends           : *ISteamFriends;
-steam_utils             : *ISteamUtils;
-steam_utils             : *ISteamUtils;
-steam_matchmaking       : *ISteamMatchmaking;
-steam_matchmakingservers: *ISteamMatchmakingServers;
-steam_gamesearch        : *ISteamGameSearch;
-steam_parties           : *ISteamParties;
-steam_remotestorage     : *ISteamRemoteStorage;
-steam_userstats         : *ISteamUserStats;
-steam_apps              : *ISteamApps;
-steam_apps              : *ISteamApps;
-steam_networking        : *ISteamNetworking;
-steam_networking        : *ISteamNetworking;
-steam_screenshots       : *ISteamScreenshots;
-steam_music             : *ISteamMusic;
-steam_musicremote       : *ISteamMusicRemote;
-steam_http              : *ISteamHTTP;
-steam_http              : *ISteamHTTP;
-steam_input             : *ISteamInput;
-steam_controller        : *ISteamController;
-steam_ugc               : *ISteamUGC;
-steam_ugc               : *ISteamUGC;
-steam_applist           : *ISteamAppList;
-steam_htmlsurface       : *ISteamHTMLSurface;
-steam_inventory         : *ISteamInventory;
-steam_inventory         : *ISteamInventory;
-steam_video             : *ISteamVideo;
-steam_parentalsettings  : *ISteamParentalSettings;
-steam_remoteplay        : *ISteamRemotePlay;
-steam_networkingmessages: *ISteamNetworkingMessages;
-steam_networkingmessages: *ISteamNetworkingMessages;
-steam_networkingsockets : *ISteamNetworkingSockets;
-steam_networkingsockets : *ISteamNetworkingSockets;
-steam_networkingutils   : *ISteamNetworkingUtils;
-steam_gameserver        : *ISteamGameServer;
-steam_gameserverstats   : *ISteamGameServerStats;
 
-
-
-#import "Basic";
 
 #if OS == .WINDOWS {
     steam :: #foreign_library "win/steam_api64";
@@ -117,15 +77,51 @@ steam_gameserverstats   : *ISteamGameServerStats;
 }
 
 #load "steam_types.jai";
-#load "steam_clientpublic.jai";
-#load "steam_input.jai";
-#load "steam_controller.jai";
-#load "steam_networkingsockets.jai";
-
 #load "steam_api_flat.jai";
 
+#load "src/steam_applist.jai";
+#load "src/steam_apps.jai";
+#load "src/steam_controller.jai";
+#load "src/steam_friends.jai";
+#load "src/steam_gamesearch.jai";
+#load "src/steam_gameserver.jai";
+#load "src/steam_gameserverapps.jai";
+#load "src/steam_gameserverhttp.jai";
+#load "src/steam_gameserverinventory.jai";
+#load "src/steam_gameservernetworking.jai";
+#load "src/steam_gameservernetworkingmessages.jai";
+#load "src/steam_gameservernetworkingsockets.jai";
+#load "src/steam_gameserverstats.jai";
+#load "src/steam_gameserverugc.jai";
+#load "src/steam_gameserverutils.jai";
+#load "src/steam_htmlsurface.jai";
+#load "src/steam_http.jai";
+#load "src/steam_input.jai";
+#load "src/steam_inventory.jai";
+#load "src/steam_matchmaking.jai";
+#load "src/steam_matchmakingservers.jai";
+#load "src/steam_music.jai";
+#load "src/steam_musicremote.jai";
+#load "src/steam_networking.jai";
+#load "src/steam_networkingmessages.jai";
+#load "src/steam_networkingsockets.jai";
+#load "src/steam_networkingutils.jai";
+#load "src/steam_parentalsettings.jai";
+#load "src/steam_parties.jai";
+#load "src/steam_remoteplay.jai";
+#load "src/steam_remotestorage.jai";
+#load "src/steam_screenshots.jai";
+#load "src/steam_ugc.jai";
+#load "src/steam_user.jai";
+#load "src/steam_userstats.jai";
+#load "src/steam_utils.jai";
+#load "src/steam_video.jai";
 
-// copypaste below, just leave it alone for now (it provides the remaining top-level procs)
+
+#import "Basic";
+
+
+// copypasta below, just leave it alone for now (it provides the remaining top-level procs)
 
 
 // SteamAPI_Init must be called before using any other API functions. If it fails, an
