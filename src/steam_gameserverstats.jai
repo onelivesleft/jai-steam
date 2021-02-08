@@ -1,1 +1,0 @@
-steam_gameserverstats : *ISteamGameServerStats; 

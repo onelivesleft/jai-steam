@@ -1,1 +1,0 @@
-steam_gameserverinventory : *ISteamInventory; 

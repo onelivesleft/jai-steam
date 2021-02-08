@@ -1,1 +1,0 @@
-steam_networkingmessages : *ISteamNetworkingMessages; 

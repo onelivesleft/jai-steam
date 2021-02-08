@@ -1,1 +1,0 @@
-steam_screenshots : *ISteamScreenshots; 

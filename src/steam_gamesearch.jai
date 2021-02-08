@@ -1,1 +1,0 @@
-steam_gamesearch : *ISteamGameSearch; 

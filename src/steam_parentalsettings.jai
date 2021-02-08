@@ -1,1 +1,0 @@
-steam_parentalsettings : *ISteamParentalSettings; 
