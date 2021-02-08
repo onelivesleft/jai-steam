@@ -1,5 +1,4 @@
 steam_screenshots : *ISteamScreenshots;
-
 SteamScreenshots : SteamScreenshots_Namespace;
 
 
@@ -8,25 +7,25 @@ SteamScreenshots : SteamScreenshots_Namespace;
 
 SteamScreenshots_Namespace :: struct {
     // procs
-                    :: SteamScreenshots_WriteScreenshot
-             :: SteamScreenshots_AddScreenshotToLibrary
-                  :: SteamScreenshots_TriggerScreenshot
-                    :: SteamScreenshots_HookScreenshots
-                        :: SteamScreenshots_SetLocation
-                            :: SteamScreenshots_TagUser
-                   :: SteamScreenshots_TagPublishedFile
-                :: SteamScreenshots_IsScreenshotsHooked
-           :: SteamScreenshots_AddVRScreenshotToLibrary
+    WriteScreenshot                                    :: SteamScreenshots_WriteScreenshot;
+    AddScreenshotToLibrary                             :: SteamScreenshots_AddScreenshotToLibrary;
+    TriggerScreenshot                                  :: SteamScreenshots_TriggerScreenshot;
+    HookScreenshots                                    :: SteamScreenshots_HookScreenshots;
+    SetLocation                                        :: SteamScreenshots_SetLocation;
+    TagUser                                            :: SteamScreenshots_TagUser;
+    TagPublishedFile                                   :: SteamScreenshots_TagPublishedFile;
+    IsScreenshotsHooked                                :: SteamScreenshots_IsScreenshotsHooked;
+    AddVRScreenshotToLibrary                           :: SteamScreenshots_AddVRScreenshotToLibrary;
 }
 
 
 SteamScreenshots_WriteScreenshot :: inline (pubRGB: *void, cubRGB: uint32, nWidth: s32, nHeight: s32) -> ScreenshotHandle {
-    return SteamAPI_ISteamScreenshots_WriteScreenshot(steam_screenshots, pubRGB: *void, cubRGB: uint32, nWidth: s32, nHeight: s32);
+    return SteamAPI_ISteamScreenshots_WriteScreenshot(steam_screenshots, pubRGB, cubRGB, nWidth, nHeight);
 }
 
 
 SteamScreenshots_AddScreenshotToLibrary :: inline (pchFilename: *char, pchThumbnailFilename: *char, nWidth: s32, nHeight: s32) -> ScreenshotHandle {
-    return SteamAPI_ISteamScreenshots_AddScreenshotToLibrary(steam_screenshots, pchFilename: *char, pchThumbnailFilename: *char, nWidth: s32, nHeight: s32);
+    return SteamAPI_ISteamScreenshots_AddScreenshotToLibrary(steam_screenshots, pchFilename, pchThumbnailFilename, nWidth, nHeight);
 }
 
 
@@ -36,22 +35,22 @@ SteamScreenshots_TriggerScreenshot :: inline () {
 
 
 SteamScreenshots_HookScreenshots :: inline (bHook: bool) {
-    SteamAPI_ISteamScreenshots_HookScreenshots(steam_screenshots, bHook: bool);
+    SteamAPI_ISteamScreenshots_HookScreenshots(steam_screenshots, bHook);
 }
 
 
 SteamScreenshots_SetLocation :: inline (hScreenshot: ScreenshotHandle, pchLocation: *char) -> bool {
-    return SteamAPI_ISteamScreenshots_SetLocation(steam_screenshots, hScreenshot: ScreenshotHandle, pchLocation: *char);
+    return SteamAPI_ISteamScreenshots_SetLocation(steam_screenshots, hScreenshot, pchLocation);
 }
 
 
 SteamScreenshots_TagUser :: inline (hScreenshot: ScreenshotHandle, steamID: uint64_steamid) -> bool {
-    return SteamAPI_ISteamScreenshots_TagUser(steam_screenshots, hScreenshot: ScreenshotHandle, steamID: uint64_steamid);
+    return SteamAPI_ISteamScreenshots_TagUser(steam_screenshots, hScreenshot, steamID);
 }
 
 
 SteamScreenshots_TagPublishedFile :: inline (hScreenshot: ScreenshotHandle, unPublishedFileID: PublishedFileId_t) -> bool {
-    return SteamAPI_ISteamScreenshots_TagPublishedFile(steam_screenshots, hScreenshot: ScreenshotHandle, unPublishedFileID: PublishedFileId_t);
+    return SteamAPI_ISteamScreenshots_TagPublishedFile(steam_screenshots, hScreenshot, unPublishedFileID);
 }
 
 
@@ -61,5 +60,5 @@ SteamScreenshots_IsScreenshotsHooked :: inline () -> bool {
 
 
 SteamScreenshots_AddVRScreenshotToLibrary :: inline (eType: EVRScreenshotType, pchFilename: *char, pchVRFilename: *char) -> ScreenshotHandle {
-    return SteamAPI_ISteamScreenshots_AddVRScreenshotToLibrary(steam_screenshots, eType: EVRScreenshotType, pchFilename: *char, pchVRFilename: *char);
+    return SteamAPI_ISteamScreenshots_AddVRScreenshotToLibrary(steam_screenshots, eType, pchFilename, pchVRFilename);
 }

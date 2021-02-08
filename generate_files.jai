@@ -13,9 +13,11 @@ JSON :: #import "JSON"; // https://github.com/rluba/jason (but fixed)
 steam_api_flat :: "sdk/public/steam/steam_api_flat.h";
 steam_api_json :: "sdk/public/steam/steam_api.json";
 
-output_autogen_folder :: "src-autogen";
-output_procs_filename :: "src-autogen/api_flat_procs.jai";
-output_types_filename :: "src-autogen/api_flat_types.jai";
+output_autogen_folder       :: "src-autogen";
+output_procs_filename       :: "src-autogen/api_flat_procs.jai";
+output_types_filename       :: "src-autogen/api_flat_types.jai";
+output_assignments_filename :: "src-autogen/partial_steam_assignments.jai";
+output_loads_filename       :: "src-autogen/partial_steam_loads.jai";
 
 Replacement :: struct {
     before : string;
@@ -63,17 +65,17 @@ const_val_replacements :: Replacement.[
 procs_builder: String_Builder;
 types_builder: String_Builder;
 
-class_top_builder    : String_Builder;
-class_bottom_builder : String_Builder;
-header_assign_builder: String_Builder;
-header_load_builder  : String_Builder;
+class_top_builder      : String_Builder;
+class_bottom_builder   : String_Builder;
+header_assigns_builder : String_Builder;
+header_loads_builder   : String_Builder;
 
 procs_out         :: #bake_arguments print_to_builder(builder = *procs_builder);
 types_out         :: #bake_arguments print_to_builder(builder = *types_builder);
 class_top_out     :: #bake_arguments print_to_builder(builder = *class_top_builder);
 class_bottom_out  :: #bake_arguments print_to_builder(builder = *class_bottom_builder);
-header_assign_out :: #bake_arguments print_to_builder(builder = *header_assign_builder);
-header_load_out   :: #bake_arguments print_to_builder(builder = *header_load_builder);
+header_assign_out :: #bake_arguments print_to_builder(builder = *header_assigns_builder);
+header_load_out   :: #bake_arguments print_to_builder(builder = *header_loads_builder);
 
 current_namespace := "";
 
@@ -91,6 +93,7 @@ main :: () {
         exit(1);
     }
 
+    print("Generating %...\n", output_procs_filename);
     convert_steam_api_flat(file_data);
 
 
@@ -101,6 +104,7 @@ main :: () {
         exit(1);
     }
 
+    print("Generating %...\n", output_types_filename);
     convert_steam_api_json(file_data);
 
 
@@ -111,8 +115,8 @@ main :: () {
     // individual classes
     init_string_builder(*class_top_builder);
     init_string_builder(*class_bottom_builder);
-    init_string_builder(*header_assign_builder);
-    init_string_builder(*header_load_builder);
+    init_string_builder(*header_assigns_builder);
+    init_string_builder(*header_loads_builder);
 
     file_data, success = read_entire_file(output_procs_filename);
     if !success {
@@ -121,6 +125,9 @@ main :: () {
     }
 
     generate_classes(file_data);
+
+    write_entire_file(output_assignments_filename, builder_to_string(*header_assigns_builder));
+    write_entire_file(output_loads_filename, builder_to_string(*header_loads_builder));
 }
 
 
@@ -226,6 +233,7 @@ convert_steam_api_flat :: (file_data: string) {
 
     }
 
+    out("\n"); // make sure we have a blank line at bottom so that `generate_classes` has a sentinel
 }
 
 
@@ -440,6 +448,13 @@ forward_til :: (str: string, sentinel1: u8, sentinel2: u8, index: Code) #expand 
     }
 }
 
+is_lower :: inline (c: u8) -> bool {
+    return c >= #char "a" && c <= #char "z";
+}
+
+is_upper :: inline (c: u8) -> bool {
+    return c >= #char "A" && c <= #char "Z";
+}
 
 snake_from_camel :: inline (str: string, preserve_caps := false) -> string #must {
     if str == ""  return "";
@@ -452,8 +467,8 @@ snake_from_camel :: inline (str: string, preserve_caps := false) -> string #must
 
     for i: 0..str.count - 1 {
         c := str[i];
-        if c >= #char "A" && c <= #char "Z" {
-            if !inside_caps {
+        if is_upper(c) {
+            if !inside_caps || i < str.count - 1 && is_lower(str[i + 1]) {
                 inside_caps = true;
                 if i > 0  append(*builder, "_");
                 if preserve_caps
@@ -483,6 +498,8 @@ generate_classes :: (file_data: string) {
     past_class_header := false;
     class_instance    := "";
     namespace         := "";
+
+    header_assign_out("do_assign :: () {\n");
 
     for raw_row, line_number: rows {
         row := strip(raw_row);
@@ -514,20 +531,29 @@ generate_classes :: (file_data: string) {
                 if i >= 0 {
                     c := row[i + 2];
                     if c >= #char "0" || c <= #char "9" {
+                        first_row := false;
                         if !in_class {
+                            first_row = true;
                             class_instance, namespace = write_class_header(section_name);
+                            print("Generating %.jai...\n", class_instance);
                         }
                         in_class = true;
-                        name := strip(mid(row, 9));
+                        name := mid(row, 9, i);
                         name = snake_from_camel(name);
                         defer free(name);
 
                         space_at := index_of_string(row, " ");
                         call := mid(row, 0, space_at);
-                        header_assign_out("    ", name);
-                        for i: 0..30 - name.count
-                            header_assign_out(" ");
-                        header_assign_out("= ", call, "();\n");
+                        header_assign_out("    %", name);
+                        for name.count..40  header_assign_out(" ");
+                        if first_row
+                            header_assign_out("= %();\n", call);
+                        else
+                            header_assign_out(":= %();\n", call);
+
+                        if first_row
+                            header_load_out("#load \"%.jai\";\n", class_instance);
+
                         continue;
                     }
                 }
@@ -537,9 +563,9 @@ generate_classes :: (file_data: string) {
 
             short_name, long_name, flat_name, parameters, returns := parts_from_flat(row);
 
-            class_top_out("    ", short_name);
-            for short_name.count..30  class_top_out(" ");
-            class_top_out(":: %\n", long_name);
+            class_top_out("    %", short_name);
+            for short_name.count..50  class_top_out(" ");
+            class_top_out(":: %;\n", long_name);
 
             class_bottom_out("\n\n");
             if returns == "" {
@@ -547,18 +573,20 @@ generate_classes :: (file_data: string) {
                 if parameters == ""
                     class_bottom_out("    %(%);\n", flat_name, class_instance);
                 else
-                    class_bottom_out("    %(%, %);\n", flat_name, class_instance, parameters);
+                    class_bottom_out("    %(%, %);\n", flat_name, class_instance, strip_types(parameters));
             }
             else {
                 class_bottom_out("% :: inline (%) -> % {\n", long_name, parameters, returns);
                 if parameters == ""
                     class_bottom_out("    return %(%);\n", flat_name, class_instance);
                 else
-                    class_bottom_out("    return %(%, %);\n", flat_name, class_instance, parameters);
+                    class_bottom_out("    return %(%, %);\n", flat_name, class_instance, strip_types(parameters));
             }
             class_bottom_out("}\n");
         }
     }
+
+    header_assign_out("}\n");
 }
 
 
@@ -568,7 +596,6 @@ write_class_header :: (class_name: string) -> string, string {
 
     header :: #string HEADER
 %1 : *%2;
-
 %3 : %3_Namespace;
 
 
@@ -585,7 +612,38 @@ write_class_header :: (class_name: string) -> string, string {
 }
 
 
+strip_types :: (str: string) -> string {
+    builder: String_Builder;
+    init_string_builder(*builder);
+    defer reset(*builder);
 
+    skip_next := false;
+    skipping := false;
+    for i: 0..str.count - 1 {
+        if skip_next {
+            skip_next = false;
+            continue;
+        }
+
+        if skipping {
+            if str[i] == #char "," {
+                skipping = false;
+                append(*builder, str[i]);
+            }
+        }
+        else {
+            if str[i] == #char ":" {
+                skipping = true;
+                skip_next = true;
+            }
+            else {
+                append(*builder, str[i]);
+            }
+        }
+    }
+
+    return builder_to_string(*builder);
+}
 
 
 parts_from_flat :: (row: string) -> short_name: string, long_name: string, flat_name: string, parameters: string, returns: string {

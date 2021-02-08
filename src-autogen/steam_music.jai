@@ -1,5 +1,4 @@
 steam_music : *ISteamMusic;
-
 SteamMusic : SteamMusic_Namespace;
 
 
@@ -8,15 +7,15 @@ SteamMusic : SteamMusic_Namespace;
 
 SteamMusic_Namespace :: struct {
     // procs
-                         :: SteamMusic_BIsEnabled
-                         :: SteamMusic_BIsPlaying
-                  :: SteamMusic_GetPlaybackStatus
-                               :: SteamMusic_Play
-                              :: SteamMusic_Pause
-                       :: SteamMusic_PlayPrevious
-                           :: SteamMusic_PlayNext
-                          :: SteamMusic_SetVolume
-                          :: SteamMusic_GetVolume
+    BIsEnabled                                         :: SteamMusic_BIsEnabled;
+    BIsPlaying                                         :: SteamMusic_BIsPlaying;
+    GetPlaybackStatus                                  :: SteamMusic_GetPlaybackStatus;
+    Play                                               :: SteamMusic_Play;
+    Pause                                              :: SteamMusic_Pause;
+    PlayPrevious                                       :: SteamMusic_PlayPrevious;
+    PlayNext                                           :: SteamMusic_PlayNext;
+    SetVolume                                          :: SteamMusic_SetVolume;
+    GetVolume                                          :: SteamMusic_GetVolume;
 }
 
 
@@ -56,7 +55,7 @@ SteamMusic_PlayNext :: inline () {
 
 
 SteamMusic_SetVolume :: inline (flVolume: float) {
-    SteamAPI_ISteamMusic_SetVolume(steam_music, flVolume: float);
+    SteamAPI_ISteamMusic_SetVolume(steam_music, flVolume);
 }
 
 

@@ -1062,3 +1062,4 @@ SteamAPI_SteamDatagramHostedAddress_Clear :: (self: *SteamDatagramHostedAddress)
 SteamAPI_SteamDatagramHostedAddress_GetPopID :: (self: *SteamDatagramHostedAddress) -> SteamNetworkingPOPID #foreign steam;
 SteamAPI_SteamDatagramHostedAddress_SetDevAddress :: (self: *SteamDatagramHostedAddress, nIP: uint32, nPort: uint16, popid: SteamNetworkingPOPID) #foreign steam;
 
+

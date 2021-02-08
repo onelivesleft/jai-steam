@@ -1,3 +1,5 @@
+// Direct, unadulterated flat wrapper of the Steam SDK.
+
 #if OS == .WINDOWS {
     steam :: #foreign_library "lib/win/steam_api64";
 } else #if OS == .MACOS {
