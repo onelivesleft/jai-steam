@@ -129,13 +129,13 @@ SteamController_GetAnalogActionOrigins :: inline (controllerHandle: ControllerHa
 }
 
 
-SteamController_GetGlyphForActionOrigin :: inline (eOrigin: EControllerActionOrigin) -> *char {
-    return SteamAPI_ISteamController_GetGlyphForActionOrigin(steam_controller, eOrigin);
+SteamController_GetGlyphForActionOrigin :: inline (eOrigin: EControllerActionOrigin) -> string {
+    return to_string(SteamAPI_ISteamController_GetGlyphForActionOrigin(steam_controller, eOrigin));
 }
 
 
-SteamController_GetStringForActionOrigin :: inline (eOrigin: EControllerActionOrigin) -> *char {
-    return SteamAPI_ISteamController_GetStringForActionOrigin(steam_controller, eOrigin);
+SteamController_GetStringForActionOrigin :: inline (eOrigin: EControllerActionOrigin) -> string {
+    return to_string(SteamAPI_ISteamController_GetStringForActionOrigin(steam_controller, eOrigin));
 }
 
 
@@ -189,13 +189,13 @@ SteamController_GetGamepadIndexForController :: inline (ulControllerHandle: Cont
 }
 
 
-SteamController_GetStringForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> *char {
-    return SteamAPI_ISteamController_GetStringForXboxOrigin(steam_controller, eOrigin);
+SteamController_GetStringForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> string {
+    return to_string(SteamAPI_ISteamController_GetStringForXboxOrigin(steam_controller, eOrigin));
 }
 
 
-SteamController_GetGlyphForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> *char {
-    return SteamAPI_ISteamController_GetGlyphForXboxOrigin(steam_controller, eOrigin);
+SteamController_GetGlyphForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> string {
+    return to_string(SteamAPI_ISteamController_GetGlyphForXboxOrigin(steam_controller, eOrigin));
 }
 
 

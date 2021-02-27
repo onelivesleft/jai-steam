@@ -1,5 +1,7 @@
 // @TODO could remove this file by making these subsitution in make_steam_api_flat
 
+
+
 VALVE_BIG_ENDIAN :: false;
 UINT64_MAX :: -1;
 
@@ -174,3 +176,13 @@ SteamDatagramRelayAuthTicket :: struct {
 	m_nExtraFields : s32;
 	m_vecExtraFields : [16] ExtraField;
 }
+
+
+// steam_api_internal
+
+CallbackMsg_t :: struct {
+	m_hSteamUser : HSteamUser;  // Specific user to whom this callback applies.
+	m_iCallback  : int;         // Callback identifier.  (Corresponds to the k_iCallback enum in the callback structure.)
+	m_pubParam   : *uint8;      // Points to the callback structure
+	m_cubParam   : int;         // Size of the data pointed to by m_pubParam
+};

@@ -85,8 +85,8 @@ SteamFriends_Namespace :: struct {
 }
 
 
-SteamFriends_GetPersonaName :: inline () -> *char {
-    return SteamAPI_ISteamFriends_GetPersonaName(steam_friends);
+SteamFriends_GetPersonaName :: inline () -> string {
+    return to_string(SteamAPI_ISteamFriends_GetPersonaName(steam_friends));
 }
 
 
@@ -120,8 +120,8 @@ SteamFriends_GetFriendPersonaState :: inline (steamIDFriend: uint64_steamid) -> 
 }
 
 
-SteamFriends_GetFriendPersonaName :: inline (steamIDFriend: uint64_steamid) -> *char {
-    return SteamAPI_ISteamFriends_GetFriendPersonaName(steam_friends, steamIDFriend);
+SteamFriends_GetFriendPersonaName :: inline (steamIDFriend: uint64_steamid) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetFriendPersonaName(steam_friends, steamIDFriend));
 }
 
 
@@ -130,8 +130,8 @@ SteamFriends_GetFriendGamePlayed :: inline (steamIDFriend: uint64_steamid, pFrie
 }
 
 
-SteamFriends_GetFriendPersonaNameHistory :: inline (steamIDFriend: uint64_steamid, iPersonaName: s32) -> *char {
-    return SteamAPI_ISteamFriends_GetFriendPersonaNameHistory(steam_friends, steamIDFriend, iPersonaName);
+SteamFriends_GetFriendPersonaNameHistory :: inline (steamIDFriend: uint64_steamid, iPersonaName: s32) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetFriendPersonaNameHistory(steam_friends, steamIDFriend, iPersonaName));
 }
 
 
@@ -140,8 +140,8 @@ SteamFriends_GetFriendSteamLevel :: inline (steamIDFriend: uint64_steamid) -> s3
 }
 
 
-SteamFriends_GetPlayerNickname :: inline (steamIDPlayer: uint64_steamid) -> *char {
-    return SteamAPI_ISteamFriends_GetPlayerNickname(steam_friends, steamIDPlayer);
+SteamFriends_GetPlayerNickname :: inline (steamIDPlayer: uint64_steamid) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetPlayerNickname(steam_friends, steamIDPlayer));
 }
 
 
@@ -155,8 +155,8 @@ SteamFriends_GetFriendsGroupIDByIndex :: inline (iFG: s32) -> FriendsGroupID_t {
 }
 
 
-SteamFriends_GetFriendsGroupName :: inline (friendsGroupID: FriendsGroupID_t) -> *char {
-    return SteamAPI_ISteamFriends_GetFriendsGroupName(steam_friends, friendsGroupID);
+SteamFriends_GetFriendsGroupName :: inline (friendsGroupID: FriendsGroupID_t) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetFriendsGroupName(steam_friends, friendsGroupID));
 }
 
 
@@ -185,13 +185,13 @@ SteamFriends_GetClanByIndex :: inline (iClan: s32) -> uint64_steamid {
 }
 
 
-SteamFriends_GetClanName :: inline (steamIDClan: uint64_steamid) -> *char {
-    return SteamAPI_ISteamFriends_GetClanName(steam_friends, steamIDClan);
+SteamFriends_GetClanName :: inline (steamIDClan: uint64_steamid) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetClanName(steam_friends, steamIDClan));
 }
 
 
-SteamFriends_GetClanTag :: inline (steamIDClan: uint64_steamid) -> *char {
-    return SteamAPI_ISteamFriends_GetClanTag(steam_friends, steamIDClan);
+SteamFriends_GetClanTag :: inline (steamIDClan: uint64_steamid) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetClanTag(steam_friends, steamIDClan));
 }
 
 
@@ -310,8 +310,8 @@ SteamFriends_ClearRichPresence :: inline () {
 }
 
 
-SteamFriends_GetFriendRichPresence :: inline (steamIDFriend: uint64_steamid, pchKey: *char) -> *char {
-    return SteamAPI_ISteamFriends_GetFriendRichPresence(steam_friends, steamIDFriend, pchKey);
+SteamFriends_GetFriendRichPresence :: inline (steamIDFriend: uint64_steamid, pchKey: *char) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetFriendRichPresence(steam_friends, steamIDFriend, pchKey));
 }
 
 
@@ -320,8 +320,8 @@ SteamFriends_GetFriendRichPresenceKeyCount :: inline (steamIDFriend: uint64_stea
 }
 
 
-SteamFriends_GetFriendRichPresenceKeyByIndex :: inline (steamIDFriend: uint64_steamid, iKey: s32) -> *char {
-    return SteamAPI_ISteamFriends_GetFriendRichPresenceKeyByIndex(steam_friends, steamIDFriend, iKey);
+SteamFriends_GetFriendRichPresenceKeyByIndex :: inline (steamIDFriend: uint64_steamid, iKey: s32) -> string {
+    return to_string(SteamAPI_ISteamFriends_GetFriendRichPresenceKeyByIndex(steam_friends, steamIDFriend, iKey));
 }
 
 

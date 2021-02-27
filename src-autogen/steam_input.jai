@@ -42,9 +42,6 @@ SteamInput_Namespace :: struct {
     TranslateActionOrigin                              :: SteamInput_TranslateActionOrigin;
     GetDeviceBindingRevision                           :: SteamInput_GetDeviceBindingRevision;
     GetRemotePlaySessionID                             :: SteamInput_GetRemotePlaySessionID;
-
-    //constants
-    MAX_COUNT :: STEAM_INPUT_MAX_COUNT;
 }
 
 
@@ -133,13 +130,13 @@ SteamInput_GetAnalogActionOrigins :: inline (inputHandle: InputHandle_t, actionS
 }
 
 
-SteamInput_GetGlyphForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> *char {
-    return SteamAPI_ISteamInput_GetGlyphForActionOrigin(steam_input, eOrigin);
+SteamInput_GetGlyphForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> string {
+    return to_string(SteamAPI_ISteamInput_GetGlyphForActionOrigin(steam_input, eOrigin));
 }
 
 
-SteamInput_GetStringForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> *char {
-    return SteamAPI_ISteamInput_GetStringForActionOrigin(steam_input, eOrigin);
+SteamInput_GetStringForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> string {
+    return to_string(SteamAPI_ISteamInput_GetStringForActionOrigin(steam_input, eOrigin));
 }
 
 
@@ -193,13 +190,13 @@ SteamInput_GetGamepadIndexForController :: inline (ulinputHandle: InputHandle_t)
 }
 
 
-SteamInput_GetStringForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> *char {
-    return SteamAPI_ISteamInput_GetStringForXboxOrigin(steam_input, eOrigin);
+SteamInput_GetStringForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> string {
+    return to_string(SteamAPI_ISteamInput_GetStringForXboxOrigin(steam_input, eOrigin));
 }
 
 
-SteamInput_GetGlyphForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> *char {
-    return SteamAPI_ISteamInput_GetGlyphForXboxOrigin(steam_input, eOrigin);
+SteamInput_GetGlyphForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> string {
+    return to_string(SteamAPI_ISteamInput_GetGlyphForXboxOrigin(steam_input, eOrigin));
 }
 
 

@@ -59,13 +59,13 @@ SteamApps_BIsVACBanned :: inline () -> bool {
 }
 
 
-SteamApps_GetCurrentGameLanguage :: inline () -> *char {
-    return SteamAPI_ISteamApps_GetCurrentGameLanguage(steam_apps);
+SteamApps_GetCurrentGameLanguage :: inline () -> string {
+    return to_string(SteamAPI_ISteamApps_GetCurrentGameLanguage(steam_apps));
 }
 
 
-SteamApps_GetAvailableGameLanguages :: inline () -> *char {
-    return SteamAPI_ISteamApps_GetAvailableGameLanguages(steam_apps);
+SteamApps_GetAvailableGameLanguages :: inline () -> string {
+    return to_string(SteamAPI_ISteamApps_GetAvailableGameLanguages(steam_apps));
 }
 
 
@@ -144,8 +144,8 @@ SteamApps_GetAppOwner :: inline () -> uint64_steamid {
 }
 
 
-SteamApps_GetLaunchQueryParam :: inline (pchKey: *char) -> *char {
-    return SteamAPI_ISteamApps_GetLaunchQueryParam(steam_apps, pchKey);
+SteamApps_GetLaunchQueryParam :: inline (pchKey: *char) -> string {
+    return to_string(SteamAPI_ISteamApps_GetLaunchQueryParam(steam_apps, pchKey));
 }
 
 

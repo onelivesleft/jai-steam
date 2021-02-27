@@ -63,8 +63,8 @@ SteamUtils_GetServerRealTime :: inline () -> uint32 {
 }
 
 
-SteamUtils_GetIPCountry :: inline () -> *char {
-    return SteamAPI_ISteamUtils_GetIPCountry(steam_utils);
+SteamUtils_GetIPCountry :: inline () -> string {
+    return to_string(SteamAPI_ISteamUtils_GetIPCountry(steam_utils));
 }
 
 
@@ -153,8 +153,8 @@ SteamUtils_GetEnteredGamepadTextInput :: inline (pchText: *char, cchText: uint32
 }
 
 
-SteamUtils_GetSteamUILanguage :: inline () -> *char {
-    return SteamAPI_ISteamUtils_GetSteamUILanguage(steam_utils);
+SteamUtils_GetSteamUILanguage :: inline () -> string {
+    return to_string(SteamAPI_ISteamUtils_GetSteamUILanguage(steam_utils));
 }
 
 

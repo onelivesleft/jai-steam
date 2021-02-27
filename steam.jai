@@ -1,17 +1,26 @@
 // Nice, remapped wrapper of Steam SDK.
 
-Steam : Steam_Namespace;
+// @TODO string overloads for *char procs
 
-Steam_ID :: u64;
-App_ID :: AppId_t;
+
+Steam : Steam_Namespace;
 
 
 #scope_module
 
 
 Steam_Namespace :: struct {
-    Init :: Steam_Init;
-    Shutdown :: Steam_Shutdown;
+    Init                       :: Steam_Init;
+    Shutdown                   :: Steam_Shutdown;
+    RestartAppIfNecessary      :: SteamAPI_RestartAppIfNecessary;
+    ReleaseCurrentThreadMemory :: SteamAPI_ReleaseCurrentThreadMemory;
+    WriteMiniDump              :: SteamAPI_WriteMiniDump;
+    SetMiniDumpComment         :: SteamAPI_SetMiniDumpComment;
+    IsSteamRunning             :: SteamAPI_IsSteamRunning;
+    GetSteamInstallPath        :: SteamAPI_GetSteamInstallPath;
+    SetTryCatchCallbacks       :: SteamAPI_SetTryCatchCallbacks;
+    UseBreakpadCrashHandler    :: SteamAPI_UseBreakpadCrashHandler;
+    SetBreakpadAppID           :: SteamAPI_SetBreakpadAppID;
 }
 
 
@@ -23,19 +32,20 @@ Steam_Init :: (debug := false) -> success: bool {
     success := SteamAPI_Init();
     if !success {
         if verbose {
-            print(#string HELP
+            print(#string ___
 Failed to init steam, this could be for one of the following reasons:
 * The Steam client isn't running. A running Steam client is required to provide implementations of the various Steamworks interfaces.
 * The Steam client couldn't determine the App ID of game. If you're running your application from the executable or debugger directly then you must have a steam_appid.txt in your game directory next to the executable, with your app ID in it and nothing else. Steam will look for this file in the current working directory. If you are running your executable from a different directory you may need to relocate the steam_appid.txt file.
 * Your application is not running under the same OS user context as the Steam client, such as a different user or administration access level.
 * Ensure that you own a license for the App ID on the currently active Steam account. Your game must show up in your Steam library.
 * Your App ID is not completely set up, i.e. in Release State: Unavailable, or it's missing default packages.
-            HELP);
+            ___);
         }
 
         return false;
     }
 
+    steam_client                             = SteamAPI_SteamClient();
     steam_user                               = SteamAPI_SteamUser_v021();
     steam_friends                            = SteamAPI_SteamFriends_v017();
     steam_utils                              = SteamAPI_SteamUtils_v010();
@@ -77,15 +87,14 @@ Failed to init steam, this could be for one of the following reasons:
     return true;
 }
 
-
 steam_game_server_utils : *ISteamUtils;
-steam_game_server_apps : *ISteamApp;
+steam_game_server_apps : *ISteamApps;
 steam_game_server_networking : *ISteamNetworking;
 steam_game_server_http : *ISteamHTTP;
 steam_game_server_ugc : *ISteamUGC;
 steam_game_server_inventory : *ISteamInventory;
-steam_game_server_networking_messages : *ISteamNetworkingMessage;
-steam_game_server_networking_sockets : *ISteamNetworkingSocket;
+steam_game_server_networking_messages : *ISteamNetworkingMessages;
+steam_game_server_networking_sockets : *ISteamNetworkingSockets;
 
 Steam_Shutdown :: () {
     SteamAPI_Shutdown();
@@ -101,10 +110,12 @@ Steam_Shutdown :: () {
 }
 
 #load "src/steam_types.jai";
+#load "src/steam_client_header.jai";
 #load "src-autogen/api_flat_procs.jai";
 #load "src-autogen/api_flat_types.jai";
 #load "src-autogen/partial_steam_assignments.jai";
 #load "src-autogen/partial_steam_loads.jai";
+#load "src-autogen/steam_client.jai";
 
 #import "Basic";
 
@@ -129,47 +140,47 @@ SteamAPI_Shutdown :: () #foreign steam;
 //
 // NOTE: If you use the Steam DRM wrapper on your primary executable file, this check is unnecessary
 // since the DRM wrapper will ensure that your application was launched properly through Steam.
-SteamAPI_RestartAppIfNecessary :: (unOwnAppID: uint32) -> bool #foreign steam;
+SteamAPI_RestartAppIfNecessary :: (unOwnAppID: uint32) -> bool #foreign steam; // @TODO
 
 // Many Steam API functions allocate a small amount of thread-local memory for parameter storage.
 // SteamAPI_ReleaseCurrentThreadMemory() will free API memory associated with the calling thread.
 // This function is also called automatically by SteamAPI_RunCallbacks(), so a single-threaded
 // program never needs to explicitly call this function.
-SteamAPI_ReleaseCurrentThreadMemory :: () #foreign steam;
+SteamAPI_ReleaseCurrentThreadMemory :: () #foreign steam;  // @TODO
 
-/*
 
-    // crash dump recording functions
-    SteamAPI_WriteMiniDump :: (uStructuredExceptionCode: uint32, pvExceptionInfo: *void, uBuildID: uint32) #foreign steam;
-    SteamAPI_SetMiniDumpComment :: (pchMsg: *char) #foreign steam;
 
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------//
-    //	steamclient.dll private wrapper functions
-    //
-    //	The following functions are part of abstracting API access to the steamclient.dll, but should only be used in very specific cases
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------//
+// crash dump recording functions
+SteamAPI_WriteMiniDump :: (uStructuredExceptionCode: uint32, pvExceptionInfo: *void, uBuildID: uint32) #foreign steam;  // @TODO
+SteamAPI_SetMiniDumpComment :: (pchMsg: *char) #foreign steam;  // @TODO
 
-    // SteamAPI_IsSteamRunning() returns true if Steam is currently running
-    SteamAPI_IsSteamRunning :: () -> bool #foreign steam;
+//----------------------------------------------------------------------------------------------------------------------------------------------------------//
+//	steamclient.dll private wrapper functions
+//
+//	The following functions are part of abstracting API access to the steamclient.dll, but should only be used in very specific cases
+//----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
-    // returns the filename path of the current running Steam process, used if you need to load an explicit steam dll by name.
-    // DEPRECATED - implementation is Windows only, and the path returned is a UTF-8 string which must be converted to UTF-16 for use with Win32 APIs
-    SteamAPI_GetSteamInstallPath :: () -> *char #foreign steam;
+// SteamAPI_IsSteamRunning() returns true if Steam is currently running
+SteamAPI_IsSteamRunning :: () -> bool #foreign steam;  // @TODO
 
-    // sets whether or not Steam_RunCallbacks() should do a try {} catch (...) {} around calls to issuing callbacks
-    // This is ignored if you are using the manual callback dispatch method
-    SteamAPI_SetTryCatchCallbacks :: (bTryCatchCallbacks:  bool) #foreign steam;
+// returns the filename path of the current running Steam process, used if you need to load an explicit steam dll by name.
+// DEPRECATED - implementation is Windows only, and the path returned is a UTF-8 string which must be converted to UTF-16 for use with Win32 APIs
+SteamAPI_GetSteamInstallPath :: () -> *char #foreign steam;  // @TODO
 
-    // this should be called before the game initialized the steam APIs
-    // pchDate should be of the format "Mmm dd yyyy" (such as from the __ DATE __ macro )
-    // pchTime should be of the format "hh:mm:ss" (such as from the __ TIME __ macro )
-    // bFullMemoryDumps (Win32 only) -- writes out a uuid-full.dmp in the client/dumps folder
-    // pvContext-- can be NULL, will be the void * context passed into m_pfnPreMinidumpCallback
-    // PFNPreMinidumpCallback m_pfnPreMinidumpCallback   -- optional callback which occurs just before a .dmp file is written during a crash.  Applications can hook this to allow adding additional information into the .dmp comment stream.
-    SteamAPI_UseBreakpadCrashHandler :: (pchVersion: *char, pchDate: *char, pchTime: *char,  bFullMemoryDumps: bool, pvContext: *void, m_pfnPreMinidumpCallback: PFNPreMinidumpCallback) #foreign steam;
-    SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;
+// sets whether or not Steam_RunCallbacks() should do a try {} catch (...) {} around calls to issuing callbacks
+// This is ignored if you are using the manual callback dispatch method
+SteamAPI_SetTryCatchCallbacks :: (bTryCatchCallbacks:  bool) #foreign steam;  // @TODO
 
-*/
+// this should be called before the game initialized the steam APIs
+// pchDate should be of the format "Mmm dd yyyy" (such as from the __ DATE __ macro )
+// pchTime should be of the format "hh:mm:ss" (such as from the __ TIME __ macro )
+// bFullMemoryDumps (Win32 only) -- writes out a uuid-full.dmp in the client/dumps folder
+// pvContext-- can be NULL, will be the void * context passed into m_pfnPreMinidumpCallback
+// PFNPreMinidumpCallback m_pfnPreMinidumpCallback   -- optional callback which occurs just before a .dmp file is written during a crash.  Applications can hook this to allow adding additional information into the .dmp comment stream.
+SteamAPI_UseBreakpadCrashHandler :: (pchVersion: *char, pchDate: *char, pchTime: *char,  bFullMemoryDumps: bool, pvContext: *void, m_pfnPreMinidumpCallback: PFNPreMinidumpCallback) #foreign steam;  // @TODO
+SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;  // @TODO
+
+
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 //
@@ -214,21 +225,20 @@ SteamAPI_ReleaseCurrentThreadMemory :: () #foreign steam;
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
-/*
-    SteamAPI_ManualDispatch_Init :: () #foreign steam;
 
-    /// Perform certain periodic actions that need to be performed.
-    SteamAPI_ManualDispatch_RunFrame :: (hSteamPipe: HSteamPipe) #foreign steam;
+SteamAPI_ManualDispatch_Init :: () #foreign steam;  // @TODO
 
-    /// Fetch the next pending callback on the given pipe, if any.  If a callback is available, true is returned
-    /// and the structure is populated.  In this case, you MUST call SteamAPI_ManualDispatch_FreeLastCallback
-    /// (after dispatching the callback) before calling SteamAPI_ManualDispatch_GetNextCallback again.
-    SteamAPI_ManualDispatch_GetNextCallback :: (hSteamPipe: HSteamPipe, pCallbackMsg: *CallbackMsg_t) -> bool #foreign steam;
+/// Perform certain periodic actions that need to be performed.
+SteamAPI_ManualDispatch_RunFrame :: (hSteamPipe: HSteamPipe) #foreign steam;  // @TODO
 
-    /// You must call this after dispatching the callback, if SteamAPI_ManualDispatch_GetNextCallback returns true.
-    SteamAPI_ManualDispatch_FreeLastCallback :: (hSteamPipe: HSteamPipe) #foreign steam;
+/// Fetch the next pending callback on the given pipe, if any.  If a callback is available, true is returned
+/// and the structure is populated.  In this case, you MUST call SteamAPI_ManualDispatch_FreeLastCallback
+/// (after dispatching the callback) before calling SteamAPI_ManualDispatch_GetNextCallback again.
+SteamAPI_ManualDispatch_GetNextCallback :: (hSteamPipe: HSteamPipe, pCallbackMsg: *CallbackMsg_t) -> bool #foreign steam;  // @TODO
 
-    /// Return the call result for the specified call on the specified pipe.  You really should
-    /// only call this in a handler for SteamAPICallCompleted_t callback.
-    SteamAPI_ManualDispatch_GetAPICallResult :: (hSteamPipe: HSteamPipe, hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: int, iCallbackExpected: int, pbFailed: *bool) -> bool #foreign steam;
-*/
+/// You must call this after dispatching the callback, if SteamAPI_ManualDispatch_GetNextCallback returns true.
+SteamAPI_ManualDispatch_FreeLastCallback :: (hSteamPipe: HSteamPipe) #foreign steam;  // @TODO
+
+/// Return the call result for the specified call on the specified pipe.  You really should
+/// only call this in a handler for SteamAPICallCompleted_t callback.
+SteamAPI_ManualDispatch_GetAPICallResult :: (hSteamPipe: HSteamPipe, hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: int, iCallbackExpected: int, pbFailed: *bool) -> bool #foreign steam;  // @TODO

@@ -32,8 +32,8 @@ SteamRemotePlay_GetSessionSteamID :: inline (unSessionID: RemotePlaySessionID_t)
 }
 
 
-SteamRemotePlay_GetSessionClientName :: inline (unSessionID: RemotePlaySessionID_t) -> *char {
-    return SteamAPI_ISteamRemotePlay_GetSessionClientName(steam_remote_play, unSessionID);
+SteamRemotePlay_GetSessionClientName :: inline (unSessionID: RemotePlaySessionID_t) -> string {
+    return to_string(SteamAPI_ISteamRemotePlay_GetSessionClientName(steam_remote_play, unSessionID));
 }
 
 

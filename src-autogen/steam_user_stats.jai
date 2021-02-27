@@ -115,8 +115,8 @@ SteamUserStats_GetAchievementIcon :: inline (pchName: *char) -> s32 {
 }
 
 
-SteamUserStats_GetAchievementDisplayAttribute :: inline (pchName: *char, pchKey: *char) -> *char {
-    return SteamAPI_ISteamUserStats_GetAchievementDisplayAttribute(steam_user_stats, pchName, pchKey);
+SteamUserStats_GetAchievementDisplayAttribute :: inline (pchName: *char, pchKey: *char) -> string {
+    return to_string(SteamAPI_ISteamUserStats_GetAchievementDisplayAttribute(steam_user_stats, pchName, pchKey));
 }
 
 
@@ -130,8 +130,8 @@ SteamUserStats_GetNumAchievements :: inline () -> uint32 {
 }
 
 
-SteamUserStats_GetAchievementName :: inline (iAchievement: uint32) -> *char {
-    return SteamAPI_ISteamUserStats_GetAchievementName(steam_user_stats, iAchievement);
+SteamUserStats_GetAchievementName :: inline (iAchievement: uint32) -> string {
+    return to_string(SteamAPI_ISteamUserStats_GetAchievementName(steam_user_stats, iAchievement));
 }
 
 
@@ -175,8 +175,8 @@ SteamUserStats_FindLeaderboard :: inline (pchLeaderboardName: *char) -> SteamAPI
 }
 
 
-SteamUserStats_GetLeaderboardName :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> *char {
-    return SteamAPI_ISteamUserStats_GetLeaderboardName(steam_user_stats, hSteamLeaderboard);
+SteamUserStats_GetLeaderboardName :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> string {
+    return to_string(SteamAPI_ISteamUserStats_GetLeaderboardName(steam_user_stats, hSteamLeaderboard));
 }
 
 

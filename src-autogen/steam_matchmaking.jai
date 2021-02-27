@@ -143,8 +143,8 @@ SteamMatchmaking_GetLobbyMemberByIndex :: inline (steamIDLobby: uint64_steamid, 
 }
 
 
-SteamMatchmaking_GetLobbyData :: inline (steamIDLobby: uint64_steamid, pchKey: *char) -> *char {
-    return SteamAPI_ISteamMatchmaking_GetLobbyData(steam_matchmaking, steamIDLobby, pchKey);
+SteamMatchmaking_GetLobbyData :: inline (steamIDLobby: uint64_steamid, pchKey: *char) -> string {
+    return to_string(SteamAPI_ISteamMatchmaking_GetLobbyData(steam_matchmaking, steamIDLobby, pchKey));
 }
 
 
@@ -168,8 +168,8 @@ SteamMatchmaking_DeleteLobbyData :: inline (steamIDLobby: uint64_steamid, pchKey
 }
 
 
-SteamMatchmaking_GetLobbyMemberData :: inline (steamIDLobby: uint64_steamid, steamIDUser: uint64_steamid, pchKey: *char) -> *char {
-    return SteamAPI_ISteamMatchmaking_GetLobbyMemberData(steam_matchmaking, steamIDLobby, steamIDUser, pchKey);
+SteamMatchmaking_GetLobbyMemberData :: inline (steamIDLobby: uint64_steamid, steamIDUser: uint64_steamid, pchKey: *char) -> string {
+    return to_string(SteamAPI_ISteamMatchmaking_GetLobbyMemberData(steam_matchmaking, steamIDLobby, steamIDUser, pchKey));
 }
 
 

@@ -160,8 +160,8 @@ SteamRemoteStorage_GetFileCount :: inline () -> int32 {
 }
 
 
-SteamRemoteStorage_GetFileNameAndSize :: inline (iFile: s32, pnFileSizeInBytes: *int32) -> *char {
-    return SteamAPI_ISteamRemoteStorage_GetFileNameAndSize(steam_remote_storage, iFile, pnFileSizeInBytes);
+SteamRemoteStorage_GetFileNameAndSize :: inline (iFile: s32, pnFileSizeInBytes: *int32) -> string {
+    return to_string(SteamAPI_ISteamRemoteStorage_GetFileNameAndSize(steam_remote_storage, iFile, pnFileSizeInBytes));
 }
 
 
