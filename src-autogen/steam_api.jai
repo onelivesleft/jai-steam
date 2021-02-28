@@ -6,6 +6,12 @@ SteamAPI : SteamAPI_Namespace;
 
 SteamAPI_Namespace :: struct {
     // procs
+    SteamMatchmakingServerListResponse : struct {
+        ServerResponded           :: SteamAPI_ISteamMatchmakingServerListResponse_ServerResponded;
+        ServerFailedToRespond     :: SteamMatchmakingServerListResponse_ServerFailedToRespond;
+        RefreshComplete           :: SteamMatchmakingServerListResponse_RefreshComplete;
+    };
+    
     SteamMatchmakingServerListResponse_ServerResponded           :: SteamMatchmakingServerListResponse_ServerResponded;
     SteamMatchmakingServerListResponse_ServerFailedToRespond     :: SteamMatchmakingServerListResponse_ServerFailedToRespond;
     SteamMatchmakingServerListResponse_RefreshComplete           :: SteamMatchmakingServerListResponse_RefreshComplete;

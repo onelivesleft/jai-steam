@@ -12,7 +12,8 @@ else
     #load "steam.jai";
 
 
-// @TODO
-// [ ] Non-constructed "classes"
+// TODO
 // [ ] Callbacks
 // [ ] Type namespace?
+// [.] Non-constructed "classes"
+// [x] Additional instances of singletons

@@ -152,7 +152,8 @@ convert_steam_api_flat :: (file_data: string) {
     // b) Each comment section header is a singleton name
     // c) & and ** in parameters are always fully spaced
 
-    for row, line_number: rows {
+    for row, row_index: rows {
+        line_number := row_index + 1;
         if in_header {
             if starts_with(row, "//")
                 continue;
@@ -188,7 +189,7 @@ convert_steam_api_flat :: (file_data: string) {
             sections := split(line, "(");
             header := split(sections[0], " ");
             if header.count == 4 && header[2] != "*" || header.count > 4 {
-                print("WTF on line %\n", line_number + 1);
+                print("WTF on line %\n", line_number);
             }
             return_type := header[1];
             return_is_pointer := false;
@@ -225,7 +226,7 @@ convert_steam_api_flat :: (file_data: string) {
                     else if parts[1] == "**"
                         pointer_char = "**";
                     else
-                        print("WTF on line %\n", line_number + 1);
+                        print("WTF on line %\n", line_number);
                 }
                 if parameter_type == "int"  parameter_type = "s32";
 
@@ -432,15 +433,17 @@ get_array :: (object: *JSON_Object, key: string) -> [..]JSON_Value {
 generate_classes :: (file_data: string) {
     rows := split(file_data, "\n");
 
-    in_section            := false;
-    section_name          := "";
-    in_singleton          := false;
-    past_singleton_header := false;
-    singleton_instance    := "";
-    namespace             := "";
-    singleton_count       := 0;
+    in_section              := false;
+    section_name            := "";
+    in_singleton            := false;
+    past_singleton_header   := false;
+    current_singleton_row   := -1;
+    singleton_instance      := "";
+    class_name_override     := "";
+    namespace               := "";
+    singleton_count         := 0;
 
-    header_assign_out("do_assign :: () {\n");
+    header_assign_out("assign_all_singletons :: () {\n");
 
     steam_api_instance :: "steam_api";
 
@@ -457,8 +460,11 @@ SteamAPI_Namespace :: struct {
 
     steam_api_top_out(steam_api_header);
 
-    for raw_row, line_number: rows {
-        row := strip(raw_row);
+    row_index := 0;
+    while row_index < rows.count {
+        defer row_index += 1;
+
+        row := strip(rows[row_index]);
 
         if !in_section {
             if starts_with(row, "//") {
@@ -467,7 +473,8 @@ SteamAPI_Namespace :: struct {
                 if section_name == "ISteamClient" {
                     in_singleton = true;
                     past_singleton_header = true;
-                    singleton_instance, namespace = write_header(section_name);
+                    current_singleton_row = -1;
+                    singleton_instance, namespace = write_header(section_name, class_name_override);
                     print("Generating %.jai...\n", singleton_instance);
                 }
             }
@@ -481,11 +488,21 @@ SteamAPI_Namespace :: struct {
                     write_entire_file(sprint("%/%.jai", output_autogen_folder, singleton_instance), builder_to_string(*singleton_top_builder));
                 }
 
-                in_section = false;
+                if current_singleton_row != -1 {
+                    row_index = current_singleton_row;
+                    section_name = section_name_from_instance_row(rows[row_index + 1]);
+                    print("%\n", section_name);
+                }
+                else {
+                    class_name_override = "";
+                    in_section = false;
+                }
+
                 in_singleton = false;
                 past_singleton_header = false;
                 reset(*singleton_top_builder);
                 reset(*singleton_bottom_builder);
+
                 continue;
             }
 
@@ -494,23 +511,28 @@ SteamAPI_Namespace :: struct {
                 if i >= 0 {
                     c := row[i + 2];
                     if c >= #char "0" || c <= #char "9" {
-                        first_row := false;
                         if !in_singleton {
-                            first_row = true;
-                            singleton_instance, namespace = write_header(section_name);
+                            in_singleton = true;
+                            current_singleton_row = -1;
+                            if class_name_override == ""
+                                class_name_override = section_name;
+                            singleton_instance, namespace = write_header(section_name, class_name_override);
                             print("Generating %.jai...\n", singleton_instance);
-                        }
-                        in_singleton = true;
-                        name := mid(row, 9, i);
-                        name = snake_from_camel(name);
-                        defer free(name);
 
-                        space_at := index_of_string(row, " ");
-                        call := mid(row, 0, space_at);
-                        header_assign_out("    %", name);
-                        for name.count..40  header_assign_out(" ");
-                        header_assign_out("= %();\n", call);
-                        header_load_out("#load \"%.jai\";\n", singleton_instance);
+                            name := mid(row, 9, i);
+                            name = snake_from_camel(name);
+                            defer free(name);
+
+                            space_at := index_of_string(row, " ");
+                            call := mid(row, 0, space_at);
+                            header_assign_out("    %", name);
+                            for name.count..40  header_assign_out(" ");
+                            header_assign_out("= %();\n", call);
+                            header_load_out("#load \"%.jai\";\n", singleton_instance);
+                        }
+                        else if current_singleton_row == -1 {
+                            current_singleton_row = row_index - 1;
+                        }
 
                         continue;
                     }
@@ -578,6 +600,8 @@ SteamAPI_Namespace :: struct {
                 steam_api_bottom_out("}\n");
             }
         }
+
+
     }
 
     header_assign_out("}\n");
@@ -591,9 +615,10 @@ SteamAPI_Namespace :: struct {
 }
 
 
-write_header :: (class_name: string) -> string, string {
+write_header :: (class_name: string, class_name_override: string) -> string, string {
     namespace := mid(class_name, 1);
-    instance := snake_from_camel(namespace);
+    instance  := snake_from_camel(namespace);
+    type_name := ifx class_name_override != "" then class_name_override else class_name;
 
     header :: #string ___JAI
 %1 : *%2;
@@ -607,9 +632,14 @@ write_header :: (class_name: string) -> string, string {
     // procs
     ___JAI
 
-    singleton_top_out(header, instance, class_name, namespace);
+    singleton_top_out(header, instance, type_name, namespace);
 
     return instance, namespace;
+}
+
+
+section_name_from_instance_row :: (row: string) -> string {
+    return sprint("I%", split(row, "_")[1]);
 }
 
 
