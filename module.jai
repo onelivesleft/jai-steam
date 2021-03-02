@@ -14,6 +14,6 @@ else
 
 // TODO
 // [ ] Callbacks
-// [ ] Type namespace?
-// [.] Non-constructed "classes"
+// [ ] Hide types inside module scope and/or Steam namespace
+// [x] Non-constructed "classes"
 // [x] Additional instances of singletons

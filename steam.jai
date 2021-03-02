@@ -3,25 +3,7 @@
 // @TODO string overloads for *char procs
 
 
-Steam : Steam_Namespace;
-
-
 #scope_module
-
-
-Steam_Namespace :: struct {
-    Init                       :: Steam_Init;
-    Shutdown                   :: Steam_Shutdown;
-    RestartAppIfNecessary      :: SteamAPI_RestartAppIfNecessary;
-    ReleaseCurrentThreadMemory :: SteamAPI_ReleaseCurrentThreadMemory;
-    WriteMiniDump              :: SteamAPI_WriteMiniDump;
-    SetMiniDumpComment         :: SteamAPI_SetMiniDumpComment;
-    IsSteamRunning             :: SteamAPI_IsSteamRunning;
-    GetSteamInstallPath        :: SteamAPI_GetSteamInstallPath;
-    SetTryCatchCallbacks       :: SteamAPI_SetTryCatchCallbacks;
-    UseBreakpadCrashHandler    :: SteamAPI_UseBreakpadCrashHandler;
-    SetBreakpadAppID           :: SteamAPI_SetBreakpadAppID;
-}
 
 
 verbose := false;
@@ -71,6 +53,7 @@ Steam_Shutdown :: () {
 #load "src-autogen/partial_steam_assignments.jai";
 #load "src-autogen/partial_steam_loads.jai";
 #load "src-autogen/steam_client.jai";
+#load "src-autogen/steam_api.jai";
 
 #import "Basic";
 

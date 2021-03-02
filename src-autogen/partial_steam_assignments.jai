@@ -1,4 +1,4 @@
-do_assign :: () {
+assign_all_singletons :: () {
     steam_user                               = SteamAPI_SteamUser_v021();
     steam_friends                            = SteamAPI_SteamFriends_v017();
     steam_utils                              = SteamAPI_SteamUtils_v010();

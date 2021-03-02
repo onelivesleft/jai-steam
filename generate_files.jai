@@ -64,10 +64,9 @@ const_val_replacements :: Replacement.[
 ];
 
 
-procs_builder: String_Builder;
-types_builder: String_Builder;
-steam_api_top_builder    : String_Builder;
-steam_api_bottom_builder : String_Builder;
+procs_builder            : String_Builder;
+types_builder            : String_Builder;
+steam_api_builder        : String_Builder;
 singleton_top_builder    : String_Builder;
 singleton_bottom_builder : String_Builder;
 header_assigns_builder   : String_Builder;
@@ -75,8 +74,7 @@ header_loads_builder     : String_Builder;
 
 procs_out             :: #bake_arguments print_to_builder(builder = *procs_builder);
 types_out             :: #bake_arguments print_to_builder(builder = *types_builder);
-steam_api_top_out     :: #bake_arguments print_to_builder(builder = *steam_api_top_builder);
-steam_api_bottom_out  :: #bake_arguments print_to_builder(builder = *steam_api_bottom_builder);
+steam_api_out         :: #bake_arguments print_to_builder(builder = *steam_api_builder);
 singleton_top_out     :: #bake_arguments print_to_builder(builder = *singleton_top_builder);
 singleton_bottom_out  :: #bake_arguments print_to_builder(builder = *singleton_bottom_builder);
 header_assign_out     :: #bake_arguments print_to_builder(builder = *header_assigns_builder);
@@ -118,8 +116,7 @@ main :: () {
 
 
     // singletones
-    init_string_builder(*steam_api_top_builder);
-    init_string_builder(*steam_api_bottom_builder);
+    init_string_builder(*steam_api_builder);
     init_string_builder(*singleton_top_builder);
     init_string_builder(*singleton_bottom_builder);
     init_string_builder(*header_assigns_builder);
@@ -445,20 +442,31 @@ generate_classes :: (file_data: string) {
 
     header_assign_out("assign_all_singletons :: () {\n");
 
-    steam_api_instance :: "steam_api";
+    steam_api_current_type := "";
 
     steam_api_header :: #string ___JAI
-SteamAPI : SteamAPI_Namespace;
+Steam : Steam_Namespace;
 
 
 #scope_file
 
 
-SteamAPI_Namespace :: struct {
-    // procs
+Steam_Namespace :: struct {
+    Init                       :: Steam_Init;
+    Shutdown                   :: Steam_Shutdown;
+    RestartAppIfNecessary      :: SteamAPI_RestartAppIfNecessary;
+    ReleaseCurrentThreadMemory :: SteamAPI_ReleaseCurrentThreadMemory;
+    WriteMiniDump              :: SteamAPI_WriteMiniDump;
+    SetMiniDumpComment         :: SteamAPI_SetMiniDumpComment;
+    IsSteamRunning             :: SteamAPI_IsSteamRunning;
+    GetSteamInstallPath        :: SteamAPI_GetSteamInstallPath;
+    SetTryCatchCallbacks       :: SteamAPI_SetTryCatchCallbacks;
+    UseBreakpadCrashHandler    :: SteamAPI_UseBreakpadCrashHandler;
+    SetBreakpadAppID           :: SteamAPI_SetBreakpadAppID;
+
     ___JAI
 
-    steam_api_top_out(steam_api_header);
+    steam_api_out(steam_api_header);
 
     row_index := 0;
     while row_index < rows.count {
@@ -491,7 +499,6 @@ SteamAPI_Namespace :: struct {
                 if current_singleton_row != -1 {
                     row_index = current_singleton_row;
                     section_name = section_name_from_instance_row(rows[row_index + 1]);
-                    print("%\n", section_name);
                 }
                 else {
                     class_name_override = "";
@@ -571,44 +578,28 @@ SteamAPI_Namespace :: struct {
                 singleton_bottom_out("}\n");
             }
             else {
-                short_name, long_name, flat_name, parameters, returns, return_is_string := steam_api_parts_from_flat(row);
+                method_name, steam_api_type, flat_name, parameters, returns, return_is_string := steam_api_parts_from_flat(row);
 
-                steam_api_top_out("    %", long_name);
-                for long_name.count..60  steam_api_top_out(" ");
-                steam_api_top_out(":: %;\n", long_name);
-
-                steam_api_bottom_out("\n\n");
-                if returns == "" {
-                    steam_api_bottom_out("% :: inline (%) {\n", long_name, parameters);
-                    if parameters == ""
-                        steam_api_bottom_out("    %(%);\n", flat_name, steam_api_instance);
-                    else
-                        steam_api_bottom_out("    %(%, %);\n", flat_name, steam_api_instance, strip_types(parameters));
-                }
-                else {
-                    prefix, postfix : string;
-                    if return_is_string {
-                        prefix = "to_string(";
-                        postfix = ")";
+                if steam_api_type != steam_api_current_type {
+                    if steam_api_current_type != "" {
+                        steam_api_out("    };\n\n");
                     }
-                    steam_api_bottom_out("% :: inline (%) -> % {\n", long_name, parameters, returns);
-                    if parameters == ""
-                        steam_api_bottom_out("    return %1%2(%3)%4;\n", prefix, flat_name, steam_api_instance, postfix);
-                    else
-                        steam_api_bottom_out("    return %1%2(%3, %4)%5;\n", prefix, flat_name, steam_api_instance, strip_types(parameters), postfix);
+
+                    steam_api_current_type = steam_api_type;
+                    steam_api_out("    % : struct {\n", steam_api_type);
                 }
-                steam_api_bottom_out("}\n");
+
+                steam_api_out("        %", method_name);
+                for method_name.count..30  steam_api_out(" ");
+                steam_api_out(":: %;\n", flat_name);
             }
         }
-
-
     }
 
     header_assign_out("}\n");
+    steam_api_out("    };\n}\n");
 
-    steam_api_top_out("}\n");
-    append(*steam_api_top_builder, builder_to_string(*steam_api_bottom_builder));
-    write_entire_file(output_steam_api_filename, builder_to_string(*steam_api_top_builder));
+    write_entire_file(output_steam_api_filename, builder_to_string(*steam_api_builder));
 
     // @TODO assert(singleton_count == N)  make sure new versions don't add singletones that we don't know about it `steam.jai`
     // @TODO assert version in `steam_client_header.jai` matches version in `isteamclient.h`
@@ -733,7 +724,7 @@ singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: str
 }
 
 
-steam_api_parts_from_flat :: (row: string) -> short_name: string, long_name: string, flat_name: string, parameters: string, returns: string, return_is_string: bool {
+steam_api_parts_from_flat :: (row: string) -> method_name: string, type_name: string, flat_name: string, parameters: string, returns: string, return_is_string: bool {
     return_is_string := false;
 
     _1 :: 9;
@@ -784,12 +775,20 @@ steam_api_parts_from_flat :: (row: string) -> short_name: string, long_name: str
         }
     }
 
+    last_underscore : int = ---;
+    if ends_with(long_name, "_c_str")
+        last_underscore = long_name.count - 6;
+    else
+        last_underscore = last_index_of_char(long_name, #char "_");
+    type_name := slice(long_name, 0, last_underscore);
+    method_name := slice(long_name, last_underscore + 1, long_name.count - (last_underscore + 1));
+
     if returns == "*char" {
         return_is_string = true;
         returns = "string";
     }
 
-    return short_name, long_name, flat_name, parameters, returns, return_is_string;
+    return method_name, type_name, flat_name, parameters, returns, return_is_string;
 }
 
 
