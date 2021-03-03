@@ -7,6 +7,7 @@ SteamGameServer : SteamGameServer_Namespace;
 
 SteamGameServer_Namespace :: struct {
     // procs
+    RunCallbacks                                       :: SteamGameServer_RunCallbacks;
     SetProduct                                         :: SteamGameServer_SetProduct;
     SetGameDescription                                 :: SteamGameServer_SetGameDescription;
     SetModDir                                          :: SteamGameServer_SetModDir;

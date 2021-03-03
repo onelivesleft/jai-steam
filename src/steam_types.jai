@@ -1,4 +1,4 @@
-// @TODO could remove this file by making these subsitution in make_steam_api_flat
+// @TODO could remove this file by making these subsitution in make_steam_api_flat?
 
 
 
@@ -182,7 +182,7 @@ SteamDatagramRelayAuthTicket :: struct {
 
 CallbackMsg_t :: struct {
 	m_hSteamUser : HSteamUser;  // Specific user to whom this callback applies.
-	m_iCallback  : int;         // Callback identifier.  (Corresponds to the k_iCallback enum in the callback structure.)
+	m_iCallback  : s32;         // Callback identifier.  (Corresponds to the k_iCallback enum in the callback structure.)
 	m_pubParam   : *uint8;      // Points to the callback structure
-	m_cubParam   : int;         // Size of the data pointed to by m_pubParam
+	m_cubParam   : s32;         // Size of the data pointed to by m_pubParam
 };

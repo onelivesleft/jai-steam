@@ -13,18 +13,22 @@ PlayerAcceptState_t :: enum s32 {
 }
 
 SteamServersConnected_t :: struct {
+    k_iCallback : s32 : 101;
 }
 
 SteamServerConnectFailure_t :: struct {
+    k_iCallback : s32 : 102;
     m_eResult : EResult;
     m_bStillRetrying : bool;
 }
 
 SteamServersDisconnected_t :: struct {
+    k_iCallback : s32 : 103;
     m_eResult : EResult;
 }
 
 ClientGameServerDeny_t :: struct {
+    k_iCallback : s32 : 113;
     m_uAppID : uint32;
     m_unGameServerIP : uint32;
     m_usGameServerPort : uint16;
@@ -33,42 +37,51 @@ ClientGameServerDeny_t :: struct {
 }
 
 IPCFailure_t :: struct {
+    k_iCallback : s32 : 117;
     m_eFailureType : uint8;
 }
 
 LicensesUpdated_t :: struct {
+    k_iCallback : s32 : 125;
 }
 
 ValidateAuthTicketResponse_t :: struct {
+    k_iCallback : s32 : 143;
     m_SteamID : CSteamID;
     m_eAuthSessionResponse : EAuthSessionResponse;
     m_OwnerSteamID : CSteamID;
 }
 
 MicroTxnAuthorizationResponse_t :: struct {
+    k_iCallback : s32 : 152;
     m_unAppID : uint32;
     m_ulOrderID : uint64;
     m_bAuthorized : uint8;
 }
 
 EncryptedAppTicketResponse_t :: struct {
+    k_iCallback : s32 : 154;
     m_eResult : EResult;
 }
 
 GetAuthSessionTicketResponse_t :: struct {
+    k_iCallback : s32 : 163;
     m_hAuthTicket : HAuthTicket;
     m_eResult : EResult;
 }
 
 GameWebCallback_t :: struct {
+    k_iCallback : s32 : 164;
     m_szURL : [256] char ;
 }
 
 StoreAuthURLResponse_t :: struct {
+    k_iCallback : s32 : 165;
     m_szURL : [512] char ;
 }
 
 MarketEligibilityResponse_t :: struct {
+    k_iCallback : s32 : 166;
     m_bAllowed : bool;
     m_eNotAllowedReason : EMarketNotAllowedReasonFlags;
     m_rtAllowedAtTime : RTime32;
@@ -77,6 +90,7 @@ MarketEligibilityResponse_t :: struct {
 }
 
 DurationControl_t :: struct {
+    k_iCallback : s32 : 167;
     m_eResult : EResult;
     m_appid : AppId_t;
     m_bApplicable : bool;
@@ -88,25 +102,30 @@ DurationControl_t :: struct {
 }
 
 PersonaStateChange_t :: struct {
+    k_iCallback : s32 : 304;
     m_ulSteamID : uint64;
     m_nChangeFlags : s32;
 }
 
 GameOverlayActivated_t :: struct {
+    k_iCallback : s32 : 331;
     m_bActive : uint8;
 }
 
 GameServerChangeRequested_t :: struct {
+    k_iCallback : s32 : 332;
     m_rgchServer : [64] char ;
     m_rgchPassword : [64] char ;
 }
 
 GameLobbyJoinRequested_t :: struct {
+    k_iCallback : s32 : 333;
     m_steamIDLobby : CSteamID;
     m_steamIDFriend : CSteamID;
 }
 
 AvatarImageLoaded_t :: struct {
+    k_iCallback : s32 : 334;
     m_steamID : CSteamID;
     m_iImage : s32;
     m_iWide : s32;
@@ -114,33 +133,39 @@ AvatarImageLoaded_t :: struct {
 }
 
 ClanOfficerListResponse_t :: struct {
+    k_iCallback : s32 : 335;
     m_steamIDClan : CSteamID;
     m_cOfficers : s32;
     m_bSuccess : uint8;
 }
 
 FriendRichPresenceUpdate_t :: struct {
+    k_iCallback : s32 : 336;
     m_steamIDFriend : CSteamID;
     m_nAppID : AppId_t;
 }
 
 GameRichPresenceJoinRequested_t :: struct {
+    k_iCallback : s32 : 337;
     m_steamIDFriend : CSteamID;
     m_rgchConnect : [256] char ;
 }
 
 GameConnectedClanChatMsg_t :: struct {
+    k_iCallback : s32 : 338;
     m_steamIDClanChat : CSteamID;
     m_steamIDUser : CSteamID;
     m_iMessageID : s32;
 }
 
 GameConnectedChatJoin_t :: struct {
+    k_iCallback : s32 : 339;
     m_steamIDClanChat : CSteamID;
     m_steamIDUser : CSteamID;
 }
 
 GameConnectedChatLeave_t :: struct {
+    k_iCallback : s32 : 340;
     m_steamIDClanChat : CSteamID;
     m_steamIDUser : CSteamID;
     m_bKicked : bool;
@@ -148,32 +173,38 @@ GameConnectedChatLeave_t :: struct {
 }
 
 DownloadClanActivityCountsResult_t :: struct {
+    k_iCallback : s32 : 341;
     m_bSuccess : bool;
 }
 
 JoinClanChatRoomCompletionResult_t :: struct {
+    k_iCallback : s32 : 342;
     m_steamIDClanChat : CSteamID;
     m_eChatRoomEnterResponse : EChatRoomEnterResponse;
 }
 
 GameConnectedFriendChatMsg_t :: struct {
+    k_iCallback : s32 : 343;
     m_steamIDUser : CSteamID;
     m_iMessageID : s32;
 }
 
 FriendsGetFollowerCount_t :: struct {
+    k_iCallback : s32 : 344;
     m_eResult : EResult;
     m_steamID : CSteamID;
     m_nCount : s32;
 }
 
 FriendsIsFollowing_t :: struct {
+    k_iCallback : s32 : 345;
     m_eResult : EResult;
     m_steamID : CSteamID;
     m_bIsFollowing : bool;
 }
 
 FriendsEnumerateFollowingList_t :: struct {
+    k_iCallback : s32 : 346;
     m_eResult : EResult;
     m_rgSteamID : [50] CSteamID ;
     m_nResultsReturned : int32;
@@ -181,44 +212,54 @@ FriendsEnumerateFollowingList_t :: struct {
 }
 
 SetPersonaNameResponse_t :: struct {
+    k_iCallback : s32 : 347;
     m_bSuccess : bool;
     m_bLocalSuccess : bool;
     m_result : EResult;
 }
 
 UnreadChatMessagesChanged_t :: struct {
+    k_iCallback : s32 : 348;
 }
 
 OverlayBrowserProtocolNavigation_t :: struct {
+    k_iCallback : s32 : 349;
     rgchURI : [1024] char ;
 }
 
 IPCountry_t :: struct {
+    k_iCallback : s32 : 701;
 }
 
 LowBatteryPower_t :: struct {
+    k_iCallback : s32 : 702;
     m_nMinutesBatteryLeft : uint8;
 }
 
 SteamAPICallCompleted_t :: struct {
+    k_iCallback : s32 : 703;
     m_hAsyncCall : SteamAPICall_t;
     m_iCallback : s32;
     m_cubParam : uint32;
 }
 
 SteamShutdown_t :: struct {
+    k_iCallback : s32 : 704;
 }
 
 CheckFileSignature_t :: struct {
+    k_iCallback : s32 : 705;
     m_eCheckFileSignature : ECheckFileSignature;
 }
 
 GamepadTextInputDismissed_t :: struct {
+    k_iCallback : s32 : 714;
     m_bSubmitted : bool;
     m_unSubmittedText : uint32;
 }
 
 FavoritesListChanged_t :: struct {
+    k_iCallback : s32 : 502;
     m_nIP : uint32;
     m_nQueryPort : uint32;
     m_nConnPort : uint32;
@@ -229,12 +270,14 @@ FavoritesListChanged_t :: struct {
 }
 
 LobbyInvite_t :: struct {
+    k_iCallback : s32 : 503;
     m_ulSteamIDUser : uint64;
     m_ulSteamIDLobby : uint64;
     m_ulGameID : uint64;
 }
 
 LobbyEnter_t :: struct {
+    k_iCallback : s32 : 504;
     m_ulSteamIDLobby : uint64;
     m_rgfChatPermissions : uint32;
     m_bLocked : bool;
@@ -242,12 +285,14 @@ LobbyEnter_t :: struct {
 }
 
 LobbyDataUpdate_t :: struct {
+    k_iCallback : s32 : 505;
     m_ulSteamIDLobby : uint64;
     m_ulSteamIDMember : uint64;
     m_bSuccess : uint8;
 }
 
 LobbyChatUpdate_t :: struct {
+    k_iCallback : s32 : 506;
     m_ulSteamIDLobby : uint64;
     m_ulSteamIDUserChanged : uint64;
     m_ulSteamIDMakingChange : uint64;
@@ -255,6 +300,7 @@ LobbyChatUpdate_t :: struct {
 }
 
 LobbyChatMsg_t :: struct {
+    k_iCallback : s32 : 507;
     m_ulSteamIDLobby : uint64;
     m_ulSteamIDUser : uint64;
     m_eChatEntryType : uint8;
@@ -262,6 +308,7 @@ LobbyChatMsg_t :: struct {
 }
 
 LobbyGameCreated_t :: struct {
+    k_iCallback : s32 : 509;
     m_ulSteamIDLobby : uint64;
     m_ulSteamIDGameServer : uint64;
     m_unIP : uint32;
@@ -269,30 +316,36 @@ LobbyGameCreated_t :: struct {
 }
 
 LobbyMatchList_t :: struct {
+    k_iCallback : s32 : 510;
     m_nLobbiesMatching : uint32;
 }
 
 LobbyKicked_t :: struct {
+    k_iCallback : s32 : 512;
     m_ulSteamIDLobby : uint64;
     m_ulSteamIDAdmin : uint64;
     m_bKickedDueToDisconnect : uint8;
 }
 
 LobbyCreated_t :: struct {
+    k_iCallback : s32 : 513;
     m_eResult : EResult;
     m_ulSteamIDLobby : uint64;
 }
 
 PSNGameBootInviteResult_t :: struct {
+    k_iCallback : s32 : 515;
     m_bGameBootInviteExists : bool;
     m_steamIDLobby : CSteamID;
 }
 
 FavoritesListAccountsUpdated_t :: struct {
+    k_iCallback : s32 : 516;
     m_eResult : EResult;
 }
 
 SearchForGameProgressCallback_t :: struct {
+    k_iCallback : s32 : 5201;
     m_ullSearchID : uint64;
     m_eResult : EResult;
     m_lobbyID : CSteamID;
@@ -302,6 +355,7 @@ SearchForGameProgressCallback_t :: struct {
 }
 
 SearchForGameResultCallback_t :: struct {
+    k_iCallback : s32 : 5202;
     m_ullSearchID : uint64;
     m_eResult : EResult;
     m_nCountPlayersInGame : int32;
@@ -311,11 +365,13 @@ SearchForGameResultCallback_t :: struct {
 }
 
 RequestPlayersForGameProgressCallback_t :: struct {
+    k_iCallback : s32 : 5211;
     m_eResult : EResult;
     m_ullSearchID : uint64;
 }
 
 RequestPlayersForGameResultCallback_t :: struct {
+    k_iCallback : s32 : 5212;
     m_eResult : EResult;
     m_ullSearchID : uint64;
     m_SteamIDPlayerFound : CSteamID;
@@ -329,23 +385,27 @@ RequestPlayersForGameResultCallback_t :: struct {
 }
 
 RequestPlayersForGameFinalResultCallback_t :: struct {
+    k_iCallback : s32 : 5213;
     m_eResult : EResult;
     m_ullSearchID : uint64;
     m_ullUniqueGameID : uint64;
 }
 
 SubmitPlayerResultResultCallback_t :: struct {
+    k_iCallback : s32 : 5214;
     m_eResult : EResult;
     ullUniqueGameID : uint64;
     steamIDPlayer : CSteamID;
 }
 
 EndGameResultCallback_t :: struct {
+    k_iCallback : s32 : 5215;
     m_eResult : EResult;
     ullUniqueGameID : uint64;
 }
 
 JoinPartyCallback_t :: struct {
+    k_iCallback : s32 : 5301;
     m_eResult : EResult;
     m_ulBeaconID : PartyBeaconID_t;
     m_SteamIDBeaconOwner : CSteamID;
@@ -353,38 +413,46 @@ JoinPartyCallback_t :: struct {
 }
 
 CreateBeaconCallback_t :: struct {
+    k_iCallback : s32 : 5302;
     m_eResult : EResult;
     m_ulBeaconID : PartyBeaconID_t;
 }
 
 ReservationNotificationCallback_t :: struct {
+    k_iCallback : s32 : 5303;
     m_ulBeaconID : PartyBeaconID_t;
     m_steamIDJoiner : CSteamID;
 }
 
 ChangeNumOpenSlotsCallback_t :: struct {
+    k_iCallback : s32 : 5304;
     m_eResult : EResult;
 }
 
 AvailableBeaconLocationsUpdated_t :: struct {
+    k_iCallback : s32 : 5305;
 }
 
 ActiveBeaconsUpdated_t :: struct {
+    k_iCallback : s32 : 5306;
 }
 
 RemoteStorageAppSyncedClient_t :: struct {
+    k_iCallback : s32 : 1301;
     m_nAppID : AppId_t;
     m_eResult : EResult;
     m_unNumDownloads : s32;
 }
 
 RemoteStorageAppSyncedServer_t :: struct {
+    k_iCallback : s32 : 1302;
     m_nAppID : AppId_t;
     m_eResult : EResult;
     m_unNumUploads : s32;
 }
 
 RemoteStorageAppSyncProgress_t :: struct {
+    k_iCallback : s32 : 1303;
     m_rgchCurrentFile : [260] char ;
     m_nAppID : AppId_t;
     m_uBytesTransferredThisChunk : uint32;
@@ -393,28 +461,33 @@ RemoteStorageAppSyncProgress_t :: struct {
 }
 
 RemoteStorageAppSyncStatusCheck_t :: struct {
+    k_iCallback : s32 : 1305;
     m_nAppID : AppId_t;
     m_eResult : EResult;
 }
 
 RemoteStorageFileShareResult_t :: struct {
+    k_iCallback : s32 : 1307;
     m_eResult : EResult;
     m_hFile : UGCHandle_t;
     m_rgchFilename : [260] char ;
 }
 
 RemoteStoragePublishFileResult_t :: struct {
+    k_iCallback : s32 : 1309;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
 }
 
 RemoteStorageDeletePublishedFileResult_t :: struct {
+    k_iCallback : s32 : 1311;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
 }
 
 RemoteStorageEnumerateUserPublishedFilesResult_t :: struct {
+    k_iCallback : s32 : 1312;
     m_eResult : EResult;
     m_nResultsReturned : int32;
     m_nTotalResultCount : int32;
@@ -422,11 +495,13 @@ RemoteStorageEnumerateUserPublishedFilesResult_t :: struct {
 }
 
 RemoteStorageSubscribePublishedFileResult_t :: struct {
+    k_iCallback : s32 : 1313;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
 }
 
 RemoteStorageEnumerateUserSubscribedFilesResult_t :: struct {
+    k_iCallback : s32 : 1314;
     m_eResult : EResult;
     m_nResultsReturned : int32;
     m_nTotalResultCount : int32;
@@ -435,17 +510,20 @@ RemoteStorageEnumerateUserSubscribedFilesResult_t :: struct {
 }
 
 RemoteStorageUnsubscribePublishedFileResult_t :: struct {
+    k_iCallback : s32 : 1315;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
 }
 
 RemoteStorageUpdatePublishedFileResult_t :: struct {
+    k_iCallback : s32 : 1316;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
 }
 
 RemoteStorageDownloadUGCResult_t :: struct {
+    k_iCallback : s32 : 1317;
     m_eResult : EResult;
     m_hFile : UGCHandle_t;
     m_nAppID : AppId_t;
@@ -455,6 +533,7 @@ RemoteStorageDownloadUGCResult_t :: struct {
 }
 
 RemoteStorageGetPublishedFileDetailsResult_t :: struct {
+    k_iCallback : s32 : 1318;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_nCreatorAppID : AppId_t;
@@ -479,6 +558,7 @@ RemoteStorageGetPublishedFileDetailsResult_t :: struct {
 }
 
 RemoteStorageEnumerateWorkshopFilesResult_t :: struct {
+    k_iCallback : s32 : 1319;
     m_eResult : EResult;
     m_nResultsReturned : int32;
     m_nTotalResultCount : int32;
@@ -489,6 +569,7 @@ RemoteStorageEnumerateWorkshopFilesResult_t :: struct {
 }
 
 RemoteStorageGetPublishedItemVoteDetailsResult_t :: struct {
+    k_iCallback : s32 : 1320;
     m_eResult : EResult;
     m_unPublishedFileId : PublishedFileId_t;
     m_nVotesFor : int32;
@@ -498,32 +579,38 @@ RemoteStorageGetPublishedItemVoteDetailsResult_t :: struct {
 }
 
 RemoteStoragePublishedFileSubscribed_t :: struct {
+    k_iCallback : s32 : 1321;
     m_nPublishedFileId : PublishedFileId_t;
     m_nAppID : AppId_t;
 }
 
 RemoteStoragePublishedFileUnsubscribed_t :: struct {
+    k_iCallback : s32 : 1322;
     m_nPublishedFileId : PublishedFileId_t;
     m_nAppID : AppId_t;
 }
 
 RemoteStoragePublishedFileDeleted_t :: struct {
+    k_iCallback : s32 : 1323;
     m_nPublishedFileId : PublishedFileId_t;
     m_nAppID : AppId_t;
 }
 
 RemoteStorageUpdateUserPublishedItemVoteResult_t :: struct {
+    k_iCallback : s32 : 1324;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
 }
 
 RemoteStorageUserVoteDetails_t :: struct {
+    k_iCallback : s32 : 1325;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_eVote : EWorkshopVote;
 }
 
 RemoteStorageEnumerateUserSharedWorkshopFilesResult_t :: struct {
+    k_iCallback : s32 : 1326;
     m_eResult : EResult;
     m_nResultsReturned : int32;
     m_nTotalResultCount : int32;
@@ -531,12 +618,14 @@ RemoteStorageEnumerateUserSharedWorkshopFilesResult_t :: struct {
 }
 
 RemoteStorageSetUserPublishedFileActionResult_t :: struct {
+    k_iCallback : s32 : 1327;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_eAction : EWorkshopFileAction;
 }
 
 RemoteStorageEnumeratePublishedFilesByUserActionResult_t :: struct {
+    k_iCallback : s32 : 1328;
     m_eResult : EResult;
     m_eAction : EWorkshopFileAction;
     m_nResultsReturned : int32;
@@ -546,21 +635,25 @@ RemoteStorageEnumeratePublishedFilesByUserActionResult_t :: struct {
 }
 
 RemoteStoragePublishFileProgress_t :: struct {
+    k_iCallback : s32 : 1329;
     m_dPercentFile : double;
     m_bPreview : bool;
 }
 
 RemoteStoragePublishedFileUpdated_t :: struct {
+    k_iCallback : s32 : 1330;
     m_nPublishedFileId : PublishedFileId_t;
     m_nAppID : AppId_t;
     m_ulUnused : uint64;
 }
 
 RemoteStorageFileWriteAsyncComplete_t :: struct {
+    k_iCallback : s32 : 1331;
     m_eResult : EResult;
 }
 
 RemoteStorageFileReadAsyncComplete_t :: struct {
+    k_iCallback : s32 : 1332;
     m_hFileReadAsync : SteamAPICall_t;
     m_eResult : EResult;
     m_nOffset : uint32;
@@ -568,17 +661,20 @@ RemoteStorageFileReadAsyncComplete_t :: struct {
 }
 
 UserStatsReceived_t :: struct {
+    k_iCallback : s32 : 1101;
     m_nGameID : uint64;
     m_eResult : EResult;
     m_steamIDUser : CSteamID;
 }
 
 UserStatsStored_t :: struct {
+    k_iCallback : s32 : 1102;
     m_nGameID : uint64;
     m_eResult : EResult;
 }
 
 UserAchievementStored_t :: struct {
+    k_iCallback : s32 : 1103;
     m_nGameID : uint64;
     m_bGroupAchievement : bool;
     m_rgchAchievementName : [128] char ;
@@ -587,17 +683,20 @@ UserAchievementStored_t :: struct {
 }
 
 LeaderboardFindResult_t :: struct {
+    k_iCallback : s32 : 1104;
     m_hSteamLeaderboard : SteamLeaderboard_t;
     m_bLeaderboardFound : uint8;
 }
 
 LeaderboardScoresDownloaded_t :: struct {
+    k_iCallback : s32 : 1105;
     m_hSteamLeaderboard : SteamLeaderboard_t;
     m_hSteamLeaderboardEntries : SteamLeaderboardEntries_t;
     m_cEntryCount : s32;
 }
 
 LeaderboardScoreUploaded_t :: struct {
+    k_iCallback : s32 : 1106;
     m_bSuccess : uint8;
     m_hSteamLeaderboard : SteamLeaderboard_t;
     m_nScore : int32;
@@ -607,15 +706,18 @@ LeaderboardScoreUploaded_t :: struct {
 }
 
 NumberOfCurrentPlayers_t :: struct {
+    k_iCallback : s32 : 1107;
     m_bSuccess : uint8;
     m_cPlayers : int32;
 }
 
 UserStatsUnloaded_t :: struct {
+    k_iCallback : s32 : 1108;
     m_steamIDUser : CSteamID;
 }
 
 UserAchievementIconFetched_t :: struct {
+    k_iCallback : s32 : 1109;
     m_nGameID : CGameID;
     m_rgchAchievementName : [128] char ;
     m_bAchieved : bool;
@@ -623,39 +725,47 @@ UserAchievementIconFetched_t :: struct {
 }
 
 GlobalAchievementPercentagesReady_t :: struct {
+    k_iCallback : s32 : 1110;
     m_nGameID : uint64;
     m_eResult : EResult;
 }
 
 LeaderboardUGCSet_t :: struct {
+    k_iCallback : s32 : 1111;
     m_eResult : EResult;
     m_hSteamLeaderboard : SteamLeaderboard_t;
 }
 
 PS3TrophiesInstalled_t :: struct {
+    k_iCallback : s32 : 1112;
     m_nGameID : uint64;
     m_eResult : EResult;
     m_ulRequiredDiskSpace : uint64;
 }
 
 GlobalStatsReceived_t :: struct {
+    k_iCallback : s32 : 1112;
     m_nGameID : uint64;
     m_eResult : EResult;
 }
 
 DlcInstalled_t :: struct {
+    k_iCallback : s32 : 1005;
     m_nAppID : AppId_t;
 }
 
 RegisterActivationCodeResponse_t :: struct {
+    k_iCallback : s32 : 1008;
     m_eResult : ERegisterActivationCodeResult;
     m_unPackageRegistered : uint32;
 }
 
 NewUrlLaunchParameters_t :: struct {
+    k_iCallback : s32 : 1014;
 }
 
 AppProofOfPurchaseKeyResponse_t :: struct {
+    k_iCallback : s32 : 1021;
     m_eResult : EResult;
     m_nAppID : uint32;
     m_cchKeyLength : uint32;
@@ -663,6 +773,7 @@ AppProofOfPurchaseKeyResponse_t :: struct {
 }
 
 FileDetailsResult_t :: struct {
+    k_iCallback : s32 : 1023;
     m_eResult : EResult;
     m_ulFileSize : uint64;
     m_FileSHA : [20] uint8 ;
@@ -670,6 +781,7 @@ FileDetailsResult_t :: struct {
 }
 
 TimedTrialStatus_t :: struct {
+    k_iCallback : s32 : 1030;
     m_unAppID : AppId_t;
     m_bIsOffline : bool;
     m_unSecondsAllowed : uint32;
@@ -677,15 +789,18 @@ TimedTrialStatus_t :: struct {
 }
 
 P2PSessionRequest_t :: struct {
+    k_iCallback : s32 : 1202;
     m_steamIDRemote : CSteamID;
 }
 
 P2PSessionConnectFail_t :: struct {
+    k_iCallback : s32 : 1203;
     m_steamIDRemote : CSteamID;
     m_eP2PSessionError : uint8;
 }
 
 SocketStatusCallback_t :: struct {
+    k_iCallback : s32 : 1201;
     m_hSocket : SNetSocket_t;
     m_hListenSocket : SNetListenSocket_t;
     m_steamIDRemote : CSteamID;
@@ -693,69 +808,88 @@ SocketStatusCallback_t :: struct {
 }
 
 ScreenshotReady_t :: struct {
+    k_iCallback : s32 : 2301;
     m_hLocal : ScreenshotHandle;
     m_eResult : EResult;
 }
 
 ScreenshotRequested_t :: struct {
+    k_iCallback : s32 : 2302;
 }
 
 PlaybackStatusHasChanged_t :: struct {
+    k_iCallback : s32 : 4001;
 }
 
 VolumeHasChanged_t :: struct {
+    k_iCallback : s32 : 4002;
     m_flNewVolume : float;
 }
 
 MusicPlayerRemoteWillActivate_t :: struct {
+    k_iCallback : s32 : 4101;
 }
 
 MusicPlayerRemoteWillDeactivate_t :: struct {
+    k_iCallback : s32 : 4102;
 }
 
 MusicPlayerRemoteToFront_t :: struct {
+    k_iCallback : s32 : 4103;
 }
 
 MusicPlayerWillQuit_t :: struct {
+    k_iCallback : s32 : 4104;
 }
 
 MusicPlayerWantsPlay_t :: struct {
+    k_iCallback : s32 : 4105;
 }
 
 MusicPlayerWantsPause_t :: struct {
+    k_iCallback : s32 : 4106;
 }
 
 MusicPlayerWantsPlayPrevious_t :: struct {
+    k_iCallback : s32 : 4107;
 }
 
 MusicPlayerWantsPlayNext_t :: struct {
+    k_iCallback : s32 : 4108;
 }
 
 MusicPlayerWantsShuffled_t :: struct {
+    k_iCallback : s32 : 4109;
     m_bShuffled : bool;
 }
 
 MusicPlayerWantsLooped_t :: struct {
+    k_iCallback : s32 : 4110;
     m_bLooped : bool;
 }
 
 MusicPlayerWantsVolume_t :: struct {
+    k_iCallback : s32 : 4011;
     m_flNewVolume : float;
 }
 
 MusicPlayerSelectsQueueEntry_t :: struct {
+    k_iCallback : s32 : 4012;
     nID : s32;
 }
 
 MusicPlayerSelectsPlaylistEntry_t :: struct {
+    k_iCallback : s32 : 4013;
     nID : s32;
 }
 
 MusicPlayerWantsPlayingRepeatStatus_t :: struct {
+    k_iCallback : s32 : 4114;
     m_nPlayingRepeatStatus : s32;
 }
 
 HTTPRequestCompleted_t :: struct {
+    k_iCallback : s32 : 2101;
     m_hRequest : HTTPRequestHandle;
     m_ulContextValue : uint64;
     m_bRequestSuccessful : bool;
@@ -764,11 +898,13 @@ HTTPRequestCompleted_t :: struct {
 }
 
 HTTPRequestHeadersReceived_t :: struct {
+    k_iCallback : s32 : 2102;
     m_hRequest : HTTPRequestHandle;
     m_ulContextValue : uint64;
 }
 
 HTTPRequestDataReceived_t :: struct {
+    k_iCallback : s32 : 2103;
     m_hRequest : HTTPRequestHandle;
     m_ulContextValue : uint64;
     m_cOffset : uint32;
@@ -776,6 +912,7 @@ HTTPRequestDataReceived_t :: struct {
 }
 
 SteamUGCQueryCompleted_t :: struct {
+    k_iCallback : s32 : 3401;
     m_handle : UGCQueryHandle_t;
     m_eResult : EResult;
     m_unNumResultsReturned : uint32;
@@ -785,46 +922,54 @@ SteamUGCQueryCompleted_t :: struct {
 }
 
 SteamUGCRequestUGCDetailsResult_t :: struct {
+    k_iCallback : s32 : 3402;
     m_details : SteamUGCDetails_t;
     m_bCachedData : bool;
 }
 
 CreateItemResult_t :: struct {
+    k_iCallback : s32 : 3403;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
 }
 
 SubmitItemUpdateResult_t :: struct {
+    k_iCallback : s32 : 3404;
     m_eResult : EResult;
     m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
     m_nPublishedFileId : PublishedFileId_t;
 }
 
 ItemInstalled_t :: struct {
+    k_iCallback : s32 : 3405;
     m_unAppID : AppId_t;
     m_nPublishedFileId : PublishedFileId_t;
 }
 
 DownloadItemResult_t :: struct {
+    k_iCallback : s32 : 3406;
     m_unAppID : AppId_t;
     m_nPublishedFileId : PublishedFileId_t;
     m_eResult : EResult;
 }
 
 UserFavoriteItemsListChanged_t :: struct {
+    k_iCallback : s32 : 3407;
     m_nPublishedFileId : PublishedFileId_t;
     m_eResult : EResult;
     m_bWasAddRequest : bool;
 }
 
 SetUserItemVoteResult_t :: struct {
+    k_iCallback : s32 : 3408;
     m_nPublishedFileId : PublishedFileId_t;
     m_eResult : EResult;
     m_bVoteUp : bool;
 }
 
 GetUserItemVoteResult_t :: struct {
+    k_iCallback : s32 : 3409;
     m_nPublishedFileId : PublishedFileId_t;
     m_eResult : EResult;
     m_bVotedUp : bool;
@@ -833,38 +978,45 @@ GetUserItemVoteResult_t :: struct {
 }
 
 StartPlaytimeTrackingResult_t :: struct {
+    k_iCallback : s32 : 3410;
     m_eResult : EResult;
 }
 
 StopPlaytimeTrackingResult_t :: struct {
+    k_iCallback : s32 : 3411;
     m_eResult : EResult;
 }
 
 AddUGCDependencyResult_t :: struct {
+    k_iCallback : s32 : 3412;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_nChildPublishedFileId : PublishedFileId_t;
 }
 
 RemoveUGCDependencyResult_t :: struct {
+    k_iCallback : s32 : 3413;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_nChildPublishedFileId : PublishedFileId_t;
 }
 
 AddAppDependencyResult_t :: struct {
+    k_iCallback : s32 : 3414;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_nAppID : AppId_t;
 }
 
 RemoveAppDependencyResult_t :: struct {
+    k_iCallback : s32 : 3415;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_nAppID : AppId_t;
 }
 
 GetAppDependenciesResult_t :: struct {
+    k_iCallback : s32 : 3416;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
     m_rgAppIDs : [32] AppId_t ;
@@ -873,23 +1025,28 @@ GetAppDependenciesResult_t :: struct {
 }
 
 DeleteItemResult_t :: struct {
+    k_iCallback : s32 : 3417;
     m_eResult : EResult;
     m_nPublishedFileId : PublishedFileId_t;
 }
 
 SteamAppInstalled_t :: struct {
+    k_iCallback : s32 : 3901;
     m_nAppID : AppId_t;
 }
 
 SteamAppUninstalled_t :: struct {
+    k_iCallback : s32 : 3902;
     m_nAppID : AppId_t;
 }
 
 HTML_BrowserReady_t :: struct {
+    k_iCallback : s32 : 4501;
     unBrowserHandle : HHTMLBrowser;
 }
 
 HTML_NeedsPaint_t :: struct {
+    k_iCallback : s32 : 4502;
     unBrowserHandle : HHTMLBrowser;
     pBGRA : *char ;
     unWide : uint32;
@@ -905,6 +1062,7 @@ HTML_NeedsPaint_t :: struct {
 }
 
 HTML_StartRequest_t :: struct {
+    k_iCallback : s32 : 4503;
     unBrowserHandle : HHTMLBrowser;
     pchURL : *char ;
     pchTarget : *char ;
@@ -913,10 +1071,12 @@ HTML_StartRequest_t :: struct {
 }
 
 HTML_CloseBrowser_t :: struct {
+    k_iCallback : s32 : 4504;
     unBrowserHandle : HHTMLBrowser;
 }
 
 HTML_URLChanged_t :: struct {
+    k_iCallback : s32 : 4505;
     unBrowserHandle : HHTMLBrowser;
     pchURL : *char ;
     pchPostData : *char ;
@@ -926,34 +1086,40 @@ HTML_URLChanged_t :: struct {
 }
 
 HTML_FinishedRequest_t :: struct {
+    k_iCallback : s32 : 4506;
     unBrowserHandle : HHTMLBrowser;
     pchURL : *char ;
     pchPageTitle : *char ;
 }
 
 HTML_OpenLinkInNewTab_t :: struct {
+    k_iCallback : s32 : 4507;
     unBrowserHandle : HHTMLBrowser;
     pchURL : *char ;
 }
 
 HTML_ChangedTitle_t :: struct {
+    k_iCallback : s32 : 4508;
     unBrowserHandle : HHTMLBrowser;
     pchTitle : *char ;
 }
 
 HTML_SearchResults_t :: struct {
+    k_iCallback : s32 : 4509;
     unBrowserHandle : HHTMLBrowser;
     unResults : uint32;
     unCurrentMatch : uint32;
 }
 
 HTML_CanGoBackAndForward_t :: struct {
+    k_iCallback : s32 : 4510;
     unBrowserHandle : HHTMLBrowser;
     bCanGoBack : bool;
     bCanGoForward : bool;
 }
 
 HTML_HorizontalScroll_t :: struct {
+    k_iCallback : s32 : 4511;
     unBrowserHandle : HHTMLBrowser;
     unScrollMax : uint32;
     unScrollCurrent : uint32;
@@ -963,6 +1129,7 @@ HTML_HorizontalScroll_t :: struct {
 }
 
 HTML_VerticalScroll_t :: struct {
+    k_iCallback : s32 : 4512;
     unBrowserHandle : HHTMLBrowser;
     unScrollMax : uint32;
     unScrollCurrent : uint32;
@@ -972,6 +1139,7 @@ HTML_VerticalScroll_t :: struct {
 }
 
 HTML_LinkAtPosition_t :: struct {
+    k_iCallback : s32 : 4513;
     unBrowserHandle : HHTMLBrowser;
     x : uint32;
     y : uint32;
@@ -981,22 +1149,26 @@ HTML_LinkAtPosition_t :: struct {
 }
 
 HTML_JSAlert_t :: struct {
+    k_iCallback : s32 : 4514;
     unBrowserHandle : HHTMLBrowser;
     pchMessage : *char ;
 }
 
 HTML_JSConfirm_t :: struct {
+    k_iCallback : s32 : 4515;
     unBrowserHandle : HHTMLBrowser;
     pchMessage : *char ;
 }
 
 HTML_FileOpenDialog_t :: struct {
+    k_iCallback : s32 : 4516;
     unBrowserHandle : HHTMLBrowser;
     pchTitle : *char ;
     pchInitialFile : *char ;
 }
 
 HTML_NewWindow_t :: struct {
+    k_iCallback : s32 : 4521;
     unBrowserHandle : HHTMLBrowser;
     pchURL : *char ;
     unX : uint32;
@@ -1007,47 +1179,57 @@ HTML_NewWindow_t :: struct {
 }
 
 HTML_SetCursor_t :: struct {
+    k_iCallback : s32 : 4522;
     unBrowserHandle : HHTMLBrowser;
     eMouseCursor : uint32;
 }
 
 HTML_StatusText_t :: struct {
+    k_iCallback : s32 : 4523;
     unBrowserHandle : HHTMLBrowser;
     pchMsg : *char ;
 }
 
 HTML_ShowToolTip_t :: struct {
+    k_iCallback : s32 : 4524;
     unBrowserHandle : HHTMLBrowser;
     pchMsg : *char ;
 }
 
 HTML_UpdateToolTip_t :: struct {
+    k_iCallback : s32 : 4525;
     unBrowserHandle : HHTMLBrowser;
     pchMsg : *char ;
 }
 
 HTML_HideToolTip_t :: struct {
+    k_iCallback : s32 : 4526;
     unBrowserHandle : HHTMLBrowser;
 }
 
 HTML_BrowserRestarted_t :: struct {
+    k_iCallback : s32 : 4527;
     unBrowserHandle : HHTMLBrowser;
     unOldBrowserHandle : HHTMLBrowser;
 }
 
 SteamInventoryResultReady_t :: struct {
+    k_iCallback : s32 : 4700;
     m_handle : SteamInventoryResult_t;
     m_result : EResult;
 }
 
 SteamInventoryFullUpdate_t :: struct {
+    k_iCallback : s32 : 4701;
     m_handle : SteamInventoryResult_t;
 }
 
 SteamInventoryDefinitionUpdate_t :: struct {
+    k_iCallback : s32 : 4702;
 }
 
 SteamInventoryEligiblePromoItemDefIDs_t :: struct {
+    k_iCallback : s32 : 4703;
     m_result : EResult;
     m_steamID : CSteamID;
     m_numEligiblePromoItemDefs : s32;
@@ -1055,58 +1237,70 @@ SteamInventoryEligiblePromoItemDefIDs_t :: struct {
 }
 
 SteamInventoryStartPurchaseResult_t :: struct {
+    k_iCallback : s32 : 4704;
     m_result : EResult;
     m_ulOrderID : uint64;
     m_ulTransID : uint64;
 }
 
 SteamInventoryRequestPricesResult_t :: struct {
+    k_iCallback : s32 : 4705;
     m_result : EResult;
     m_rgchCurrency : [4] char ;
 }
 
 GetVideoURLResult_t :: struct {
+    k_iCallback : s32 : 4611;
     m_eResult : EResult;
     m_unVideoAppID : AppId_t;
     m_rgchURL : [256] char ;
 }
 
 GetOPFSettingsResult_t :: struct {
+    k_iCallback : s32 : 4624;
     m_eResult : EResult;
     m_unVideoAppID : AppId_t;
 }
 
 SteamParentalSettingsChanged_t :: struct {
+    k_iCallback : s32 : 5001;
 }
 
 SteamRemotePlaySessionConnected_t :: struct {
+    k_iCallback : s32 : 5701;
     m_unSessionID : RemotePlaySessionID_t;
 }
 
 SteamRemotePlaySessionDisconnected_t :: struct {
+    k_iCallback : s32 : 5702;
     m_unSessionID : RemotePlaySessionID_t;
 }
 
 SteamNetworkingMessagesSessionRequest_t :: struct {
+    k_iCallback : s32 : 1251;
     m_identityRemote : SteamNetworkingIdentity;
 }
 
 SteamNetworkingMessagesSessionFailed_t :: struct {
+    k_iCallback : s32 : 1252;
     m_info : SteamNetConnectionInfo_t;
 }
 
 SteamNetConnectionStatusChangedCallback_t :: struct {
+    k_iCallback : s32 : 1221;
     m_hConn : HSteamNetConnection;
     m_info : SteamNetConnectionInfo_t;
     m_eOldState : ESteamNetworkingConnectionState;
 }
 
 SteamNetAuthenticationStatus_t :: struct {
+    k_iCallback : s32 : 1222;
     m_eAvail : ESteamNetworkingAvailability;
     m_debugMsg : [256] char ;
 }
 
 SteamRelayNetworkStatus_t :: struct {
+    k_iCallback : s32 : 1281;
     m_eAvail : ESteamNetworkingAvailability;
     m_bPingMeasurementInProgress : s32;
     m_eAvailNetworkConfig : ESteamNetworkingAvailability;
@@ -1115,32 +1309,38 @@ SteamRelayNetworkStatus_t :: struct {
 }
 
 GSClientApprove_t :: struct {
+    k_iCallback : s32 : 201;
     m_SteamID : CSteamID;
     m_OwnerSteamID : CSteamID;
 }
 
 GSClientDeny_t :: struct {
+    k_iCallback : s32 : 202;
     m_SteamID : CSteamID;
     m_eDenyReason : EDenyReason;
     m_rgchOptionalText : [128] char ;
 }
 
 GSClientKick_t :: struct {
+    k_iCallback : s32 : 203;
     m_SteamID : CSteamID;
     m_eDenyReason : EDenyReason;
 }
 
 GSClientAchievementStatus_t :: struct {
+    k_iCallback : s32 : 206;
     m_SteamID : uint64;
     m_pchAchievement : [128] char ;
     m_bUnlocked : bool;
 }
 
 GSPolicyResponse_t :: struct {
+    k_iCallback : s32 : 115;
     m_bSecure : uint8;
 }
 
 GSGameplayStats_t :: struct {
+    k_iCallback : s32 : 207;
     m_eResult : EResult;
     m_nRank : int32;
     m_unTotalConnects : uint32;
@@ -1148,6 +1348,7 @@ GSGameplayStats_t :: struct {
 }
 
 GSClientGroupStatus_t :: struct {
+    k_iCallback : s32 : 208;
     m_SteamIDUser : CSteamID;
     m_SteamIDGroup : CSteamID;
     m_bMember : bool;
@@ -1155,6 +1356,7 @@ GSClientGroupStatus_t :: struct {
 }
 
 GSReputation_t :: struct {
+    k_iCallback : s32 : 209;
     m_eResult : EResult;
     m_unReputationScore : uint32;
     m_bBanned : bool;
@@ -1165,10 +1367,12 @@ GSReputation_t :: struct {
 }
 
 AssociateWithClanResult_t :: struct {
+    k_iCallback : s32 : 210;
     m_eResult : EResult;
 }
 
 ComputeNewPlayerCompatibilityResult_t :: struct {
+    k_iCallback : s32 : 211;
     m_eResult : EResult;
     m_cPlayersThatDontLikeCandidate : s32;
     m_cPlayersThatCandidateDoesntLike : s32;
@@ -1177,16 +1381,19 @@ ComputeNewPlayerCompatibilityResult_t :: struct {
 }
 
 GSStatsReceived_t :: struct {
+    k_iCallback : s32 : 1800;
     m_eResult : EResult;
     m_steamIDUser : CSteamID;
 }
 
 GSStatsStored_t :: struct {
+    k_iCallback : s32 : 1801;
     m_eResult : EResult;
     m_steamIDUser : CSteamID;
 }
 
 GSStatsUnloaded_t :: struct {
+    k_iCallback : s32 : 1108;
     m_steamIDUser : CSteamID;
 }
 
@@ -2986,7 +3193,7 @@ uint8 :: u8;
 int8 :: s8;
 int16 :: s16;
 uint16 :: u16;
-int32 :: s64;
+int32 :: s32;
 uint32 :: uint;
 int64 :: s64;
 uint64 :: u64;
@@ -3017,11 +3224,11 @@ PFNLegacyKeyRegistration :: *void;
 PFNLegacyKeyInstalled :: *void;
 PFNPreMinidumpCallback :: *void;
 BREAKPAD_HANDLE :: *void;
-HSteamPipe :: s64;
-HSteamUser :: s64;
+HSteamPipe :: s32;
+HSteamUser :: s32;
 FriendsGroupID_t :: s16;
 HServerListRequest :: *void;
-HServerQuery :: s64;
+HServerQuery :: s32;
 UGCHandle_t :: u64;
 PublishedFileUpdateHandle_t :: u64;
 PublishedFileId_t :: u64;
@@ -3045,8 +3252,8 @@ UGCQueryHandle_t :: u64;
 UGCUpdateHandle_t :: u64;
 HHTMLBrowser :: uint;
 SteamItemInstanceID_t :: u64;
-SteamItemDef_t :: s64;
-SteamInventoryResult_t :: s64;
+SteamItemDef_t :: s32;
+SteamInventoryResult_t :: s32;
 SteamInventoryUpdateHandle_t :: u64;
 RemotePlaySessionID_t :: uint;
 FnSteamNetConnectionStatusChanged :: *void;

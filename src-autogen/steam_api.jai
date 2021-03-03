@@ -16,6 +16,7 @@ Steam_Namespace :: struct {
     SetTryCatchCallbacks       :: SteamAPI_SetTryCatchCallbacks;
     UseBreakpadCrashHandler    :: SteamAPI_UseBreakpadCrashHandler;
     SetBreakpadAppID           :: SteamAPI_SetBreakpadAppID;
+    RunCallbacks               :: SteamAPI_RunCallbacks;
 
     SteamMatchmakingServerListResponse : struct {
         ServerResponded                :: SteamAPI_ISteamMatchmakingServerListResponse_ServerResponded;

@@ -1,6 +1,10 @@
 // This generates all the files in the `src-autogen` folder.  If the Steamworks version has changed,
 // it's very likely this will break.  A manual edit after running is almost guaranteed to be necessary.
 
+// @TODO
+// [x] Inject SteamGameServer_RunCallbacks into SteamGameServer
+
+
 #import "Basic";
 #import "File";
 #import "File_Utilities";
@@ -40,7 +44,7 @@ type_replacements :: Replacement.[
 
 typedef_replacements :: Replacement.[
     .{"char [1024]", "[1024] char"},
-    .{"int", "s64"},
+    .{"int", "s32"},
     .{"short", "s16"},
     .{"unsigned char [8]", "[8] u8"},
     .{"unsigned char", "u8"},
@@ -362,6 +366,10 @@ convert_steam_api_json :: (file_data: string) {
                         struct_name := get_str(object, "struct");
                         struct_fields := get_array(object, "fields");
                         out("\n% :: struct {\n", struct_name);
+
+                        callback_id := get_int(object, "callback_id");
+                        out("    k_iCallback : s32 : %;\n", callback_id);
+
                         for struct_fields {
                             object := it.value.object;
                             field_name := get_str(object, "fieldname");
@@ -414,6 +422,13 @@ get_str :: (object: *JSON_Object, key: string, replacements: [] Replacement) -> 
 }
 
 
+get_int :: (object: *JSON_Object, key: string) -> int {
+    value, success := table_find(<<object, key);
+    if success  return cast(int) value.value.number;
+    else        return 0;
+}
+
+
 get_obj :: (object: *JSON_Object, key: string) -> *JSON_Object {
     value, success := table_find(<<object, key);
     if success  return value.value.object;
@@ -463,6 +478,7 @@ Steam_Namespace :: struct {
     SetTryCatchCallbacks       :: SteamAPI_SetTryCatchCallbacks;
     UseBreakpadCrashHandler    :: SteamAPI_UseBreakpadCrashHandler;
     SetBreakpadAppID           :: SteamAPI_SetBreakpadAppID;
+    RunCallbacks               :: SteamAPI_RunCallbacks;
 
     ___JAI
 
@@ -624,7 +640,8 @@ write_header :: (class_name: string, class_name_override: string) -> string, str
     ___JAI
 
     singleton_top_out(header, instance, type_name, namespace);
-
+    if instance == "steam_game_server"
+        singleton_top_out("    RunCallbacks                                       :: SteamGameServer_RunCallbacks;\n");
     return instance, namespace;
 }
 
