@@ -13,6 +13,7 @@
 
 #load "src/string.jai";
 #load "src/json.jai";
+#load "src/singletons_v150.jai";
 
 
 steam_api_flat :: "sdk/public/steam/steam_api_flat.h";
@@ -29,7 +30,6 @@ output_callbacks_filename   :: "src-autogen/partial_steam_callbacks.jai";
 
 files_appended_to_flat :: string.[
     "src/steam_types.jai",
-    "src/steam_client_header.jai",
 ];
 
 
@@ -44,7 +44,7 @@ procs_to_ignore :: string.[
 ];
 
 attach_server_prefix :: string.[
-    
+
 ];
 
 Replacement :: struct {
@@ -194,7 +194,40 @@ main :: () {
     write_entire_file(output_loads_filename, builder_to_string(*header_loads_builder));
 
     reset(*file_builder);
-    append(*file_builder, builder_to_string(*procs_builder));
+    append(*file_builder, #string ___JAI
+STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
+
+#scope_module
+SteamInternal_CreateInterface :: (version: *u8) -> *ISteamClient #foreign steam;
+#scope_export
+
+SteamClient :: () -> *ISteamClient {
+    return SteamInternal_CreateInterface(STEAMCLIENT_INTERFACE_VERSION);
+}
+___JAI);
+    procs_data := builder_to_string(*procs_builder);
+    for row: split(procs_data, "\n") {
+        end_of_name := index_of_string(row, " :: (");
+        if end_of_name >= 0 {
+            underscore := end_of_name;
+            backward_til(row, #char "_", #code underscore);
+            if !is_letter(row[underscore + 1]) {
+                underscore -= 1;
+                backward_til(row, #char "_", #code underscore);
+            }
+            if row[underscore + 1] == #char "v" {
+                append(*file_builder, slice(row, 0, underscore));
+                append(*file_builder, slice(row, end_of_name));
+            }
+            else if mid(row, underscore - 2, end_of_name) == "_c_str"
+                append(*file_builder, slice(row, underscore - 1));
+            else
+                append(*file_builder, slice(row, underscore + 1));
+        }
+        else
+            append(*file_builder, row);
+        append(*file_builder, "\n");
+    }
     append(*file_builder, builder_to_string(*types_builder));
     output(*file_builder, "\n%\n\n", builder_to_string(*callbacks_enum));
     for files_appended_to_flat {
@@ -282,6 +315,18 @@ convert_steam_api_flat :: (file_data: string) {
 
             parameters := split(split(sections[1], ")")[0], ",");
 
+            link_name := proc_name;
+            if starts_with(proc_name, "SteamAPI_") {
+                proc_name = slice(proc_name, 9);
+                if starts_with(proc_name, "I")
+                    proc_name = slice(proc_name, 1);
+            }
+
+            class_end := 1;
+            forward_til(row, #char "_", #code class_end);
+            class_name := slice(proc_name, class_end);
+            belongs_to_singleton := contains(singletons_v150, class_name);
+
             out("% :: (", proc_name);
 
             for parameter, index: parameters {
@@ -295,7 +340,7 @@ convert_steam_api_flat :: (file_data: string) {
                     pointer_char = "*";
                 }
                 else if parts.count == 3 {
-                    if parts[1] == "*" || parts[1] == "&" // wing and prayer & -> *
+                    if parts[1] == "*" || parts[1] == "&"
                         pointer_char = "*";
                     else if parts[1] == "**"
                         pointer_char = "**";
@@ -308,11 +353,11 @@ convert_steam_api_flat :: (file_data: string) {
             }
 
             if return_type == "void"
-                out(") #foreign steam;\n");
+                out(") #foreign steam \"%\";\n", link_name);
             else if return_type == "SteamAPICall_t"
-                out(") -> %1%2 #must #foreign steam;\n", return_char, return_type);
+                out(") -> %1%2 #must #foreign steam \"%3\";\n", return_char, return_type, link_name);
             else
-                out(") -> %1%2 #foreign steam;\n", return_char, return_type);
+                out(") -> %1%2 #foreign steam \"%3\";\n", return_char, return_type, link_name);
         }
 
     }
@@ -686,25 +731,6 @@ generate_classes :: (file_data: string) {
     steam_api_current_type := "";
 
     steam_api_header :: #string ___JAI
-Steam : Steam_Namespace;
-
-
-#scope_file
-
-
-Steam_Namespace :: struct {
-    Init                       :: Steam_Init;
-    Shutdown                   :: Steam_Shutdown;
-    RestartAppIfNecessary      :: SteamAPI_RestartAppIfNecessary;
-    ReleaseCurrentThreadMemory :: SteamAPI_ReleaseCurrentThreadMemory;
-    WriteMiniDump              :: SteamAPI_WriteMiniDump;
-    SetMiniDumpComment         :: SteamAPI_SetMiniDumpComment;
-    IsSteamRunning             :: SteamAPI_IsSteamRunning;
-    GetSteamInstallPath        :: SteamAPI_GetSteamInstallPath;
-    SetTryCatchCallbacks       :: SteamAPI_SetTryCatchCallbacks;
-    UseBreakpadCrashHandler    :: SteamAPI_UseBreakpadCrashHandler;
-    SetBreakpadAppID           :: SteamAPI_SetBreakpadAppID;
-    RunCallbacks               :: SteamAPI_RunCallbacks;
 
     ___JAI
 
@@ -732,7 +758,7 @@ Steam_Namespace :: struct {
         else {
             if row == "" {
                 if in_singleton && !contains(singletons_to_ignore, section_name) {
-                    singleton_top_out("}\n");
+                    //singleton_top_out("}\n");
                     singleton_count += 1;
                     append(*singleton_top_builder, builder_to_string(*singleton_bottom_builder));
                     write_entire_file(sprint("%/%.jai", output_autogen_folder, singleton_instance), builder_to_string(*singleton_top_builder));
@@ -768,7 +794,7 @@ Steam_Namespace :: struct {
                             singleton_instance, namespace = write_header(section_name, class_name_override);
                             print("Generating %.jai...\n", singleton_instance);
 
-                            name := mid(row, 9, i);
+                            name := mid(row, 0, i);
                             name = snake_from_camel(name);
                             defer free(name);
 
@@ -793,11 +819,12 @@ Steam_Namespace :: struct {
             past_singleton_header = true;
 
             if in_singleton {
-                short_name, long_name, flat_name, parameters, returns, return_is_string := singleton_parts_from_flat(row);
+                short_name, long_name, parameters, returns, return_is_string := singleton_parts_from_flat(row);
+                flat_name := long_name;
 
-                singleton_top_out("    %", short_name);
-                for short_name.count..50  singleton_top_out(" ");
-                singleton_top_out(":: %;\n", long_name);
+                //singleton_top_out("    %", short_name);
+                //for short_name.count..50  singleton_top_out(" ");
+                //singleton_top_out(":: %;\n", long_name);
 
                 singleton_bottom_out("\n\n");
                 if returns == "" {
@@ -857,10 +884,6 @@ write_header :: (class_name: string, class_name_override: string) -> string, str
 
     header :: #string ___JAI
 %1 : *%2;
-%3 : %3_Namespace;
-
-
-#scope_file
 
 
 %3_Namespace :: struct {
@@ -875,7 +898,7 @@ write_header :: (class_name: string, class_name_override: string) -> string, str
 
 
 section_name_from_instance_row :: (row: string) -> string {
-    return sprint("I%", split(row, "_")[1]);
+    return sprint("I%", split(row, "_")[0]);
 }
 
 
@@ -913,20 +936,18 @@ strip_types :: (str: string) -> string {
 }
 
 
-singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: string, flat_name: string, parameters: string, returns: string, return_is_string: bool {
+singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: string, parameters: string, returns: string, return_is_string: bool {
     return_is_string := false;
 
-    _1 :: 9;
-    _2 := _1 + 1;
+    short_start := 0;
+    forward_til(row, #char "_", #code short_start);
+    short_start += 1;
 
-    forward_til(row, #char "_", #code _2);
-
-    i := _2 + 1;
+    i := short_start + 1;
     forward_til(row, #char " ", #code i);
 
-    short_name := mid(row, _2 + 1, i);
-    long_name  := mid(row, _1 + 1, i);
-    flat_name  := mid(row,  0,     i);
+    short_name := mid(row, short_start, i);
+    long_name  := mid(row, 0, i);
 
     forward_til(row, #char "(", #code i);
     forward_til(row, #char ",", #char ")", #code i);
@@ -965,7 +986,7 @@ singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: str
         returns = "string";
     }
 
-    return short_name, long_name, flat_name, parameters, returns, return_is_string;
+    return short_name, long_name, parameters, returns, return_is_string;
 }
 
 

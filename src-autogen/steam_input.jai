@@ -45,176 +45,176 @@ SteamInput_Namespace :: struct {
 }
 
 
-SteamInput_Init :: inline () -> bool {
-    return SteamAPI_ISteamInput_Init(steam_input);
+SteamInput_Init :: inline () -> bool #foreign steam "SteamAPI_IS {
+    return SteamInput_Init(steam_input);
 }
 
 
-SteamInput_Shutdown :: inline () -> bool {
-    return SteamAPI_ISteamInput_Shutdown(steam_input);
+SteamInput_Shutdown :: inline () -> bool #foreign steam "SteamAPI_ISteam {
+    return SteamInput_Shutdown(steam_input);
 }
 
 
 SteamInput_RunFrame :: inline () {
-    SteamAPI_ISteamInput_RunFrame(steam_input);
+    SteamInput_RunFrame(steam_input);
 }
 
 
-SteamInput_GetConnectedControllers :: inline (handlesOut: *InputHandle_t) -> s32 {
-    return SteamAPI_ISteamInput_GetConnectedControllers(steam_input, handlesOut);
+SteamInput_GetConnectedControllers :: inline (handlesOut: *InputHandle_t) -> s32 #foreign steam "SteamAPI_ISteamInput_GetConnec {
+    return SteamInput_GetConnectedControllers(steam_input, handlesOut);
 }
 
 
-SteamInput_GetActionSetHandle :: inline (pszActionSetName: *char) -> InputActionSetHandle_t {
-    return SteamAPI_ISteamInput_GetActionSetHandle(steam_input, pszActionSetName);
+SteamInput_GetActionSetHandle :: inline (pszActionSetName: *char) -> InputActionSetHandle_t #foreign steam "SteamAPI_ISteamInput_GetA {
+    return SteamInput_GetActionSetHandle(steam_input, pszActionSetName);
 }
 
 
 SteamInput_ActivateActionSet :: inline (inputHandle: InputHandle_t, actionSetHandle: InputActionSetHandle_t) {
-    SteamAPI_ISteamInput_ActivateActionSet(steam_input, inputHandle, actionSetHandle);
+    SteamInput_ActivateActionSet(steam_input, inputHandle, actionSetHandle);
 }
 
 
-SteamInput_GetCurrentActionSet :: inline (inputHandle: InputHandle_t) -> InputActionSetHandle_t {
-    return SteamAPI_ISteamInput_GetCurrentActionSet(steam_input, inputHandle);
+SteamInput_GetCurrentActionSet :: inline (inputHandle: InputHandle_t) -> InputActionSetHandle_t #foreign steam "SteamAPI_ISteamInput_GetCu {
+    return SteamInput_GetCurrentActionSet(steam_input, inputHandle);
 }
 
 
 SteamInput_ActivateActionSetLayer :: inline (inputHandle: InputHandle_t, actionSetLayerHandle: InputActionSetHandle_t) {
-    SteamAPI_ISteamInput_ActivateActionSetLayer(steam_input, inputHandle, actionSetLayerHandle);
+    SteamInput_ActivateActionSetLayer(steam_input, inputHandle, actionSetLayerHandle);
 }
 
 
 SteamInput_DeactivateActionSetLayer :: inline (inputHandle: InputHandle_t, actionSetLayerHandle: InputActionSetHandle_t) {
-    SteamAPI_ISteamInput_DeactivateActionSetLayer(steam_input, inputHandle, actionSetLayerHandle);
+    SteamInput_DeactivateActionSetLayer(steam_input, inputHandle, actionSetLayerHandle);
 }
 
 
 SteamInput_DeactivateAllActionSetLayers :: inline (inputHandle: InputHandle_t) {
-    SteamAPI_ISteamInput_DeactivateAllActionSetLayers(steam_input, inputHandle);
+    SteamInput_DeactivateAllActionSetLayers(steam_input, inputHandle);
 }
 
 
-SteamInput_GetActiveActionSetLayers :: inline (inputHandle: InputHandle_t, handlesOut: *InputActionSetHandle_t) -> s32 {
-    return SteamAPI_ISteamInput_GetActiveActionSetLayers(steam_input, inputHandle, handlesOut);
+SteamInput_GetActiveActionSetLayers :: inline (inputHandle: InputHandle_t, handlesOut: *InputActionSetHandle_t) -> s32 #foreign steam "SteamAPI_ISteamInput_GetActiveA {
+    return SteamInput_GetActiveActionSetLayers(steam_input, inputHandle, handlesOut);
 }
 
 
-SteamInput_GetDigitalActionHandle :: inline (pszActionName: *char) -> InputDigitalActionHandle_t {
-    return SteamAPI_ISteamInput_GetDigitalActionHandle(steam_input, pszActionName);
+SteamInput_GetDigitalActionHandle :: inline (pszActionName: *char) -> InputDigitalActionHandle_t #foreign steam "SteamAPI_ISteamInput_GetDigit {
+    return SteamInput_GetDigitalActionHandle(steam_input, pszActionName);
 }
 
 
-SteamInput_GetDigitalActionData :: inline (inputHandle: InputHandle_t, digitalActionHandle: InputDigitalActionHandle_t) -> InputDigitalActionData_t {
-    return SteamAPI_ISteamInput_GetDigitalActionData(steam_input, inputHandle, digitalActionHandle);
+SteamInput_GetDigitalActionData :: inline (inputHandle: InputHandle_t, digitalActionHandle: InputDigitalActionHandle_t) -> InputDigitalActionData_t #foreign steam "SteamAPI_ISteamInput_GetDig {
+    return SteamInput_GetDigitalActionData(steam_input, inputHandle, digitalActionHandle);
 }
 
 
-SteamInput_GetDigitalActionOrigins :: inline (inputHandle: InputHandle_t, actionSetHandle: InputActionSetHandle_t, digitalActionHandle: InputDigitalActionHandle_t, originsOut: *EInputActionOrigin) -> s32 {
-    return SteamAPI_ISteamInput_GetDigitalActionOrigins(steam_input, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
+SteamInput_GetDigitalActionOrigins :: inline (inputHandle: InputHandle_t, actionSetHandle: InputActionSetHandle_t, digitalActionHandle: InputDigitalActionHandle_t, originsOut: *EInputActionOrigin) -> s32 #foreign steam "SteamAPI_ISteamInput_GetDigita {
+    return SteamInput_GetDigitalActionOrigins(steam_input, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
 }
 
 
-SteamInput_GetAnalogActionHandle :: inline (pszActionName: *char) -> InputAnalogActionHandle_t {
-    return SteamAPI_ISteamInput_GetAnalogActionHandle(steam_input, pszActionName);
+SteamInput_GetAnalogActionHandle :: inline (pszActionName: *char) -> InputAnalogActionHandle_t #foreign steam "SteamAPI_ISteamInput_GetAnal {
+    return SteamInput_GetAnalogActionHandle(steam_input, pszActionName);
 }
 
 
-SteamInput_GetAnalogActionData :: inline (inputHandle: InputHandle_t, analogActionHandle: InputAnalogActionHandle_t) -> InputAnalogActionData_t {
-    return SteamAPI_ISteamInput_GetAnalogActionData(steam_input, inputHandle, analogActionHandle);
+SteamInput_GetAnalogActionData :: inline (inputHandle: InputHandle_t, analogActionHandle: InputAnalogActionHandle_t) -> InputAnalogActionData_t #foreign steam "SteamAPI_ISteamInput_GetAn {
+    return SteamInput_GetAnalogActionData(steam_input, inputHandle, analogActionHandle);
 }
 
 
-SteamInput_GetAnalogActionOrigins :: inline (inputHandle: InputHandle_t, actionSetHandle: InputActionSetHandle_t, analogActionHandle: InputAnalogActionHandle_t, originsOut: *EInputActionOrigin) -> s32 {
-    return SteamAPI_ISteamInput_GetAnalogActionOrigins(steam_input, inputHandle, actionSetHandle, analogActionHandle, originsOut);
+SteamInput_GetAnalogActionOrigins :: inline (inputHandle: InputHandle_t, actionSetHandle: InputActionSetHandle_t, analogActionHandle: InputAnalogActionHandle_t, originsOut: *EInputActionOrigin) -> s32 #foreign steam "SteamAPI_ISteamInput_GetAnalo {
+    return SteamInput_GetAnalogActionOrigins(steam_input, inputHandle, actionSetHandle, analogActionHandle, originsOut);
 }
 
 
-SteamInput_GetGlyphForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> string {
-    return to_string(SteamAPI_ISteamInput_GetGlyphForActionOrigin(steam_input, eOrigin));
+SteamInput_GetGlyphForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> *char #foreign steam "SteamAPI_ISteamInput_GetGlyphF {
+    return SteamInput_GetGlyphForActionOrigin(steam_input, eOrigin);
 }
 
 
-SteamInput_GetStringForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> string {
-    return to_string(SteamAPI_ISteamInput_GetStringForActionOrigin(steam_input, eOrigin));
+SteamInput_GetStringForActionOrigin :: inline (eOrigin: EInputActionOrigin) -> *char #foreign steam "SteamAPI_ISteamInput_GetStringF {
+    return SteamInput_GetStringForActionOrigin(steam_input, eOrigin);
 }
 
 
 SteamInput_StopAnalogActionMomentum :: inline (inputHandle: InputHandle_t, eAction: InputAnalogActionHandle_t) {
-    SteamAPI_ISteamInput_StopAnalogActionMomentum(steam_input, inputHandle, eAction);
+    SteamInput_StopAnalogActionMomentum(steam_input, inputHandle, eAction);
 }
 
 
-SteamInput_GetMotionData :: inline (inputHandle: InputHandle_t) -> InputMotionData_t {
-    return SteamAPI_ISteamInput_GetMotionData(steam_input, inputHandle);
+SteamInput_GetMotionData :: inline (inputHandle: InputHandle_t) -> InputMotionData_t #foreign steam "SteamAPI_ISteamInput {
+    return SteamInput_GetMotionData(steam_input, inputHandle);
 }
 
 
 SteamInput_TriggerVibration :: inline (inputHandle: InputHandle_t, usLeftSpeed: u16, usRightSpeed: u16) {
-    SteamAPI_ISteamInput_TriggerVibration(steam_input, inputHandle, usLeftSpeed, usRightSpeed);
+    SteamInput_TriggerVibration(steam_input, inputHandle, usLeftSpeed, usRightSpeed);
 }
 
 
 SteamInput_SetLEDColor :: inline (inputHandle: InputHandle_t, nColorR: uint8, nColorG: uint8, nColorB: uint8, nFlags: u32) {
-    SteamAPI_ISteamInput_SetLEDColor(steam_input, inputHandle, nColorR, nColorG, nColorB, nFlags);
+    SteamInput_SetLEDColor(steam_input, inputHandle, nColorR, nColorG, nColorB, nFlags);
 }
 
 
 SteamInput_TriggerHapticPulse :: inline (inputHandle: InputHandle_t, eTargetPad: ESteamControllerPad, usDurationMicroSec: u16) {
-    SteamAPI_ISteamInput_TriggerHapticPulse(steam_input, inputHandle, eTargetPad, usDurationMicroSec);
+    SteamInput_TriggerHapticPulse(steam_input, inputHandle, eTargetPad, usDurationMicroSec);
 }
 
 
 SteamInput_TriggerRepeatedHapticPulse :: inline (inputHandle: InputHandle_t, eTargetPad: ESteamControllerPad, usDurationMicroSec: u16, usOffMicroSec: u16, unRepeat: u16, nFlags: u32) {
-    SteamAPI_ISteamInput_TriggerRepeatedHapticPulse(steam_input, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    SteamInput_TriggerRepeatedHapticPulse(steam_input, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
 }
 
 
-SteamInput_ShowBindingPanel :: inline (inputHandle: InputHandle_t) -> bool {
-    return SteamAPI_ISteamInput_ShowBindingPanel(steam_input, inputHandle);
+SteamInput_ShowBindingPanel :: inline (inputHandle: InputHandle_t) -> bool #foreign steam "SteamAPI_ISteamInput_Sh {
+    return SteamInput_ShowBindingPanel(steam_input, inputHandle);
 }
 
 
-SteamInput_GetInputTypeForHandle :: inline (inputHandle: InputHandle_t) -> ESteamInputType {
-    return SteamAPI_ISteamInput_GetInputTypeForHandle(steam_input, inputHandle);
+SteamInput_GetInputTypeForHandle :: inline (inputHandle: InputHandle_t) -> ESteamInputType #foreign steam "SteamAPI_ISteamInput_GetInpu {
+    return SteamInput_GetInputTypeForHandle(steam_input, inputHandle);
 }
 
 
-SteamInput_GetControllerForGamepadIndex :: inline (nIndex: s32) -> InputHandle_t {
-    return SteamAPI_ISteamInput_GetControllerForGamepadIndex(steam_input, nIndex);
+SteamInput_GetControllerForGamepadIndex :: inline (nIndex: s32) -> InputHandle_t #foreign steam "SteamAPI_ISteamInput_GetControllerF {
+    return SteamInput_GetControllerForGamepadIndex(steam_input, nIndex);
 }
 
 
-SteamInput_GetGamepadIndexForController :: inline (ulinputHandle: InputHandle_t) -> s32 {
-    return SteamAPI_ISteamInput_GetGamepadIndexForController(steam_input, ulinputHandle);
+SteamInput_GetGamepadIndexForController :: inline (ulinputHandle: InputHandle_t) -> s32 #foreign steam "SteamAPI_ISteamInput_GetGamepadInde {
+    return SteamInput_GetGamepadIndexForController(steam_input, ulinputHandle);
 }
 
 
-SteamInput_GetStringForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> string {
-    return to_string(SteamAPI_ISteamInput_GetStringForXboxOrigin(steam_input, eOrigin));
+SteamInput_GetStringForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> *char #foreign steam "SteamAPI_ISteamInput_GetStrin {
+    return SteamInput_GetStringForXboxOrigin(steam_input, eOrigin);
 }
 
 
-SteamInput_GetGlyphForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> string {
-    return to_string(SteamAPI_ISteamInput_GetGlyphForXboxOrigin(steam_input, eOrigin));
+SteamInput_GetGlyphForXboxOrigin :: inline (eOrigin: EXboxOrigin) -> *char #foreign steam "SteamAPI_ISteamInput_GetGlyp {
+    return SteamInput_GetGlyphForXboxOrigin(steam_input, eOrigin);
 }
 
 
-SteamInput_GetActionOriginFromXboxOrigin :: inline (inputHandle: InputHandle_t, eOrigin: EXboxOrigin) -> EInputActionOrigin {
-    return SteamAPI_ISteamInput_GetActionOriginFromXboxOrigin(steam_input, inputHandle, eOrigin);
+SteamInput_GetActionOriginFromXboxOrigin :: inline (inputHandle: InputHandle_t, eOrigin: EXboxOrigin) -> EInputActionOrigin #foreign steam "SteamAPI_ISteamInput_GetActionOrigin {
+    return SteamInput_GetActionOriginFromXboxOrigin(steam_input, inputHandle, eOrigin);
 }
 
 
-SteamInput_TranslateActionOrigin :: inline (eDestinationInputType: ESteamInputType, eSourceOrigin: EInputActionOrigin) -> EInputActionOrigin {
-    return SteamAPI_ISteamInput_TranslateActionOrigin(steam_input, eDestinationInputType, eSourceOrigin);
+SteamInput_TranslateActionOrigin :: inline (eDestinationInputType: ESteamInputType, eSourceOrigin: EInputActionOrigin) -> EInputActionOrigin #foreign steam "SteamAPI_ISteamInput_Transla {
+    return SteamInput_TranslateActionOrigin(steam_input, eDestinationInputType, eSourceOrigin);
 }
 
 
-SteamInput_GetDeviceBindingRevision :: inline (inputHandle: InputHandle_t, pMajor: *s32, pMinor: *s32) -> bool {
-    return SteamAPI_ISteamInput_GetDeviceBindingRevision(steam_input, inputHandle, pMajor, pMinor);
+SteamInput_GetDeviceBindingRevision :: inline (inputHandle: InputHandle_t, pMajor: *s32, pMinor: *s32) -> bool #foreign steam "SteamAPI_ISteamInput_GetDeviceB {
+    return SteamInput_GetDeviceBindingRevision(steam_input, inputHandle, pMajor, pMinor);
 }
 
 
-SteamInput_GetRemotePlaySessionID :: inline (inputHandle: InputHandle_t) -> uint32 {
-    return SteamAPI_ISteamInput_GetRemotePlaySessionID(steam_input, inputHandle);
+SteamInput_GetRemotePlaySessionID :: inline (inputHandle: InputHandle_t) -> uint32 #foreign steam "SteamAPI_ISteamInput_GetRemot {
+    return SteamInput_GetRemotePlaySessionID(steam_input, inputHandle);
 }

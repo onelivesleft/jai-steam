@@ -13,11 +13,6 @@
 #load "src-autogen/api_flat.jai";
 
 
-
-
-// copypasta below, just leave it alone for now (it provides the remaining top-level procs)
-
-
 // SteamAPI_Init must be called before using any other API functions. If it fails, an
 // error message will be output to the debugger (or stderr) with further information.
 SteamAPI_Init :: () -> bool #foreign steam;
@@ -89,8 +84,8 @@ SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;
 // - STEAM_CALLBACK, CCallResult, CCallback, or CCallbackManual
 //
 // Here is the basic template for replacing SteamAPI_RunCallbacks() with manual dispatch
-/*
-
+/**
+```c
 	HSteamPipe hSteamPipe = SteamAPI_GetHSteamPipe(); // See also SteamGameServer_GetHSteamPipe()
 	SteamAPI_ManualDispatch_RunFrame( hSteamPipe )
 	CallbackMsg_t callback;
@@ -99,10 +94,10 @@ SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;
 		// Check for dispatching API call results
 		if ( callback.m_iCallback == SteamAPICallCompleted_t::k_iCallback )
 		{
-			SteamAPICallCompleted_t *pCallCompleted = (SteamAPICallCompleted_t *)callback.
-			void *pTmpCallResult = malloc( pCallback->m_cubParam );
+			SteamAPICallCompleted_t *pCallCompleted = (SteamAPICallCompleted_t *)callback->m_pubParam;
+			void *pTmpCallResult = malloc( pCallCompleted->m_cubParam );
 			bool bFailed;
-			if ( SteamAPI_ManualDispatch_GetAPICallResult( hSteamPipe, pCallCompleted->m_hAsyncCall, pTmpCallResult, pCallback->m_cubParam, pCallback->m_iCallback, &bFailed ) )
+			if ( SteamAPI_ManualDispatch_GetAPICallResult( hSteamPipe, pCallCompleted->m_hAsyncCall, pTmpCallResult, pCallCompleted->m_cubParam, pCallCompleted->m_iCallback, &bFailed ) )
 			{
 				// Dispatch the call result to the registered handler(s) for the
 				// call identified by pCallCompleted->m_hAsyncCall
@@ -116,7 +111,7 @@ SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;
 		}
 		SteamAPI_ManualDispatch_FreeLastCallback( hSteamPipe );
 	}
-
+```c
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -137,6 +132,50 @@ SteamAPI_ManualDispatch_FreeLastCallback :: (hSteamPipe: HSteamPipe) #foreign st
 /// Return the call result for the specified call on the specified pipe.  You really should
 /// only call this in a handler for SteamAPICallCompleted_t callback.
 SteamAPI_ManualDispatch_GetAPICallResult :: (hSteamPipe: HSteamPipe, hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: int, iCallbackExpected: int, pbFailed: *bool) -> bool #foreign steam;
+
+
+
+// Jai additions not in the standard Steamworks API follow
+
+
+/**
+# Callback Message Loop
+
+You can process the callback message loop using a `for`, by looping on
+either `SteamAPI_Callbacks` or `SteamGameServer_Callbacks`.
+
+For example:
+```
+for message, is_call_result: SteamAPI_Callbacks {
+	if is_call_result {
+		print("\nHandling call result %\n", formatInt(message.caller, base=16));
+		if message.call_result_id == {
+			case .NumberOfCurrentPlayers_t;
+			if !message.io_failure {
+				number_of_current_players := << cast(*NumberOfCurrentPlayers_t) message.data;
+				if number_of_current_players.m_bSuccess
+					print("Num Players: %\n", number_of_current_players.m_cPlayers);
+				else
+					print("Failed to get Num Players\n");
+			}
+			else {
+				print("IO Failure while trying to get Num Players\n");
+			}
+		}
+	}
+	else {
+		if message.callback_id == {
+			case .GameOverlayActivated_t;
+			info := cast(*GameOverlayActivated_t) message.data;
+			print("\n---\nOverlay active: %\n", cast(bool) info.m_bActive);
+			steam_userstats := SteamAPI_SteamUserStats_v012();
+			handle := SteamAPI_ISteamUserStats_GetNumberOfCurrentPlayers(steam_userstats);
+			print("Requesting #players, handle = %\n", formatInt(handle, base=16));
+		}
+	}
+}
+```
+*/
 
 
 SteamAPI_CallbackMessage :: struct {
@@ -176,7 +215,12 @@ for_expansion :: (_: *SteamAPI_Callbacks_Type, body: Code, flags: For_Flags) #ex
 		`it_index : bool;
 		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback {
 			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
-			call_result := temporary_alloc(completed_call_result.m_cubParam);
+
+			call_result : *void;
+			#if use_temporary_storage
+				call_result = temporary_alloc(completed_call_result.m_cubParam);
+			else
+				call_result = alloc(completed_call_result.m_cubParam);
 
 			io_failure := false;
 			if SteamAPI_ManualDispatch_GetAPICallResult(
@@ -192,6 +236,8 @@ for_expansion :: (_: *SteamAPI_Callbacks_Type, body: Code, flags: For_Flags) #ex
 
 				#insert body;
 			}
+
+			#if !use_temporary_storage  free(call_result);
 		}
 		else {
 			it.m_iCallback = callback.m_iCallback;
@@ -222,7 +268,12 @@ for_expansion :: (_: *SteamGameServer_Callbacks_Type, body: Code, flags: For_Fla
 		`it_index : bool;
 		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback {
 			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
-			call_result := temporary_alloc(completed_call_result.m_cubParam);
+
+			call_result : *void;
+			#if use_temporary_storage
+				call_result = temporary_alloc(completed_call_result.m_cubParam);
+			else
+				call_result = alloc(completed_call_result.m_cubParam);
 
 			io_failure := false;
 			if SteamAPI_ManualDispatch_GetAPICallResult(
@@ -238,6 +289,8 @@ for_expansion :: (_: *SteamGameServer_Callbacks_Type, body: Code, flags: For_Fla
 
 				#insert body;
 			}
+
+			#if !use_temporary_storage  free(call_result);
 		}
 		else {
 			it.m_iCallback = callback.m_iCallback;

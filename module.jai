@@ -14,6 +14,9 @@ else
 
 
 // TODO
+// [ ] Change internal flat names: SteamAPI_ISteamClient_GetISteamGenericInterface -> SteamClient_GetISteamGenericInterface
+// [ ] Change flat names: SteamAPI_ISteamClient_GetISteamGenericInterface -> GetISteamGenericInterface
+// [ ] Singleton names to short name
 // [ ] Fix up scopes - rework away from structs.  Maybe keep structs for Init/Shutdown stuff
 // [ ] @SteamCallback for callbacks in nice api
 // [ ] CallResult macro in nice api

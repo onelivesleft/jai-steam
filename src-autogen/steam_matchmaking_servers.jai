@@ -27,86 +27,86 @@ SteamMatchmakingServers_Namespace :: struct {
 }
 
 
-SteamMatchmakingServers_RequestInternetServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest {
-    return SteamAPI_ISteamMatchmakingServers_RequestInternetServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
+SteamMatchmakingServers_RequestInternetServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest #foreign steam "SteamAPI_ISteamMatchmakingServers_RequestInte {
+    return SteamMatchmakingServers_RequestInternetServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
 }
 
 
-SteamMatchmakingServers_RequestLANServerList :: inline (iApp: AppId_t, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest {
-    return SteamAPI_ISteamMatchmakingServers_RequestLANServerList(steam_matchmaking_servers, iApp, pRequestServersResponse);
+SteamMatchmakingServers_RequestLANServerList :: inline (iApp: AppId_t, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest #foreign steam "SteamAPI_ISteamMatchmakingServers_Reques {
+    return SteamMatchmakingServers_RequestLANServerList(steam_matchmaking_servers, iApp, pRequestServersResponse);
 }
 
 
-SteamMatchmakingServers_RequestFriendsServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest {
-    return SteamAPI_ISteamMatchmakingServers_RequestFriendsServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
+SteamMatchmakingServers_RequestFriendsServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest #foreign steam "SteamAPI_ISteamMatchmakingServers_RequestFri {
+    return SteamMatchmakingServers_RequestFriendsServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
 }
 
 
-SteamMatchmakingServers_RequestFavoritesServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest {
-    return SteamAPI_ISteamMatchmakingServers_RequestFavoritesServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
+SteamMatchmakingServers_RequestFavoritesServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest #foreign steam "SteamAPI_ISteamMatchmakingServers_RequestFavor {
+    return SteamMatchmakingServers_RequestFavoritesServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
 }
 
 
-SteamMatchmakingServers_RequestHistoryServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest {
-    return SteamAPI_ISteamMatchmakingServers_RequestHistoryServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
+SteamMatchmakingServers_RequestHistoryServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest #foreign steam "SteamAPI_ISteamMatchmakingServers_RequestHis {
+    return SteamMatchmakingServers_RequestHistoryServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
 }
 
 
-SteamMatchmakingServers_RequestSpectatorServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest {
-    return SteamAPI_ISteamMatchmakingServers_RequestSpectatorServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
+SteamMatchmakingServers_RequestSpectatorServerList :: inline (iApp: AppId_t, ppchFilters: **MatchMakingKeyValuePair_t, nFilters: uint32, pRequestServersResponse: *ISteamMatchmakingServerListResponse) -> HServerListRequest #foreign steam "SteamAPI_ISteamMatchmakingServers_RequestSpect {
+    return SteamMatchmakingServers_RequestSpectatorServerList(steam_matchmaking_servers, iApp, ppchFilters, nFilters, pRequestServersResponse);
 }
 
 
 SteamMatchmakingServers_ReleaseRequest :: inline (hServerListRequest: HServerListRequest) {
-    SteamAPI_ISteamMatchmakingServers_ReleaseRequest(steam_matchmaking_servers, hServerListRequest);
+    SteamMatchmakingServers_ReleaseRequest(steam_matchmaking_servers, hServerListRequest);
 }
 
 
-SteamMatchmakingServers_GetServerDetails :: inline (hRequest: HServerListRequest, iServer: s32) -> *gameserveritem_t {
-    return SteamAPI_ISteamMatchmakingServers_GetServerDetails(steam_matchmaking_servers, hRequest, iServer);
+SteamMatchmakingServers_GetServerDetails :: inline (hRequest: HServerListRequest, iServer: s32) -> *gameserveritem_t #foreign steam "SteamAPI_ISteamMatchmakingServers_Ge {
+    return SteamMatchmakingServers_GetServerDetails(steam_matchmaking_servers, hRequest, iServer);
 }
 
 
 SteamMatchmakingServers_CancelQuery :: inline (hRequest: HServerListRequest) {
-    SteamAPI_ISteamMatchmakingServers_CancelQuery(steam_matchmaking_servers, hRequest);
+    SteamMatchmakingServers_CancelQuery(steam_matchmaking_servers, hRequest);
 }
 
 
 SteamMatchmakingServers_RefreshQuery :: inline (hRequest: HServerListRequest) {
-    SteamAPI_ISteamMatchmakingServers_RefreshQuery(steam_matchmaking_servers, hRequest);
+    SteamMatchmakingServers_RefreshQuery(steam_matchmaking_servers, hRequest);
 }
 
 
-SteamMatchmakingServers_IsRefreshing :: inline (hRequest: HServerListRequest) -> bool {
-    return SteamAPI_ISteamMatchmakingServers_IsRefreshing(steam_matchmaking_servers, hRequest);
+SteamMatchmakingServers_IsRefreshing :: inline (hRequest: HServerListRequest) -> bool #foreign steam "SteamAPI_ISteamMatchmakingServer {
+    return SteamMatchmakingServers_IsRefreshing(steam_matchmaking_servers, hRequest);
 }
 
 
-SteamMatchmakingServers_GetServerCount :: inline (hRequest: HServerListRequest) -> s32 {
-    return SteamAPI_ISteamMatchmakingServers_GetServerCount(steam_matchmaking_servers, hRequest);
+SteamMatchmakingServers_GetServerCount :: inline (hRequest: HServerListRequest) -> s32 #foreign steam "SteamAPI_ISteamMatchmakingServers_ {
+    return SteamMatchmakingServers_GetServerCount(steam_matchmaking_servers, hRequest);
 }
 
 
 SteamMatchmakingServers_RefreshServer :: inline (hRequest: HServerListRequest, iServer: s32) {
-    SteamAPI_ISteamMatchmakingServers_RefreshServer(steam_matchmaking_servers, hRequest, iServer);
+    SteamMatchmakingServers_RefreshServer(steam_matchmaking_servers, hRequest, iServer);
 }
 
 
-SteamMatchmakingServers_PingServer :: inline (unIP: uint32, usPort: uint16, pRequestServersResponse: *ISteamMatchmakingPingResponse) -> HServerQuery {
-    return SteamAPI_ISteamMatchmakingServers_PingServer(steam_matchmaking_servers, unIP, usPort, pRequestServersResponse);
+SteamMatchmakingServers_PingServer :: inline (unIP: uint32, usPort: uint16, pRequestServersResponse: *ISteamMatchmakingPingResponse) -> HServerQuery #foreign steam "SteamAPI_ISteamMatchmakingServ {
+    return SteamMatchmakingServers_PingServer(steam_matchmaking_servers, unIP, usPort, pRequestServersResponse);
 }
 
 
-SteamMatchmakingServers_PlayerDetails :: inline (unIP: uint32, usPort: uint16, pRequestServersResponse: *ISteamMatchmakingPlayersResponse) -> HServerQuery {
-    return SteamAPI_ISteamMatchmakingServers_PlayerDetails(steam_matchmaking_servers, unIP, usPort, pRequestServersResponse);
+SteamMatchmakingServers_PlayerDetails :: inline (unIP: uint32, usPort: uint16, pRequestServersResponse: *ISteamMatchmakingPlayersResponse) -> HServerQuery #foreign steam "SteamAPI_ISteamMatchmakingServers {
+    return SteamMatchmakingServers_PlayerDetails(steam_matchmaking_servers, unIP, usPort, pRequestServersResponse);
 }
 
 
-SteamMatchmakingServers_ServerRules :: inline (unIP: uint32, usPort: uint16, pRequestServersResponse: *ISteamMatchmakingRulesResponse) -> HServerQuery {
-    return SteamAPI_ISteamMatchmakingServers_ServerRules(steam_matchmaking_servers, unIP, usPort, pRequestServersResponse);
+SteamMatchmakingServers_ServerRules :: inline (unIP: uint32, usPort: uint16, pRequestServersResponse: *ISteamMatchmakingRulesResponse) -> HServerQuery #foreign steam "SteamAPI_ISteamMatchmakingServe {
+    return SteamMatchmakingServers_ServerRules(steam_matchmaking_servers, unIP, usPort, pRequestServersResponse);
 }
 
 
 SteamMatchmakingServers_CancelServerQuery :: inline (hServerQuery: HServerQuery) {
-    SteamAPI_ISteamMatchmakingServers_CancelServerQuery(steam_matchmaking_servers, hServerQuery);
+    SteamMatchmakingServers_CancelServerQuery(steam_matchmaking_servers, hServerQuery);
 }

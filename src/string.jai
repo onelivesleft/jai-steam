@@ -11,6 +11,11 @@ mid :: inline (str: string, first_index: int, last_index: int) -> string #must {
 }
 
 
+is_letter :: inline (char: u8) -> bool #must {
+    return !(char < #char "A" || char > #char "z" || char > #char "Z" && char < #char "a");
+}
+
+
 strip :: inline (str: string) -> string #must {
     return trim(str, " \t\n\r");
 }
@@ -36,6 +41,13 @@ forward_til :: (str: string, sentinel: u8, index: Code) #expand {
 forward_til :: (str: string, sentinel1: u8, sentinel2: u8, index: Code) #expand {
     while (#insert index) < str.count && str[(#insert index)] != sentinel1 && str[(#insert index)] != sentinel2 {
         (#insert index) += 1;
+    }
+}
+
+
+backward_til :: (str: string, sentinel: u8, index: Code) #expand {
+    while (#insert index) > 0 && str[(#insert index)] != sentinel {
+        (#insert index) -= 1;
     }
 }
 

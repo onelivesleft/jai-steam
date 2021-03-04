@@ -19,46 +19,46 @@ SteamScreenshots_Namespace :: struct {
 }
 
 
-SteamScreenshots_WriteScreenshot :: inline (pubRGB: *void, cubRGB: uint32, nWidth: s32, nHeight: s32) -> ScreenshotHandle {
-    return SteamAPI_ISteamScreenshots_WriteScreenshot(steam_screenshots, pubRGB, cubRGB, nWidth, nHeight);
+SteamScreenshots_WriteScreenshot :: inline (pubRGB: *void, cubRGB: uint32, nWidth: s32, nHeight: s32) -> ScreenshotHandle #foreign steam "SteamAPI_ISteamScreenshots_W {
+    return SteamScreenshots_WriteScreenshot(steam_screenshots, pubRGB, cubRGB, nWidth, nHeight);
 }
 
 
-SteamScreenshots_AddScreenshotToLibrary :: inline (pchFilename: *char, pchThumbnailFilename: *char, nWidth: s32, nHeight: s32) -> ScreenshotHandle {
-    return SteamAPI_ISteamScreenshots_AddScreenshotToLibrary(steam_screenshots, pchFilename, pchThumbnailFilename, nWidth, nHeight);
+SteamScreenshots_AddScreenshotToLibrary :: inline (pchFilename: *char, pchThumbnailFilename: *char, nWidth: s32, nHeight: s32) -> ScreenshotHandle #foreign steam "SteamAPI_ISteamScreenshots_AddScree {
+    return SteamScreenshots_AddScreenshotToLibrary(steam_screenshots, pchFilename, pchThumbnailFilename, nWidth, nHeight);
 }
 
 
 SteamScreenshots_TriggerScreenshot :: inline () {
-    SteamAPI_ISteamScreenshots_TriggerScreenshot(steam_screenshots);
+    SteamScreenshots_TriggerScreenshot(steam_screenshots);
 }
 
 
 SteamScreenshots_HookScreenshots :: inline (bHook: bool) {
-    SteamAPI_ISteamScreenshots_HookScreenshots(steam_screenshots, bHook);
+    SteamScreenshots_HookScreenshots(steam_screenshots, bHook);
 }
 
 
-SteamScreenshots_SetLocation :: inline (hScreenshot: ScreenshotHandle, pchLocation: *char) -> bool {
-    return SteamAPI_ISteamScreenshots_SetLocation(steam_screenshots, hScreenshot, pchLocation);
+SteamScreenshots_SetLocation :: inline (hScreenshot: ScreenshotHandle, pchLocation: *char) -> bool #foreign steam "SteamAPI_ISteamScreensho {
+    return SteamScreenshots_SetLocation(steam_screenshots, hScreenshot, pchLocation);
 }
 
 
-SteamScreenshots_TagUser :: inline (hScreenshot: ScreenshotHandle, steamID: uint64_steamid) -> bool {
-    return SteamAPI_ISteamScreenshots_TagUser(steam_screenshots, hScreenshot, steamID);
+SteamScreenshots_TagUser :: inline (hScreenshot: ScreenshotHandle, steamID: uint64_steamid) -> bool #foreign steam "SteamAPI_ISteamScree {
+    return SteamScreenshots_TagUser(steam_screenshots, hScreenshot, steamID);
 }
 
 
-SteamScreenshots_TagPublishedFile :: inline (hScreenshot: ScreenshotHandle, unPublishedFileID: PublishedFileId_t) -> bool {
-    return SteamAPI_ISteamScreenshots_TagPublishedFile(steam_screenshots, hScreenshot, unPublishedFileID);
+SteamScreenshots_TagPublishedFile :: inline (hScreenshot: ScreenshotHandle, unPublishedFileID: PublishedFileId_t) -> bool #foreign steam "SteamAPI_ISteamScreenshots_Ta {
+    return SteamScreenshots_TagPublishedFile(steam_screenshots, hScreenshot, unPublishedFileID);
 }
 
 
-SteamScreenshots_IsScreenshotsHooked :: inline () -> bool {
-    return SteamAPI_ISteamScreenshots_IsScreenshotsHooked(steam_screenshots);
+SteamScreenshots_IsScreenshotsHooked :: inline () -> bool #foreign steam "SteamAPI_ISteamScreenshots_IsScr {
+    return SteamScreenshots_IsScreenshotsHooked(steam_screenshots);
 }
 
 
-SteamScreenshots_AddVRScreenshotToLibrary :: inline (eType: EVRScreenshotType, pchFilename: *char, pchVRFilename: *char) -> ScreenshotHandle {
-    return SteamAPI_ISteamScreenshots_AddVRScreenshotToLibrary(steam_screenshots, eType, pchFilename, pchVRFilename);
+SteamScreenshots_AddVRScreenshotToLibrary :: inline (eType: EVRScreenshotType, pchFilename: *char, pchVRFilename: *char) -> ScreenshotHandle #foreign steam "SteamAPI_ISteamScreenshots_AddVRScree {
+    return SteamScreenshots_AddVRScreenshotToLibrary(steam_screenshots, eType, pchFilename, pchVRFilename);
 }

@@ -43,166 +43,166 @@ SteamGameServerUtils_Namespace :: struct {
 }
 
 
-SteamUtils_GetSecondsSinceAppActive :: inline () -> uint32 {
-    return SteamAPI_ISteamUtils_GetSecondsSinceAppActive(steam_game_server_utils);
+SteamUtils_GetSecondsSinceAppActive :: inline () -> uint32 #foreign steam "SteamAPI_ISteamUtils_GetSeconds {
+    return SteamUtils_GetSecondsSinceAppActive(steam_game_server_utils);
 }
 
 
-SteamUtils_GetSecondsSinceComputerActive :: inline () -> uint32 {
-    return SteamAPI_ISteamUtils_GetSecondsSinceComputerActive(steam_game_server_utils);
+SteamUtils_GetSecondsSinceComputerActive :: inline () -> uint32 #foreign steam "SteamAPI_ISteamUtils_GetSecondsSince {
+    return SteamUtils_GetSecondsSinceComputerActive(steam_game_server_utils);
 }
 
 
-SteamUtils_GetConnectedUniverse :: inline () -> EUniverse {
-    return SteamAPI_ISteamUtils_GetConnectedUniverse(steam_game_server_utils);
+SteamUtils_GetConnectedUniverse :: inline () -> EUniverse #foreign steam "SteamAPI_ISteamUtils_GetCon {
+    return SteamUtils_GetConnectedUniverse(steam_game_server_utils);
 }
 
 
-SteamUtils_GetServerRealTime :: inline () -> uint32 {
-    return SteamAPI_ISteamUtils_GetServerRealTime(steam_game_server_utils);
+SteamUtils_GetServerRealTime :: inline () -> uint32 #foreign steam "SteamAPI_ISteamUtils_Get {
+    return SteamUtils_GetServerRealTime(steam_game_server_utils);
 }
 
 
-SteamUtils_GetIPCountry :: inline () -> string {
-    return to_string(SteamAPI_ISteamUtils_GetIPCountry(steam_game_server_utils));
+SteamUtils_GetIPCountry :: inline () -> *char #foreign steam "SteamAPI_ISteamUtil {
+    return SteamUtils_GetIPCountry(steam_game_server_utils);
 }
 
 
-SteamUtils_GetImageSize :: inline (iImage: s32, pnWidth: *uint32, pnHeight: *uint32) -> bool {
-    return SteamAPI_ISteamUtils_GetImageSize(steam_game_server_utils, iImage, pnWidth, pnHeight);
+SteamUtils_GetImageSize :: inline (iImage: s32, pnWidth: *uint32, pnHeight: *uint32) -> bool #foreign steam "SteamAPI_ISteamUtil {
+    return SteamUtils_GetImageSize(steam_game_server_utils, iImage, pnWidth, pnHeight);
 }
 
 
-SteamUtils_GetImageRGBA :: inline (iImage: s32, pubDest: *uint8, nDestBufferSize: s32) -> bool {
-    return SteamAPI_ISteamUtils_GetImageRGBA(steam_game_server_utils, iImage, pubDest, nDestBufferSize);
+SteamUtils_GetImageRGBA :: inline (iImage: s32, pubDest: *uint8, nDestBufferSize: s32) -> bool #foreign steam "SteamAPI_ISteamUtil {
+    return SteamUtils_GetImageRGBA(steam_game_server_utils, iImage, pubDest, nDestBufferSize);
 }
 
 
-SteamUtils_GetCSERIPPort :: inline (unIP: *uint32, usPort: *uint16) -> bool {
-    return SteamAPI_ISteamUtils_GetCSERIPPort(steam_game_server_utils, unIP, usPort);
+SteamUtils_GetCSERIPPort :: inline (unIP: *uint32, usPort: *uint16) -> bool #foreign steam "SteamAPI_ISteamUtils {
+    return SteamUtils_GetCSERIPPort(steam_game_server_utils, unIP, usPort);
 }
 
 
-SteamUtils_GetCurrentBatteryPower :: inline () -> uint8 {
-    return SteamAPI_ISteamUtils_GetCurrentBatteryPower(steam_game_server_utils);
+SteamUtils_GetCurrentBatteryPower :: inline () -> uint8 #foreign steam "SteamAPI_ISteamUtils_GetCurre {
+    return SteamUtils_GetCurrentBatteryPower(steam_game_server_utils);
 }
 
 
-SteamUtils_GetAppID :: inline () -> uint32 {
-    return SteamAPI_ISteamUtils_GetAppID(steam_game_server_utils);
+SteamUtils_GetAppID :: inline () -> uint32 #foreign steam "SteamAPI_ISteam {
+    return SteamUtils_GetAppID(steam_game_server_utils);
 }
 
 
 SteamUtils_SetOverlayNotificationPosition :: inline (eNotificationPosition: ENotificationPosition) {
-    SteamAPI_ISteamUtils_SetOverlayNotificationPosition(steam_game_server_utils, eNotificationPosition);
+    SteamUtils_SetOverlayNotificationPosition(steam_game_server_utils, eNotificationPosition);
 }
 
 
-SteamUtils_IsAPICallCompleted :: inline (hSteamAPICall: SteamAPICall_t, pbFailed: *bool) -> bool {
-    return SteamAPI_ISteamUtils_IsAPICallCompleted(steam_game_server_utils, hSteamAPICall, pbFailed);
+SteamUtils_IsAPICallCompleted :: inline (hSteamAPICall: SteamAPICall_t, pbFailed: *bool) -> bool #foreign steam "SteamAPI_ISteamUtils_IsAP {
+    return SteamUtils_IsAPICallCompleted(steam_game_server_utils, hSteamAPICall, pbFailed);
 }
 
 
-SteamUtils_GetAPICallFailureReason :: inline (hSteamAPICall: SteamAPICall_t) -> ESteamAPICallFailure {
-    return SteamAPI_ISteamUtils_GetAPICallFailureReason(steam_game_server_utils, hSteamAPICall);
+SteamUtils_GetAPICallFailureReason :: inline (hSteamAPICall: SteamAPICall_t) -> ESteamAPICallFailure #foreign steam "SteamAPI_ISteamUtils_GetAPICal {
+    return SteamUtils_GetAPICallFailureReason(steam_game_server_utils, hSteamAPICall);
 }
 
 
-SteamUtils_GetAPICallResult :: inline (hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: s32, iCallbackExpected: s32, pbFailed: *bool) -> bool {
-    return SteamAPI_ISteamUtils_GetAPICallResult(steam_game_server_utils, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+SteamUtils_GetAPICallResult :: inline (hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: s32, iCallbackExpected: s32, pbFailed: *bool) -> bool #foreign steam "SteamAPI_ISteamUtils_Ge {
+    return SteamUtils_GetAPICallResult(steam_game_server_utils, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 
-SteamUtils_GetIPCCallCount :: inline () -> uint32 {
-    return SteamAPI_ISteamUtils_GetIPCCallCount(steam_game_server_utils);
+SteamUtils_GetIPCCallCount :: inline () -> uint32 #foreign steam "SteamAPI_ISteamUtils_G {
+    return SteamUtils_GetIPCCallCount(steam_game_server_utils);
 }
 
 
 SteamUtils_SetWarningMessageHook :: inline (pFunction: SteamAPIWarningMessageHook_t) {
-    SteamAPI_ISteamUtils_SetWarningMessageHook(steam_game_server_utils, pFunction);
+    SteamUtils_SetWarningMessageHook(steam_game_server_utils, pFunction);
 }
 
 
-SteamUtils_IsOverlayEnabled :: inline () -> bool {
-    return SteamAPI_ISteamUtils_IsOverlayEnabled(steam_game_server_utils);
+SteamUtils_IsOverlayEnabled :: inline () -> bool #foreign steam "SteamAPI_ISteamUtils_Is {
+    return SteamUtils_IsOverlayEnabled(steam_game_server_utils);
 }
 
 
-SteamUtils_BOverlayNeedsPresent :: inline () -> bool {
-    return SteamAPI_ISteamUtils_BOverlayNeedsPresent(steam_game_server_utils);
+SteamUtils_BOverlayNeedsPresent :: inline () -> bool #foreign steam "SteamAPI_ISteamUtils_BOverl {
+    return SteamUtils_BOverlayNeedsPresent(steam_game_server_utils);
 }
 
 
-SteamUtils_CheckFileSignature :: inline (szFileName: *char) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUtils_CheckFileSignature(steam_game_server_utils, szFileName);
+SteamUtils_CheckFileSignature :: inline (szFileName: *char) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUtils_Chec {
+    return SteamUtils_CheckFileSignature(steam_game_server_utils, szFileName);
 }
 
 
-SteamUtils_ShowGamepadTextInput :: inline (eInputMode: EGamepadTextInputMode, eLineInputMode: EGamepadTextInputLineMode, pchDescription: *char, unCharMax: uint32, pchExistingText: *char) -> bool {
-    return SteamAPI_ISteamUtils_ShowGamepadTextInput(steam_game_server_utils, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
+SteamUtils_ShowGamepadTextInput :: inline (eInputMode: EGamepadTextInputMode, eLineInputMode: EGamepadTextInputLineMode, pchDescription: *char, unCharMax: uint32, pchExistingText: *char) -> bool #foreign steam "SteamAPI_ISteamUtils_ShowGa {
+    return SteamUtils_ShowGamepadTextInput(steam_game_server_utils, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
 }
 
 
-SteamUtils_GetEnteredGamepadTextLength :: inline () -> uint32 {
-    return SteamAPI_ISteamUtils_GetEnteredGamepadTextLength(steam_game_server_utils);
+SteamUtils_GetEnteredGamepadTextLength :: inline () -> uint32 #foreign steam "SteamAPI_ISteamUtils_GetEnteredGam {
+    return SteamUtils_GetEnteredGamepadTextLength(steam_game_server_utils);
 }
 
 
-SteamUtils_GetEnteredGamepadTextInput :: inline (pchText: *char, cchText: uint32) -> bool {
-    return SteamAPI_ISteamUtils_GetEnteredGamepadTextInput(steam_game_server_utils, pchText, cchText);
+SteamUtils_GetEnteredGamepadTextInput :: inline (pchText: *char, cchText: uint32) -> bool #foreign steam "SteamAPI_ISteamUtils_GetEnteredGa {
+    return SteamUtils_GetEnteredGamepadTextInput(steam_game_server_utils, pchText, cchText);
 }
 
 
-SteamUtils_GetSteamUILanguage :: inline () -> string {
-    return to_string(SteamAPI_ISteamUtils_GetSteamUILanguage(steam_game_server_utils));
+SteamUtils_GetSteamUILanguage :: inline () -> *char #foreign steam "SteamAPI_ISteamUtils_GetS {
+    return SteamUtils_GetSteamUILanguage(steam_game_server_utils);
 }
 
 
-SteamUtils_IsSteamRunningInVR :: inline () -> bool {
-    return SteamAPI_ISteamUtils_IsSteamRunningInVR(steam_game_server_utils);
+SteamUtils_IsSteamRunningInVR :: inline () -> bool #foreign steam "SteamAPI_ISteamUtils_IsSt {
+    return SteamUtils_IsSteamRunningInVR(steam_game_server_utils);
 }
 
 
 SteamUtils_SetOverlayNotificationInset :: inline (nHorizontalInset: s32, nVerticalInset: s32) {
-    SteamAPI_ISteamUtils_SetOverlayNotificationInset(steam_game_server_utils, nHorizontalInset, nVerticalInset);
+    SteamUtils_SetOverlayNotificationInset(steam_game_server_utils, nHorizontalInset, nVerticalInset);
 }
 
 
-SteamUtils_IsSteamInBigPictureMode :: inline () -> bool {
-    return SteamAPI_ISteamUtils_IsSteamInBigPictureMode(steam_game_server_utils);
+SteamUtils_IsSteamInBigPictureMode :: inline () -> bool #foreign steam "SteamAPI_ISteamUtils_IsSteamIn {
+    return SteamUtils_IsSteamInBigPictureMode(steam_game_server_utils);
 }
 
 
 SteamUtils_StartVRDashboard :: inline () {
-    SteamAPI_ISteamUtils_StartVRDashboard(steam_game_server_utils);
+    SteamUtils_StartVRDashboard(steam_game_server_utils);
 }
 
 
-SteamUtils_IsVRHeadsetStreamingEnabled :: inline () -> bool {
-    return SteamAPI_ISteamUtils_IsVRHeadsetStreamingEnabled(steam_game_server_utils);
+SteamUtils_IsVRHeadsetStreamingEnabled :: inline () -> bool #foreign steam "SteamAPI_ISteamUtils_IsVRHeadsetSt {
+    return SteamUtils_IsVRHeadsetStreamingEnabled(steam_game_server_utils);
 }
 
 
 SteamUtils_SetVRHeadsetStreamingEnabled :: inline (bEnabled: bool) {
-    SteamAPI_ISteamUtils_SetVRHeadsetStreamingEnabled(steam_game_server_utils, bEnabled);
+    SteamUtils_SetVRHeadsetStreamingEnabled(steam_game_server_utils, bEnabled);
 }
 
 
-SteamUtils_IsSteamChinaLauncher :: inline () -> bool {
-    return SteamAPI_ISteamUtils_IsSteamChinaLauncher(steam_game_server_utils);
+SteamUtils_IsSteamChinaLauncher :: inline () -> bool #foreign steam "SteamAPI_ISteamUtils_IsStea {
+    return SteamUtils_IsSteamChinaLauncher(steam_game_server_utils);
 }
 
 
-SteamUtils_InitFilterText :: inline (unFilterOptions: uint32) -> bool {
-    return SteamAPI_ISteamUtils_InitFilterText(steam_game_server_utils, unFilterOptions);
+SteamUtils_InitFilterText :: inline (unFilterOptions: uint32) -> bool #foreign steam "SteamAPI_ISteamUtils_ {
+    return SteamUtils_InitFilterText(steam_game_server_utils, unFilterOptions);
 }
 
 
-SteamUtils_FilterText :: inline (eContext: ETextFilteringContext, sourceSteamID: uint64_steamid, pchInputMessage: *char, pchOutFilteredText: *char, nByteSizeOutFilteredText: uint32) -> s32 {
-    return SteamAPI_ISteamUtils_FilterText(steam_game_server_utils, eContext, sourceSteamID, pchInputMessage, pchOutFilteredText, nByteSizeOutFilteredText);
+SteamUtils_FilterText :: inline (eContext: ETextFilteringContext, sourceSteamID: uint64_steamid, pchInputMessage: *char, pchOutFilteredText: *char, nByteSizeOutFilteredText: uint32) -> s32 #foreign steam "SteamAPI_ISteamUt {
+    return SteamUtils_FilterText(steam_game_server_utils, eContext, sourceSteamID, pchInputMessage, pchOutFilteredText, nByteSizeOutFilteredText);
 }
 
 
-SteamUtils_GetIPv6ConnectivityState :: inline (eProtocol: ESteamIPv6ConnectivityProtocol) -> ESteamIPv6ConnectivityState {
-    return SteamAPI_ISteamUtils_GetIPv6ConnectivityState(steam_game_server_utils, eProtocol);
+SteamUtils_GetIPv6ConnectivityState :: inline (eProtocol: ESteamIPv6ConnectivityProtocol) -> ESteamIPv6ConnectivityState #foreign steam "SteamAPI_ISteamUtils_GetIPv6Con {
+    return SteamUtils_GetIPv6ConnectivityState(steam_game_server_utils, eProtocol);
 }

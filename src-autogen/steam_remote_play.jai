@@ -17,36 +17,36 @@ SteamRemotePlay_Namespace :: struct {
 }
 
 
-SteamRemotePlay_GetSessionCount :: inline () -> uint32 {
-    return SteamAPI_ISteamRemotePlay_GetSessionCount(steam_remote_play);
+SteamRemotePlay_GetSessionCount :: inline () -> uint32 #foreign steam "SteamAPI_ISteamRemotePlay_G {
+    return SteamRemotePlay_GetSessionCount(steam_remote_play);
 }
 
 
-SteamRemotePlay_GetSessionID :: inline (iSessionIndex: s32) -> RemotePlaySessionID_t {
-    return SteamAPI_ISteamRemotePlay_GetSessionID(steam_remote_play, iSessionIndex);
+SteamRemotePlay_GetSessionID :: inline (iSessionIndex: s32) -> RemotePlaySessionID_t #foreign steam "SteamAPI_ISteamRemotePla {
+    return SteamRemotePlay_GetSessionID(steam_remote_play, iSessionIndex);
 }
 
 
-SteamRemotePlay_GetSessionSteamID :: inline (unSessionID: RemotePlaySessionID_t) -> uint64_steamid {
-    return SteamAPI_ISteamRemotePlay_GetSessionSteamID(steam_remote_play, unSessionID);
+SteamRemotePlay_GetSessionSteamID :: inline (unSessionID: RemotePlaySessionID_t) -> uint64_steamid #foreign steam "SteamAPI_ISteamRemotePlay_Get {
+    return SteamRemotePlay_GetSessionSteamID(steam_remote_play, unSessionID);
 }
 
 
-SteamRemotePlay_GetSessionClientName :: inline (unSessionID: RemotePlaySessionID_t) -> string {
-    return to_string(SteamAPI_ISteamRemotePlay_GetSessionClientName(steam_remote_play, unSessionID));
+SteamRemotePlay_GetSessionClientName :: inline (unSessionID: RemotePlaySessionID_t) -> *char #foreign steam "SteamAPI_ISteamRemotePlay_GetSes {
+    return SteamRemotePlay_GetSessionClientName(steam_remote_play, unSessionID);
 }
 
 
-SteamRemotePlay_GetSessionClientFormFactor :: inline (unSessionID: RemotePlaySessionID_t) -> ESteamDeviceFormFactor {
-    return SteamAPI_ISteamRemotePlay_GetSessionClientFormFactor(steam_remote_play, unSessionID);
+SteamRemotePlay_GetSessionClientFormFactor :: inline (unSessionID: RemotePlaySessionID_t) -> ESteamDeviceFormFactor #foreign steam "SteamAPI_ISteamRemotePlay_GetSessionCl {
+    return SteamRemotePlay_GetSessionClientFormFactor(steam_remote_play, unSessionID);
 }
 
 
-SteamRemotePlay_BGetSessionClientResolution :: inline (unSessionID: RemotePlaySessionID_t, pnResolutionX: *s32, pnResolutionY: *s32) -> bool {
-    return SteamAPI_ISteamRemotePlay_BGetSessionClientResolution(steam_remote_play, unSessionID, pnResolutionX, pnResolutionY);
+SteamRemotePlay_BGetSessionClientResolution :: inline (unSessionID: RemotePlaySessionID_t, pnResolutionX: *s32, pnResolutionY: *s32) -> bool #foreign steam "SteamAPI_ISteamRemotePlay_BGetSessionCl {
+    return SteamRemotePlay_BGetSessionClientResolution(steam_remote_play, unSessionID, pnResolutionX, pnResolutionY);
 }
 
 
-SteamRemotePlay_BSendRemotePlayTogetherInvite :: inline (steamIDFriend: uint64_steamid) -> bool {
-    return SteamAPI_ISteamRemotePlay_BSendRemotePlayTogetherInvite(steam_remote_play, steamIDFriend);
+SteamRemotePlay_BSendRemotePlayTogetherInvite :: inline (steamIDFriend: uint64_steamid) -> bool #foreign steam "SteamAPI_ISteamRemotePlay_BSendRemotePlay {
+    return SteamRemotePlay_BSendRemotePlayTogetherInvite(steam_remote_play, steamIDFriend);
 }

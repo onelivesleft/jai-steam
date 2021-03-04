@@ -48,191 +48,191 @@ SteamInventory_Namespace :: struct {
 }
 
 
-SteamInventory_GetResultStatus :: inline (resultHandle: SteamInventoryResult_t) -> EResult {
-    return SteamAPI_ISteamInventory_GetResultStatus(steam_inventory, resultHandle);
+SteamInventory_GetResultStatus :: inline (resultHandle: SteamInventoryResult_t) -> EResult #foreign steam "SteamAPI_ISteamInventory_G {
+    return SteamInventory_GetResultStatus(steam_inventory, resultHandle);
 }
 
 
-SteamInventory_GetResultItems :: inline (resultHandle: SteamInventoryResult_t, pOutItemsArray: *SteamItemDetails_t, punOutItemsArraySize: *uint32) -> bool {
-    return SteamAPI_ISteamInventory_GetResultItems(steam_inventory, resultHandle, pOutItemsArray, punOutItemsArraySize);
+SteamInventory_GetResultItems :: inline (resultHandle: SteamInventoryResult_t, pOutItemsArray: *SteamItemDetails_t, punOutItemsArraySize: *uint32) -> bool #foreign steam "SteamAPI_ISteamInventory_ {
+    return SteamInventory_GetResultItems(steam_inventory, resultHandle, pOutItemsArray, punOutItemsArraySize);
 }
 
 
-SteamInventory_GetResultItemProperty :: inline (resultHandle: SteamInventoryResult_t, unItemIndex: uint32, pchPropertyName: *char, pchValueBuffer: *char, punValueBufferSizeOut: *uint32) -> bool {
-    return SteamAPI_ISteamInventory_GetResultItemProperty(steam_inventory, resultHandle, unItemIndex, pchPropertyName, pchValueBuffer, punValueBufferSizeOut);
+SteamInventory_GetResultItemProperty :: inline (resultHandle: SteamInventoryResult_t, unItemIndex: uint32, pchPropertyName: *char, pchValueBuffer: *char, punValueBufferSizeOut: *uint32) -> bool #foreign steam "SteamAPI_ISteamInventory_GetResu {
+    return SteamInventory_GetResultItemProperty(steam_inventory, resultHandle, unItemIndex, pchPropertyName, pchValueBuffer, punValueBufferSizeOut);
 }
 
 
-SteamInventory_GetResultTimestamp :: inline (resultHandle: SteamInventoryResult_t) -> uint32 {
-    return SteamAPI_ISteamInventory_GetResultTimestamp(steam_inventory, resultHandle);
+SteamInventory_GetResultTimestamp :: inline (resultHandle: SteamInventoryResult_t) -> uint32 #foreign steam "SteamAPI_ISteamInventory_GetR {
+    return SteamInventory_GetResultTimestamp(steam_inventory, resultHandle);
 }
 
 
-SteamInventory_CheckResultSteamID :: inline (resultHandle: SteamInventoryResult_t, steamIDExpected: uint64_steamid) -> bool {
-    return SteamAPI_ISteamInventory_CheckResultSteamID(steam_inventory, resultHandle, steamIDExpected);
+SteamInventory_CheckResultSteamID :: inline (resultHandle: SteamInventoryResult_t, steamIDExpected: uint64_steamid) -> bool #foreign steam "SteamAPI_ISteamInventory_Chec {
+    return SteamInventory_CheckResultSteamID(steam_inventory, resultHandle, steamIDExpected);
 }
 
 
 SteamInventory_DestroyResult :: inline (resultHandle: SteamInventoryResult_t) {
-    SteamAPI_ISteamInventory_DestroyResult(steam_inventory, resultHandle);
+    SteamInventory_DestroyResult(steam_inventory, resultHandle);
 }
 
 
-SteamInventory_GetAllItems :: inline (pResultHandle: *SteamInventoryResult_t) -> bool {
-    return SteamAPI_ISteamInventory_GetAllItems(steam_inventory, pResultHandle);
+SteamInventory_GetAllItems :: inline (pResultHandle: *SteamInventoryResult_t) -> bool #foreign steam "SteamAPI_ISteamInvento {
+    return SteamInventory_GetAllItems(steam_inventory, pResultHandle);
 }
 
 
-SteamInventory_GetItemsByID :: inline (pResultHandle: *SteamInventoryResult_t, pInstanceIDs: *SteamItemInstanceID_t, unCountInstanceIDs: uint32) -> bool {
-    return SteamAPI_ISteamInventory_GetItemsByID(steam_inventory, pResultHandle, pInstanceIDs, unCountInstanceIDs);
+SteamInventory_GetItemsByID :: inline (pResultHandle: *SteamInventoryResult_t, pInstanceIDs: *SteamItemInstanceID_t, unCountInstanceIDs: uint32) -> bool #foreign steam "SteamAPI_ISteamInventor {
+    return SteamInventory_GetItemsByID(steam_inventory, pResultHandle, pInstanceIDs, unCountInstanceIDs);
 }
 
 
-SteamInventory_SerializeResult :: inline (resultHandle: SteamInventoryResult_t, pOutBuffer: *void, punOutBufferSize: *uint32) -> bool {
-    return SteamAPI_ISteamInventory_SerializeResult(steam_inventory, resultHandle, pOutBuffer, punOutBufferSize);
+SteamInventory_SerializeResult :: inline (resultHandle: SteamInventoryResult_t, pOutBuffer: *void, punOutBufferSize: *uint32) -> bool #foreign steam "SteamAPI_ISteamInventory_S {
+    return SteamInventory_SerializeResult(steam_inventory, resultHandle, pOutBuffer, punOutBufferSize);
 }
 
 
-SteamInventory_DeserializeResult :: inline (pOutResultHandle: *SteamInventoryResult_t, pBuffer: *void, unBufferSize: uint32, bRESERVED_MUST_BE_FALSE: bool) -> bool {
-    return SteamAPI_ISteamInventory_DeserializeResult(steam_inventory, pOutResultHandle, pBuffer, unBufferSize, bRESERVED_MUST_BE_FALSE);
+SteamInventory_DeserializeResult :: inline (pOutResultHandle: *SteamInventoryResult_t, pBuffer: *void, unBufferSize: uint32, bRESERVED_MUST_BE_FALSE: bool) -> bool #foreign steam "SteamAPI_ISteamInventory_Des {
+    return SteamInventory_DeserializeResult(steam_inventory, pOutResultHandle, pBuffer, unBufferSize, bRESERVED_MUST_BE_FALSE);
 }
 
 
-SteamInventory_GenerateItems :: inline (pResultHandle: *SteamInventoryResult_t, pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32) -> bool {
-    return SteamAPI_ISteamInventory_GenerateItems(steam_inventory, pResultHandle, pArrayItemDefs, punArrayQuantity, unArrayLength);
+SteamInventory_GenerateItems :: inline (pResultHandle: *SteamInventoryResult_t, pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32) -> bool #foreign steam "SteamAPI_ISteamInventory {
+    return SteamInventory_GenerateItems(steam_inventory, pResultHandle, pArrayItemDefs, punArrayQuantity, unArrayLength);
 }
 
 
-SteamInventory_GrantPromoItems :: inline (pResultHandle: *SteamInventoryResult_t) -> bool {
-    return SteamAPI_ISteamInventory_GrantPromoItems(steam_inventory, pResultHandle);
+SteamInventory_GrantPromoItems :: inline (pResultHandle: *SteamInventoryResult_t) -> bool #foreign steam "SteamAPI_ISteamInventory_G {
+    return SteamInventory_GrantPromoItems(steam_inventory, pResultHandle);
 }
 
 
-SteamInventory_AddPromoItem :: inline (pResultHandle: *SteamInventoryResult_t, itemDef: SteamItemDef_t) -> bool {
-    return SteamAPI_ISteamInventory_AddPromoItem(steam_inventory, pResultHandle, itemDef);
+SteamInventory_AddPromoItem :: inline (pResultHandle: *SteamInventoryResult_t, itemDef: SteamItemDef_t) -> bool #foreign steam "SteamAPI_ISteamInventor {
+    return SteamInventory_AddPromoItem(steam_inventory, pResultHandle, itemDef);
 }
 
 
-SteamInventory_AddPromoItems :: inline (pResultHandle: *SteamInventoryResult_t, pArrayItemDefs: *SteamItemDef_t, unArrayLength: uint32) -> bool {
-    return SteamAPI_ISteamInventory_AddPromoItems(steam_inventory, pResultHandle, pArrayItemDefs, unArrayLength);
+SteamInventory_AddPromoItems :: inline (pResultHandle: *SteamInventoryResult_t, pArrayItemDefs: *SteamItemDef_t, unArrayLength: uint32) -> bool #foreign steam "SteamAPI_ISteamInventory {
+    return SteamInventory_AddPromoItems(steam_inventory, pResultHandle, pArrayItemDefs, unArrayLength);
 }
 
 
-SteamInventory_ConsumeItem :: inline (pResultHandle: *SteamInventoryResult_t, itemConsume: SteamItemInstanceID_t, unQuantity: uint32) -> bool {
-    return SteamAPI_ISteamInventory_ConsumeItem(steam_inventory, pResultHandle, itemConsume, unQuantity);
+SteamInventory_ConsumeItem :: inline (pResultHandle: *SteamInventoryResult_t, itemConsume: SteamItemInstanceID_t, unQuantity: uint32) -> bool #foreign steam "SteamAPI_ISteamInvento {
+    return SteamInventory_ConsumeItem(steam_inventory, pResultHandle, itemConsume, unQuantity);
 }
 
 
-SteamInventory_ExchangeItems :: inline (pResultHandle: *SteamInventoryResult_t, pArrayGenerate: *SteamItemDef_t, punArrayGenerateQuantity: *uint32, unArrayGenerateLength: uint32, pArrayDestroy: *SteamItemInstanceID_t, punArrayDestroyQuantity: *uint32, unArrayDestroyLength: uint32) -> bool {
-    return SteamAPI_ISteamInventory_ExchangeItems(steam_inventory, pResultHandle, pArrayGenerate, punArrayGenerateQuantity, unArrayGenerateLength, pArrayDestroy, punArrayDestroyQuantity, unArrayDestroyLength);
+SteamInventory_ExchangeItems :: inline (pResultHandle: *SteamInventoryResult_t, pArrayGenerate: *SteamItemDef_t, punArrayGenerateQuantity: *uint32, unArrayGenerateLength: uint32, pArrayDestroy: *SteamItemInstanceID_t, punArrayDestroyQuantity: *uint32, unArrayDestroyLength: uint32) -> bool #foreign steam "SteamAPI_ISteamInventory {
+    return SteamInventory_ExchangeItems(steam_inventory, pResultHandle, pArrayGenerate, punArrayGenerateQuantity, unArrayGenerateLength, pArrayDestroy, punArrayDestroyQuantity, unArrayDestroyLength);
 }
 
 
-SteamInventory_TransferItemQuantity :: inline (pResultHandle: *SteamInventoryResult_t, itemIdSource: SteamItemInstanceID_t, unQuantity: uint32, itemIdDest: SteamItemInstanceID_t) -> bool {
-    return SteamAPI_ISteamInventory_TransferItemQuantity(steam_inventory, pResultHandle, itemIdSource, unQuantity, itemIdDest);
+SteamInventory_TransferItemQuantity :: inline (pResultHandle: *SteamInventoryResult_t, itemIdSource: SteamItemInstanceID_t, unQuantity: uint32, itemIdDest: SteamItemInstanceID_t) -> bool #foreign steam "SteamAPI_ISteamInventory_Transf {
+    return SteamInventory_TransferItemQuantity(steam_inventory, pResultHandle, itemIdSource, unQuantity, itemIdDest);
 }
 
 
 SteamInventory_SendItemDropHeartbeat :: inline () {
-    SteamAPI_ISteamInventory_SendItemDropHeartbeat(steam_inventory);
+    SteamInventory_SendItemDropHeartbeat(steam_inventory);
 }
 
 
-SteamInventory_TriggerItemDrop :: inline (pResultHandle: *SteamInventoryResult_t, dropListDefinition: SteamItemDef_t) -> bool {
-    return SteamAPI_ISteamInventory_TriggerItemDrop(steam_inventory, pResultHandle, dropListDefinition);
+SteamInventory_TriggerItemDrop :: inline (pResultHandle: *SteamInventoryResult_t, dropListDefinition: SteamItemDef_t) -> bool #foreign steam "SteamAPI_ISteamInventory_T {
+    return SteamInventory_TriggerItemDrop(steam_inventory, pResultHandle, dropListDefinition);
 }
 
 
-SteamInventory_TradeItems :: inline (pResultHandle: *SteamInventoryResult_t, steamIDTradePartner: uint64_steamid, pArrayGive: *SteamItemInstanceID_t, pArrayGiveQuantity: *uint32, nArrayGiveLength: uint32, pArrayGet: *SteamItemInstanceID_t, pArrayGetQuantity: *uint32, nArrayGetLength: uint32) -> bool {
-    return SteamAPI_ISteamInventory_TradeItems(steam_inventory, pResultHandle, steamIDTradePartner, pArrayGive, pArrayGiveQuantity, nArrayGiveLength, pArrayGet, pArrayGetQuantity, nArrayGetLength);
+SteamInventory_TradeItems :: inline (pResultHandle: *SteamInventoryResult_t, steamIDTradePartner: uint64_steamid, pArrayGive: *SteamItemInstanceID_t, pArrayGiveQuantity: *uint32, nArrayGiveLength: uint32, pArrayGet: *SteamItemInstanceID_t, pArrayGetQuantity: *uint32, nArrayGetLength: uint32) -> bool #foreign steam "SteamAPI_ISteamInvent {
+    return SteamInventory_TradeItems(steam_inventory, pResultHandle, steamIDTradePartner, pArrayGive, pArrayGiveQuantity, nArrayGiveLength, pArrayGet, pArrayGetQuantity, nArrayGetLength);
 }
 
 
-SteamInventory_LoadItemDefinitions :: inline () -> bool {
-    return SteamAPI_ISteamInventory_LoadItemDefinitions(steam_inventory);
+SteamInventory_LoadItemDefinitions :: inline () -> bool #foreign steam "SteamAPI_ISteamInventory_LoadI {
+    return SteamInventory_LoadItemDefinitions(steam_inventory);
 }
 
 
-SteamInventory_GetItemDefinitionIDs :: inline (pItemDefIDs: *SteamItemDef_t, punItemDefIDsArraySize: *uint32) -> bool {
-    return SteamAPI_ISteamInventory_GetItemDefinitionIDs(steam_inventory, pItemDefIDs, punItemDefIDsArraySize);
+SteamInventory_GetItemDefinitionIDs :: inline (pItemDefIDs: *SteamItemDef_t, punItemDefIDsArraySize: *uint32) -> bool #foreign steam "SteamAPI_ISteamInventory_GetIte {
+    return SteamInventory_GetItemDefinitionIDs(steam_inventory, pItemDefIDs, punItemDefIDsArraySize);
 }
 
 
-SteamInventory_GetItemDefinitionProperty :: inline (iDefinition: SteamItemDef_t, pchPropertyName: *char, pchValueBuffer: *char, punValueBufferSizeOut: *uint32) -> bool {
-    return SteamAPI_ISteamInventory_GetItemDefinitionProperty(steam_inventory, iDefinition, pchPropertyName, pchValueBuffer, punValueBufferSizeOut);
+SteamInventory_GetItemDefinitionProperty :: inline (iDefinition: SteamItemDef_t, pchPropertyName: *char, pchValueBuffer: *char, punValueBufferSizeOut: *uint32) -> bool #foreign steam "SteamAPI_ISteamInventory_GetItemDefi {
+    return SteamInventory_GetItemDefinitionProperty(steam_inventory, iDefinition, pchPropertyName, pchValueBuffer, punValueBufferSizeOut);
 }
 
 
-SteamInventory_RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamInventory_RequestEligiblePromoItemDefinitionsIDs(steam_inventory, steamID);
+SteamInventory_RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamInventory_RequestEligiblePromoItem {
+    return SteamInventory_RequestEligiblePromoItemDefinitionsIDs(steam_inventory, steamID);
 }
 
 
-SteamInventory_GetEligiblePromoItemDefinitionIDs :: inline (steamID: uint64_steamid, pItemDefIDs: *SteamItemDef_t, punItemDefIDsArraySize: *uint32) -> bool {
-    return SteamAPI_ISteamInventory_GetEligiblePromoItemDefinitionIDs(steam_inventory, steamID, pItemDefIDs, punItemDefIDsArraySize);
+SteamInventory_GetEligiblePromoItemDefinitionIDs :: inline (steamID: uint64_steamid, pItemDefIDs: *SteamItemDef_t, punItemDefIDsArraySize: *uint32) -> bool #foreign steam "SteamAPI_ISteamInventory_GetEligiblePromoIte {
+    return SteamInventory_GetEligiblePromoItemDefinitionIDs(steam_inventory, steamID, pItemDefIDs, punItemDefIDsArraySize);
 }
 
 
-SteamInventory_StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamInventory_StartPurchase(steam_inventory, pArrayItemDefs, punArrayQuantity, unArrayLength);
+SteamInventory_StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamInventory {
+    return SteamInventory_StartPurchase(steam_inventory, pArrayItemDefs, punArrayQuantity, unArrayLength);
 }
 
 
-SteamInventory_RequestPrices :: inline () -> SteamAPICall_t #must {
-    return SteamAPI_ISteamInventory_RequestPrices(steam_inventory);
+SteamInventory_RequestPrices :: inline () -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamInventory {
+    return SteamInventory_RequestPrices(steam_inventory);
 }
 
 
-SteamInventory_GetNumItemsWithPrices :: inline () -> uint32 {
-    return SteamAPI_ISteamInventory_GetNumItemsWithPrices(steam_inventory);
+SteamInventory_GetNumItemsWithPrices :: inline () -> uint32 #foreign steam "SteamAPI_ISteamInventory_GetNumI {
+    return SteamInventory_GetNumItemsWithPrices(steam_inventory);
 }
 
 
-SteamInventory_GetItemsWithPrices :: inline (pArrayItemDefs: *SteamItemDef_t, pCurrentPrices: *uint64, pBasePrices: *uint64, unArrayLength: uint32) -> bool {
-    return SteamAPI_ISteamInventory_GetItemsWithPrices(steam_inventory, pArrayItemDefs, pCurrentPrices, pBasePrices, unArrayLength);
+SteamInventory_GetItemsWithPrices :: inline (pArrayItemDefs: *SteamItemDef_t, pCurrentPrices: *uint64, pBasePrices: *uint64, unArrayLength: uint32) -> bool #foreign steam "SteamAPI_ISteamInventory_GetI {
+    return SteamInventory_GetItemsWithPrices(steam_inventory, pArrayItemDefs, pCurrentPrices, pBasePrices, unArrayLength);
 }
 
 
-SteamInventory_GetItemPrice :: inline (iDefinition: SteamItemDef_t, pCurrentPrice: *uint64, pBasePrice: *uint64) -> bool {
-    return SteamAPI_ISteamInventory_GetItemPrice(steam_inventory, iDefinition, pCurrentPrice, pBasePrice);
+SteamInventory_GetItemPrice :: inline (iDefinition: SteamItemDef_t, pCurrentPrice: *uint64, pBasePrice: *uint64) -> bool #foreign steam "SteamAPI_ISteamInventor {
+    return SteamInventory_GetItemPrice(steam_inventory, iDefinition, pCurrentPrice, pBasePrice);
 }
 
 
-SteamInventory_StartUpdateProperties :: inline () -> SteamInventoryUpdateHandle_t {
-    return SteamAPI_ISteamInventory_StartUpdateProperties(steam_inventory);
+SteamInventory_StartUpdateProperties :: inline () -> SteamInventoryUpdateHandle_t #foreign steam "SteamAPI_ISteamInventory_StartUp {
+    return SteamInventory_StartUpdateProperties(steam_inventory);
 }
 
 
-SteamInventory_RemoveProperty :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char) -> bool {
-    return SteamAPI_ISteamInventory_RemoveProperty(steam_inventory, handle, nItemID, pchPropertyName);
+SteamInventory_RemoveProperty :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char) -> bool #foreign steam "SteamAPI_ISteamInventory_ {
+    return SteamInventory_RemoveProperty(steam_inventory, handle, nItemID, pchPropertyName);
 }
 
 
-SteamInventory_SetPropertyString :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, pchPropertyValue: *char) -> bool {
-    return SteamAPI_ISteamInventory_SetPropertyString(steam_inventory, handle, nItemID, pchPropertyName, pchPropertyValue);
+SteamInventory_SetPropertyString :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, pchPropertyValue: *char) -> bool #foreign steam "SteamAPI_ISteamInventory_Set {
+    return SteamInventory_SetPropertyString(steam_inventory, handle, nItemID, pchPropertyName, pchPropertyValue);
 }
 
 
-SteamInventory_SetPropertyBool :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, bValue: bool) -> bool {
-    return SteamAPI_ISteamInventory_SetPropertyBool(steam_inventory, handle, nItemID, pchPropertyName, bValue);
+SteamInventory_SetPropertyBool :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, bValue: bool) -> bool #foreign steam "SteamAPI_ISteamInventory_S {
+    return SteamInventory_SetPropertyBool(steam_inventory, handle, nItemID, pchPropertyName, bValue);
 }
 
 
-SteamInventory_SetPropertyInt64 :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, nValue: int64) -> bool {
-    return SteamAPI_ISteamInventory_SetPropertyInt64(steam_inventory, handle, nItemID, pchPropertyName, nValue);
+SteamInventory_SetPropertyInt64 :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, nValue: int64) -> bool #foreign steam "SteamAPI_ISteamInventory_Se {
+    return SteamInventory_SetPropertyInt64(steam_inventory, handle, nItemID, pchPropertyName, nValue);
 }
 
 
-SteamInventory_SetPropertyFloat :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, flValue: float) -> bool {
-    return SteamAPI_ISteamInventory_SetPropertyFloat(steam_inventory, handle, nItemID, pchPropertyName, flValue);
+SteamInventory_SetPropertyFloat :: inline (handle: SteamInventoryUpdateHandle_t, nItemID: SteamItemInstanceID_t, pchPropertyName: *char, flValue: float) -> bool #foreign steam "SteamAPI_ISteamInventory_Se {
+    return SteamInventory_SetPropertyFloat(steam_inventory, handle, nItemID, pchPropertyName, flValue);
 }
 
 
-SteamInventory_SubmitUpdateProperties :: inline (handle: SteamInventoryUpdateHandle_t, pResultHandle: *SteamInventoryResult_t) -> bool {
-    return SteamAPI_ISteamInventory_SubmitUpdateProperties(steam_inventory, handle, pResultHandle);
+SteamInventory_SubmitUpdateProperties :: inline (handle: SteamInventoryUpdateHandle_t, pResultHandle: *SteamInventoryResult_t) -> bool #foreign steam "SteamAPI_ISteamInventory_SubmitUp {
+    return SteamInventory_SubmitUpdateProperties(steam_inventory, handle, pResultHandle);
 }
 
 
-SteamInventory_InspectItem :: inline (pResultHandle: *SteamInventoryResult_t, pchItemToken: *char) -> bool {
-    return SteamAPI_ISteamInventory_InspectItem(steam_inventory, pResultHandle, pchItemToken);
+SteamInventory_InspectItem :: inline (pResultHandle: *SteamInventoryResult_t, pchItemToken: *char) -> bool #foreign steam "SteamAPI_ISteamInvento {
+    return SteamInventory_InspectItem(steam_inventory, pResultHandle, pchItemToken);
 }

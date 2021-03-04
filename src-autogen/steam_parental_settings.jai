@@ -16,31 +16,31 @@ SteamParentalSettings_Namespace :: struct {
 }
 
 
-SteamParentalSettings_BIsParentalLockEnabled :: inline () -> bool {
-    return SteamAPI_ISteamParentalSettings_BIsParentalLockEnabled(steam_parental_settings);
+SteamParentalSettings_BIsParentalLockEnabled :: inline () -> bool #foreign steam "SteamAPI_ISteamParentalSettings_BIsParen {
+    return SteamParentalSettings_BIsParentalLockEnabled(steam_parental_settings);
 }
 
 
-SteamParentalSettings_BIsParentalLockLocked :: inline () -> bool {
-    return SteamAPI_ISteamParentalSettings_BIsParentalLockLocked(steam_parental_settings);
+SteamParentalSettings_BIsParentalLockLocked :: inline () -> bool #foreign steam "SteamAPI_ISteamParentalSettings_BIsPare {
+    return SteamParentalSettings_BIsParentalLockLocked(steam_parental_settings);
 }
 
 
-SteamParentalSettings_BIsAppBlocked :: inline (nAppID: AppId_t) -> bool {
-    return SteamAPI_ISteamParentalSettings_BIsAppBlocked(steam_parental_settings, nAppID);
+SteamParentalSettings_BIsAppBlocked :: inline (nAppID: AppId_t) -> bool #foreign steam "SteamAPI_ISteamParentalSettings {
+    return SteamParentalSettings_BIsAppBlocked(steam_parental_settings, nAppID);
 }
 
 
-SteamParentalSettings_BIsAppInBlockList :: inline (nAppID: AppId_t) -> bool {
-    return SteamAPI_ISteamParentalSettings_BIsAppInBlockList(steam_parental_settings, nAppID);
+SteamParentalSettings_BIsAppInBlockList :: inline (nAppID: AppId_t) -> bool #foreign steam "SteamAPI_ISteamParentalSettings_BIs {
+    return SteamParentalSettings_BIsAppInBlockList(steam_parental_settings, nAppID);
 }
 
 
-SteamParentalSettings_BIsFeatureBlocked :: inline (eFeature: EParentalFeature) -> bool {
-    return SteamAPI_ISteamParentalSettings_BIsFeatureBlocked(steam_parental_settings, eFeature);
+SteamParentalSettings_BIsFeatureBlocked :: inline (eFeature: EParentalFeature) -> bool #foreign steam "SteamAPI_ISteamParentalSettings_BIs {
+    return SteamParentalSettings_BIsFeatureBlocked(steam_parental_settings, eFeature);
 }
 
 
-SteamParentalSettings_BIsFeatureInBlockList :: inline (eFeature: EParentalFeature) -> bool {
-    return SteamAPI_ISteamParentalSettings_BIsFeatureInBlockList(steam_parental_settings, eFeature);
+SteamParentalSettings_BIsFeatureInBlockList :: inline (eFeature: EParentalFeature) -> bool #foreign steam "SteamAPI_ISteamParentalSettings_BIsFeat {
+    return SteamParentalSettings_BIsFeatureInBlockList(steam_parental_settings, eFeature);
 }

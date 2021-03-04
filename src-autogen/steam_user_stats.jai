@@ -55,226 +55,226 @@ SteamUserStats_Namespace :: struct {
 }
 
 
-SteamUserStats_RequestCurrentStats :: inline () -> bool {
-    return SteamAPI_ISteamUserStats_RequestCurrentStats(steam_user_stats);
+SteamUserStats_RequestCurrentStats :: inline () -> bool #foreign steam "SteamAPI_ISteamUserStats_Reque {
+    return SteamUserStats_RequestCurrentStats(steam_user_stats);
 }
 
 
-SteamUserStats_GetStatInt32 :: inline (pchName: *char, pData: *int32) -> bool {
-    return SteamAPI_ISteamUserStats_GetStatInt32(steam_user_stats, pchName, pData);
+SteamUserStats_GetStatInt32 :: inline (pchName: *char, pData: *int32) -> bool #foreign steam "SteamAPI_ISteamUserStat {
+    return SteamUserStats_GetStatInt32(steam_user_stats, pchName, pData);
 }
 
 
-SteamUserStats_GetStatFloat :: inline (pchName: *char, pData: *float) -> bool {
-    return SteamAPI_ISteamUserStats_GetStatFloat(steam_user_stats, pchName, pData);
+SteamUserStats_GetStatFloat :: inline (pchName: *char, pData: *float) -> bool #foreign steam "SteamAPI_ISteamUserStat {
+    return SteamUserStats_GetStatFloat(steam_user_stats, pchName, pData);
 }
 
 
-SteamUserStats_SetStatInt32 :: inline (pchName: *char, nData: int32) -> bool {
-    return SteamAPI_ISteamUserStats_SetStatInt32(steam_user_stats, pchName, nData);
+SteamUserStats_SetStatInt32 :: inline (pchName: *char, nData: int32) -> bool #foreign steam "SteamAPI_ISteamUserStat {
+    return SteamUserStats_SetStatInt32(steam_user_stats, pchName, nData);
 }
 
 
-SteamUserStats_SetStatFloat :: inline (pchName: *char, fData: float) -> bool {
-    return SteamAPI_ISteamUserStats_SetStatFloat(steam_user_stats, pchName, fData);
+SteamUserStats_SetStatFloat :: inline (pchName: *char, fData: float) -> bool #foreign steam "SteamAPI_ISteamUserStat {
+    return SteamUserStats_SetStatFloat(steam_user_stats, pchName, fData);
 }
 
 
-SteamUserStats_UpdateAvgRateStat :: inline (pchName: *char, flCountThisSession: float, dSessionLength: double) -> bool {
-    return SteamAPI_ISteamUserStats_UpdateAvgRateStat(steam_user_stats, pchName, flCountThisSession, dSessionLength);
+SteamUserStats_UpdateAvgRateStat :: inline (pchName: *char, flCountThisSession: float, dSessionLength: double) -> bool #foreign steam "SteamAPI_ISteamUserStats_Upd {
+    return SteamUserStats_UpdateAvgRateStat(steam_user_stats, pchName, flCountThisSession, dSessionLength);
 }
 
 
-SteamUserStats_GetAchievement :: inline (pchName: *char, pbAchieved: *bool) -> bool {
-    return SteamAPI_ISteamUserStats_GetAchievement(steam_user_stats, pchName, pbAchieved);
+SteamUserStats_GetAchievement :: inline (pchName: *char, pbAchieved: *bool) -> bool #foreign steam "SteamAPI_ISteamUserStats_ {
+    return SteamUserStats_GetAchievement(steam_user_stats, pchName, pbAchieved);
 }
 
 
-SteamUserStats_SetAchievement :: inline (pchName: *char) -> bool {
-    return SteamAPI_ISteamUserStats_SetAchievement(steam_user_stats, pchName);
+SteamUserStats_SetAchievement :: inline (pchName: *char) -> bool #foreign steam "SteamAPI_ISteamUserStats_ {
+    return SteamUserStats_SetAchievement(steam_user_stats, pchName);
 }
 
 
-SteamUserStats_ClearAchievement :: inline (pchName: *char) -> bool {
-    return SteamAPI_ISteamUserStats_ClearAchievement(steam_user_stats, pchName);
+SteamUserStats_ClearAchievement :: inline (pchName: *char) -> bool #foreign steam "SteamAPI_ISteamUserStats_Cl {
+    return SteamUserStats_ClearAchievement(steam_user_stats, pchName);
 }
 
 
-SteamUserStats_GetAchievementAndUnlockTime :: inline (pchName: *char, pbAchieved: *bool, punUnlockTime: *uint32) -> bool {
-    return SteamAPI_ISteamUserStats_GetAchievementAndUnlockTime(steam_user_stats, pchName, pbAchieved, punUnlockTime);
+SteamUserStats_GetAchievementAndUnlockTime :: inline (pchName: *char, pbAchieved: *bool, punUnlockTime: *uint32) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetAchievemen {
+    return SteamUserStats_GetAchievementAndUnlockTime(steam_user_stats, pchName, pbAchieved, punUnlockTime);
 }
 
 
-SteamUserStats_StoreStats :: inline () -> bool {
-    return SteamAPI_ISteamUserStats_StoreStats(steam_user_stats);
+SteamUserStats_StoreStats :: inline () -> bool #foreign steam "SteamAPI_ISteamUserSt {
+    return SteamUserStats_StoreStats(steam_user_stats);
 }
 
 
-SteamUserStats_GetAchievementIcon :: inline (pchName: *char) -> s32 {
-    return SteamAPI_ISteamUserStats_GetAchievementIcon(steam_user_stats, pchName);
+SteamUserStats_GetAchievementIcon :: inline (pchName: *char) -> s32 #foreign steam "SteamAPI_ISteamUserStats_GetA {
+    return SteamUserStats_GetAchievementIcon(steam_user_stats, pchName);
 }
 
 
-SteamUserStats_GetAchievementDisplayAttribute :: inline (pchName: *char, pchKey: *char) -> string {
-    return to_string(SteamAPI_ISteamUserStats_GetAchievementDisplayAttribute(steam_user_stats, pchName, pchKey));
+SteamUserStats_GetAchievementDisplayAttribute :: inline (pchName: *char, pchKey: *char) -> *char #foreign steam "SteamAPI_ISteamUserStats_GetAchievementDi {
+    return SteamUserStats_GetAchievementDisplayAttribute(steam_user_stats, pchName, pchKey);
 }
 
 
-SteamUserStats_IndicateAchievementProgress :: inline (pchName: *char, nCurProgress: uint32, nMaxProgress: uint32) -> bool {
-    return SteamAPI_ISteamUserStats_IndicateAchievementProgress(steam_user_stats, pchName, nCurProgress, nMaxProgress);
+SteamUserStats_IndicateAchievementProgress :: inline (pchName: *char, nCurProgress: uint32, nMaxProgress: uint32) -> bool #foreign steam "SteamAPI_ISteamUserStats_IndicateAchie {
+    return SteamUserStats_IndicateAchievementProgress(steam_user_stats, pchName, nCurProgress, nMaxProgress);
 }
 
 
-SteamUserStats_GetNumAchievements :: inline () -> uint32 {
-    return SteamAPI_ISteamUserStats_GetNumAchievements(steam_user_stats);
+SteamUserStats_GetNumAchievements :: inline () -> uint32 #foreign steam "SteamAPI_ISteamUserStats_GetN {
+    return SteamUserStats_GetNumAchievements(steam_user_stats);
 }
 
 
-SteamUserStats_GetAchievementName :: inline (iAchievement: uint32) -> string {
-    return to_string(SteamAPI_ISteamUserStats_GetAchievementName(steam_user_stats, iAchievement));
+SteamUserStats_GetAchievementName :: inline (iAchievement: uint32) -> *char #foreign steam "SteamAPI_ISteamUserStats_GetA {
+    return SteamUserStats_GetAchievementName(steam_user_stats, iAchievement);
 }
 
 
-SteamUserStats_RequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_RequestUserStats(steam_user_stats, steamIDUser);
+SteamUserStats_RequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_Re {
+    return SteamUserStats_RequestUserStats(steam_user_stats, steamIDUser);
 }
 
 
-SteamUserStats_GetUserStatInt32 :: inline (steamIDUser: uint64_steamid, pchName: *char, pData: *int32) -> bool {
-    return SteamAPI_ISteamUserStats_GetUserStatInt32(steam_user_stats, steamIDUser, pchName, pData);
+SteamUserStats_GetUserStatInt32 :: inline (steamIDUser: uint64_steamid, pchName: *char, pData: *int32) -> bool #foreign steam "SteamAPI_ISteamUserStats_Ge {
+    return SteamUserStats_GetUserStatInt32(steam_user_stats, steamIDUser, pchName, pData);
 }
 
 
-SteamUserStats_GetUserStatFloat :: inline (steamIDUser: uint64_steamid, pchName: *char, pData: *float) -> bool {
-    return SteamAPI_ISteamUserStats_GetUserStatFloat(steam_user_stats, steamIDUser, pchName, pData);
+SteamUserStats_GetUserStatFloat :: inline (steamIDUser: uint64_steamid, pchName: *char, pData: *float) -> bool #foreign steam "SteamAPI_ISteamUserStats_Ge {
+    return SteamUserStats_GetUserStatFloat(steam_user_stats, steamIDUser, pchName, pData);
 }
 
 
-SteamUserStats_GetUserAchievement :: inline (steamIDUser: uint64_steamid, pchName: *char, pbAchieved: *bool) -> bool {
-    return SteamAPI_ISteamUserStats_GetUserAchievement(steam_user_stats, steamIDUser, pchName, pbAchieved);
+SteamUserStats_GetUserAchievement :: inline (steamIDUser: uint64_steamid, pchName: *char, pbAchieved: *bool) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetU {
+    return SteamUserStats_GetUserAchievement(steam_user_stats, steamIDUser, pchName, pbAchieved);
 }
 
 
-SteamUserStats_GetUserAchievementAndUnlockTime :: inline (steamIDUser: uint64_steamid, pchName: *char, pbAchieved: *bool, punUnlockTime: *uint32) -> bool {
-    return SteamAPI_ISteamUserStats_GetUserAchievementAndUnlockTime(steam_user_stats, steamIDUser, pchName, pbAchieved, punUnlockTime);
+SteamUserStats_GetUserAchievementAndUnlockTime :: inline (steamIDUser: uint64_steamid, pchName: *char, pbAchieved: *bool, punUnlockTime: *uint32) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetUserAchievemen {
+    return SteamUserStats_GetUserAchievementAndUnlockTime(steam_user_stats, steamIDUser, pchName, pbAchieved, punUnlockTime);
 }
 
 
-SteamUserStats_ResetAllStats :: inline (bAchievementsToo: bool) -> bool {
-    return SteamAPI_ISteamUserStats_ResetAllStats(steam_user_stats, bAchievementsToo);
+SteamUserStats_ResetAllStats :: inline (bAchievementsToo: bool) -> bool #foreign steam "SteamAPI_ISteamUserStats {
+    return SteamUserStats_ResetAllStats(steam_user_stats, bAchievementsToo);
 }
 
 
-SteamUserStats_FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_FindOrCreateLeaderboard(steam_user_stats, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+SteamUserStats_FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_FindOrCre {
+    return SteamUserStats_FindOrCreateLeaderboard(steam_user_stats, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
 }
 
 
-SteamUserStats_FindLeaderboard :: inline (pchLeaderboardName: *char) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_FindLeaderboard(steam_user_stats, pchLeaderboardName);
+SteamUserStats_FindLeaderboard :: inline (pchLeaderboardName: *char) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_F {
+    return SteamUserStats_FindLeaderboard(steam_user_stats, pchLeaderboardName);
 }
 
 
-SteamUserStats_GetLeaderboardName :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> string {
-    return to_string(SteamAPI_ISteamUserStats_GetLeaderboardName(steam_user_stats, hSteamLeaderboard));
+SteamUserStats_GetLeaderboardName :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> *char #foreign steam "SteamAPI_ISteamUserStats_GetL {
+    return SteamUserStats_GetLeaderboardName(steam_user_stats, hSteamLeaderboard);
 }
 
 
-SteamUserStats_GetLeaderboardEntryCount :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> s32 {
-    return SteamAPI_ISteamUserStats_GetLeaderboardEntryCount(steam_user_stats, hSteamLeaderboard);
+SteamUserStats_GetLeaderboardEntryCount :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> s32 #foreign steam "SteamAPI_ISteamUserStats_GetLeaderb {
+    return SteamUserStats_GetLeaderboardEntryCount(steam_user_stats, hSteamLeaderboard);
 }
 
 
-SteamUserStats_GetLeaderboardSortMethod :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> ELeaderboardSortMethod {
-    return SteamAPI_ISteamUserStats_GetLeaderboardSortMethod(steam_user_stats, hSteamLeaderboard);
+SteamUserStats_GetLeaderboardSortMethod :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> ELeaderboardSortMethod #foreign steam "SteamAPI_ISteamUserStats_GetLeaderb {
+    return SteamUserStats_GetLeaderboardSortMethod(steam_user_stats, hSteamLeaderboard);
 }
 
 
-SteamUserStats_GetLeaderboardDisplayType :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> ELeaderboardDisplayType {
-    return SteamAPI_ISteamUserStats_GetLeaderboardDisplayType(steam_user_stats, hSteamLeaderboard);
+SteamUserStats_GetLeaderboardDisplayType :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> ELeaderboardDisplayType #foreign steam "SteamAPI_ISteamUserStats_GetLeaderbo {
+    return SteamUserStats_GetLeaderboardDisplayType(steam_user_stats, hSteamLeaderboard);
 }
 
 
-SteamUserStats_DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_DownloadLeaderboardEntries(steam_user_stats, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+SteamUserStats_DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_DownloadLead {
+    return SteamUserStats_DownloadLeaderboardEntries(steam_user_stats, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
 }
 
 
-SteamUserStats_DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_DownloadLeaderboardEntriesForUsers(steam_user_stats, hSteamLeaderboard, prgUsers, cUsers);
+SteamUserStats_DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_DownloadLeaderboardE {
+    return SteamUserStats_DownloadLeaderboardEntriesForUsers(steam_user_stats, hSteamLeaderboard, prgUsers, cUsers);
 }
 
 
-SteamUserStats_GetDownloadedLeaderboardEntry :: inline (hSteamLeaderboardEntries: SteamLeaderboardEntries_t, index: s32, pLeaderboardEntry: *LeaderboardEntry_t, pDetails: *int32, cDetailsMax: s32) -> bool {
-    return SteamAPI_ISteamUserStats_GetDownloadedLeaderboardEntry(steam_user_stats, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+SteamUserStats_GetDownloadedLeaderboardEntry :: inline (hSteamLeaderboardEntries: SteamLeaderboardEntries_t, index: s32, pLeaderboardEntry: *LeaderboardEntry_t, pDetails: *int32, cDetailsMax: s32) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetDownloadedLe {
+    return SteamUserStats_GetDownloadedLeaderboardEntry(steam_user_stats, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
 }
 
 
-SteamUserStats_UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_UploadLeaderboardScore(steam_user_stats, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+SteamUserStats_UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_UploadLe {
+    return SteamUserStats_UploadLeaderboardScore(steam_user_stats, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
 }
 
 
-SteamUserStats_AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_AttachLeaderboardUGC(steam_user_stats, hSteamLeaderboard, hUGC);
+SteamUserStats_AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_Attach {
+    return SteamUserStats_AttachLeaderboardUGC(steam_user_stats, hSteamLeaderboard, hUGC);
 }
 
 
-SteamUserStats_GetNumberOfCurrentPlayers :: inline () -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_GetNumberOfCurrentPlayers(steam_user_stats);
+SteamUserStats_GetNumberOfCurrentPlayers :: inline () -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_GetNumberOf {
+    return SteamUserStats_GetNumberOfCurrentPlayers(steam_user_stats);
 }
 
 
-SteamUserStats_RequestGlobalAchievementPercentages :: inline () -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_RequestGlobalAchievementPercentages(steam_user_stats);
+SteamUserStats_RequestGlobalAchievementPercentages :: inline () -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_RequestGlobalAchievem {
+    return SteamUserStats_RequestGlobalAchievementPercentages(steam_user_stats);
 }
 
 
-SteamUserStats_GetMostAchievedAchievementInfo :: inline (pchName: *char, unNameBufLen: uint32, pflPercent: *float, pbAchieved: *bool) -> s32 {
-    return SteamAPI_ISteamUserStats_GetMostAchievedAchievementInfo(steam_user_stats, pchName, unNameBufLen, pflPercent, pbAchieved);
+SteamUserStats_GetMostAchievedAchievementInfo :: inline (pchName: *char, unNameBufLen: uint32, pflPercent: *float, pbAchieved: *bool) -> s32 #foreign steam "SteamAPI_ISteamUserStats_GetMostAchievedA {
+    return SteamUserStats_GetMostAchievedAchievementInfo(steam_user_stats, pchName, unNameBufLen, pflPercent, pbAchieved);
 }
 
 
-SteamUserStats_GetNextMostAchievedAchievementInfo :: inline (iIteratorPrevious: s32, pchName: *char, unNameBufLen: uint32, pflPercent: *float, pbAchieved: *bool) -> s32 {
-    return SteamAPI_ISteamUserStats_GetNextMostAchievedAchievementInfo(steam_user_stats, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+SteamUserStats_GetNextMostAchievedAchievementInfo :: inline (iIteratorPrevious: s32, pchName: *char, unNameBufLen: uint32, pflPercent: *float, pbAchieved: *bool) -> s32 #foreign steam "SteamAPI_ISteamUserStats_GetNextMostAchievedA {
+    return SteamUserStats_GetNextMostAchievedAchievementInfo(steam_user_stats, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
 }
 
 
-SteamUserStats_GetAchievementAchievedPercent :: inline (pchName: *char, pflPercent: *float) -> bool {
-    return SteamAPI_ISteamUserStats_GetAchievementAchievedPercent(steam_user_stats, pchName, pflPercent);
+SteamUserStats_GetAchievementAchievedPercent :: inline (pchName: *char, pflPercent: *float) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetAchievementA {
+    return SteamUserStats_GetAchievementAchievedPercent(steam_user_stats, pchName, pflPercent);
 }
 
 
-SteamUserStats_RequestGlobalStats :: inline (nHistoryDays: s32) -> SteamAPICall_t #must {
-    return SteamAPI_ISteamUserStats_RequestGlobalStats(steam_user_stats, nHistoryDays);
+SteamUserStats_RequestGlobalStats :: inline (nHistoryDays: s32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamUserStats_Requ {
+    return SteamUserStats_RequestGlobalStats(steam_user_stats, nHistoryDays);
 }
 
 
-SteamUserStats_GetGlobalStatInt64 :: inline (pchStatName: *char, pData: *int64) -> bool {
-    return SteamAPI_ISteamUserStats_GetGlobalStatInt64(steam_user_stats, pchStatName, pData);
+SteamUserStats_GetGlobalStatInt64 :: inline (pchStatName: *char, pData: *int64) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetG {
+    return SteamUserStats_GetGlobalStatInt64(steam_user_stats, pchStatName, pData);
 }
 
 
-SteamUserStats_GetGlobalStatDouble :: inline (pchStatName: *char, pData: *double) -> bool {
-    return SteamAPI_ISteamUserStats_GetGlobalStatDouble(steam_user_stats, pchStatName, pData);
+SteamUserStats_GetGlobalStatDouble :: inline (pchStatName: *char, pData: *double) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetGl {
+    return SteamUserStats_GetGlobalStatDouble(steam_user_stats, pchStatName, pData);
 }
 
 
-SteamUserStats_GetGlobalStatHistoryInt64 :: inline (pchStatName: *char, pData: *int64, cubData: uint32) -> int32 {
-    return SteamAPI_ISteamUserStats_GetGlobalStatHistoryInt64(steam_user_stats, pchStatName, pData, cubData);
+SteamUserStats_GetGlobalStatHistoryInt64 :: inline (pchStatName: *char, pData: *int64, cubData: uint32) -> int32 #foreign steam "SteamAPI_ISteamUserStats_GetGlobalSt {
+    return SteamUserStats_GetGlobalStatHistoryInt64(steam_user_stats, pchStatName, pData, cubData);
 }
 
 
-SteamUserStats_GetGlobalStatHistoryDouble :: inline (pchStatName: *char, pData: *double, cubData: uint32) -> int32 {
-    return SteamAPI_ISteamUserStats_GetGlobalStatHistoryDouble(steam_user_stats, pchStatName, pData, cubData);
+SteamUserStats_GetGlobalStatHistoryDouble :: inline (pchStatName: *char, pData: *double, cubData: uint32) -> int32 #foreign steam "SteamAPI_ISteamUserStats_GetGlobalSta {
+    return SteamUserStats_GetGlobalStatHistoryDouble(steam_user_stats, pchStatName, pData, cubData);
 }
 
 
-SteamUserStats_GetAchievementProgressLimitsInt32 :: inline (pchName: *char, pnMinProgress: *int32, pnMaxProgress: *int32) -> bool {
-    return SteamAPI_ISteamUserStats_GetAchievementProgressLimitsInt32(steam_user_stats, pchName, pnMinProgress, pnMaxProgress);
+SteamUserStats_GetAchievementProgressLimitsInt32 :: inline (pchName: *char, pnMinProgress: *int32, pnMaxProgress: *int32) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetAchievementProgr {
+    return SteamUserStats_GetAchievementProgressLimitsInt32(steam_user_stats, pchName, pnMinProgress, pnMaxProgress);
 }
 
 
-SteamUserStats_GetAchievementProgressLimitsFloat :: inline (pchName: *char, pfMinProgress: *float, pfMaxProgress: *float) -> bool {
-    return SteamAPI_ISteamUserStats_GetAchievementProgressLimitsFloat(steam_user_stats, pchName, pfMinProgress, pfMaxProgress);
+SteamUserStats_GetAchievementProgressLimitsFloat :: inline (pchName: *char, pfMinProgress: *float, pfMaxProgress: *float) -> bool #foreign steam "SteamAPI_ISteamUserStats_GetAchievementProgr {
+    return SteamUserStats_GetAchievementProgressLimitsFloat(steam_user_stats, pchName, pfMinProgress, pfMaxProgress);
 }
