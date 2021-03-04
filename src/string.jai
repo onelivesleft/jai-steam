@@ -40,6 +40,12 @@ forward_til :: (str: string, sentinel1: u8, sentinel2: u8, index: Code) #expand 
 }
 
 
+contains :: (haystack: [] string, needle: string) -> bool #must {
+    for haystack  if it == needle  return true;
+    return false;
+}
+
+
 is_lower :: inline (c: u8) -> bool {
     return c >= #char "a" && c <= #char "z";
 }

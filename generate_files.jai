@@ -33,6 +33,20 @@ files_appended_to_flat :: string.[
 ];
 
 
+singletons_to_ignore :: string.[
+    "ISteamController", // deprecated and conflicts with `ISteamInput`
+    "ISteamAppList",    // undocumented and conflicts with `ISteamApps`
+];
+
+procs_to_ignore :: string.[
+    "SteamClient_GetIPCCallCount",       // duplicate of the proc in SteamUtils
+    "SteamClient_SetWarningMessageHook", // duplicate of the proc in SteamUtils
+];
+
+attach_server_prefix :: string.[
+    
+];
+
 Replacement :: struct {
     before : string;
     after  : string;
@@ -717,7 +731,7 @@ Steam_Namespace :: struct {
         }
         else {
             if row == "" {
-                if in_singleton {
+                if in_singleton && !contains(singletons_to_ignore, section_name) {
                     singleton_top_out("}\n");
                     singleton_count += 1;
                     append(*singleton_top_builder, builder_to_string(*singleton_bottom_builder));
@@ -758,12 +772,14 @@ Steam_Namespace :: struct {
                             name = snake_from_camel(name);
                             defer free(name);
 
-                            space_at := index_of_string(row, " ");
-                            call := mid(row, 0, space_at);
-                            header_assign_out("    %", name);
-                            for name.count..40  header_assign_out(" ");
-                            header_assign_out("= %();\n", call);
-                            header_load_out("#load \"%.jai\";\n", singleton_instance);
+                            if !contains(singletons_to_ignore, section_name) {
+                                space_at := index_of_string(row, " ");
+                                call := mid(row, 0, space_at);
+                                header_assign_out("    %", name);
+                                for name.count..40  header_assign_out(" ");
+                                header_assign_out("= %();\n", call);
+                                header_load_out("#load \"%.jai\";\n", singleton_instance);
+                            }
                         }
                         else if current_singleton_row == -1 {
                             current_singleton_row = row_index - 1;

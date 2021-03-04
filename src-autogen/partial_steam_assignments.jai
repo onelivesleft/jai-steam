@@ -22,10 +22,8 @@ assign_all_singletons :: () {
     steam_http                               = SteamAPI_SteamHTTP_v003();
     steam_game_server_http                   = SteamAPI_SteamGameServerHTTP_v003();
     steam_input                              = SteamAPI_SteamInput_v001();
-    steam_controller                         = SteamAPI_SteamController_v007();
     steam_ugc                                = SteamAPI_SteamUGC_v014();
     steam_game_server_ugc                    = SteamAPI_SteamGameServerUGC_v014();
-    steam_app_list                           = SteamAPI_SteamAppList_v001();
     steam_html_surface                       = SteamAPI_SteamHTMLSurface_v005();
     steam_inventory                          = SteamAPI_SteamInventory_v003();
     steam_game_server_inventory              = SteamAPI_SteamGameServerInventory_v003();

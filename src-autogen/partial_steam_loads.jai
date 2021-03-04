@@ -18,10 +18,8 @@
 #load "steam_http.jai";
 #load "steam_game_server_http.jai";
 #load "steam_input.jai";
-#load "steam_controller.jai";
 #load "steam_ugc.jai";
 #load "steam_game_server_ugc.jai";
-#load "steam_app_list.jai";
 #load "steam_html_surface.jai";
 #load "steam_inventory.jai";
 #load "steam_game_server_inventory.jai";
