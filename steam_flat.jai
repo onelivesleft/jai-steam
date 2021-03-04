@@ -8,10 +8,10 @@
     steam :: #foreign_library "lib/linux/libsteam_api";
 }
 
-#load "src/steam_types.jai";
-#load "src/steam_client_header.jai";
-#load "src-autogen/api_flat_procs.jai";
-#load "src-autogen/api_flat_types.jai";
+#import "Basic";
+
+#load "src-autogen/api_flat.jai";
+
 
 
 
@@ -137,3 +137,115 @@ SteamAPI_ManualDispatch_FreeLastCallback :: (hSteamPipe: HSteamPipe) #foreign st
 /// Return the call result for the specified call on the specified pipe.  You really should
 /// only call this in a handler for SteamAPICallCompleted_t callback.
 SteamAPI_ManualDispatch_GetAPICallResult :: (hSteamPipe: HSteamPipe, hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: int, iCallbackExpected: int, pbFailed: *bool) -> bool #foreign steam;
+
+
+SteamAPI_CallbackMessage :: struct {
+	union {
+		m_iCallback : s32;
+		callback_id : CallbackID;
+		call_result_id : CallResultID;
+	}
+	union {
+		m_hAsyncCall : SteamAPICall_t;
+		caller :  SteamAPICall_t;
+	}
+	data : *void;
+	callback : *CallbackMsg_t;
+	call_result : *SteamAPICallCompleted_t;
+	io_failure : bool;
+}
+
+SteamAPI_GetHSteamPipe :: () -> HSteamPipe #foreign steam;
+SteamGameServer_GetHSteamPipe :: ()  -> HSteamPipe #foreign steam;
+
+SteamAPI_Callbacks_Type :: struct {}
+SteamAPI_Callbacks : SteamAPI_Callbacks_Type;
+
+for_expansion :: (_: *SteamAPI_Callbacks_Type, body: Code, flags: For_Flags) #expand {
+	#assert(flags == 0); // no options are supported
+
+	steam_pipe := SteamAPI_GetHSteamPipe();
+	SteamAPI_ManualDispatch_RunFrame(steam_pipe);
+
+	callback: CallbackMsg_t;
+
+	while SteamAPI_ManualDispatch_GetNextCallback(steam_pipe, *callback) {
+		defer SteamAPI_ManualDispatch_FreeLastCallback(steam_pipe);
+
+		`it : SteamAPI_CallbackMessage;
+		`it_index : bool;
+		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback {
+			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
+			call_result := temporary_alloc(completed_call_result.m_cubParam);
+
+			io_failure := false;
+			if SteamAPI_ManualDispatch_GetAPICallResult(
+				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *io_failure)
+			{
+				it.m_iCallback = completed_call_result.m_iCallback;
+				it.m_hAsyncCall = completed_call_result.m_hAsyncCall;
+				it.data = call_result;
+				it.callback = *callback;
+				it.call_result = completed_call_result;
+				it.io_failure = io_failure;
+				it_index = true;
+
+				#insert body;
+			}
+		}
+		else {
+			it.m_iCallback = callback.m_iCallback;
+			it.data = callback.m_pubParam;
+			it.callback = *callback;
+			it_index = false;
+
+			#insert body;
+		}
+	}
+}
+
+SteamGameServer_Callbacks_Type :: struct {}
+SteamGameServer_Callbacks : SteamGameServer_Callbacks_Type;
+
+for_expansion :: (_: *SteamGameServer_Callbacks_Type, body: Code, flags: For_Flags) #expand {
+	#assert(flags == 0); // no options are supported
+
+	steam_pipe := SteamGameServer_GetHSteamPipe();
+	SteamAPI_ManualDispatch_RunFrame(steam_pipe);
+
+	callback: CallbackMsg_t;
+
+	while SteamAPI_ManualDispatch_GetNextCallback(steam_pipe, *callback) {
+		defer SteamAPI_ManualDispatch_FreeLastCallback(steam_pipe);
+
+		`it : SteamAPI_CallbackMessage;
+		`it_index : bool;
+		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback {
+			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
+			call_result := temporary_alloc(completed_call_result.m_cubParam);
+
+			io_failure := false;
+			if SteamAPI_ManualDispatch_GetAPICallResult(
+				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *io_failure)
+			{
+				it.m_iCallback = completed_call_result.m_iCallback;
+				it.m_hAsyncCall = completed_call_result.m_hAsyncCall;
+				it.data = call_result;
+				it.callback = *callback;
+				it.call_result = completed_call_result;
+				it.io_failure = io_failure;
+				it_index = true;
+
+				#insert body;
+			}
+		}
+		else {
+			it.m_iCallback = callback.m_iCallback;
+			it.data = callback.m_pubParam;
+			it.callback = *callback;
+			it_index = false;
+
+			#insert body;
+		}
+	}
+}

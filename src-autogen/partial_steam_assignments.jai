@@ -1,3 +1,6 @@
+#scope_module
+
+
 assign_all_singletons :: () {
     steam_user                               = SteamAPI_SteamUser_v021();
     steam_friends                            = SteamAPI_SteamFriends_v017();

@@ -224,7 +224,7 @@ SteamGameServer_GetGameplayStats :: inline () {
 }
 
 
-SteamGameServer_GetServerReputation :: inline () -> SteamAPICall_t {
+SteamGameServer_GetServerReputation :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamGameServer_GetServerReputation(steam_game_server);
 }
 
@@ -259,11 +259,11 @@ SteamGameServer_ForceHeartbeat :: inline () {
 }
 
 
-SteamGameServer_AssociateWithClan :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t {
+SteamGameServer_AssociateWithClan :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamGameServer_AssociateWithClan(steam_game_server, steamIDClan);
 }
 
 
-SteamGameServer_ComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid) -> SteamAPICall_t {
+SteamGameServer_ComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamGameServer_ComputeNewPlayerCompatibility(steam_game_server, steamIDNewPlayer);
 }

@@ -109,7 +109,7 @@ SteamUGC_CreateQueryUGCDetailsRequest :: inline (pvecPublishedFileID: *Published
 }
 
 
-SteamUGC_SendQueryUGCRequest :: inline (handle: UGCQueryHandle_t) -> SteamAPICall_t {
+SteamUGC_SendQueryUGCRequest :: inline (handle: UGCQueryHandle_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_SendQueryUGCRequest(steam_ugc, handle);
 }
 
@@ -259,12 +259,12 @@ SteamUGC_AddRequiredKeyValueTag :: inline (handle: UGCQueryHandle_t, pKey: *char
 }
 
 
-SteamUGC_RequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32) -> SteamAPICall_t {
+SteamUGC_RequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_RequestUGCDetails(steam_ugc, nPublishedFileID, unMaxAgeSeconds);
 }
 
 
-SteamUGC_CreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType) -> SteamAPICall_t {
+SteamUGC_CreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_CreateItem(steam_ugc, nConsumerAppId, eFileType);
 }
 
@@ -359,7 +359,7 @@ SteamUGC_RemoveItemPreview :: inline (handle: UGCUpdateHandle_t, index: uint32) 
 }
 
 
-SteamUGC_SubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *char) -> SteamAPICall_t {
+SteamUGC_SubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_SubmitItemUpdate(steam_ugc, handle, pchChangeNote);
 }
 
@@ -369,32 +369,32 @@ SteamUGC_GetItemUpdateProgress :: inline (handle: UGCUpdateHandle_t, punBytesPro
 }
 
 
-SteamUGC_SetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t {
+SteamUGC_SetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_SetUserItemVote(steam_ugc, nPublishedFileID, bVoteUp);
 }
 
 
-SteamUGC_GetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_GetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_GetUserItemVote(steam_ugc, nPublishedFileID);
 }
 
 
-SteamUGC_AddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_AddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_AddItemToFavorites(steam_ugc, nAppId, nPublishedFileID);
 }
 
 
-SteamUGC_RemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_RemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_RemoveItemFromFavorites(steam_ugc, nAppId, nPublishedFileID);
 }
 
 
-SteamUGC_SubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_SubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_SubscribeItem(steam_ugc, nPublishedFileID);
 }
 
 
-SteamUGC_UnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_UnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_UnsubscribeItem(steam_ugc, nPublishedFileID);
 }
 
@@ -439,46 +439,46 @@ SteamUGC_SuspendDownloads :: inline (bSuspend: bool) {
 }
 
 
-SteamUGC_StartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t {
+SteamUGC_StartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_StartPlaytimeTracking(steam_ugc, pvecPublishedFileID, unNumPublishedFileIDs);
 }
 
 
-SteamUGC_StopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t {
+SteamUGC_StopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_StopPlaytimeTracking(steam_ugc, pvecPublishedFileID, unNumPublishedFileIDs);
 }
 
 
-SteamUGC_StopPlaytimeTrackingForAllItems :: inline () -> SteamAPICall_t {
+SteamUGC_StopPlaytimeTrackingForAllItems :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_StopPlaytimeTrackingForAllItems(steam_ugc);
 }
 
 
-SteamUGC_AddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_AddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_AddDependency(steam_ugc, nParentPublishedFileID, nChildPublishedFileID);
 }
 
 
-SteamUGC_RemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_RemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_RemoveDependency(steam_ugc, nParentPublishedFileID, nChildPublishedFileID);
 }
 
 
-SteamUGC_AddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t {
+SteamUGC_AddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_AddAppDependency(steam_ugc, nPublishedFileID, nAppID);
 }
 
 
-SteamUGC_RemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t {
+SteamUGC_RemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_RemoveAppDependency(steam_ugc, nPublishedFileID, nAppID);
 }
 
 
-SteamUGC_GetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_GetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_GetAppDependencies(steam_ugc, nPublishedFileID);
 }
 
 
-SteamUGC_DeleteItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
+SteamUGC_DeleteItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_DeleteItem(steam_ugc, nPublishedFileID);
 }

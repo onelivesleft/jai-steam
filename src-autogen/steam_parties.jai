@@ -37,7 +37,7 @@ SteamParties_GetBeaconDetails :: inline (ulBeaconID: PartyBeaconID_t, pSteamIDBe
 }
 
 
-SteamParties_JoinParty :: inline (ulBeaconID: PartyBeaconID_t) -> SteamAPICall_t {
+SteamParties_JoinParty :: inline (ulBeaconID: PartyBeaconID_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamParties_JoinParty(steam_parties, ulBeaconID);
 }
 
@@ -52,7 +52,7 @@ SteamParties_GetAvailableBeaconLocations :: inline (pLocationList: *SteamPartyBe
 }
 
 
-SteamParties_CreateBeacon :: inline (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char) -> SteamAPICall_t {
+SteamParties_CreateBeacon :: inline (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamParties_CreateBeacon(steam_parties, unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata);
 }
 
@@ -67,7 +67,7 @@ SteamParties_CancelReservation :: inline (ulBeacon: PartyBeaconID_t, steamIDUser
 }
 
 
-SteamParties_ChangeNumOpenSlots :: inline (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32) -> SteamAPICall_t {
+SteamParties_ChangeNumOpenSlots :: inline (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamParties_ChangeNumOpenSlots(steam_parties, ulBeacon, unOpenSlots);
 }
 

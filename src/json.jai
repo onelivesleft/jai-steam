@@ -1,5 +1,9 @@
 // based on https://github.com/rluba/jason
 
+
+#scope_module
+
+
 JSON_Type :: enum u8 {
     NULL    :: 0;
     BOOLEAN :: 1;

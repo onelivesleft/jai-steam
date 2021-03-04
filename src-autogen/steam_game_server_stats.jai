@@ -20,7 +20,7 @@ SteamGameServerStats_Namespace :: struct {
 }
 
 
-SteamGameServerStats_RequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t {
+SteamGameServerStats_RequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamGameServerStats_RequestUserStats(steam_game_server_stats, steamIDUser);
 }
 
@@ -65,6 +65,6 @@ SteamGameServerStats_ClearUserAchievement :: inline (steamIDUser: uint64_steamid
 }
 
 
-SteamGameServerStats_StoreUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t {
+SteamGameServerStats_StoreUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamGameServerStats_StoreUserStats(steam_game_server_stats, steamIDUser);
 }

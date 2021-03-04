@@ -1,5 +1,7 @@
-// @TODO could remove this file by making these subsitution in make_steam_api_flat?
+// #scope_module @TODO namespace this?
 
+
+// @TODO could remove this file by making these subsitution in make_steam_api_flat?
 
 
 VALVE_BIG_ENDIAN :: false;

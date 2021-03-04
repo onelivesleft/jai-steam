@@ -75,12 +75,12 @@ SteamRemoteStorage_FileRead :: inline (pchFile: *char, pvData: *void, cubDataToR
 }
 
 
-SteamRemoteStorage_FileWriteAsync :: inline (pchFile: *char, pvData: *void, cubData: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_FileWriteAsync :: inline (pchFile: *char, pvData: *void, cubData: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_FileWriteAsync(steam_remote_storage, pchFile, pvData, cubData);
 }
 
 
-SteamRemoteStorage_FileReadAsync :: inline (pchFile: *char, nOffset: uint32, cubToRead: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_FileReadAsync :: inline (pchFile: *char, nOffset: uint32, cubToRead: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_FileReadAsync(steam_remote_storage, pchFile, nOffset, cubToRead);
 }
 
@@ -100,7 +100,7 @@ SteamRemoteStorage_FileDelete :: inline (pchFile: *char) -> bool {
 }
 
 
-SteamRemoteStorage_FileShare :: inline (pchFile: *char) -> SteamAPICall_t {
+SteamRemoteStorage_FileShare :: inline (pchFile: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_FileShare(steam_remote_storage, pchFile);
 }
 
@@ -185,7 +185,7 @@ SteamRemoteStorage_SetCloudEnabledForApp :: inline (bEnabled: bool) {
 }
 
 
-SteamRemoteStorage_UGCDownload :: inline (hContent: UGCHandle_t, unPriority: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_UGCDownload :: inline (hContent: UGCHandle_t, unPriority: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_UGCDownload(steam_remote_storage, hContent, unPriority);
 }
 
@@ -215,7 +215,7 @@ SteamRemoteStorage_GetCachedUGCHandle :: inline (iCachedContent: int32) -> UGCHa
 }
 
 
-SteamRemoteStorage_PublishWorkshopFile :: inline (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType) -> SteamAPICall_t {
+SteamRemoteStorage_PublishWorkshopFile :: inline (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_PublishWorkshopFile(steam_remote_storage, pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
 
@@ -255,37 +255,37 @@ SteamRemoteStorage_UpdatePublishedFileTags :: inline (updateHandle: PublishedFil
 }
 
 
-SteamRemoteStorage_CommitPublishedFileUpdate :: inline (updateHandle: PublishedFileUpdateHandle_t) -> SteamAPICall_t {
+SteamRemoteStorage_CommitPublishedFileUpdate :: inline (updateHandle: PublishedFileUpdateHandle_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_CommitPublishedFileUpdate(steam_remote_storage, updateHandle);
 }
 
 
-SteamRemoteStorage_GetPublishedFileDetails :: inline (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_GetPublishedFileDetails :: inline (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_GetPublishedFileDetails(steam_remote_storage, unPublishedFileId, unMaxSecondsOld);
 }
 
 
-SteamRemoteStorage_DeletePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t {
+SteamRemoteStorage_DeletePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_DeletePublishedFile(steam_remote_storage, unPublishedFileId);
 }
 
 
-SteamRemoteStorage_EnumerateUserPublishedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_EnumerateUserPublishedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_EnumerateUserPublishedFiles(steam_remote_storage, unStartIndex);
 }
 
 
-SteamRemoteStorage_SubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t {
+SteamRemoteStorage_SubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_SubscribePublishedFile(steam_remote_storage, unPublishedFileId);
 }
 
 
-SteamRemoteStorage_EnumerateUserSubscribedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_EnumerateUserSubscribedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_EnumerateUserSubscribedFiles(steam_remote_storage, unStartIndex);
 }
 
 
-SteamRemoteStorage_UnsubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t {
+SteamRemoteStorage_UnsubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_UnsubscribePublishedFile(steam_remote_storage, unPublishedFileId);
 }
 
@@ -295,46 +295,46 @@ SteamRemoteStorage_UpdatePublishedFileSetChangeDescription :: inline (updateHand
 }
 
 
-SteamRemoteStorage_GetPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t {
+SteamRemoteStorage_GetPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_GetPublishedItemVoteDetails(steam_remote_storage, unPublishedFileId);
 }
 
 
-SteamRemoteStorage_UpdateUserPublishedItemVote :: inline (unPublishedFileId: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t {
+SteamRemoteStorage_UpdateUserPublishedItemVote :: inline (unPublishedFileId: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_UpdateUserPublishedItemVote(steam_remote_storage, unPublishedFileId, bVoteUp);
 }
 
 
-SteamRemoteStorage_GetUserPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t {
+SteamRemoteStorage_GetUserPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_GetUserPublishedItemVoteDetails(steam_remote_storage, unPublishedFileId);
 }
 
 
-SteamRemoteStorage_EnumerateUserSharedWorkshopFiles :: inline (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t) -> SteamAPICall_t {
+SteamRemoteStorage_EnumerateUserSharedWorkshopFiles :: inline (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_EnumerateUserSharedWorkshopFiles(steam_remote_storage, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
 
-SteamRemoteStorage_PublishVideo :: inline (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t) -> SteamAPICall_t {
+SteamRemoteStorage_PublishVideo :: inline (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_PublishVideo(steam_remote_storage, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
 
 
-SteamRemoteStorage_SetUserPublishedFileAction :: inline (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction) -> SteamAPICall_t {
+SteamRemoteStorage_SetUserPublishedFileAction :: inline (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_SetUserPublishedFileAction(steam_remote_storage, unPublishedFileId, eAction);
 }
 
 
-SteamRemoteStorage_EnumeratePublishedFilesByUserAction :: inline (eAction: EWorkshopFileAction, unStartIndex: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_EnumeratePublishedFilesByUserAction :: inline (eAction: EWorkshopFileAction, unStartIndex: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_EnumeratePublishedFilesByUserAction(steam_remote_storage, eAction, unStartIndex);
 }
 
 
-SteamRemoteStorage_EnumeratePublishedWorkshopFiles :: inline (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t) -> SteamAPICall_t {
+SteamRemoteStorage_EnumeratePublishedWorkshopFiles :: inline (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_EnumeratePublishedWorkshopFiles(steam_remote_storage, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
 
-SteamRemoteStorage_UGCDownloadToLocation :: inline (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32) -> SteamAPICall_t {
+SteamRemoteStorage_UGCDownloadToLocation :: inline (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamRemoteStorage_UGCDownloadToLocation(steam_remote_storage, hContent, pchLocation, unPriority);
 }

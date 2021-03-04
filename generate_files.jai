@@ -19,11 +19,19 @@ steam_api_flat :: "sdk/public/steam/steam_api_flat.h";
 steam_api_json :: "sdk/public/steam/steam_api.json";
 
 output_autogen_folder       :: "src-autogen";
-output_procs_filename       :: "src-autogen/api_flat_procs.jai";
-output_types_filename       :: "src-autogen/api_flat_types.jai";
+output_flat_filename        :: "src-autogen/api_flat.jai";
+output_procs_filename       :: "src-autogen/api_flat_procs_internal.jai";
+output_types_filename       :: "src-autogen/api_flat_types_internal.jai";
 output_steam_api_filename   :: "src-autogen/steam_api.jai";  // for misc procs not attached to singletons
 output_assignments_filename :: "src-autogen/partial_steam_assignments.jai";
 output_loads_filename       :: "src-autogen/partial_steam_loads.jai";
+output_callbacks_filename   :: "src-autogen/partial_steam_callbacks.jai";
+
+files_appended_to_flat :: string.[
+    "src/steam_types.jai",
+    "src/steam_client_header.jai",
+];
+
 
 Replacement :: struct {
     before : string;
@@ -76,6 +84,14 @@ singleton_bottom_builder : String_Builder;
 header_assigns_builder   : String_Builder;
 header_loads_builder     : String_Builder;
 
+callbacks_builder      : String_Builder;
+callbacks_callresults : String_Builder;
+callbacks_callbacks   : String_Builder;
+callbacks_enum        : String_Builder;
+callbacks_struct      : String_Builder;
+callbacks_types       : String_Builder;
+callbacks_procs       : String_Builder;
+
 procs_out             :: #bake_arguments print_to_builder(builder = *procs_builder);
 types_out             :: #bake_arguments print_to_builder(builder = *types_builder);
 steam_api_out         :: #bake_arguments print_to_builder(builder = *steam_api_builder);
@@ -83,6 +99,11 @@ singleton_top_out     :: #bake_arguments print_to_builder(builder = *singleton_t
 singleton_bottom_out  :: #bake_arguments print_to_builder(builder = *singleton_bottom_builder);
 header_assign_out     :: #bake_arguments print_to_builder(builder = *header_assigns_builder);
 header_load_out       :: #bake_arguments print_to_builder(builder = *header_loads_builder);
+
+output :: print_to_builder;
+
+callback_structnames : Table(string, s32);
+callresult_structnames : Table(string, bool);
 
 current_namespace := "";
 
@@ -103,6 +124,19 @@ main :: () {
     print("Generating %...\n", output_procs_filename);
     convert_steam_api_flat(file_data);
 
+    file_builder : String_Builder;
+    init_string_builder(*file_builder);
+    append(*file_builder, "#scope_module\n\n\n");
+    append(*file_builder, builder_to_string(*procs_builder));
+    write_entire_file(output_procs_filename, builder_to_string(*file_builder));
+
+    init_string_builder(*callbacks_builder);
+    init_string_builder(*callbacks_callresults);
+    init_string_builder(*callbacks_callbacks);
+    init_string_builder(*callbacks_enum);
+    init_string_builder(*callbacks_struct);
+    init_string_builder(*callbacks_types);
+    init_string_builder(*callbacks_procs);
 
     // flat types
     file_data, success = read_entire_file(steam_api_json);
@@ -114,10 +148,18 @@ main :: () {
     print("Generating %...\n", output_types_filename);
     convert_steam_api_json(file_data);
 
+    reset(*file_builder);
+    // append(*file_builder, "#scope_module\n\n\n"); // @TODO namespace types?
+    append(*file_builder, builder_to_string(*types_builder));
+    write_entire_file(output_types_filename, builder_to_string(*file_builder));
 
-    write_entire_file(output_procs_filename, builder_to_string(*procs_builder));
-    write_entire_file(output_types_filename, builder_to_string(*types_builder));
 
+    output(*callbacks_builder, callbacks_header, builder_to_string(*callbacks_callresults), builder_to_string(*callbacks_callbacks));
+    output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_enum));
+    output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_struct));
+    output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_types));
+    output(*callbacks_builder, "\n%", builder_to_string(*callbacks_procs));
+    write_entire_file(output_callbacks_filename, builder_to_string(*callbacks_builder));
 
     // singletones
     init_string_builder(*steam_api_builder);
@@ -136,6 +178,23 @@ main :: () {
 
     write_entire_file(output_assignments_filename, builder_to_string(*header_assigns_builder));
     write_entire_file(output_loads_filename, builder_to_string(*header_loads_builder));
+
+    reset(*file_builder);
+    append(*file_builder, builder_to_string(*procs_builder));
+    append(*file_builder, builder_to_string(*types_builder));
+    output(*file_builder, "\n%\n\n", builder_to_string(*callbacks_enum));
+    for files_appended_to_flat {
+        file_data, success := read_entire_file(it);
+        if !success {
+            print("Failed to read %", it);
+            exit(1);
+        }
+        file_data = lstrip(file_data);
+        if starts_with(file_data, "#scope_module")
+            file_data = slice(file_data, 13);
+        append(*file_builder, file_data);
+    }
+    write_entire_file(output_flat_filename, builder_to_string(*file_builder));
 }
 
 
@@ -236,6 +295,8 @@ convert_steam_api_flat :: (file_data: string) {
 
             if return_type == "void"
                 out(") #foreign steam;\n");
+            else if return_type == "SteamAPICall_t"
+                out(") -> %1%2 #must #foreign steam;\n", return_char, return_type);
             else
                 out(") -> %1%2 #foreign steam;\n", return_char, return_type);
         }
@@ -250,6 +311,7 @@ convert_steam_api_json :: (file_data: string) {
     root, success := json_parse_string(file_data);
 
     out :: types_out;
+
 
     traverse_node :: (key: string, node: JSON_Value, depth: int = 0) {
         const_name : JSON_Value;
@@ -359,6 +421,13 @@ convert_steam_api_json :: (file_data: string) {
                     }
                 }
 
+                case "methods";
+                for node.value.array {
+                    object := it.value.object;
+                    struct_name := get_str(object, "callresult");
+                    if struct_name  table_set(*callresult_structnames, struct_name, true);
+                }
+
                 case "callback_structs";
                 if depth == 1 {
                     for node.value.array {
@@ -367,8 +436,10 @@ convert_steam_api_json :: (file_data: string) {
                         struct_fields := get_array(object, "fields");
                         out("\n% :: struct {\n", struct_name);
 
-                        callback_id := get_int(object, "callback_id");
+                        callback_id := cast(s32) get_int(object, "callback_id");
                         out("    k_iCallback : s32 : %;\n", callback_id);
+
+                        table_set(*callback_structnames, struct_name, callback_id);
 
                         for struct_fields {
                             object := it.value.object;
@@ -398,9 +469,150 @@ convert_steam_api_json :: (file_data: string) {
         }
     }
 
+
     root_value : JSON_Value;
     traverse_node("", root);
+
+
+    output(*callbacks_enum, "CallbackID :: enum s32 {\n");
+    output(*callbacks_struct, "Callbacks : struct {\n");
+    output(*callbacks_procs, "\n#scope_export\n\n\n");
+
+    for callback_id, struct_name: callback_structnames {
+        _, found := table_find(callresult_structnames, struct_name);
+        if found  continue;
+
+        // @Note We special case UserStatsUnloaded_t / GSStatsUnloaded_t because they share their enum ID.
+        //       We also skip PS3TrophiesInstalled_t entirely (because it shares ID with GlobalStatsReceived_t,
+        //       and is presumably useless at this stage)
+
+        if struct_name != "UserStatsUnloaded_t" && struct_name != "GSStatsUnloaded_t" && struct_name != "PS3TrophiesInstalled_t"
+            output(*callbacks_callbacks, "                case .%1;  for Callbacks.%1  it(<<cast(*%1) callback.m_pubParam);\n", struct_name);
+        if struct_name != "GSStatsUnloaded_t" && struct_name != "PS3TrophiesInstalled_t"
+            output(*callbacks_enum, "    % :: %;\n", struct_name, callback_id);
+        output(*callbacks_struct, "    %1 : [..] %1_Callback;\n", struct_name);
+        output(*callbacks_types, "%1_Callback :: #type(%1);\n", struct_name);
+        output(*callbacks_procs, #string ___JAI
+SteamAPI_RegisterCallback :: (callback: (%1) -> ()) {
+	array_add(*Callbacks.%1, callback);
 }
+
+        ___JAI, struct_name);
+    }
+
+    output(*callbacks_enum, "}\n\nCallResultID :: enum s32 {\n");
+    output(*callbacks_struct, "}\n\nCallResults : struct {\n");
+    callresult_internal_procs : String_Builder;
+    init_string_builder(*callresult_internal_procs);
+    append(*callresult_internal_procs, "\n#scope_module\n\n\n");
+
+    for callback_id, struct_name: callresult_structnames {
+        call_result_id, found := table_find(callback_structnames, struct_name);
+        assert(found, sprint("Can't find callback ID for %", struct_name));
+        output(*callbacks_callresults, "                    case .%1;  run_call_results(CallResults.%1, completed_call_result.m_hAsyncCall, cast(*%1) call_result, io_failure);\n", struct_name);
+        output(*callbacks_enum, "    % :: %;\n", struct_name, call_result_id);
+        output(*callbacks_struct, "    %1 : Table(SteamAPICall_t, [..] %1_CallResult);\n", struct_name);
+        output(*callbacks_types, "%1_CallResult :: #type(%1, bool);\n", struct_name);
+        output(*callbacks_procs, #string ___JAI
+SteamAPI_RegisterCallResult :: (callback: (%1, bool) -> (), call_result_id: SteamAPICall_t) {
+    procs, found := table_find(CallResults.%1, call_result_id);
+    if !found {
+        array : [..] %1_CallResult;
+        procs = array;
+    }
+    array_add(*procs, callback);
+    table_set(*CallResults.%1, call_result_id, procs);
+}
+
+        ___JAI, struct_name);
+        output(*callresult_internal_procs, #string ___JAI
+run_call_results :: (callbacks: Table(SteamAPICall_t, [..] %1_CallResult), call_id: SteamAPICall_t, call_result: *%1, io_failure: bool) {
+    procs, found := table_find(callbacks, call_id);
+    if found {
+        for procs  it(<<call_result, io_failure);
+        array_reset(*procs);
+        table_remove(*callbacks, call_id);
+    }
+}
+
+        ___JAI, struct_name);
+    }
+
+    output(*callbacks_struct, "}");
+    output(*callbacks_enum, "}");
+    output(*callbacks_procs, builder_to_string(*callresult_internal_procs));
+}
+
+
+// @TODO callresults
+// Dispatch the call result to the registered handler(s) for the
+// call identified by completed_call_result->m_hAsyncCall
+//if completed_call_result.m_iCallback == NumberOfCurrentPlayers_t.k_iCallback
+//	print("%% %%\n", formatStruct(<<cast(*NumberOfCurrentPlayers_t) call_result, use_long_form_if_more_than_this_many_members=-1, use_newlines_if_long_form=true), io_failure);
+//else if completed_call_result.m_iCallback == GlobalStatsReceived_t.k_iCallback
+//	print("%% %%\n", formatStruct(<<cast(*GlobalStatsReceived_t) call_result, use_long_form_if_more_than_this_many_members=-1, use_newlines_if_long_form=true), io_failure);
+
+// @TODO callbacks
+// Look at callback.m_iCallback to see what kind of callback it is,
+// and dispatch to appropriate handler(s)
+//print("%\n", callback);
+
+
+
+callbacks_header :: #string ___JAI
+#scope_module
+
+
+run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
+	SteamAPI_ManualDispatch_RunFrame(steam_pipe);
+
+	callback: CallbackMsg_t;
+	while SteamAPI_ManualDispatch_GetNextCallback(steam_pipe, *callback) {
+		defer SteamAPI_ManualDispatch_FreeLastCallback(steam_pipe);
+
+		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback { // is a call result
+			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
+			call_result : *void;
+			#if use_temporary_storage
+				call_result = temporary_alloc(completed_call_result.m_cubParam);
+			else
+				call_result = alloc(completed_call_result.m_cubParam);
+
+			io_failure := false;
+			if SteamAPI_ManualDispatch_GetAPICallResult(
+				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *io_failure)
+			{
+                call_result_id := cast(CallResultID) completed_call_result.m_iCallback;
+                if #complete call_result_id == {
+%                }
+			}
+
+			#if !use_temporary_storage  free(call_result);
+		}
+		else {
+            callback_id := cast(CallbackID) callback.m_iCallback;
+			if #complete callback_id == {
+                case .UserStatsUnloaded_t;
+                if is_server  for Callbacks.GSStatsUnloaded_t    it(<<cast(*GSStatsUnloaded_t) callback.m_pubParam);
+                else          for Callbacks.UserStatsUnloaded_t  it(<<cast(*UserStatsUnloaded_t) callback.m_pubParam);
+
+%			 }
+		}
+	}
+}
+
+
+SteamAPI_RunCallbacks :: () {
+	steam_pipe := SteamAPI_GetHSteamPipe();
+	run_callbacks(steam_pipe, false);
+}
+
+
+SteamGameServer_RunCallbacks :: () {
+	steam_pipe := SteamGameServer_GetHSteamPipe();
+	run_callbacks(steam_pipe, true);
+}
+___JAI
 
 
 get_str :: (object: *JSON_Object, key: string) -> string {
@@ -455,7 +667,7 @@ generate_classes :: (file_data: string) {
     namespace               := "";
     singleton_count         := 0;
 
-    header_assign_out("assign_all_singletons :: () {\n");
+    header_assign_out("#scope_module\n\n\nassign_all_singletons :: () {\n");
 
     steam_api_current_type := "";
 

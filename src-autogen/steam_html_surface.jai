@@ -57,7 +57,7 @@ SteamHTMLSurface_Shutdown :: inline () -> bool {
 }
 
 
-SteamHTMLSurface_CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char) -> SteamAPICall_t {
+SteamHTMLSurface_CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamHTMLSurface_CreateBrowser(steam_html_surface, pchUserAgent, pchUserCSS);
 }
 

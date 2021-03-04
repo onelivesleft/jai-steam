@@ -31,8 +31,6 @@ Failed to init steam, this could be for one of the following reasons:
 
 	SteamAPI_ManualDispatch_Init();
 
-	SteamAPI_RegisterCallback(overlay_activated);
-
     return true;
 }
 
@@ -50,18 +48,21 @@ Steam_Shutdown :: () {
     steam :: #foreign_library "lib/linux/libsteam_api";
 }
 
-#load "src/steam_types.jai";
-#load "src/steam_client_header.jai";
-#load "src/steam_api_internal.jai";
-#load "src-autogen/api_flat_procs.jai";
-#load "src-autogen/api_flat_types.jai";
-#load "src-autogen/partial_steam_assignments.jai";
-#load "src-autogen/partial_steam_loads.jai";
-#load "src-autogen/steam_client.jai";
-#load "src-autogen/steam_api.jai";
 
 #import "Basic";
 #import "Hash_Table";
+
+
+#load "src/steam_types.jai";
+#load "src/steam_client_header.jai";
+#load "src-autogen/api_flat_procs_internal.jai";
+#load "src-autogen/api_flat_types_internal.jai";
+#load "src-autogen/partial_steam_assignments.jai";
+#load "src-autogen/partial_steam_loads.jai";
+#load "src-autogen/partial_steam_callbacks.jai";
+#load "src-autogen/steam_client.jai";
+#load "src-autogen/steam_api.jai";
+
 
 
 // copypasta below, just leave it alone for now (it provides the remaining top-level procs)
@@ -84,19 +85,19 @@ SteamAPI_Shutdown :: () #foreign steam;
 //
 // NOTE: If you use the Steam DRM wrapper on your primary executable file, this check is unnecessary
 // since the DRM wrapper will ensure that your application was launched properly through Steam.
-SteamAPI_RestartAppIfNecessary :: (unOwnAppID: uint32) -> bool #foreign steam; // @TODO
+SteamAPI_RestartAppIfNecessary :: (unOwnAppID: uint32) -> bool #foreign steam;
 
 // Many Steam API functions allocate a small amount of thread-local memory for parameter storage.
 // SteamAPI_ReleaseCurrentThreadMemory() will free API memory associated with the calling thread.
 // This function is also called automatically by SteamAPI_RunCallbacks(), so a single-threaded
 // program never needs to explicitly call this function.
-SteamAPI_ReleaseCurrentThreadMemory :: () #foreign steam;  // @TODO
+SteamAPI_ReleaseCurrentThreadMemory :: () #foreign steam;
 
 
 
 // crash dump recording functions
 SteamAPI_WriteMiniDump :: (uStructuredExceptionCode: uint32, pvExceptionInfo: *void, uBuildID: uint32) #foreign steam;  // @TODO
-SteamAPI_SetMiniDumpComment :: (pchMsg: *char) #foreign steam;  // @TODO
+SteamAPI_SetMiniDumpComment :: (pchMsg: *char) #foreign steam;
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 //	steamclient.dll private wrapper functions
@@ -149,6 +150,7 @@ while ( SteamAPI_ManualDispatch_GetNextCallback( hSteamPipe, &callback ) )
 	if ( callback.m_iCallback == SteamAPICallCompleted_t::k_iCallback )
 	{
 		SteamAPICallCompleted_t *pCallCompleted = (SteamAPICallCompleted_t *)callback.
+		SteamAPICallCompleted_t *pCallCompleted = (SteamAPICallCompleted_t *)callback->m_pubParam.
 		void *pTmpCallResult = malloc( pCallback->m_cubParam );
 		bool bFailed;
 		if ( SteamAPI_ManualDispatch_GetAPICallResult(
@@ -186,123 +188,7 @@ struct CallbackMsg_t
 };
 ```
 */
-/**
-```
-SteamAPICall_t : u64;
-
-SteamAPICallCompleted_t :: struct {
-    k_iCallback : s32 : 703;       	//@TODO change to CallbackID (s32 enum)
-    m_hAsyncCall : SteamAPICall_t;
-    m_iCallback : s32;				//@TODO change to CallbackID (s32 enum)
-    m_cubParam : uint32;
-}
-
-CallbackMsg_t :: struct {
-	m_hSteamUser : HSteamUser;
-	m_iCallback  : s32;         	//@TODO change to CallbackID (s32 enum)
-	m_pubParam   : *uint8;
-	m_cubParam   : s32;
-};
-```
-*/
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
-
-
-run_callbacks :: (steam_pipe: HSteamPipe) {
-	SteamAPI_ManualDispatch_RunFrame(steam_pipe);
-
-	callback: CallbackMsg_t;
-	while SteamAPI_ManualDispatch_GetNextCallback(steam_pipe, *callback) {
-		defer SteamAPI_ManualDispatch_FreeLastCallback(steam_pipe);
-
-		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback { // is a call result
-			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
-			call_result : *void;
-			#if use_temporary_storage
-				call_result = temporary_alloc(completed_call_result.m_cubParam);
-			else
-				call_result = alloc(completed_call_result.m_cubParam);
-
-			failed := false;
-			if SteamAPI_ManualDispatch_GetAPICallResult(
-				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *failed)
-			{
-				// @TODO
-				// Dispatch the call result to the registered handler(s) for the
-				// call identified by completed_call_result->m_hAsyncCall
-				//if completed_call_result.m_iCallback == NumberOfCurrentPlayers_t.k_iCallback
-				//	print("% %\n", formatStruct(<<cast(*NumberOfCurrentPlayers_t) call_result, use_long_form_if_more_than_this_many_members=-1, use_newlines_if_long_form=true), failed);
-				//else if completed_call_result.m_iCallback == GlobalStatsReceived_t.k_iCallback
-				//	print("% %\n", formatStruct(<<cast(*GlobalStatsReceived_t) call_result, use_long_form_if_more_than_this_many_members=-1, use_newlines_if_long_form=true), failed);
-			}
-
-			#if !use_temporary_storage  free(call_result);
-		}
-		else {
-			// @TODO
-			// Look at callback.m_iCallback to see what kind of callback it is,
-			// and dispatch to appropriate handler(s)
-			//print("%\n", callback);
-			if cast(CallbackID) callback.m_iCallback == {
-				case .GameOverlayActivated_t;    for Callbacks.GameOverlayActivated_t   it(<<cast(*GameOverlayActivated_t) callback.m_pubParam);
-				case .LobbyKicked_t;    for Callbacks.LobbyKicked_t   it(<<cast(*LobbyKicked_t) callback.m_pubParam);
-				case .LobbyCreated_t;	for Callbacks.LobbyCreated_t  it(<<cast(*LobbyCreated_t) callback.m_pubParam);
-			}
-		}
-	}
-}
-
-CallbackID :: enum s32 {
-	GameOverlayActivated_t :: 331;
-    LobbyKicked_t  :: 512;
-    LobbyCreated_t :: 513;
-}
-
-Callbacks : struct {
-	GameOverlayActivated_t : [..] GameOverlayActivated_t_Callback;
-    LobbyKicked_t  : [..] LobbyKicked_t_Callback;
-    LobbyCreated_t : [..] LobbyCreated_t_Callback;
-}
-
-GameOverlayActivated_t_Callback :: #type(GameOverlayActivated_t);
-LobbyKicked_t_Callback :: #type(LobbyKicked_t);
-LobbyCreated_t_Callback :: #type(LobbyCreated_t);
-
-
-overlay_activated :: (info: GameOverlayActivated_t) {
-	print("%\n", info);
-} @SteamCallback
-
-
-SteamAPI_RegisterCallback :: (callback: (GameOverlayActivated_t) -> ()) {
-	array_add(*Callbacks.GameOverlayActivated_t, callback);
-}
-
-SteamAPI_RegisterCallback :: (callback: (LobbyKicked_t) -> ()) {
-	array_add(*Callbacks.LobbyKicked_t, callback);
-}
-
-SteamAPI_RegisterCallback :: (callback: (LobbyCreated_t) -> ()) {
-	array_add(*Callbacks.LobbyCreated_t, callback);
-}
-
-/**
-```
-SteamAPI_RegisterCallback(overlay_activated);
-
-```
-*/
-
-SteamAPI_RunCallbacks :: () {
-	steam_pipe := SteamAPI_GetHSteamPipe();
-	run_callbacks(steam_pipe);
-}
-
-
-SteamGameServer_RunCallbacks :: () {
-	steam_pipe := SteamGameServer_GetHSteamPipe();
-	run_callbacks(steam_pipe);
-}
 
 
 SteamAPI_ManualDispatch_Init :: () #foreign steam;
@@ -321,3 +207,7 @@ SteamAPI_ManualDispatch_FreeLastCallback :: (hSteamPipe: HSteamPipe) #foreign st
 /// Return the call result for the specified call on the specified pipe.  You really should
 /// only call this in a handler for SteamAPICallCompleted_t callback.
 SteamAPI_ManualDispatch_GetAPICallResult :: (hSteamPipe: HSteamPipe, hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: int, iCallbackExpected: int, pbFailed: *bool) -> bool #foreign steam;  // @TODO
+
+
+SteamAPI_GetHSteamPipe :: () -> HSteamPipe #foreign steam;
+SteamGameServer_GetHSteamPipe :: ()  -> HSteamPipe #foreign steam;

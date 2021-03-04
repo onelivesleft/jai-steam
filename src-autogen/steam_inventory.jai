@@ -163,7 +163,7 @@ SteamInventory_GetItemDefinitionProperty :: inline (iDefinition: SteamItemDef_t,
 }
 
 
-SteamInventory_RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid) -> SteamAPICall_t {
+SteamInventory_RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamInventory_RequestEligiblePromoItemDefinitionsIDs(steam_inventory, steamID);
 }
 
@@ -173,12 +173,12 @@ SteamInventory_GetEligiblePromoItemDefinitionIDs :: inline (steamID: uint64_stea
 }
 
 
-SteamInventory_StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32) -> SteamAPICall_t {
+SteamInventory_StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamInventory_StartPurchase(steam_inventory, pArrayItemDefs, punArrayQuantity, unArrayLength);
 }
 
 
-SteamInventory_RequestPrices :: inline () -> SteamAPICall_t {
+SteamInventory_RequestPrices :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamInventory_RequestPrices(steam_inventory);
 }
 

@@ -1,3 +1,6 @@
+#scope_module
+
+
 mid :: inline (str: string, index: int) -> string #must {
     return slice(str, index, str.count - index);
 }
@@ -15,6 +18,11 @@ strip :: inline (str: string) -> string #must {
 
 lstrip :: inline (str: string) -> string #must {
     return trim_left(str, " \t\n\r");
+}
+
+
+slice :: inline (str: string, index: int) -> string #must {
+    return slice(str, index, str.count - index);
 }
 
 

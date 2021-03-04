@@ -68,7 +68,7 @@ SteamMatchmaking_RemoveFavoriteGame :: inline (nAppID: AppId_t, nIP: uint32, nCo
 }
 
 
-SteamMatchmaking_RequestLobbyList :: inline () -> SteamAPICall_t {
+SteamMatchmaking_RequestLobbyList :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamMatchmaking_RequestLobbyList(steam_matchmaking);
 }
 
@@ -113,12 +113,12 @@ SteamMatchmaking_GetLobbyByIndex :: inline (iLobby: s32) -> uint64_steamid {
 }
 
 
-SteamMatchmaking_CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32) -> SteamAPICall_t {
+SteamMatchmaking_CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamMatchmaking_CreateLobby(steam_matchmaking, eLobbyType, cMaxMembers);
 }
 
 
-SteamMatchmaking_JoinLobby :: inline (steamIDLobby: uint64_steamid) -> SteamAPICall_t {
+SteamMatchmaking_JoinLobby :: inline (steamIDLobby: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamMatchmaking_JoinLobby(steam_matchmaking, steamIDLobby);
 }
 
