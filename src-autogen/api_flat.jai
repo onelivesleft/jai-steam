@@ -5168,7 +5168,6 @@ CallbackMsg_t :: struct {
 #scope_module
 
 
-// @TODO could remove this file by making these subsitution in make_steam_api_flat?
 char :: u8;
 int32_t :: s32;
 int64_t :: s64;

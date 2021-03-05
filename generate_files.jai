@@ -1,9 +1,6 @@
 // This generates all the files in the `src-autogen` folder.  If the Steamworks version has changed,
 // it's very likely this will break.  A manual edit after running is almost guaranteed to be necessary.
 
-// @TODO
-// [x] Inject SteamGameServer_RunCallbacks into SteamGameServer
-
 
 #import "Basic";
 #import "File";
@@ -16,8 +13,11 @@
 #load "src/singletons_v150.jai";
 
 
+steam_client_header :: "src/steam_client_header.jai";
+
 steam_api_flat :: "sdk/public/steam/steam_api_flat.h";
 steam_api_json :: "sdk/public/steam/steam_api.json";
+steam_client_h :: "sdk/public/steam/isteamclient.h";
 
 output_autogen_folder       :: "src-autogen";
 output_flat_filename        :: "src-autogen/api_flat.jai";
@@ -28,8 +28,6 @@ output_assignments_filename :: "src-autogen/partial_steam_assignments.jai";
 output_loads_filename       :: "src-autogen/partial_steam_loads.jai";
 output_callbacks_filename   :: "src-autogen/partial_steam_callbacks.jai";
 
-
-steam_client_header :: "src/steam_client_header.jai";
 
 files_appended_to_flat :: string.[
     "src/steam_types.jai",
@@ -59,10 +57,10 @@ procs_to_ignore :: string.[
     "SteamAPI_ISteamClient_GetIPCCallCount",       // duplicate of the proc in SteamUtils
     "SteamAPI_ISteamClient_SetWarningMessageHook", // duplicate of the proc in SteamUtils
     "SteamAPI_ISteamNetworkingSockets_RunCallbacks", // handled by our own callback system
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ToString",      // compiler bug @Urgent @Remove
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ParseString",   // compiler bug @Urgent @Remove
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ToString",    // compiler bug @Urgent @Remove
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ParseString", // compiler bug @Urgent @Remove
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ToString",      // compiler bug @Urgent @Remove @TODO
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ParseString",   // compiler bug @Urgent @Remove @TODO
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ToString",    // compiler bug @Urgent @Remove @TODO
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ParseString", // compiler bug @Urgent @Remove @TODO
 ];
 
 
@@ -141,6 +139,11 @@ current_namespace := "";
 
 
 main :: () {
+    if !interface_version_matches() {
+        print("Version mismatch between steam_client_header.jai and isteamclient.h");
+        exit(1);
+    }
+
     init_string_builder(*procs_builder);
     init_string_builder(*types_builder);
 
@@ -181,7 +184,6 @@ main :: () {
     convert_steam_api_json(file_data);
 
     reset(*file_builder);
-    // append(*file_builder, "#scope_module\n\n\n"); // @TODO namespace types?
     append(*file_builder, builder_to_string(*types_builder));
     write_entire_file(output_types_filename, builder_to_string(*file_builder));
 
@@ -628,21 +630,6 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] %1_CallResult), call_
 }
 
 
-// @TODO callresults
-// Dispatch the call result to the registered handler(s) for the
-// call identified by completed_call_result->m_hAsyncCall
-//if completed_call_result.m_iCallback == NumberOfCurrentPlayers_t.k_iCallback
-//	print("%% %%\n", formatStruct(<<cast(*NumberOfCurrentPlayers_t) call_result, use_long_form_if_more_than_this_many_members=-1, use_newlines_if_long_form=true), io_failure);
-//else if completed_call_result.m_iCallback == GlobalStatsReceived_t.k_iCallback
-//	print("%% %%\n", formatStruct(<<cast(*GlobalStatsReceived_t) call_result, use_long_form_if_more_than_this_many_members=-1, use_newlines_if_long_form=true), io_failure);
-
-// @TODO callbacks
-// Look at callback.m_iCallback to see what kind of callback it is,
-// and dispatch to appropriate handler(s)
-//print("%\n", callback);
-
-
-
 callbacks_header :: #string ___JAI
 #scope_module
 
@@ -889,8 +876,46 @@ generate_classes :: (file_data: string) {
 
     write_entire_file(output_steam_api_filename, builder_to_string(*steam_api_builder));
 
-    // @TODO assert(singleton_count == N)  make sure new versions don't add singletones that we don't know about it `steam.jai`
-    // @TODO assert version in `steam_client_header.jai` matches version in `isteamclient.h`
+    if singleton_count != 36 {
+        print("Singleton count should be 36! Has the version changed?");
+        exit(1);
+    }
+}
+
+
+interface_version_matches :: () -> matches: bool {
+    steam_version : string;
+    jai_version : string;
+
+    file_data, success := read_entire_file(steam_client_h);
+    if !success {
+        print("Failed to read %", steam_client_h);
+        exit(1);
+    }
+
+    for row: split(file_data, "\n") {
+        if contains(row, "#define STEAMCLIENT_INTERFACE_VERSION") {
+            steam_version = split(row, "\"")[1];
+            break;
+        }
+    }
+
+    if steam_version == ""  return false;
+
+    file_data, success = read_entire_file(steam_client_header);
+    if !success {
+        print("Failed to read %", steam_client_header);
+        exit(1);
+    }
+
+    for row: split(file_data, "\n") {
+        if contains(row, "STEAMCLIENT_INTERFACE_VERSION :: ") {
+            jai_version = split(row, "\"")[1];
+            break;
+        }
+    }
+
+    return steam_version == jai_version;
 }
 
 
