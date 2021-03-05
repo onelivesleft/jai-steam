@@ -124,3 +124,14 @@ encode_utf8 :: (val: u16, result: *u8) -> len: u8 {
 		return 1;
 	}
 }
+
+
+append_file :: (builder: *String_Builder, filepath: string) {
+    file_data, success := read_entire_file(filepath);
+    if !success {
+        print("Failed to read %", filepath);
+        exit(1);
+    }
+    file_data = lstrip(file_data);
+    append(builder, file_data);
+}

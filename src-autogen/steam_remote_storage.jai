@@ -1,340 +1,612 @@
 steam_remote_storage : *ISteamRemoteStorage;
-SteamRemoteStorage : SteamRemoteStorage_Namespace;
 
 
-#scope_file
-
-
-SteamRemoteStorage_Namespace :: struct {
-    // procs
-    FileWrite                                          :: SteamRemoteStorage_FileWrite;
-    FileRead                                           :: SteamRemoteStorage_FileRead;
-    FileWriteAsync                                     :: SteamRemoteStorage_FileWriteAsync;
-    FileReadAsync                                      :: SteamRemoteStorage_FileReadAsync;
-    FileReadAsyncComplete                              :: SteamRemoteStorage_FileReadAsyncComplete;
-    FileForget                                         :: SteamRemoteStorage_FileForget;
-    FileDelete                                         :: SteamRemoteStorage_FileDelete;
-    FileShare                                          :: SteamRemoteStorage_FileShare;
-    SetSyncPlatforms                                   :: SteamRemoteStorage_SetSyncPlatforms;
-    FileWriteStreamOpen                                :: SteamRemoteStorage_FileWriteStreamOpen;
-    FileWriteStreamWriteChunk                          :: SteamRemoteStorage_FileWriteStreamWriteChunk;
-    FileWriteStreamClose                               :: SteamRemoteStorage_FileWriteStreamClose;
-    FileWriteStreamCancel                              :: SteamRemoteStorage_FileWriteStreamCancel;
-    FileExists                                         :: SteamRemoteStorage_FileExists;
-    FilePersisted                                      :: SteamRemoteStorage_FilePersisted;
-    GetFileSize                                        :: SteamRemoteStorage_GetFileSize;
-    GetFileTimestamp                                   :: SteamRemoteStorage_GetFileTimestamp;
-    GetSyncPlatforms                                   :: SteamRemoteStorage_GetSyncPlatforms;
-    GetFileCount                                       :: SteamRemoteStorage_GetFileCount;
-    GetFileNameAndSize                                 :: SteamRemoteStorage_GetFileNameAndSize;
-    GetQuota                                           :: SteamRemoteStorage_GetQuota;
-    IsCloudEnabledForAccount                           :: SteamRemoteStorage_IsCloudEnabledForAccount;
-    IsCloudEnabledForApp                               :: SteamRemoteStorage_IsCloudEnabledForApp;
-    SetCloudEnabledForApp                              :: SteamRemoteStorage_SetCloudEnabledForApp;
-    UGCDownload                                        :: SteamRemoteStorage_UGCDownload;
-    GetUGCDownloadProgress                             :: SteamRemoteStorage_GetUGCDownloadProgress;
-    GetUGCDetails                                      :: SteamRemoteStorage_GetUGCDetails;
-    UGCRead                                            :: SteamRemoteStorage_UGCRead;
-    GetCachedUGCCount                                  :: SteamRemoteStorage_GetCachedUGCCount;
-    GetCachedUGCHandle                                 :: SteamRemoteStorage_GetCachedUGCHandle;
-    PublishWorkshopFile                                :: SteamRemoteStorage_PublishWorkshopFile;
-    CreatePublishedFileUpdateRequest                   :: SteamRemoteStorage_CreatePublishedFileUpdateRequest;
-    UpdatePublishedFileFile                            :: SteamRemoteStorage_UpdatePublishedFileFile;
-    UpdatePublishedFilePreviewFile                     :: SteamRemoteStorage_UpdatePublishedFilePreviewFile;
-    UpdatePublishedFileTitle                           :: SteamRemoteStorage_UpdatePublishedFileTitle;
-    UpdatePublishedFileDescription                     :: SteamRemoteStorage_UpdatePublishedFileDescription;
-    UpdatePublishedFileVisibility                      :: SteamRemoteStorage_UpdatePublishedFileVisibility;
-    UpdatePublishedFileTags                            :: SteamRemoteStorage_UpdatePublishedFileTags;
-    CommitPublishedFileUpdate                          :: SteamRemoteStorage_CommitPublishedFileUpdate;
-    GetPublishedFileDetails                            :: SteamRemoteStorage_GetPublishedFileDetails;
-    DeletePublishedFile                                :: SteamRemoteStorage_DeletePublishedFile;
-    EnumerateUserPublishedFiles                        :: SteamRemoteStorage_EnumerateUserPublishedFiles;
-    SubscribePublishedFile                             :: SteamRemoteStorage_SubscribePublishedFile;
-    EnumerateUserSubscribedFiles                       :: SteamRemoteStorage_EnumerateUserSubscribedFiles;
-    UnsubscribePublishedFile                           :: SteamRemoteStorage_UnsubscribePublishedFile;
-    UpdatePublishedFileSetChangeDescription            :: SteamRemoteStorage_UpdatePublishedFileSetChangeDescription;
-    GetPublishedItemVoteDetails                        :: SteamRemoteStorage_GetPublishedItemVoteDetails;
-    UpdateUserPublishedItemVote                        :: SteamRemoteStorage_UpdateUserPublishedItemVote;
-    GetUserPublishedItemVoteDetails                    :: SteamRemoteStorage_GetUserPublishedItemVoteDetails;
-    EnumerateUserSharedWorkshopFiles                   :: SteamRemoteStorage_EnumerateUserSharedWorkshopFiles;
-    PublishVideo                                       :: SteamRemoteStorage_PublishVideo;
-    SetUserPublishedFileAction                         :: SteamRemoteStorage_SetUserPublishedFileAction;
-    EnumeratePublishedFilesByUserAction                :: SteamRemoteStorage_EnumeratePublishedFilesByUserAction;
-    EnumeratePublishedWorkshopFiles                    :: SteamRemoteStorage_EnumeratePublishedWorkshopFiles;
-    UGCDownloadToLocation                              :: SteamRemoteStorage_UGCDownloadToLocation;
+FileWrite :: inline (pchFile: *char, pvData: *void, cubData: int32) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileWrite(steam_remote_storage, pchFile, pvData, cubData);
 }
 
 
-SteamRemoteStorage_FileWrite :: inline (pchFile: *char, pvData: *void, cubData: int32) -> bool #foreign steam "SteamAPI_ISteamRemoteSto {
-    return SteamRemoteStorage_FileWrite(steam_remote_storage, pchFile, pvData, cubData);
+FileRead :: inline (pchFile: *char, pvData: *void, cubDataToRead: int32) -> int32 {
+    return SteamAPI_ISteamRemoteStorage_FileRead(steam_remote_storage, pchFile, pvData, cubDataToRead);
 }
 
 
-SteamRemoteStorage_FileRead :: inline (pchFile: *char, pvData: *void, cubDataToRead: int32) -> int32 #foreign steam "SteamAPI_ISteamRemoteSt {
-    return SteamRemoteStorage_FileRead(steam_remote_storage, pchFile, pvData, cubDataToRead);
+FileWriteAsync :: inline (pchFile: *char, pvData: *void, cubData: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_FileWriteAsync(steam_remote_storage, pchFile, pvData, cubData);
+}
+
+FileWriteAsync :: inline (pchFile: *char, pvData: *void, cubData: uint32, callback: (RemoteStorageFileWriteAsyncComplete_t, bool) -> ()) {
+    RegisterCallResult(
+        FileWriteAsync(pchFile, pvData, cubData),
+        callback
+    );
+}
+
+//FileWriteAsync :: (pchFile: *char, pvData: *void, cubData: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        FileWriteAsync(pchFile, pvData, cubData),
+//        (result: RemoteStorageFileWriteAsyncComplete_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+FileReadAsync :: inline (pchFile: *char, nOffset: uint32, cubToRead: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_FileReadAsync(steam_remote_storage, pchFile, nOffset, cubToRead);
+}
+
+FileReadAsync :: inline (pchFile: *char, nOffset: uint32, cubToRead: uint32, callback: (RemoteStorageFileReadAsyncComplete_t, bool) -> ()) {
+    RegisterCallResult(
+        FileReadAsync(pchFile, nOffset, cubToRead),
+        callback
+    );
+}
+
+//FileReadAsync :: (pchFile: *char, nOffset: uint32, cubToRead: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        FileReadAsync(pchFile, nOffset, cubToRead),
+//        (result: RemoteStorageFileReadAsyncComplete_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+FileReadAsyncComplete :: inline (hReadCall: SteamAPICall_t, pvBuffer: *void, cubToRead: uint32) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileReadAsyncComplete(steam_remote_storage, hReadCall, pvBuffer, cubToRead);
 }
 
 
-SteamRemoteStorage_FileWriteAsync :: inline (pchFile: *char, pvData: *void, cubData: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_ {
-    return SteamRemoteStorage_FileWriteAsync(steam_remote_storage, pchFile, pvData, cubData);
+FileForget :: inline (pchFile: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileForget(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FileReadAsync :: inline (pchFile: *char, nOffset: uint32, cubToRead: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage {
-    return SteamRemoteStorage_FileReadAsync(steam_remote_storage, pchFile, nOffset, cubToRead);
+FileDelete :: inline (pchFile: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileDelete(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FileReadAsyncComplete :: inline (hReadCall: SteamAPICall_t, pvBuffer: *void, cubToRead: uint32) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_FileRea {
-    return SteamRemoteStorage_FileReadAsyncComplete(steam_remote_storage, hReadCall, pvBuffer, cubToRead);
+FileShare :: inline (pchFile: *char) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_FileShare(steam_remote_storage, pchFile);
+}
+
+FileShare :: inline (pchFile: *char, callback: (RemoteStorageFileShareResult_t, bool) -> ()) {
+    RegisterCallResult(
+        FileShare(pchFile),
+        callback
+    );
+}
+
+//FileShare :: (pchFile: *char, code: Code) #expand {
+//    RegisterCallResult(
+//        FileShare(pchFile),
+//        (result: RemoteStorageFileShareResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+SetSyncPlatforms :: inline (pchFile: *char, eRemoteStoragePlatform: ERemoteStoragePlatform) -> bool {
+    return SteamAPI_ISteamRemoteStorage_SetSyncPlatforms(steam_remote_storage, pchFile, eRemoteStoragePlatform);
 }
 
 
-SteamRemoteStorage_FileForget :: inline (pchFile: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStor {
-    return SteamRemoteStorage_FileForget(steam_remote_storage, pchFile);
+FileWriteStreamOpen :: inline (pchFile: *char) -> UGCFileWriteStreamHandle_t {
+    return SteamAPI_ISteamRemoteStorage_FileWriteStreamOpen(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FileDelete :: inline (pchFile: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStor {
-    return SteamRemoteStorage_FileDelete(steam_remote_storage, pchFile);
+FileWriteStreamWriteChunk :: inline (writeHandle: UGCFileWriteStreamHandle_t, pvData: *void, cubData: int32) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileWriteStreamWriteChunk(steam_remote_storage, writeHandle, pvData, cubData);
 }
 
 
-SteamRemoteStorage_FileShare :: inline (pchFile: *char) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteSto {
-    return SteamRemoteStorage_FileShare(steam_remote_storage, pchFile);
+FileWriteStreamClose :: inline (writeHandle: UGCFileWriteStreamHandle_t) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileWriteStreamClose(steam_remote_storage, writeHandle);
 }
 
 
-SteamRemoteStorage_SetSyncPlatforms :: inline (pchFile: *char, eRemoteStoragePlatform: ERemoteStoragePlatform) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_Se {
-    return SteamRemoteStorage_SetSyncPlatforms(steam_remote_storage, pchFile, eRemoteStoragePlatform);
+FileWriteStreamCancel :: inline (writeHandle: UGCFileWriteStreamHandle_t) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileWriteStreamCancel(steam_remote_storage, writeHandle);
 }
 
 
-SteamRemoteStorage_FileWriteStreamOpen :: inline (pchFile: *char) -> UGCFileWriteStreamHandle_t #foreign steam "SteamAPI_ISteamRemoteStorage_FileW {
-    return SteamRemoteStorage_FileWriteStreamOpen(steam_remote_storage, pchFile);
+FileExists :: inline (pchFile: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FileExists(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FileWriteStreamWriteChunk :: inline (writeHandle: UGCFileWriteStreamHandle_t, pvData: *void, cubData: int32) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_FileWriteSt {
-    return SteamRemoteStorage_FileWriteStreamWriteChunk(steam_remote_storage, writeHandle, pvData, cubData);
+FilePersisted :: inline (pchFile: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_FilePersisted(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FileWriteStreamClose :: inline (writeHandle: UGCFileWriteStreamHandle_t) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_FileWr {
-    return SteamRemoteStorage_FileWriteStreamClose(steam_remote_storage, writeHandle);
+GetFileSize :: inline (pchFile: *char) -> int32 {
+    return SteamAPI_ISteamRemoteStorage_GetFileSize(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FileWriteStreamCancel :: inline (writeHandle: UGCFileWriteStreamHandle_t) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_FileWri {
-    return SteamRemoteStorage_FileWriteStreamCancel(steam_remote_storage, writeHandle);
+GetFileTimestamp :: inline (pchFile: *char) -> int64 {
+    return SteamAPI_ISteamRemoteStorage_GetFileTimestamp(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FileExists :: inline (pchFile: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStor {
-    return SteamRemoteStorage_FileExists(steam_remote_storage, pchFile);
+GetSyncPlatforms :: inline (pchFile: *char) -> ERemoteStoragePlatform {
+    return SteamAPI_ISteamRemoteStorage_GetSyncPlatforms(steam_remote_storage, pchFile);
 }
 
 
-SteamRemoteStorage_FilePersisted :: inline (pchFile: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage {
-    return SteamRemoteStorage_FilePersisted(steam_remote_storage, pchFile);
+GetFileCount :: inline () -> int32 {
+    return SteamAPI_ISteamRemoteStorage_GetFileCount(steam_remote_storage);
 }
 
 
-SteamRemoteStorage_GetFileSize :: inline (pchFile: *char) -> int32 #foreign steam "SteamAPI_ISteamRemoteStora {
-    return SteamRemoteStorage_GetFileSize(steam_remote_storage, pchFile);
+GetFileNameAndSize :: inline (iFile: s32, pnFileSizeInBytes: *int32) -> string {
+    return to_string(SteamAPI_ISteamRemoteStorage_GetFileNameAndSize(steam_remote_storage, iFile, pnFileSizeInBytes));
 }
 
 
-SteamRemoteStorage_GetFileTimestamp :: inline (pchFile: *char) -> int64 #foreign steam "SteamAPI_ISteamRemoteStorage_Ge {
-    return SteamRemoteStorage_GetFileTimestamp(steam_remote_storage, pchFile);
+GetQuota :: inline (pnTotalBytes: *uint64, puAvailableBytes: *uint64) -> bool {
+    return SteamAPI_ISteamRemoteStorage_GetQuota(steam_remote_storage, pnTotalBytes, puAvailableBytes);
 }
 
 
-SteamRemoteStorage_GetSyncPlatforms :: inline (pchFile: *char) -> ERemoteStoragePlatform #foreign steam "SteamAPI_ISteamRemoteStorage_Ge {
-    return SteamRemoteStorage_GetSyncPlatforms(steam_remote_storage, pchFile);
+IsCloudEnabledForAccount :: inline () -> bool {
+    return SteamAPI_ISteamRemoteStorage_IsCloudEnabledForAccount(steam_remote_storage);
 }
 
 
-SteamRemoteStorage_GetFileCount :: inline () -> int32 #foreign steam "SteamAPI_ISteamRemoteStorag {
-    return SteamRemoteStorage_GetFileCount(steam_remote_storage);
+IsCloudEnabledForApp :: inline () -> bool {
+    return SteamAPI_ISteamRemoteStorage_IsCloudEnabledForApp(steam_remote_storage);
 }
 
 
-SteamRemoteStorage_GetFileNameAndSize :: inline (iFile: s32, pnFileSizeInBytes: *int32) -> *char #foreign steam "SteamAPI_ISteamRemoteStorage_GetF {
-    return SteamRemoteStorage_GetFileNameAndSize(steam_remote_storage, iFile, pnFileSizeInBytes);
+SetCloudEnabledForApp :: inline (bEnabled: bool) {
+    SteamAPI_ISteamRemoteStorage_SetCloudEnabledForApp(steam_remote_storage, bEnabled);
 }
 
 
-SteamRemoteStorage_GetQuota :: inline (pnTotalBytes: *uint64, puAvailableBytes: *uint64) -> bool #foreign steam "SteamAPI_ISteamRemoteSt {
-    return SteamRemoteStorage_GetQuota(steam_remote_storage, pnTotalBytes, puAvailableBytes);
+UGCDownload :: inline (hContent: UGCHandle_t, unPriority: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_UGCDownload(steam_remote_storage, hContent, unPriority);
+}
+
+UGCDownload :: inline (hContent: UGCHandle_t, unPriority: uint32, callback: (RemoteStorageDownloadUGCResult_t, bool) -> ()) {
+    RegisterCallResult(
+        UGCDownload(hContent, unPriority),
+        callback
+    );
+}
+
+//UGCDownload :: (hContent: UGCHandle_t, unPriority: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        UGCDownload(hContent, unPriority),
+//        (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+GetUGCDownloadProgress :: inline (hContent: UGCHandle_t, pnBytesDownloaded: *int32, pnBytesExpected: *int32) -> bool {
+    return SteamAPI_ISteamRemoteStorage_GetUGCDownloadProgress(steam_remote_storage, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
 
-SteamRemoteStorage_IsCloudEnabledForAccount :: inline () -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_IsCloudEna {
-    return SteamRemoteStorage_IsCloudEnabledForAccount(steam_remote_storage);
+GetUGCDetails :: inline (hContent: UGCHandle_t, pnAppID: *AppId_t, ppchName: **char, pnFileSizeInBytes: *int32, pSteamIDOwner: *CSteamID) -> bool {
+    return SteamAPI_ISteamRemoteStorage_GetUGCDetails(steam_remote_storage, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
 
-SteamRemoteStorage_IsCloudEnabledForApp :: inline () -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_IsClou {
-    return SteamRemoteStorage_IsCloudEnabledForApp(steam_remote_storage);
+UGCRead :: inline (hContent: UGCHandle_t, pvData: *void, cubDataToRead: int32, cOffset: uint32, eAction: EUGCReadAction) -> int32 {
+    return SteamAPI_ISteamRemoteStorage_UGCRead(steam_remote_storage, hContent, pvData, cubDataToRead, cOffset, eAction);
 }
 
 
-SteamRemoteStorage_SetCloudEnabledForApp :: inline (bEnabled: bool) {
-    SteamRemoteStorage_SetCloudEnabledForApp(steam_remote_storage, bEnabled);
+GetCachedUGCCount :: inline () -> int32 {
+    return SteamAPI_ISteamRemoteStorage_GetCachedUGCCount(steam_remote_storage);
 }
 
 
-SteamRemoteStorage_UGCDownload :: inline (hContent: UGCHandle_t, unPriority: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStora {
-    return SteamRemoteStorage_UGCDownload(steam_remote_storage, hContent, unPriority);
+GetCachedUGCHandle :: inline (iCachedContent: int32) -> UGCHandle_t {
+    return SteamAPI_ISteamRemoteStorage_GetCachedUGCHandle(steam_remote_storage, iCachedContent);
 }
 
 
-SteamRemoteStorage_GetUGCDownloadProgress :: inline (hContent: UGCHandle_t, pnBytesDownloaded: *int32, pnBytesExpected: *int32) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_GetUGCDo {
-    return SteamRemoteStorage_GetUGCDownloadProgress(steam_remote_storage, hContent, pnBytesDownloaded, pnBytesExpected);
+PublishWorkshopFile :: inline (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_PublishWorkshopFile(steam_remote_storage, pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
+}
+
+PublishWorkshopFile :: inline (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType, callback: (RemoteStoragePublishFileProgress_t, bool) -> ()) {
+    RegisterCallResult(
+        PublishWorkshopFile(pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType),
+        callback
+    );
+}
+
+//PublishWorkshopFile :: (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType, code: Code) #expand {
+//    RegisterCallResult(
+//        PublishWorkshopFile(pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType),
+//        (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+CreatePublishedFileUpdateRequest :: inline (unPublishedFileId: PublishedFileId_t) -> PublishedFileUpdateHandle_t {
+    return SteamAPI_ISteamRemoteStorage_CreatePublishedFileUpdateRequest(steam_remote_storage, unPublishedFileId);
 }
 
 
-SteamRemoteStorage_GetUGCDetails :: inline (hContent: UGCHandle_t, pnAppID: *AppId_t, ppchName: **char, pnFileSizeInBytes: *int32, pSteamIDOwner: *CSteamID) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage {
-    return SteamRemoteStorage_GetUGCDetails(steam_remote_storage, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
+UpdatePublishedFileFile :: inline (updateHandle: PublishedFileUpdateHandle_t, pchFile: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_UpdatePublishedFileFile(steam_remote_storage, updateHandle, pchFile);
 }
 
 
-SteamRemoteStorage_UGCRead :: inline (hContent: UGCHandle_t, pvData: *void, cubDataToRead: int32, cOffset: uint32, eAction: EUGCReadAction) -> int32 #foreign steam "SteamAPI_ISteamRemoteS {
-    return SteamRemoteStorage_UGCRead(steam_remote_storage, hContent, pvData, cubDataToRead, cOffset, eAction);
+UpdatePublishedFilePreviewFile :: inline (updateHandle: PublishedFileUpdateHandle_t, pchPreviewFile: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_UpdatePublishedFilePreviewFile(steam_remote_storage, updateHandle, pchPreviewFile);
 }
 
 
-SteamRemoteStorage_GetCachedUGCCount :: inline () -> int32 #foreign steam "SteamAPI_ISteamRemoteStorage_Get {
-    return SteamRemoteStorage_GetCachedUGCCount(steam_remote_storage);
+UpdatePublishedFileTitle :: inline (updateHandle: PublishedFileUpdateHandle_t, pchTitle: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_UpdatePublishedFileTitle(steam_remote_storage, updateHandle, pchTitle);
 }
 
 
-SteamRemoteStorage_GetCachedUGCHandle :: inline (iCachedContent: int32) -> UGCHandle_t #foreign steam "SteamAPI_ISteamRemoteStorage_GetC {
-    return SteamRemoteStorage_GetCachedUGCHandle(steam_remote_storage, iCachedContent);
+UpdatePublishedFileDescription :: inline (updateHandle: PublishedFileUpdateHandle_t, pchDescription: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_UpdatePublishedFileDescription(steam_remote_storage, updateHandle, pchDescription);
 }
 
 
-SteamRemoteStorage_PublishWorkshopFile :: inline (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_Publi {
-    return SteamRemoteStorage_PublishWorkshopFile(steam_remote_storage, pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
+UpdatePublishedFileVisibility :: inline (updateHandle: PublishedFileUpdateHandle_t, eVisibility: ERemoteStoragePublishedFileVisibility) -> bool {
+    return SteamAPI_ISteamRemoteStorage_UpdatePublishedFileVisibility(steam_remote_storage, updateHandle, eVisibility);
 }
 
 
-SteamRemoteStorage_CreatePublishedFileUpdateRequest :: inline (unPublishedFileId: PublishedFileId_t) -> PublishedFileUpdateHandle_t #foreign steam "SteamAPI_ISteamRemoteStorage_CreatePublishedFil {
-    return SteamRemoteStorage_CreatePublishedFileUpdateRequest(steam_remote_storage, unPublishedFileId);
+UpdatePublishedFileTags :: inline (updateHandle: PublishedFileUpdateHandle_t, pTags: *SteamParamStringArray_t) -> bool {
+    return SteamAPI_ISteamRemoteStorage_UpdatePublishedFileTags(steam_remote_storage, updateHandle, pTags);
 }
 
 
-SteamRemoteStorage_UpdatePublishedFileFile :: inline (updateHandle: PublishedFileUpdateHandle_t, pchFile: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_UpdatePub {
-    return SteamRemoteStorage_UpdatePublishedFileFile(steam_remote_storage, updateHandle, pchFile);
+CommitPublishedFileUpdate :: inline (updateHandle: PublishedFileUpdateHandle_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_CommitPublishedFileUpdate(steam_remote_storage, updateHandle);
+}
+
+CommitPublishedFileUpdate :: inline (updateHandle: PublishedFileUpdateHandle_t, callback: (RemoteStorageUpdatePublishedFileResult_t, bool) -> ()) {
+    RegisterCallResult(
+        CommitPublishedFileUpdate(updateHandle),
+        callback
+    );
+}
+
+//CommitPublishedFileUpdate :: (updateHandle: PublishedFileUpdateHandle_t, code: Code) #expand {
+//    RegisterCallResult(
+//        CommitPublishedFileUpdate(updateHandle),
+//        (result: RemoteStorageUpdatePublishedFileResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+GetPublishedFileDetails :: inline (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_GetPublishedFileDetails(steam_remote_storage, unPublishedFileId, unMaxSecondsOld);
+}
+
+GetPublishedFileDetails :: inline (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32, callback: (RemoteStorageGetPublishedFileDetailsResult_t, bool) -> ()) {
+    RegisterCallResult(
+        GetPublishedFileDetails(unPublishedFileId, unMaxSecondsOld),
+        callback
+    );
+}
+
+//GetPublishedFileDetails :: (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        GetPublishedFileDetails(unPublishedFileId, unMaxSecondsOld),
+//        (result: RemoteStorageGetPublishedFileDetailsResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+DeletePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_DeletePublishedFile(steam_remote_storage, unPublishedFileId);
+}
+
+DeletePublishedFile :: inline (unPublishedFileId: PublishedFileId_t, callback: (RemoteStorageDeletePublishedFileResult_t, bool) -> ()) {
+    RegisterCallResult(
+        DeletePublishedFile(unPublishedFileId),
+        callback
+    );
+}
+
+//DeletePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+//    RegisterCallResult(
+//        DeletePublishedFile(unPublishedFileId),
+//        (result: RemoteStorageDeletePublishedFileResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+EnumerateUserPublishedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_EnumerateUserPublishedFiles(steam_remote_storage, unStartIndex);
+}
+
+EnumerateUserPublishedFiles :: inline (unStartIndex: uint32, callback: (RemoteStorageEnumerateUserPublishedFilesResult_t, bool) -> ()) {
+    RegisterCallResult(
+        EnumerateUserPublishedFiles(unStartIndex),
+        callback
+    );
+}
+
+//EnumerateUserPublishedFiles :: (unStartIndex: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        EnumerateUserPublishedFiles(unStartIndex),
+//        (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+SubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_SubscribePublishedFile(steam_remote_storage, unPublishedFileId);
+}
+
+SubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t, callback: (RemoteStorageSubscribePublishedFileResult_t, bool) -> ()) {
+    RegisterCallResult(
+        SubscribePublishedFile(unPublishedFileId),
+        callback
+    );
+}
+
+//SubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+//    RegisterCallResult(
+//        SubscribePublishedFile(unPublishedFileId),
+//        (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+EnumerateUserSubscribedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_EnumerateUserSubscribedFiles(steam_remote_storage, unStartIndex);
+}
+
+EnumerateUserSubscribedFiles :: inline (unStartIndex: uint32, callback: (RemoteStorageEnumerateUserSubscribedFilesResult_t, bool) -> ()) {
+    RegisterCallResult(
+        EnumerateUserSubscribedFiles(unStartIndex),
+        callback
+    );
+}
+
+//EnumerateUserSubscribedFiles :: (unStartIndex: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        EnumerateUserSubscribedFiles(unStartIndex),
+//        (result: RemoteStorageEnumerateUserSubscribedFilesResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+UnsubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_UnsubscribePublishedFile(steam_remote_storage, unPublishedFileId);
+}
+
+UnsubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t, callback: (RemoteStorageUnsubscribePublishedFileResult_t, bool) -> ()) {
+    RegisterCallResult(
+        UnsubscribePublishedFile(unPublishedFileId),
+        callback
+    );
+}
+
+//UnsubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+//    RegisterCallResult(
+//        UnsubscribePublishedFile(unPublishedFileId),
+//        (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+UpdatePublishedFileSetChangeDescription :: inline (updateHandle: PublishedFileUpdateHandle_t, pchChangeDescription: *char) -> bool {
+    return SteamAPI_ISteamRemoteStorage_UpdatePublishedFileSetChangeDescription(steam_remote_storage, updateHandle, pchChangeDescription);
 }
 
 
-SteamRemoteStorage_UpdatePublishedFilePreviewFile :: inline (updateHandle: PublishedFileUpdateHandle_t, pchPreviewFile: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_UpdatePublishedF {
-    return SteamRemoteStorage_UpdatePublishedFilePreviewFile(steam_remote_storage, updateHandle, pchPreviewFile);
+GetPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_GetPublishedItemVoteDetails(steam_remote_storage, unPublishedFileId);
 }
 
-
-SteamRemoteStorage_UpdatePublishedFileTitle :: inline (updateHandle: PublishedFileUpdateHandle_t, pchTitle: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_UpdatePubl {
-    return SteamRemoteStorage_UpdatePublishedFileTitle(steam_remote_storage, updateHandle, pchTitle);
+GetPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t, callback: (RemoteStorageGetPublishedItemVoteDetailsResult_t, bool) -> ()) {
+    RegisterCallResult(
+        GetPublishedItemVoteDetails(unPublishedFileId),
+        callback
+    );
 }
 
+//GetPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+//    RegisterCallResult(
+//        GetPublishedItemVoteDetails(unPublishedFileId),
+//        (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_UpdatePublishedFileDescription :: inline (updateHandle: PublishedFileUpdateHandle_t, pchDescription: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_UpdatePublishedF {
-    return SteamRemoteStorage_UpdatePublishedFileDescription(steam_remote_storage, updateHandle, pchDescription);
+
+UpdateUserPublishedItemVote :: inline (unPublishedFileId: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_UpdateUserPublishedItemVote(steam_remote_storage, unPublishedFileId, bVoteUp);
 }
 
-
-SteamRemoteStorage_UpdatePublishedFileVisibility :: inline (updateHandle: PublishedFileUpdateHandle_t, eVisibility: ERemoteStoragePublishedFileVisibility) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_UpdatePublished {
-    return SteamRemoteStorage_UpdatePublishedFileVisibility(steam_remote_storage, updateHandle, eVisibility);
+UpdateUserPublishedItemVote :: inline (unPublishedFileId: PublishedFileId_t, bVoteUp: bool, callback: (RemoteStorageUpdateUserPublishedItemVoteResult_t, bool) -> ()) {
+    RegisterCallResult(
+        UpdateUserPublishedItemVote(unPublishedFileId, bVoteUp),
+        callback
+    );
 }
 
+//UpdateUserPublishedItemVote :: (unPublishedFileId: PublishedFileId_t, bVoteUp: bool, code: Code) #expand {
+//    RegisterCallResult(
+//        UpdateUserPublishedItemVote(unPublishedFileId, bVoteUp),
+//        (result: RemoteStorageUpdateUserPublishedItemVoteResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_UpdatePublishedFileTags :: inline (updateHandle: PublishedFileUpdateHandle_t, pTags: *SteamParamStringArray_t) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_UpdatePub {
-    return SteamRemoteStorage_UpdatePublishedFileTags(steam_remote_storage, updateHandle, pTags);
+
+GetUserPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_GetUserPublishedItemVoteDetails(steam_remote_storage, unPublishedFileId);
 }
 
-
-SteamRemoteStorage_CommitPublishedFileUpdate :: inline (updateHandle: PublishedFileUpdateHandle_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_CommitPubli {
-    return SteamRemoteStorage_CommitPublishedFileUpdate(steam_remote_storage, updateHandle);
+GetUserPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t, callback: (RemoteStorageGetPublishedItemVoteDetailsResult_t, bool) -> ()) {
+    RegisterCallResult(
+        GetUserPublishedItemVoteDetails(unPublishedFileId),
+        callback
+    );
 }
 
+//GetUserPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+//    RegisterCallResult(
+//        GetUserPublishedItemVoteDetails(unPublishedFileId),
+//        (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_GetPublishedFileDetails :: inline (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_GetPublis {
-    return SteamRemoteStorage_GetPublishedFileDetails(steam_remote_storage, unPublishedFileId, unMaxSecondsOld);
+
+EnumerateUserSharedWorkshopFiles :: inline (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_EnumerateUserSharedWorkshopFiles(steam_remote_storage, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-
-SteamRemoteStorage_DeletePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_Delet {
-    return SteamRemoteStorage_DeletePublishedFile(steam_remote_storage, unPublishedFileId);
+EnumerateUserSharedWorkshopFiles :: inline (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t, callback: (RemoteStorageEnumerateUserPublishedFilesResult_t, bool) -> ()) {
+    RegisterCallResult(
+        EnumerateUserSharedWorkshopFiles(steamId, unStartIndex, pRequiredTags, pExcludedTags),
+        callback
+    );
 }
 
+//EnumerateUserSharedWorkshopFiles :: (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t, code: Code) #expand {
+//    RegisterCallResult(
+//        EnumerateUserSharedWorkshopFiles(steamId, unStartIndex, pRequiredTags, pExcludedTags),
+//        (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_EnumerateUserPublishedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_EnumerateUser {
-    return SteamRemoteStorage_EnumerateUserPublishedFiles(steam_remote_storage, unStartIndex);
+
+PublishVideo :: inline (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_PublishVideo(steam_remote_storage, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
 
-
-SteamRemoteStorage_SubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_Subscrib {
-    return SteamRemoteStorage_SubscribePublishedFile(steam_remote_storage, unPublishedFileId);
+PublishVideo :: inline (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, callback: (RemoteStoragePublishFileProgress_t, bool) -> ()) {
+    RegisterCallResult(
+        PublishVideo(eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags),
+        callback
+    );
 }
 
+//PublishVideo :: (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, code: Code) #expand {
+//    RegisterCallResult(
+//        PublishVideo(eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags),
+//        (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_EnumerateUserSubscribedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_EnumerateUserS {
-    return SteamRemoteStorage_EnumerateUserSubscribedFiles(steam_remote_storage, unStartIndex);
+
+SetUserPublishedFileAction :: inline (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_SetUserPublishedFileAction(steam_remote_storage, unPublishedFileId, eAction);
 }
 
-
-SteamRemoteStorage_UnsubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_Unsubscrib {
-    return SteamRemoteStorage_UnsubscribePublishedFile(steam_remote_storage, unPublishedFileId);
+SetUserPublishedFileAction :: inline (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction, callback: (RemoteStorageSetUserPublishedFileActionResult_t, bool) -> ()) {
+    RegisterCallResult(
+        SetUserPublishedFileAction(unPublishedFileId, eAction),
+        callback
+    );
 }
 
+//SetUserPublishedFileAction :: (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction, code: Code) #expand {
+//    RegisterCallResult(
+//        SetUserPublishedFileAction(unPublishedFileId, eAction),
+//        (result: RemoteStorageSetUserPublishedFileActionResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_UpdatePublishedFileSetChangeDescription :: inline (updateHandle: PublishedFileUpdateHandle_t, pchChangeDescription: *char) -> bool #foreign steam "SteamAPI_ISteamRemoteStorage_UpdatePublishedFileSetCha {
-    return SteamRemoteStorage_UpdatePublishedFileSetChangeDescription(steam_remote_storage, updateHandle, pchChangeDescription);
+
+EnumeratePublishedFilesByUserAction :: inline (eAction: EWorkshopFileAction, unStartIndex: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_EnumeratePublishedFilesByUserAction(steam_remote_storage, eAction, unStartIndex);
 }
 
-
-SteamRemoteStorage_GetPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_GetPublishedI {
-    return SteamRemoteStorage_GetPublishedItemVoteDetails(steam_remote_storage, unPublishedFileId);
+EnumeratePublishedFilesByUserAction :: inline (eAction: EWorkshopFileAction, unStartIndex: uint32, callback: (RemoteStorageEnumeratePublishedFilesByUserActionResult_t, bool) -> ()) {
+    RegisterCallResult(
+        EnumeratePublishedFilesByUserAction(eAction, unStartIndex),
+        callback
+    );
 }
 
+//EnumeratePublishedFilesByUserAction :: (eAction: EWorkshopFileAction, unStartIndex: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        EnumeratePublishedFilesByUserAction(eAction, unStartIndex),
+//        (result: RemoteStorageEnumeratePublishedFilesByUserActionResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_UpdateUserPublishedItemVote :: inline (unPublishedFileId: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_UpdateUserPub {
-    return SteamRemoteStorage_UpdateUserPublishedItemVote(steam_remote_storage, unPublishedFileId, bVoteUp);
+
+EnumeratePublishedWorkshopFiles :: inline (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_EnumeratePublishedWorkshopFiles(steam_remote_storage, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
-
-SteamRemoteStorage_GetUserPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_GetUserPublishedI {
-    return SteamRemoteStorage_GetUserPublishedItemVoteDetails(steam_remote_storage, unPublishedFileId);
+EnumeratePublishedWorkshopFiles :: inline (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t, callback: (RemoteStorageEnumerateWorkshopFilesResult_t, bool) -> ()) {
+    RegisterCallResult(
+        EnumeratePublishedWorkshopFiles(eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags),
+        callback
+    );
 }
 
+//EnumeratePublishedWorkshopFiles :: (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t, code: Code) #expand {
+//    RegisterCallResult(
+//        EnumeratePublishedWorkshopFiles(eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags),
+//        (result: RemoteStorageEnumerateWorkshopFilesResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamRemoteStorage_EnumerateUserSharedWorkshopFiles :: inline (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_EnumerateUserShare {
-    return SteamRemoteStorage_EnumerateUserSharedWorkshopFiles(steam_remote_storage, steamId, unStartIndex, pRequiredTags, pExcludedTags);
+
+UGCDownloadToLocation :: inline (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamRemoteStorage_UGCDownloadToLocation(steam_remote_storage, hContent, pchLocation, unPriority);
 }
 
-
-SteamRemoteStorage_PublishVideo :: inline (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorag {
-    return SteamRemoteStorage_PublishVideo(steam_remote_storage, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
+UGCDownloadToLocation :: inline (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32, callback: (RemoteStorageDownloadUGCResult_t, bool) -> ()) {
+    RegisterCallResult(
+        UGCDownloadToLocation(hContent, pchLocation, unPriority),
+        callback
+    );
 }
 
-
-SteamRemoteStorage_SetUserPublishedFileAction :: inline (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_SetUserPubli {
-    return SteamRemoteStorage_SetUserPublishedFileAction(steam_remote_storage, unPublishedFileId, eAction);
-}
-
-
-SteamRemoteStorage_EnumeratePublishedFilesByUserAction :: inline (eAction: EWorkshopFileAction, unStartIndex: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_EnumeratePublishedFil {
-    return SteamRemoteStorage_EnumeratePublishedFilesByUserAction(steam_remote_storage, eAction, unStartIndex);
-}
-
-
-SteamRemoteStorage_EnumeratePublishedWorkshopFiles :: inline (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_EnumeratePublishe {
-    return SteamRemoteStorage_EnumeratePublishedWorkshopFiles(steam_remote_storage, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
-}
-
-
-SteamRemoteStorage_UGCDownloadToLocation :: inline (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamRemoteStorage_UGCDown {
-    return SteamRemoteStorage_UGCDownloadToLocation(steam_remote_storage, hContent, pchLocation, unPriority);
-}
+//UGCDownloadToLocation :: (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32, code: Code) #expand {
+//    RegisterCallResult(
+//        UGCDownloadToLocation(hContent, pchLocation, unPriority),
+//        (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}

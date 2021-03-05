@@ -1,6 +1,115 @@
-// Nice, remapped wrapper of Steam SDK.
+// Standard Jai wrapper of Steam SDK v1.50.
+//
+// Handles a lot of book-keeping for you; if you want full control then set the
+// `use_flat_api` module parameter, and switch to reading `steam_flat.jai`
 
-// @TODO string overloads for *char procs
+
+// `InitSteam` must be called before using any other API functions. If it fails, an
+// error message will be output to the debugger (or stderr) with further information.
+
+InitSteam :: (debug := false) -> success: bool {
+	return Steam_Init(debug);
+}
+
+
+// `ShutdownSteam` should be called during process shutdown if possible.
+
+ShutdownSteam :: () {
+	SteamAPI_Shutdown();
+}
+
+
+// `RunCallbacks` dispatches all available callbacks.  It's best to call this at >10Hz, the more time between
+// calls, the more potential latency between receiving events or results from the Steamworks API.
+// Most games call this once per render-frame.
+
+// Note that `RunCallbacks` and `ServerRuncallbacks` are part of the Jai Steam library, not foreign calls
+// to the steam DLL.
+
+// You may designate callback procs with the `@SteamCallback` annotation: to enable this feature you must
+// do two things:
+// 		1) In your buld script, import this module with the `building` module parameter enabled, and
+// 		   then call `steam_build_step(message)` for every compiler message.
+//      2) Add `#insert SteamCallbacks` after your call to `InitSteam`.
+// See `module.jai` for details.
+
+// You may manually register a callback by calling `RegisterCallback(proc)`.
+
+RunCallbacks :: () {
+	run_callbacks(steam_pipe, false);
+	SteamAPI_ReleaseCurrentThreadMemory();
+}
+
+ServerRunCallbacks :: () {
+	run_callbacks(steam_server_pipe, true);
+	SteamAPI_ReleaseCurrentThreadMemory();
+}
+
+
+// `RestartAppIfNecessary` ensures that your executable was launched through Steam.
+//
+// Returns true if the current process should terminate. Steam is now re-launching your application.
+//
+// Returns false if no action needs to be taken. This means that your executable was started through
+// the Steam client, or a steam_appid.txt file is present in your game's directory (for development).
+// Your current process should continue if false is returned.
+//
+// NOTE: If you use the Steam DRM wrapper on your primary executable file, this check is unnecessary
+// since the DRM wrapper will ensure that your application was launched properly through Steam.
+
+RestartAppIfNecessary :: (unOwnAppID: uint32) -> required_restart: bool {
+	return SteamAPI_RestartAppIfNecessary(unOwnAppID);
+};
+
+
+// Many Steam API functions allocate a small amount of thread-local memory for parameter storage.
+// `ReleaseCurrentThreadMemory()` will free API memory associated with the calling thread.
+// This function is also called automatically by `RunCallbacks()`, so a single-threaded
+// program never needs to explicitly call this function.
+
+ReleaseCurrentThreadMemory :: () {
+	SteamAPI_ReleaseCurrentThreadMemory();
+}
+
+
+// Crash dump recording functions
+
+WriteMiniDump :: (uStructuredExceptionCode: uint32, pvExceptionInfo: *void, uBuildID: uint32) {
+	SteamAPI_WriteMiniDump(uStructuredExceptionCode, pvExceptionInfo, uBuildID);
+}
+
+SetMiniDumpComment :: (pchMsg: *char) {
+	SteamAPI_SetMiniDumpComment(pchMsg);
+}
+
+
+//  ---------------------------------------------------------------------------------------------------------------------------------
+//	The following functions are part of abstracting API access to the steamclient.dll, but should only be used in very specific cases
+//  ---------------------------------------------------------------------------------------------------------------------------------
+
+
+// `IsSteamRunning()` returns true if Steam is currently running
+
+IsSteamRunning :: () -> is_running: bool {
+	return SteamAPI_IsSteamRunning();
+}
+
+
+// This should be called before the game initialized the steam APIs
+// `pchDate`				  should be of the format "Mmm dd yyyy" (such as from the __ DATE __ macro )
+// `pchTime`				  should be of the format "hh:mm:ss" (such as from the __ TIME __ macro )
+// `bFullMemoryDumps` 		  (Win32 only) writes out a uuid-full.dmp in the client/dumps folder
+// `pvContext`				  can be NULL, will be the void * context passed into m_pfnPreMinidumpCallback
+// `m_pfnPreMinidumpCallback` optional callback which occurs just before a .dmp file is written during a crash.
+//                            Applications can hook this to allow adding additional information into the .dmp comment stream.
+
+UseBreakpadCrashHandler :: (pchVersion: *char, pchDate: *char, pchTime: *char,  bFullMemoryDumps: bool, pvContext: *void, m_pfnPreMinidumpCallback: PFNPreMinidumpCallback) {
+	SteamAPI_UseBreakpadCrashHandler(pchVersion, pchDate, pchTime,  bFullMemoryDumps, pvContext, m_pfnPreMinidumpCallback);
+}
+
+SetBreakpadAppID :: (unAppID: uint32) {
+	SteamAPI_SetBreakpadAppID(unAppID);
+}
 
 
 #scope_module
@@ -31,13 +140,12 @@ Failed to init steam, this could be for one of the following reasons:
 
 	SteamAPI_ManualDispatch_Init();
 
+	steam_pipe = SteamAPI_GetHSteamPipe();
+	steam_server_pipe = SteamGameServer_GetHSteamPipe();
+
     return true;
 }
 
-
-Steam_Shutdown :: () {
-    SteamAPI_Shutdown();
-}
 
 
 #if OS == .WINDOWS {
@@ -64,150 +172,26 @@ Steam_Shutdown :: () {
 #load "src-autogen/steam_api.jai";
 
 
+// More detailed documentation about the following calls can be found in `steam_flat.jai`,
+// but if you're using this version of the module you shouldn't need to worry about them.
 
-// copypasta below, just leave it alone for now (it provides the remaining top-level procs)
-
-
-// SteamAPI_Init must be called before using any other API functions. If it fails, an
-// error message will be output to the debugger (or stderr) with further information.
 SteamAPI_Init :: () -> bool #foreign steam;
-
-// SteamAPI_Shutdown should be called during process shutdown if possible.
 SteamAPI_Shutdown :: () #foreign steam;
-
-// SteamAPI_RestartAppIfNecessary ensures that your executable was launched through Steam.
-//
-// Returns true if the current process should terminate. Steam is now re-launching your application.
-//
-// Returns false if no action needs to be taken. This means that your executable was started through
-// the Steam client, or a steam_appid.txt file is present in your game's directory (for development).
-// Your current process should continue if false is returned.
-//
-// NOTE: If you use the Steam DRM wrapper on your primary executable file, this check is unnecessary
-// since the DRM wrapper will ensure that your application was launched properly through Steam.
 SteamAPI_RestartAppIfNecessary :: (unOwnAppID: uint32) -> bool #foreign steam;
-
-// Many Steam API functions allocate a small amount of thread-local memory for parameter storage.
-// SteamAPI_ReleaseCurrentThreadMemory() will free API memory associated with the calling thread.
-// This function is also called automatically by SteamAPI_RunCallbacks(), so a single-threaded
-// program never needs to explicitly call this function.
 SteamAPI_ReleaseCurrentThreadMemory :: () #foreign steam;
-
-
-
-// crash dump recording functions
 SteamAPI_WriteMiniDump :: (uStructuredExceptionCode: uint32, pvExceptionInfo: *void, uBuildID: uint32) #foreign steam;  // @TODO
 SteamAPI_SetMiniDumpComment :: (pchMsg: *char) #foreign steam;
-
-//----------------------------------------------------------------------------------------------------------------------------------------------------------//
-//	steamclient.dll private wrapper functions
-//
-//	The following functions are part of abstracting API access to the steamclient.dll, but should only be used in very specific cases
-//----------------------------------------------------------------------------------------------------------------------------------------------------------//
-
-// SteamAPI_IsSteamRunning() returns true if Steam is currently running
 SteamAPI_IsSteamRunning :: () -> bool #foreign steam;
-
-// returns the filename path of the current running Steam process, used if you need to load an explicit steam dll by name.
-// DEPRECATED - implementation is Windows only, and the path returned is a UTF-8 string which must be converted to UTF-16 for use with Win32 APIs
-SteamAPI_GetSteamInstallPath :: () -> *char #foreign steam;
-
-// sets whether or not Steam_RunCallbacks() should do a try {} catch (...) {} around calls to issuing callbacks
-// This is ignored if you are using the manual callback dispatch method
-SteamAPI_SetTryCatchCallbacks :: (bTryCatchCallbacks:  bool) #deprecated #foreign steam;
-
-// this should be called before the game initialized the steam APIs
-// pchDate should be of the format "Mmm dd yyyy" (such as from the __ DATE __ macro )
-// pchTime should be of the format "hh:mm:ss" (such as from the __ TIME __ macro )
-// bFullMemoryDumps (Win32 only) -- writes out a uuid-full.dmp in the client/dumps folder
-// pvContext-- can be NULL, will be the void * context passed into m_pfnPreMinidumpCallback
-// PFNPreMinidumpCallback m_pfnPreMinidumpCallback   -- optional callback which occurs just before a .dmp file is written during a crash.  Applications can hook this to allow adding additional information into the .dmp comment stream.
 SteamAPI_UseBreakpadCrashHandler :: (pchVersion: *char, pchDate: *char, pchTime: *char,  bFullMemoryDumps: bool, pvContext: *void, m_pfnPreMinidumpCallback: PFNPreMinidumpCallback) #foreign steam;
 SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;
-
-
-
-//----------------------------------------------------------------------------------------------------------------------------------------------------------//
-//
-// Manual callback loop
-//
-// An alternative method for dispatching callbacks.  Similar to a windows message loop.
-//
-// If you use the manual callback dispatch, you must NOT use:
-//
-// - SteamAPI_RunCallbacks or SteamGameServer_RunCallbacks
-// - STEAM_CALLBACK, CCallResult, CCallback, or CCallbackManual
-//
-// Here is the basic template for replacing SteamAPI_RunCallbacks() with manual dispatch
-/*
-```c++
-HSteamPipe hSteamPipe = SteamAPI_GetHSteamPipe(); // See also SteamGameServer_GetHSteamPipe()
-SteamAPI_ManualDispatch_RunFrame( hSteamPipe )
-CallbackMsg_t callback;
-while ( SteamAPI_ManualDispatch_GetNextCallback( hSteamPipe, &callback ) )
-{
-	// Check for dispatching API call results
-	if ( callback.m_iCallback == SteamAPICallCompleted_t::k_iCallback )
-	{
-		SteamAPICallCompleted_t *pCallCompleted = (SteamAPICallCompleted_t *)callback.
-		SteamAPICallCompleted_t *pCallCompleted = (SteamAPICallCompleted_t *)callback->m_pubParam.
-		void *pTmpCallResult = malloc( pCallback->m_cubParam );
-		bool bFailed;
-		if ( SteamAPI_ManualDispatch_GetAPICallResult(
-			hSteamPipe, pCallCompleted->m_hAsyncCall, pTmpCallResult, pCallback->m_cubParam, pCallback->m_iCallback, &bFailed ) )
-		{
-			// Dispatch the call result to the registered handler(s) for the
-			// call identified by pCallCompleted->m_hAsyncCall
-		}
-		free( pTmpCallResult );
-	}
-	else
-	{
-		// Look at callback.m_iCallback to see what kind of callback it is,
-		// and dispatch to appropriate handler(s)
-	}
-	SteamAPI_ManualDispatch_FreeLastCallback( hSteamPipe );
-}
-
-typedef unsigned long long SteamAPICall_t;
-
-struct SteamAPICallCompleted_t
-{
-	enum { k_iCallback = k_iSteamUtilsCallbacks + 3 };
-	SteamAPICall_t m_hAsyncCall;
-	int m_iCallback;
-	uint32 m_cubParam;
-};
-
-struct CallbackMsg_t
-{
-	HSteamUser m_hSteamUser; // Specific user to whom this callback applies.
-	int m_iCallback; // Callback identifier.  (Corresponds to the k_iCallback enum in the callback structure.)
-	uint8 *m_pubParam; // Points to the callback structure
-	int m_cubParam; // Size of the data pointed to by m_pubParam
-};
-```
-*/
-//----------------------------------------------------------------------------------------------------------------------------------------------------------//
-
-
 SteamAPI_ManualDispatch_Init :: () #foreign steam;
-
-/// Perform certain periodic actions that need to be performed.
 SteamAPI_ManualDispatch_RunFrame :: (hSteamPipe: HSteamPipe) #foreign steam;
-
-/// Fetch the next pending callback on the given pipe, if any.  If a callback is available, true is returned
-/// and the structure is populated.  In this case, you MUST call SteamAPI_ManualDispatch_FreeLastCallback
-/// (after dispatching the callback) before calling SteamAPI_ManualDispatch_GetNextCallback again.
 SteamAPI_ManualDispatch_GetNextCallback :: (hSteamPipe: HSteamPipe, pCallbackMsg: *CallbackMsg_t) -> bool #foreign steam;  // @TODO
-
-/// You must call this after dispatching the callback, if SteamAPI_ManualDispatch_GetNextCallback returns true.
 SteamAPI_ManualDispatch_FreeLastCallback :: (hSteamPipe: HSteamPipe) #foreign steam;  // @TODO
-
-/// Return the call result for the specified call on the specified pipe.  You really should
-/// only call this in a handler for SteamAPICallCompleted_t callback.
 SteamAPI_ManualDispatch_GetAPICallResult :: (hSteamPipe: HSteamPipe, hSteamAPICall: SteamAPICall_t, pCallback: *void, cubCallback: int, iCallbackExpected: int, pbFailed: *bool) -> bool #foreign steam;  // @TODO
 
+steam_pipe : HSteamPipe;
+steam_server_pipe : HSteamPipe;
 
 SteamAPI_GetHSteamPipe :: () -> HSteamPipe #foreign steam;
 SteamGameServer_GetHSteamPipe :: ()  -> HSteamPipe #foreign steam;

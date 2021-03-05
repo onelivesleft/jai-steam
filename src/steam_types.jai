@@ -1,22 +1,8 @@
-// #scope_module @TODO namespace this?
-
-
-// @TODO could remove this file by making these subsitution in make_steam_api_flat?
-
-
 VALVE_BIG_ENDIAN :: false;
 UINT64_MAX :: -1;
 
-char :: u8;
-int32_t :: s32;
-int64_t :: s64;
-intptr_t :: u64;
 SteamAPIWarningMessageHook_t :: *void;
-double :: float64;
-uint :: u32;
 CGameID :: u64;
-size_t :: u64;
-
 
 //
 // clientpublic
@@ -188,3 +174,16 @@ CallbackMsg_t :: struct {
 	m_pubParam   : *uint8;      // Points to the callback structure
 	m_cubParam   : s32;         // Size of the data pointed to by m_pubParam
 };
+
+
+#scope_module
+
+
+// @TODO could remove this file by making these subsitution in make_steam_api_flat?
+char :: u8;
+int32_t :: s32;
+int64_t :: s64;
+intptr_t :: u64;
+double :: float64;
+uint :: u32;
+size_t :: u64;

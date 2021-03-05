@@ -244,18 +244,6 @@ run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
 }
 
 
-SteamAPI_RunCallbacks :: () {
-	steam_pipe := SteamAPI_GetHSteamPipe();
-	run_callbacks(steam_pipe, false);
-}
-
-
-SteamGameServer_RunCallbacks :: () {
-	steam_pipe := SteamGameServer_GetHSteamPipe();
-	run_callbacks(steam_pipe, true);
-}
-
-
 CallbackID :: enum s32 {
     SteamServerConnectFailure_t :: 102;
     HTML_OpenLinkInNewTab_t :: 4507;
@@ -892,563 +880,563 @@ LeaderboardUGCSet_t_CallResult :: #type(LeaderboardUGCSet_t, bool);
 #scope_export
 
 
-SteamAPI_RegisterCallback :: (callback: (SteamServerConnectFailure_t) -> ()) {
+RegisterCallback :: (callback: (SteamServerConnectFailure_t) -> ()) {
 	array_add(*Callbacks.SteamServerConnectFailure_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_OpenLinkInNewTab_t) -> ()) {
+RegisterCallback :: (callback: (HTML_OpenLinkInNewTab_t) -> ()) {
 	array_add(*Callbacks.HTML_OpenLinkInNewTab_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSClientApprove_t) -> ()) {
+RegisterCallback :: (callback: (GSClientApprove_t) -> ()) {
 	array_add(*Callbacks.GSClientApprove_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStoragePublishFileResult_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStoragePublishFileResult_t) -> ()) {
 	array_add(*Callbacks.RemoteStoragePublishFileResult_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (AppProofOfPurchaseKeyResponse_t) -> ()) {
+RegisterCallback :: (callback: (AppProofOfPurchaseKeyResponse_t) -> ()) {
 	array_add(*Callbacks.AppProofOfPurchaseKeyResponse_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (UserAchievementIconFetched_t) -> ()) {
+RegisterCallback :: (callback: (UserAchievementIconFetched_t) -> ()) {
 	array_add(*Callbacks.UserAchievementIconFetched_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWillQuit_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWillQuit_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWillQuit_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamServersConnected_t) -> ()) {
+RegisterCallback :: (callback: (SteamServersConnected_t) -> ()) {
 	array_add(*Callbacks.SteamServersConnected_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MicroTxnAuthorizationResponse_t) -> ()) {
+RegisterCallback :: (callback: (MicroTxnAuthorizationResponse_t) -> ()) {
 	array_add(*Callbacks.MicroTxnAuthorizationResponse_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (ValidateAuthTicketResponse_t) -> ()) {
+RegisterCallback :: (callback: (ValidateAuthTicketResponse_t) -> ()) {
 	array_add(*Callbacks.ValidateAuthTicketResponse_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameConnectedChatJoin_t) -> ()) {
+RegisterCallback :: (callback: (GameConnectedChatJoin_t) -> ()) {
 	array_add(*Callbacks.GameConnectedChatJoin_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (PersonaStateChange_t) -> ()) {
+RegisterCallback :: (callback: (PersonaStateChange_t) -> ()) {
 	array_add(*Callbacks.PersonaStateChange_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamRelayNetworkStatus_t) -> ()) {
+RegisterCallback :: (callback: (SteamRelayNetworkStatus_t) -> ()) {
 	array_add(*Callbacks.SteamRelayNetworkStatus_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LowBatteryPower_t) -> ()) {
+RegisterCallback :: (callback: (LowBatteryPower_t) -> ()) {
 	array_add(*Callbacks.LowBatteryPower_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (UserStatsUnloaded_t) -> ()) {
+RegisterCallback :: (callback: (UserStatsUnloaded_t) -> ()) {
 	array_add(*Callbacks.UserStatsUnloaded_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_URLChanged_t) -> ()) {
+RegisterCallback :: (callback: (HTML_URLChanged_t) -> ()) {
 	array_add(*Callbacks.HTML_URLChanged_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (UnreadChatMessagesChanged_t) -> ()) {
+RegisterCallback :: (callback: (UnreadChatMessagesChanged_t) -> ()) {
 	array_add(*Callbacks.UnreadChatMessagesChanged_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStoragePublishedFileDeleted_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStoragePublishedFileDeleted_t) -> ()) {
 	array_add(*Callbacks.RemoteStoragePublishedFileDeleted_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamNetworkingMessagesSessionRequest_t) -> ()) {
+RegisterCallback :: (callback: (SteamNetworkingMessagesSessionRequest_t) -> ()) {
 	array_add(*Callbacks.SteamNetworkingMessagesSessionRequest_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsPlayPrevious_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsPlayPrevious_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsPlayPrevious_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_ShowToolTip_t) -> ()) {
+RegisterCallback :: (callback: (HTML_ShowToolTip_t) -> ()) {
 	array_add(*Callbacks.HTML_ShowToolTip_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamNetAuthenticationStatus_t) -> ()) {
+RegisterCallback :: (callback: (SteamNetAuthenticationStatus_t) -> ()) {
 	array_add(*Callbacks.SteamNetAuthenticationStatus_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LobbyGameCreated_t) -> ()) {
+RegisterCallback :: (callback: (LobbyGameCreated_t) -> ()) {
 	array_add(*Callbacks.LobbyGameCreated_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RequestPlayersForGameProgressCallback_t) -> ()) {
+RegisterCallback :: (callback: (RequestPlayersForGameProgressCallback_t) -> ()) {
 	array_add(*Callbacks.RequestPlayersForGameProgressCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSClientDeny_t) -> ()) {
+RegisterCallback :: (callback: (GSClientDeny_t) -> ()) {
 	array_add(*Callbacks.GSClientDeny_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsPlayNext_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsPlayNext_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsPlayNext_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_ChangedTitle_t) -> ()) {
+RegisterCallback :: (callback: (HTML_ChangedTitle_t) -> ()) {
 	array_add(*Callbacks.HTML_ChangedTitle_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LobbyKicked_t) -> ()) {
+RegisterCallback :: (callback: (LobbyKicked_t) -> ()) {
 	array_add(*Callbacks.LobbyKicked_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStorageAppSyncProgress_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStorageAppSyncProgress_t) -> ()) {
 	array_add(*Callbacks.RemoteStorageAppSyncProgress_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_CanGoBackAndForward_t) -> ()) {
+RegisterCallback :: (callback: (HTML_CanGoBackAndForward_t) -> ()) {
 	array_add(*Callbacks.HTML_CanGoBackAndForward_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStoragePublishedFileUpdated_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStoragePublishedFileUpdated_t) -> ()) {
 	array_add(*Callbacks.RemoteStoragePublishedFileUpdated_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (AvailableBeaconLocationsUpdated_t) -> ()) {
+RegisterCallback :: (callback: (AvailableBeaconLocationsUpdated_t) -> ()) {
 	array_add(*Callbacks.AvailableBeaconLocationsUpdated_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSGameplayStats_t) -> ()) {
+RegisterCallback :: (callback: (GSGameplayStats_t) -> ()) {
 	array_add(*Callbacks.GSGameplayStats_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (IPCFailure_t) -> ()) {
+RegisterCallback :: (callback: (IPCFailure_t) -> ()) {
 	array_add(*Callbacks.IPCFailure_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStoragePublishedFileSubscribed_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStoragePublishedFileSubscribed_t) -> ()) {
 	array_add(*Callbacks.RemoteStoragePublishedFileSubscribed_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (ScreenshotReady_t) -> ()) {
+RegisterCallback :: (callback: (ScreenshotReady_t) -> ()) {
 	array_add(*Callbacks.ScreenshotReady_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_CloseBrowser_t) -> ()) {
+RegisterCallback :: (callback: (HTML_CloseBrowser_t) -> ()) {
 	array_add(*Callbacks.HTML_CloseBrowser_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (PS3TrophiesInstalled_t) -> ()) {
+RegisterCallback :: (callback: (PS3TrophiesInstalled_t) -> ()) {
 	array_add(*Callbacks.PS3TrophiesInstalled_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameWebCallback_t) -> ()) {
+RegisterCallback :: (callback: (GameWebCallback_t) -> ()) {
 	array_add(*Callbacks.GameWebCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_NewWindow_t) -> ()) {
+RegisterCallback :: (callback: (HTML_NewWindow_t) -> ()) {
 	array_add(*Callbacks.HTML_NewWindow_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GetVideoURLResult_t) -> ()) {
+RegisterCallback :: (callback: (GetVideoURLResult_t) -> ()) {
 	array_add(*Callbacks.GetVideoURLResult_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameLobbyJoinRequested_t) -> ()) {
+RegisterCallback :: (callback: (GameLobbyJoinRequested_t) -> ()) {
 	array_add(*Callbacks.GameLobbyJoinRequested_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_JSConfirm_t) -> ()) {
+RegisterCallback :: (callback: (HTML_JSConfirm_t) -> ()) {
 	array_add(*Callbacks.HTML_JSConfirm_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (PSNGameBootInviteResult_t) -> ()) {
+RegisterCallback :: (callback: (PSNGameBootInviteResult_t) -> ()) {
 	array_add(*Callbacks.PSNGameBootInviteResult_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (UserStatsStored_t) -> ()) {
+RegisterCallback :: (callback: (UserStatsStored_t) -> ()) {
 	array_add(*Callbacks.UserStatsStored_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (NewUrlLaunchParameters_t) -> ()) {
+RegisterCallback :: (callback: (NewUrlLaunchParameters_t) -> ()) {
 	array_add(*Callbacks.NewUrlLaunchParameters_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GetOPFSettingsResult_t) -> ()) {
+RegisterCallback :: (callback: (GetOPFSettingsResult_t) -> ()) {
 	array_add(*Callbacks.GetOPFSettingsResult_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameOverlayActivated_t) -> ()) {
+RegisterCallback :: (callback: (GameOverlayActivated_t) -> ()) {
 	array_add(*Callbacks.GameOverlayActivated_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (FriendRichPresenceUpdate_t) -> ()) {
+RegisterCallback :: (callback: (FriendRichPresenceUpdate_t) -> ()) {
 	array_add(*Callbacks.FriendRichPresenceUpdate_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamInventoryFullUpdate_t) -> ()) {
+RegisterCallback :: (callback: (SteamInventoryFullUpdate_t) -> ()) {
 	array_add(*Callbacks.SteamInventoryFullUpdate_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerRemoteWillActivate_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerRemoteWillActivate_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerRemoteWillActivate_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameConnectedChatLeave_t) -> ()) {
+RegisterCallback :: (callback: (GameConnectedChatLeave_t) -> ()) {
 	array_add(*Callbacks.GameConnectedChatLeave_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStorageAppSyncedServer_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStorageAppSyncedServer_t) -> ()) {
 	array_add(*Callbacks.RemoteStorageAppSyncedServer_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerRemoteWillDeactivate_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerRemoteWillDeactivate_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerRemoteWillDeactivate_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_StatusText_t) -> ()) {
+RegisterCallback :: (callback: (HTML_StatusText_t) -> ()) {
 	array_add(*Callbacks.HTML_StatusText_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsPlayingRepeatStatus_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsPlayingRepeatStatus_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsPlayingRepeatStatus_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SearchForGameProgressCallback_t) -> ()) {
+RegisterCallback :: (callback: (SearchForGameProgressCallback_t) -> ()) {
 	array_add(*Callbacks.SearchForGameProgressCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTTPRequestHeadersReceived_t) -> ()) {
+RegisterCallback :: (callback: (HTTPRequestHeadersReceived_t) -> ()) {
 	array_add(*Callbacks.HTTPRequestHeadersReceived_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerRemoteToFront_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerRemoteToFront_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerRemoteToFront_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GamepadTextInputDismissed_t) -> ()) {
+RegisterCallback :: (callback: (GamepadTextInputDismissed_t) -> ()) {
 	array_add(*Callbacks.GamepadTextInputDismissed_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTTPRequestDataReceived_t) -> ()) {
+RegisterCallback :: (callback: (HTTPRequestDataReceived_t) -> ()) {
 	array_add(*Callbacks.HTTPRequestDataReceived_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_FinishedRequest_t) -> ()) {
+RegisterCallback :: (callback: (HTML_FinishedRequest_t) -> ()) {
 	array_add(*Callbacks.HTML_FinishedRequest_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamInventoryDefinitionUpdate_t) -> ()) {
+RegisterCallback :: (callback: (SteamInventoryDefinitionUpdate_t) -> ()) {
 	array_add(*Callbacks.SteamInventoryDefinitionUpdate_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamParentalSettingsChanged_t) -> ()) {
+RegisterCallback :: (callback: (SteamParentalSettingsChanged_t) -> ()) {
 	array_add(*Callbacks.SteamParentalSettingsChanged_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsPause_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsPause_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsPause_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamInventoryResultReady_t) -> ()) {
+RegisterCallback :: (callback: (SteamInventoryResultReady_t) -> ()) {
 	array_add(*Callbacks.SteamInventoryResultReady_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LobbyChatMsg_t) -> ()) {
+RegisterCallback :: (callback: (LobbyChatMsg_t) -> ()) {
 	array_add(*Callbacks.LobbyChatMsg_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamNetConnectionStatusChangedCallback_t) -> ()) {
+RegisterCallback :: (callback: (SteamNetConnectionStatusChangedCallback_t) -> ()) {
 	array_add(*Callbacks.SteamNetConnectionStatusChangedCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (P2PSessionConnectFail_t) -> ()) {
+RegisterCallback :: (callback: (P2PSessionConnectFail_t) -> ()) {
 	array_add(*Callbacks.P2PSessionConnectFail_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (DownloadItemResult_t) -> ()) {
+RegisterCallback :: (callback: (DownloadItemResult_t) -> ()) {
 	array_add(*Callbacks.DownloadItemResult_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_HorizontalScroll_t) -> ()) {
+RegisterCallback :: (callback: (HTML_HorizontalScroll_t) -> ()) {
 	array_add(*Callbacks.HTML_HorizontalScroll_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (AvatarImageLoaded_t) -> ()) {
+RegisterCallback :: (callback: (AvatarImageLoaded_t) -> ()) {
 	array_add(*Callbacks.AvatarImageLoaded_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (ItemInstalled_t) -> ()) {
+RegisterCallback :: (callback: (ItemInstalled_t) -> ()) {
 	array_add(*Callbacks.ItemInstalled_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamAppInstalled_t) -> ()) {
+RegisterCallback :: (callback: (SteamAppInstalled_t) -> ()) {
 	array_add(*Callbacks.SteamAppInstalled_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerSelectsPlaylistEntry_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerSelectsPlaylistEntry_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerSelectsPlaylistEntry_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_NeedsPaint_t) -> ()) {
+RegisterCallback :: (callback: (HTML_NeedsPaint_t) -> ()) {
 	array_add(*Callbacks.HTML_NeedsPaint_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LobbyChatUpdate_t) -> ()) {
+RegisterCallback :: (callback: (LobbyChatUpdate_t) -> ()) {
 	array_add(*Callbacks.LobbyChatUpdate_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_HideToolTip_t) -> ()) {
+RegisterCallback :: (callback: (HTML_HideToolTip_t) -> ()) {
 	array_add(*Callbacks.HTML_HideToolTip_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SubmitPlayerResultResultCallback_t) -> ()) {
+RegisterCallback :: (callback: (SubmitPlayerResultResultCallback_t) -> ()) {
 	array_add(*Callbacks.SubmitPlayerResultResultCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameConnectedClanChatMsg_t) -> ()) {
+RegisterCallback :: (callback: (GameConnectedClanChatMsg_t) -> ()) {
 	array_add(*Callbacks.GameConnectedClanChatMsg_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LicensesUpdated_t) -> ()) {
+RegisterCallback :: (callback: (LicensesUpdated_t) -> ()) {
 	array_add(*Callbacks.LicensesUpdated_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (FavoritesListChanged_t) -> ()) {
+RegisterCallback :: (callback: (FavoritesListChanged_t) -> ()) {
 	array_add(*Callbacks.FavoritesListChanged_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (FavoritesListAccountsUpdated_t) -> ()) {
+RegisterCallback :: (callback: (FavoritesListAccountsUpdated_t) -> ()) {
 	array_add(*Callbacks.FavoritesListAccountsUpdated_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSClientAchievementStatus_t) -> ()) {
+RegisterCallback :: (callback: (GSClientAchievementStatus_t) -> ()) {
 	array_add(*Callbacks.GSClientAchievementStatus_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamNetworkingMessagesSessionFailed_t) -> ()) {
+RegisterCallback :: (callback: (SteamNetworkingMessagesSessionFailed_t) -> ()) {
 	array_add(*Callbacks.SteamNetworkingMessagesSessionFailed_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStorageAppSyncStatusCheck_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStorageAppSyncStatusCheck_t) -> ()) {
 	array_add(*Callbacks.RemoteStorageAppSyncStatusCheck_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_UpdateToolTip_t) -> ()) {
+RegisterCallback :: (callback: (HTML_UpdateToolTip_t) -> ()) {
 	array_add(*Callbacks.HTML_UpdateToolTip_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsShuffled_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsShuffled_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsShuffled_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_VerticalScroll_t) -> ()) {
+RegisterCallback :: (callback: (HTML_VerticalScroll_t) -> ()) {
 	array_add(*Callbacks.HTML_VerticalScroll_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamRemotePlaySessionConnected_t) -> ()) {
+RegisterCallback :: (callback: (SteamRemotePlaySessionConnected_t) -> ()) {
 	array_add(*Callbacks.SteamRemotePlaySessionConnected_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_FileOpenDialog_t) -> ()) {
+RegisterCallback :: (callback: (HTML_FileOpenDialog_t) -> ()) {
 	array_add(*Callbacks.HTML_FileOpenDialog_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GetAuthSessionTicketResponse_t) -> ()) {
+RegisterCallback :: (callback: (GetAuthSessionTicketResponse_t) -> ()) {
 	array_add(*Callbacks.GetAuthSessionTicketResponse_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RegisterActivationCodeResponse_t) -> ()) {
+RegisterCallback :: (callback: (RegisterActivationCodeResponse_t) -> ()) {
 	array_add(*Callbacks.RegisterActivationCodeResponse_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSStatsUnloaded_t) -> ()) {
+RegisterCallback :: (callback: (GSStatsUnloaded_t) -> ()) {
 	array_add(*Callbacks.GSStatsUnloaded_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SocketStatusCallback_t) -> ()) {
+RegisterCallback :: (callback: (SocketStatusCallback_t) -> ()) {
 	array_add(*Callbacks.SocketStatusCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (ClientGameServerDeny_t) -> ()) {
+RegisterCallback :: (callback: (ClientGameServerDeny_t) -> ()) {
 	array_add(*Callbacks.ClientGameServerDeny_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamShutdown_t) -> ()) {
+RegisterCallback :: (callback: (SteamShutdown_t) -> ()) {
 	array_add(*Callbacks.SteamShutdown_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (P2PSessionRequest_t) -> ()) {
+RegisterCallback :: (callback: (P2PSessionRequest_t) -> ()) {
 	array_add(*Callbacks.P2PSessionRequest_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStorageEnumerateUserSharedWorkshopFilesResult_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStorageEnumerateUserSharedWorkshopFilesResult_t) -> ()) {
 	array_add(*Callbacks.RemoteStorageEnumerateUserSharedWorkshopFilesResult_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerSelectsQueueEntry_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerSelectsQueueEntry_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerSelectsQueueEntry_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameConnectedFriendChatMsg_t) -> ()) {
+RegisterCallback :: (callback: (GameConnectedFriendChatMsg_t) -> ()) {
 	array_add(*Callbacks.GameConnectedFriendChatMsg_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (VolumeHasChanged_t) -> ()) {
+RegisterCallback :: (callback: (VolumeHasChanged_t) -> ()) {
 	array_add(*Callbacks.VolumeHasChanged_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamAPICallCompleted_t) -> ()) {
+RegisterCallback :: (callback: (SteamAPICallCompleted_t) -> ()) {
 	array_add(*Callbacks.SteamAPICallCompleted_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsLooped_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsLooped_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsLooped_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTTPRequestCompleted_t) -> ()) {
+RegisterCallback :: (callback: (HTTPRequestCompleted_t) -> ()) {
 	array_add(*Callbacks.HTTPRequestCompleted_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (IPCountry_t) -> ()) {
+RegisterCallback :: (callback: (IPCountry_t) -> ()) {
 	array_add(*Callbacks.IPCountry_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamAppUninstalled_t) -> ()) {
+RegisterCallback :: (callback: (SteamAppUninstalled_t) -> ()) {
 	array_add(*Callbacks.SteamAppUninstalled_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_StartRequest_t) -> ()) {
+RegisterCallback :: (callback: (HTML_StartRequest_t) -> ()) {
 	array_add(*Callbacks.HTML_StartRequest_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamRemotePlaySessionDisconnected_t) -> ()) {
+RegisterCallback :: (callback: (SteamRemotePlaySessionDisconnected_t) -> ()) {
 	array_add(*Callbacks.SteamRemotePlaySessionDisconnected_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SearchForGameResultCallback_t) -> ()) {
+RegisterCallback :: (callback: (SearchForGameResultCallback_t) -> ()) {
 	array_add(*Callbacks.SearchForGameResultCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RequestPlayersForGameResultCallback_t) -> ()) {
+RegisterCallback :: (callback: (RequestPlayersForGameResultCallback_t) -> ()) {
 	array_add(*Callbacks.RequestPlayersForGameResultCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameRichPresenceJoinRequested_t) -> ()) {
+RegisterCallback :: (callback: (GameRichPresenceJoinRequested_t) -> ()) {
 	array_add(*Callbacks.GameRichPresenceJoinRequested_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (ReservationNotificationCallback_t) -> ()) {
+RegisterCallback :: (callback: (ReservationNotificationCallback_t) -> ()) {
 	array_add(*Callbacks.ReservationNotificationCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (TimedTrialStatus_t) -> ()) {
+RegisterCallback :: (callback: (TimedTrialStatus_t) -> ()) {
 	array_add(*Callbacks.TimedTrialStatus_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSClientGroupStatus_t) -> ()) {
+RegisterCallback :: (callback: (GSClientGroupStatus_t) -> ()) {
 	array_add(*Callbacks.GSClientGroupStatus_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsVolume_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsVolume_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsVolume_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStorageUserVoteDetails_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStorageUserVoteDetails_t) -> ()) {
 	array_add(*Callbacks.RemoteStorageUserVoteDetails_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (ScreenshotRequested_t) -> ()) {
+RegisterCallback :: (callback: (ScreenshotRequested_t) -> ()) {
 	array_add(*Callbacks.ScreenshotRequested_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (DlcInstalled_t) -> ()) {
+RegisterCallback :: (callback: (DlcInstalled_t) -> ()) {
 	array_add(*Callbacks.DlcInstalled_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSPolicyResponse_t) -> ()) {
+RegisterCallback :: (callback: (GSPolicyResponse_t) -> ()) {
 	array_add(*Callbacks.GSPolicyResponse_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (OverlayBrowserProtocolNavigation_t) -> ()) {
+RegisterCallback :: (callback: (OverlayBrowserProtocolNavigation_t) -> ()) {
 	array_add(*Callbacks.OverlayBrowserProtocolNavigation_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (EndGameResultCallback_t) -> ()) {
+RegisterCallback :: (callback: (EndGameResultCallback_t) -> ()) {
 	array_add(*Callbacks.EndGameResultCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (PlaybackStatusHasChanged_t) -> ()) {
+RegisterCallback :: (callback: (PlaybackStatusHasChanged_t) -> ()) {
 	array_add(*Callbacks.PlaybackStatusHasChanged_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStoragePublishedFileUnsubscribed_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStoragePublishedFileUnsubscribed_t) -> ()) {
 	array_add(*Callbacks.RemoteStoragePublishedFileUnsubscribed_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_SetCursor_t) -> ()) {
+RegisterCallback :: (callback: (HTML_SetCursor_t) -> ()) {
 	array_add(*Callbacks.HTML_SetCursor_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_BrowserRestarted_t) -> ()) {
+RegisterCallback :: (callback: (HTML_BrowserRestarted_t) -> ()) {
 	array_add(*Callbacks.HTML_BrowserRestarted_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RemoteStorageAppSyncedClient_t) -> ()) {
+RegisterCallback :: (callback: (RemoteStorageAppSyncedClient_t) -> ()) {
 	array_add(*Callbacks.RemoteStorageAppSyncedClient_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (ActiveBeaconsUpdated_t) -> ()) {
+RegisterCallback :: (callback: (ActiveBeaconsUpdated_t) -> ()) {
 	array_add(*Callbacks.ActiveBeaconsUpdated_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (MusicPlayerWantsPlay_t) -> ()) {
+RegisterCallback :: (callback: (MusicPlayerWantsPlay_t) -> ()) {
 	array_add(*Callbacks.MusicPlayerWantsPlay_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LobbyInvite_t) -> ()) {
+RegisterCallback :: (callback: (LobbyInvite_t) -> ()) {
 	array_add(*Callbacks.LobbyInvite_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_SearchResults_t) -> ()) {
+RegisterCallback :: (callback: (HTML_SearchResults_t) -> ()) {
 	array_add(*Callbacks.HTML_SearchResults_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (SteamServersDisconnected_t) -> ()) {
+RegisterCallback :: (callback: (SteamServersDisconnected_t) -> ()) {
 	array_add(*Callbacks.SteamServersDisconnected_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (UserAchievementStored_t) -> ()) {
+RegisterCallback :: (callback: (UserAchievementStored_t) -> ()) {
 	array_add(*Callbacks.UserAchievementStored_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_JSAlert_t) -> ()) {
+RegisterCallback :: (callback: (HTML_JSAlert_t) -> ()) {
 	array_add(*Callbacks.HTML_JSAlert_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (HTML_LinkAtPosition_t) -> ()) {
+RegisterCallback :: (callback: (HTML_LinkAtPosition_t) -> ()) {
 	array_add(*Callbacks.HTML_LinkAtPosition_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (LobbyDataUpdate_t) -> ()) {
+RegisterCallback :: (callback: (LobbyDataUpdate_t) -> ()) {
 	array_add(*Callbacks.LobbyDataUpdate_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GameServerChangeRequested_t) -> ()) {
+RegisterCallback :: (callback: (GameServerChangeRequested_t) -> ()) {
 	array_add(*Callbacks.GameServerChangeRequested_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (RequestPlayersForGameFinalResultCallback_t) -> ()) {
+RegisterCallback :: (callback: (RequestPlayersForGameFinalResultCallback_t) -> ()) {
 	array_add(*Callbacks.RequestPlayersForGameFinalResultCallback_t, callback);
 }
 
-SteamAPI_RegisterCallback :: (callback: (GSClientKick_t) -> ()) {
+RegisterCallback :: (callback: (GSClientKick_t) -> ()) {
 	array_add(*Callbacks.GSClientKick_t, callback);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (StoreAuthURLResponse_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StoreAuthURLResponse_t, bool) -> ()) {
     procs, found := table_find(CallResults.StoreAuthURLResponse_t, call_result_id);
     if !found {
         array : [..] StoreAuthURLResponse_t_CallResult;
@@ -1458,7 +1446,7 @@ SteamAPI_RegisterCallResult :: (callback: (StoreAuthURLResponse_t, bool) -> (), 
     table_set(*CallResults.StoreAuthURLResponse_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageDeletePublishedFileResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageDeletePublishedFileResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageDeletePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageDeletePublishedFileResult_t_CallResult;
@@ -1468,7 +1456,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageDeletePublishedFileResul
     table_set(*CallResults.RemoteStorageDeletePublishedFileResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageSubscribePublishedFileResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageSubscribePublishedFileResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageSubscribePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageSubscribePublishedFileResult_t_CallResult;
@@ -1478,7 +1466,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageSubscribePublishedFileRe
     table_set(*CallResults.RemoteStorageSubscribePublishedFileResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (EncryptedAppTicketResponse_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (EncryptedAppTicketResponse_t, bool) -> ()) {
     procs, found := table_find(CallResults.EncryptedAppTicketResponse_t, call_result_id);
     if !found {
         array : [..] EncryptedAppTicketResponse_t_CallResult;
@@ -1488,7 +1476,7 @@ SteamAPI_RegisterCallResult :: (callback: (EncryptedAppTicketResponse_t, bool) -
     table_set(*CallResults.EncryptedAppTicketResponse_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (CreateItemResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateItemResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.CreateItemResult_t, call_result_id);
     if !found {
         array : [..] CreateItemResult_t_CallResult;
@@ -1498,7 +1486,7 @@ SteamAPI_RegisterCallResult :: (callback: (CreateItemResult_t, bool) -> (), call
     table_set(*CallResults.CreateItemResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (LobbyMatchList_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyMatchList_t, bool) -> ()) {
     procs, found := table_find(CallResults.LobbyMatchList_t, call_result_id);
     if !found {
         array : [..] LobbyMatchList_t_CallResult;
@@ -1508,7 +1496,7 @@ SteamAPI_RegisterCallResult :: (callback: (LobbyMatchList_t, bool) -> (), call_r
     table_set(*CallResults.LobbyMatchList_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (DownloadClanActivityCountsResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DownloadClanActivityCountsResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.DownloadClanActivityCountsResult_t, call_result_id);
     if !found {
         array : [..] DownloadClanActivityCountsResult_t_CallResult;
@@ -1518,7 +1506,7 @@ SteamAPI_RegisterCallResult :: (callback: (DownloadClanActivityCountsResult_t, b
     table_set(*CallResults.DownloadClanActivityCountsResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageFileReadAsyncComplete_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileReadAsyncComplete_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageFileReadAsyncComplete_t, call_result_id);
     if !found {
         array : [..] RemoteStorageFileReadAsyncComplete_t_CallResult;
@@ -1528,7 +1516,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageFileReadAsyncComplete_t,
     table_set(*CallResults.RemoteStorageFileReadAsyncComplete_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumeratePublishedFilesByUserActionResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumeratePublishedFilesByUserActionResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageEnumeratePublishedFilesByUserActionResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumeratePublishedFilesByUserActionResult_t_CallResult;
@@ -1538,7 +1526,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumeratePublishedFilesB
     table_set(*CallResults.RemoteStorageEnumeratePublishedFilesByUserActionResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (LobbyCreated_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyCreated_t, bool) -> ()) {
     procs, found := table_find(CallResults.LobbyCreated_t, call_result_id);
     if !found {
         array : [..] LobbyCreated_t_CallResult;
@@ -1548,7 +1536,7 @@ SteamAPI_RegisterCallResult :: (callback: (LobbyCreated_t, bool) -> (), call_res
     table_set(*CallResults.LobbyCreated_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (GlobalStatsReceived_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalStatsReceived_t, bool) -> ()) {
     procs, found := table_find(CallResults.GlobalStatsReceived_t, call_result_id);
     if !found {
         array : [..] GlobalStatsReceived_t_CallResult;
@@ -1558,7 +1546,7 @@ SteamAPI_RegisterCallResult :: (callback: (GlobalStatsReceived_t, bool) -> (), c
     table_set(*CallResults.GlobalStatsReceived_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumerateWorkshopFilesResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateWorkshopFilesResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageEnumerateWorkshopFilesResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumerateWorkshopFilesResult_t_CallResult;
@@ -1568,7 +1556,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumerateWorkshopFilesRe
     table_set(*CallResults.RemoteStorageEnumerateWorkshopFilesResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SetPersonaNameResponse_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetPersonaNameResponse_t, bool) -> ()) {
     procs, found := table_find(CallResults.SetPersonaNameResponse_t, call_result_id);
     if !found {
         array : [..] SetPersonaNameResponse_t_CallResult;
@@ -1578,7 +1566,7 @@ SteamAPI_RegisterCallResult :: (callback: (SetPersonaNameResponse_t, bool) -> ()
     table_set(*CallResults.SetPersonaNameResponse_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (StopPlaytimeTrackingResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StopPlaytimeTrackingResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.StopPlaytimeTrackingResult_t, call_result_id);
     if !found {
         array : [..] StopPlaytimeTrackingResult_t_CallResult;
@@ -1588,7 +1576,7 @@ SteamAPI_RegisterCallResult :: (callback: (StopPlaytimeTrackingResult_t, bool) -
     table_set(*CallResults.StopPlaytimeTrackingResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (NumberOfCurrentPlayers_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (NumberOfCurrentPlayers_t, bool) -> ()) {
     procs, found := table_find(CallResults.NumberOfCurrentPlayers_t, call_result_id);
     if !found {
         array : [..] NumberOfCurrentPlayers_t_CallResult;
@@ -1598,7 +1586,7 @@ SteamAPI_RegisterCallResult :: (callback: (NumberOfCurrentPlayers_t, bool) -> ()
     table_set(*CallResults.NumberOfCurrentPlayers_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (ChangeNumOpenSlotsCallback_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ChangeNumOpenSlotsCallback_t, bool) -> ()) {
     procs, found := table_find(CallResults.ChangeNumOpenSlotsCallback_t, call_result_id);
     if !found {
         array : [..] ChangeNumOpenSlotsCallback_t_CallResult;
@@ -1608,7 +1596,7 @@ SteamAPI_RegisterCallResult :: (callback: (ChangeNumOpenSlotsCallback_t, bool) -
     table_set(*CallResults.ChangeNumOpenSlotsCallback_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoveAppDependencyResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveAppDependencyResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoveAppDependencyResult_t, call_result_id);
     if !found {
         array : [..] RemoveAppDependencyResult_t_CallResult;
@@ -1618,7 +1606,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoveAppDependencyResult_t, bool) ->
     table_set(*CallResults.RemoveAppDependencyResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (UserFavoriteItemsListChanged_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserFavoriteItemsListChanged_t, bool) -> ()) {
     procs, found := table_find(CallResults.UserFavoriteItemsListChanged_t, call_result_id);
     if !found {
         array : [..] UserFavoriteItemsListChanged_t_CallResult;
@@ -1628,7 +1616,7 @@ SteamAPI_RegisterCallResult :: (callback: (UserFavoriteItemsListChanged_t, bool)
     table_set(*CallResults.UserFavoriteItemsListChanged_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SteamInventoryRequestPricesResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryRequestPricesResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.SteamInventoryRequestPricesResult_t, call_result_id);
     if !found {
         array : [..] SteamInventoryRequestPricesResult_t_CallResult;
@@ -1638,7 +1626,7 @@ SteamAPI_RegisterCallResult :: (callback: (SteamInventoryRequestPricesResult_t, 
     table_set(*CallResults.SteamInventoryRequestPricesResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (AddAppDependencyResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddAppDependencyResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.AddAppDependencyResult_t, call_result_id);
     if !found {
         array : [..] AddAppDependencyResult_t_CallResult;
@@ -1648,7 +1636,7 @@ SteamAPI_RegisterCallResult :: (callback: (AddAppDependencyResult_t, bool) -> ()
     table_set(*CallResults.AddAppDependencyResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (LeaderboardFindResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardFindResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.LeaderboardFindResult_t, call_result_id);
     if !found {
         array : [..] LeaderboardFindResult_t_CallResult;
@@ -1658,7 +1646,7 @@ SteamAPI_RegisterCallResult :: (callback: (LeaderboardFindResult_t, bool) -> (),
     table_set(*CallResults.LeaderboardFindResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageDownloadUGCResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageDownloadUGCResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageDownloadUGCResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageDownloadUGCResult_t_CallResult;
@@ -1668,7 +1656,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageDownloadUGCResult_t, boo
     table_set(*CallResults.RemoteStorageDownloadUGCResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (CheckFileSignature_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CheckFileSignature_t, bool) -> ()) {
     procs, found := table_find(CallResults.CheckFileSignature_t, call_result_id);
     if !found {
         array : [..] CheckFileSignature_t_CallResult;
@@ -1678,7 +1666,7 @@ SteamAPI_RegisterCallResult :: (callback: (CheckFileSignature_t, bool) -> (), ca
     table_set(*CallResults.CheckFileSignature_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageGetPublishedFileDetailsResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageGetPublishedFileDetailsResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageGetPublishedFileDetailsResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageGetPublishedFileDetailsResult_t_CallResult;
@@ -1688,7 +1676,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageGetPublishedFileDetailsR
     table_set(*CallResults.RemoteStorageGetPublishedFileDetailsResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (FileDetailsResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FileDetailsResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.FileDetailsResult_t, call_result_id);
     if !found {
         array : [..] FileDetailsResult_t_CallResult;
@@ -1698,7 +1686,7 @@ SteamAPI_RegisterCallResult :: (callback: (FileDetailsResult_t, bool) -> (), cal
     table_set(*CallResults.FileDetailsResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (ComputeNewPlayerCompatibilityResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ComputeNewPlayerCompatibilityResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.ComputeNewPlayerCompatibilityResult_t, call_result_id);
     if !found {
         array : [..] ComputeNewPlayerCompatibilityResult_t_CallResult;
@@ -1708,7 +1696,7 @@ SteamAPI_RegisterCallResult :: (callback: (ComputeNewPlayerCompatibilityResult_t
     table_set(*CallResults.ComputeNewPlayerCompatibilityResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageSetUserPublishedFileActionResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageSetUserPublishedFileActionResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageSetUserPublishedFileActionResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageSetUserPublishedFileActionResult_t_CallResult;
@@ -1718,7 +1706,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageSetUserPublishedFileActi
     table_set(*CallResults.RemoteStorageSetUserPublishedFileActionResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumerateUserPublishedFilesResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateUserPublishedFilesResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageEnumerateUserPublishedFilesResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumerateUserPublishedFilesResult_t_CallResult;
@@ -1728,7 +1716,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumerateUserPublishedFi
     table_set(*CallResults.RemoteStorageEnumerateUserPublishedFilesResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageUnsubscribePublishedFileResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUnsubscribePublishedFileResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageUnsubscribePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageUnsubscribePublishedFileResult_t_CallResult;
@@ -1738,7 +1726,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageUnsubscribePublishedFile
     table_set(*CallResults.RemoteStorageUnsubscribePublishedFileResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStoragePublishFileProgress_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStoragePublishFileProgress_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStoragePublishFileProgress_t, call_result_id);
     if !found {
         array : [..] RemoteStoragePublishFileProgress_t_CallResult;
@@ -1748,7 +1736,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStoragePublishFileProgress_t, b
     table_set(*CallResults.RemoteStoragePublishFileProgress_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (CreateBeaconCallback_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateBeaconCallback_t, bool) -> ()) {
     procs, found := table_find(CallResults.CreateBeaconCallback_t, call_result_id);
     if !found {
         array : [..] CreateBeaconCallback_t_CallResult;
@@ -1758,7 +1746,7 @@ SteamAPI_RegisterCallResult :: (callback: (CreateBeaconCallback_t, bool) -> (), 
     table_set(*CallResults.CreateBeaconCallback_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (HTML_BrowserReady_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (HTML_BrowserReady_t, bool) -> ()) {
     procs, found := table_find(CallResults.HTML_BrowserReady_t, call_result_id);
     if !found {
         array : [..] HTML_BrowserReady_t_CallResult;
@@ -1768,7 +1756,7 @@ SteamAPI_RegisterCallResult :: (callback: (HTML_BrowserReady_t, bool) -> (), cal
     table_set(*CallResults.HTML_BrowserReady_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (MarketEligibilityResponse_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (MarketEligibilityResponse_t, bool) -> ()) {
     procs, found := table_find(CallResults.MarketEligibilityResponse_t, call_result_id);
     if !found {
         array : [..] MarketEligibilityResponse_t_CallResult;
@@ -1778,7 +1766,7 @@ SteamAPI_RegisterCallResult :: (callback: (MarketEligibilityResponse_t, bool) ->
     table_set(*CallResults.MarketEligibilityResponse_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageUpdatePublishedFileResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUpdatePublishedFileResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageUpdatePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageUpdatePublishedFileResult_t_CallResult;
@@ -1788,7 +1776,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageUpdatePublishedFileResul
     table_set(*CallResults.RemoteStorageUpdatePublishedFileResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (UserStatsReceived_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserStatsReceived_t, bool) -> ()) {
     procs, found := table_find(CallResults.UserStatsReceived_t, call_result_id);
     if !found {
         array : [..] UserStatsReceived_t_CallResult;
@@ -1798,7 +1786,7 @@ SteamAPI_RegisterCallResult :: (callback: (UserStatsReceived_t, bool) -> (), cal
     table_set(*CallResults.UserStatsReceived_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (JoinClanChatRoomCompletionResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinClanChatRoomCompletionResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.JoinClanChatRoomCompletionResult_t, call_result_id);
     if !found {
         array : [..] JoinClanChatRoomCompletionResult_t_CallResult;
@@ -1808,7 +1796,7 @@ SteamAPI_RegisterCallResult :: (callback: (JoinClanChatRoomCompletionResult_t, b
     table_set(*CallResults.JoinClanChatRoomCompletionResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (GlobalAchievementPercentagesReady_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalAchievementPercentagesReady_t, bool) -> ()) {
     procs, found := table_find(CallResults.GlobalAchievementPercentagesReady_t, call_result_id);
     if !found {
         array : [..] GlobalAchievementPercentagesReady_t_CallResult;
@@ -1818,7 +1806,7 @@ SteamAPI_RegisterCallResult :: (callback: (GlobalAchievementPercentagesReady_t, 
     table_set(*CallResults.GlobalAchievementPercentagesReady_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (AssociateWithClanResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AssociateWithClanResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.AssociateWithClanResult_t, call_result_id);
     if !found {
         array : [..] AssociateWithClanResult_t_CallResult;
@@ -1828,7 +1816,7 @@ SteamAPI_RegisterCallResult :: (callback: (AssociateWithClanResult_t, bool) -> (
     table_set(*CallResults.AssociateWithClanResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (GetAppDependenciesResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetAppDependenciesResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.GetAppDependenciesResult_t, call_result_id);
     if !found {
         array : [..] GetAppDependenciesResult_t_CallResult;
@@ -1838,7 +1826,7 @@ SteamAPI_RegisterCallResult :: (callback: (GetAppDependenciesResult_t, bool) -> 
     table_set(*CallResults.GetAppDependenciesResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (FriendsIsFollowing_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsIsFollowing_t, bool) -> ()) {
     procs, found := table_find(CallResults.FriendsIsFollowing_t, call_result_id);
     if !found {
         array : [..] FriendsIsFollowing_t_CallResult;
@@ -1848,7 +1836,7 @@ SteamAPI_RegisterCallResult :: (callback: (FriendsIsFollowing_t, bool) -> (), ca
     table_set(*CallResults.FriendsIsFollowing_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SteamUGCRequestUGCDetailsResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCRequestUGCDetailsResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.SteamUGCRequestUGCDetailsResult_t, call_result_id);
     if !found {
         array : [..] SteamUGCRequestUGCDetailsResult_t_CallResult;
@@ -1858,7 +1846,7 @@ SteamAPI_RegisterCallResult :: (callback: (SteamUGCRequestUGCDetailsResult_t, bo
     table_set(*CallResults.SteamUGCRequestUGCDetailsResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (ClanOfficerListResponse_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ClanOfficerListResponse_t, bool) -> ()) {
     procs, found := table_find(CallResults.ClanOfficerListResponse_t, call_result_id);
     if !found {
         array : [..] ClanOfficerListResponse_t_CallResult;
@@ -1868,7 +1856,7 @@ SteamAPI_RegisterCallResult :: (callback: (ClanOfficerListResponse_t, bool) -> (
     table_set(*CallResults.ClanOfficerListResponse_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (FriendsEnumerateFollowingList_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsEnumerateFollowingList_t, bool) -> ()) {
     procs, found := table_find(CallResults.FriendsEnumerateFollowingList_t, call_result_id);
     if !found {
         array : [..] FriendsEnumerateFollowingList_t_CallResult;
@@ -1878,7 +1866,7 @@ SteamAPI_RegisterCallResult :: (callback: (FriendsEnumerateFollowingList_t, bool
     table_set(*CallResults.FriendsEnumerateFollowingList_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageGetPublishedItemVoteDetailsResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageGetPublishedItemVoteDetailsResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageGetPublishedItemVoteDetailsResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageGetPublishedItemVoteDetailsResult_t_CallResult;
@@ -1888,7 +1876,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageGetPublishedItemVoteDeta
     table_set(*CallResults.RemoteStorageGetPublishedItemVoteDetailsResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (LobbyEnter_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyEnter_t, bool) -> ()) {
     procs, found := table_find(CallResults.LobbyEnter_t, call_result_id);
     if !found {
         array : [..] LobbyEnter_t_CallResult;
@@ -1898,7 +1886,7 @@ SteamAPI_RegisterCallResult :: (callback: (LobbyEnter_t, bool) -> (), call_resul
     table_set(*CallResults.LobbyEnter_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SteamUGCQueryCompleted_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCQueryCompleted_t, bool) -> ()) {
     procs, found := table_find(CallResults.SteamUGCQueryCompleted_t, call_result_id);
     if !found {
         array : [..] SteamUGCQueryCompleted_t_CallResult;
@@ -1908,7 +1896,7 @@ SteamAPI_RegisterCallResult :: (callback: (SteamUGCQueryCompleted_t, bool) -> ()
     table_set(*CallResults.SteamUGCQueryCompleted_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (GSReputation_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSReputation_t, bool) -> ()) {
     procs, found := table_find(CallResults.GSReputation_t, call_result_id);
     if !found {
         array : [..] GSReputation_t_CallResult;
@@ -1918,7 +1906,7 @@ SteamAPI_RegisterCallResult :: (callback: (GSReputation_t, bool) -> (), call_res
     table_set(*CallResults.GSReputation_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (FriendsGetFollowerCount_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsGetFollowerCount_t, bool) -> ()) {
     procs, found := table_find(CallResults.FriendsGetFollowerCount_t, call_result_id);
     if !found {
         array : [..] FriendsGetFollowerCount_t_CallResult;
@@ -1928,7 +1916,7 @@ SteamAPI_RegisterCallResult :: (callback: (FriendsGetFollowerCount_t, bool) -> (
     table_set(*CallResults.FriendsGetFollowerCount_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SteamInventoryEligiblePromoItemDefIDs_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryEligiblePromoItemDefIDs_t, bool) -> ()) {
     procs, found := table_find(CallResults.SteamInventoryEligiblePromoItemDefIDs_t, call_result_id);
     if !found {
         array : [..] SteamInventoryEligiblePromoItemDefIDs_t_CallResult;
@@ -1938,7 +1926,7 @@ SteamAPI_RegisterCallResult :: (callback: (SteamInventoryEligiblePromoItemDefIDs
     table_set(*CallResults.SteamInventoryEligiblePromoItemDefIDs_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SteamInventoryStartPurchaseResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryStartPurchaseResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.SteamInventoryStartPurchaseResult_t, call_result_id);
     if !found {
         array : [..] SteamInventoryStartPurchaseResult_t_CallResult;
@@ -1948,7 +1936,7 @@ SteamAPI_RegisterCallResult :: (callback: (SteamInventoryStartPurchaseResult_t, 
     table_set(*CallResults.SteamInventoryStartPurchaseResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageFileShareResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileShareResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageFileShareResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageFileShareResult_t_CallResult;
@@ -1958,7 +1946,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageFileShareResult_t, bool)
     table_set(*CallResults.RemoteStorageFileShareResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoveUGCDependencyResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveUGCDependencyResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoveUGCDependencyResult_t, call_result_id);
     if !found {
         array : [..] RemoveUGCDependencyResult_t_CallResult;
@@ -1968,7 +1956,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoveUGCDependencyResult_t, bool) ->
     table_set(*CallResults.RemoveUGCDependencyResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (StartPlaytimeTrackingResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StartPlaytimeTrackingResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.StartPlaytimeTrackingResult_t, call_result_id);
     if !found {
         array : [..] StartPlaytimeTrackingResult_t_CallResult;
@@ -1978,7 +1966,7 @@ SteamAPI_RegisterCallResult :: (callback: (StartPlaytimeTrackingResult_t, bool) 
     table_set(*CallResults.StartPlaytimeTrackingResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (GSStatsReceived_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsReceived_t, bool) -> ()) {
     procs, found := table_find(CallResults.GSStatsReceived_t, call_result_id);
     if !found {
         array : [..] GSStatsReceived_t_CallResult;
@@ -1988,7 +1976,7 @@ SteamAPI_RegisterCallResult :: (callback: (GSStatsReceived_t, bool) -> (), call_
     table_set(*CallResults.GSStatsReceived_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (GSStatsStored_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsStored_t, bool) -> ()) {
     procs, found := table_find(CallResults.GSStatsStored_t, call_result_id);
     if !found {
         array : [..] GSStatsStored_t_CallResult;
@@ -1998,7 +1986,7 @@ SteamAPI_RegisterCallResult :: (callback: (GSStatsStored_t, bool) -> (), call_re
     table_set(*CallResults.GSStatsStored_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SubmitItemUpdateResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SubmitItemUpdateResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.SubmitItemUpdateResult_t, call_result_id);
     if !found {
         array : [..] SubmitItemUpdateResult_t_CallResult;
@@ -2008,7 +1996,7 @@ SteamAPI_RegisterCallResult :: (callback: (SubmitItemUpdateResult_t, bool) -> ()
     table_set(*CallResults.SubmitItemUpdateResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (GetUserItemVoteResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetUserItemVoteResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.GetUserItemVoteResult_t, call_result_id);
     if !found {
         array : [..] GetUserItemVoteResult_t_CallResult;
@@ -2018,7 +2006,7 @@ SteamAPI_RegisterCallResult :: (callback: (GetUserItemVoteResult_t, bool) -> (),
     table_set(*CallResults.GetUserItemVoteResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (LeaderboardScoreUploaded_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardScoreUploaded_t, bool) -> ()) {
     procs, found := table_find(CallResults.LeaderboardScoreUploaded_t, call_result_id);
     if !found {
         array : [..] LeaderboardScoreUploaded_t_CallResult;
@@ -2028,7 +2016,7 @@ SteamAPI_RegisterCallResult :: (callback: (LeaderboardScoreUploaded_t, bool) -> 
     table_set(*CallResults.LeaderboardScoreUploaded_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumerateUserSubscribedFilesResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateUserSubscribedFilesResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageEnumerateUserSubscribedFilesResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumerateUserSubscribedFilesResult_t_CallResult;
@@ -2038,7 +2026,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageEnumerateUserSubscribedF
     table_set(*CallResults.RemoteStorageEnumerateUserSubscribedFilesResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (JoinPartyCallback_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinPartyCallback_t, bool) -> ()) {
     procs, found := table_find(CallResults.JoinPartyCallback_t, call_result_id);
     if !found {
         array : [..] JoinPartyCallback_t_CallResult;
@@ -2048,7 +2036,7 @@ SteamAPI_RegisterCallResult :: (callback: (JoinPartyCallback_t, bool) -> (), cal
     table_set(*CallResults.JoinPartyCallback_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (AddUGCDependencyResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddUGCDependencyResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.AddUGCDependencyResult_t, call_result_id);
     if !found {
         array : [..] AddUGCDependencyResult_t_CallResult;
@@ -2058,7 +2046,7 @@ SteamAPI_RegisterCallResult :: (callback: (AddUGCDependencyResult_t, bool) -> ()
     table_set(*CallResults.AddUGCDependencyResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (LeaderboardScoresDownloaded_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardScoresDownloaded_t, bool) -> ()) {
     procs, found := table_find(CallResults.LeaderboardScoresDownloaded_t, call_result_id);
     if !found {
         array : [..] LeaderboardScoresDownloaded_t_CallResult;
@@ -2068,7 +2056,7 @@ SteamAPI_RegisterCallResult :: (callback: (LeaderboardScoresDownloaded_t, bool) 
     table_set(*CallResults.LeaderboardScoresDownloaded_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (DeleteItemResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DeleteItemResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.DeleteItemResult_t, call_result_id);
     if !found {
         array : [..] DeleteItemResult_t_CallResult;
@@ -2078,7 +2066,7 @@ SteamAPI_RegisterCallResult :: (callback: (DeleteItemResult_t, bool) -> (), call
     table_set(*CallResults.DeleteItemResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageFileWriteAsyncComplete_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileWriteAsyncComplete_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageFileWriteAsyncComplete_t, call_result_id);
     if !found {
         array : [..] RemoteStorageFileWriteAsyncComplete_t_CallResult;
@@ -2088,7 +2076,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageFileWriteAsyncComplete_t
     table_set(*CallResults.RemoteStorageFileWriteAsyncComplete_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (SetUserItemVoteResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetUserItemVoteResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.SetUserItemVoteResult_t, call_result_id);
     if !found {
         array : [..] SetUserItemVoteResult_t_CallResult;
@@ -2098,7 +2086,7 @@ SteamAPI_RegisterCallResult :: (callback: (SetUserItemVoteResult_t, bool) -> (),
     table_set(*CallResults.SetUserItemVoteResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (DurationControl_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DurationControl_t, bool) -> ()) {
     procs, found := table_find(CallResults.DurationControl_t, call_result_id);
     if !found {
         array : [..] DurationControl_t_CallResult;
@@ -2108,7 +2096,7 @@ SteamAPI_RegisterCallResult :: (callback: (DurationControl_t, bool) -> (), call_
     table_set(*CallResults.DurationControl_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (RemoteStorageUpdateUserPublishedItemVoteResult_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUpdateUserPublishedItemVoteResult_t, bool) -> ()) {
     procs, found := table_find(CallResults.RemoteStorageUpdateUserPublishedItemVoteResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageUpdateUserPublishedItemVoteResult_t_CallResult;
@@ -2118,7 +2106,7 @@ SteamAPI_RegisterCallResult :: (callback: (RemoteStorageUpdateUserPublishedItemV
     table_set(*CallResults.RemoteStorageUpdateUserPublishedItemVoteResult_t, call_result_id, procs);
 }
 
-SteamAPI_RegisterCallResult :: (callback: (LeaderboardUGCSet_t, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardUGCSet_t, bool) -> ()) {
     procs, found := table_find(CallResults.LeaderboardUGCSet_t, call_result_id);
     if !found {
         array : [..] LeaderboardUGCSet_t_CallResult;

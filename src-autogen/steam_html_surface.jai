@@ -1,232 +1,202 @@
 steam_html_surface : *ISteamHTMLSurface;
-SteamHTMLSurface : SteamHTMLSurface_Namespace;
 
 
-#scope_file
-
-
-SteamHTMLSurface_Namespace :: struct {
-    // procs
-    Init                                               :: SteamHTMLSurface_Init;
-    Shutdown                                           :: SteamHTMLSurface_Shutdown;
-    CreateBrowser                                      :: SteamHTMLSurface_CreateBrowser;
-    RemoveBrowser                                      :: SteamHTMLSurface_RemoveBrowser;
-    LoadURL                                            :: SteamHTMLSurface_LoadURL;
-    SetSize                                            :: SteamHTMLSurface_SetSize;
-    StopLoad                                           :: SteamHTMLSurface_StopLoad;
-    Reload                                             :: SteamHTMLSurface_Reload;
-    GoBack                                             :: SteamHTMLSurface_GoBack;
-    GoForward                                          :: SteamHTMLSurface_GoForward;
-    AddHeader                                          :: SteamHTMLSurface_AddHeader;
-    ExecuteJavascript                                  :: SteamHTMLSurface_ExecuteJavascript;
-    MouseUp                                            :: SteamHTMLSurface_MouseUp;
-    MouseDown                                          :: SteamHTMLSurface_MouseDown;
-    MouseDoubleClick                                   :: SteamHTMLSurface_MouseDoubleClick;
-    MouseMove                                          :: SteamHTMLSurface_MouseMove;
-    MouseWheel                                         :: SteamHTMLSurface_MouseWheel;
-    KeyDown                                            :: SteamHTMLSurface_KeyDown;
-    KeyUp                                              :: SteamHTMLSurface_KeyUp;
-    KeyChar                                            :: SteamHTMLSurface_KeyChar;
-    SetHorizontalScroll                                :: SteamHTMLSurface_SetHorizontalScroll;
-    SetVerticalScroll                                  :: SteamHTMLSurface_SetVerticalScroll;
-    SetKeyFocus                                        :: SteamHTMLSurface_SetKeyFocus;
-    ViewSource                                         :: SteamHTMLSurface_ViewSource;
-    CopyToClipboard                                    :: SteamHTMLSurface_CopyToClipboard;
-    PasteFromClipboard                                 :: SteamHTMLSurface_PasteFromClipboard;
-    Find                                               :: SteamHTMLSurface_Find;
-    StopFind                                           :: SteamHTMLSurface_StopFind;
-    GetLinkAtPosition                                  :: SteamHTMLSurface_GetLinkAtPosition;
-    SetCookie                                          :: SteamHTMLSurface_SetCookie;
-    SetPageScaleFactor                                 :: SteamHTMLSurface_SetPageScaleFactor;
-    SetBackgroundMode                                  :: SteamHTMLSurface_SetBackgroundMode;
-    SetDPIScalingFactor                                :: SteamHTMLSurface_SetDPIScalingFactor;
-    OpenDeveloperTools                                 :: SteamHTMLSurface_OpenDeveloperTools;
-    AllowStartRequest                                  :: SteamHTMLSurface_AllowStartRequest;
-    JSDialogResponse                                   :: SteamHTMLSurface_JSDialogResponse;
-    FileLoadDialogResponse                             :: SteamHTMLSurface_FileLoadDialogResponse;
+InitHTMLSurface :: inline () -> bool {
+    return SteamAPI_ISteamHTMLSurface_Init(steam_html_surface);
 }
 
 
-SteamHTMLSurface_Init :: inline () -> bool #foreign steam "SteamAPI_ISteamHT {
-    return SteamHTMLSurface_Init(steam_html_surface);
+ShutdownHTMLSurface :: inline () -> bool {
+    return SteamAPI_ISteamHTMLSurface_Shutdown(steam_html_surface);
 }
 
 
-SteamHTMLSurface_Shutdown :: inline () -> bool #foreign steam "SteamAPI_ISteamHTMLSu {
-    return SteamHTMLSurface_Shutdown(steam_html_surface);
+CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamHTMLSurface_CreateBrowser(steam_html_surface, pchUserAgent, pchUserCSS);
+}
+
+CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char, callback: (HTML_BrowserReady_t, bool) -> ()) {
+    RegisterCallResult(
+        CreateBrowser(pchUserAgent, pchUserCSS),
+        callback
+    );
+}
+
+//CreateBrowser :: (pchUserAgent: *char, pchUserCSS: *char, code: Code) #expand {
+//    RegisterCallResult(
+//        CreateBrowser(pchUserAgent, pchUserCSS),
+//        (result: HTML_BrowserReady_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+RemoveBrowser :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_RemoveBrowser(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamHTMLSurface {
-    return SteamHTMLSurface_CreateBrowser(steam_html_surface, pchUserAgent, pchUserCSS);
+LoadURL :: inline (unBrowserHandle: HHTMLBrowser, pchURL: *char, pchPostData: *char) {
+    SteamAPI_ISteamHTMLSurface_LoadURL(steam_html_surface, unBrowserHandle, pchURL, pchPostData);
 }
 
 
-SteamHTMLSurface_RemoveBrowser :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_RemoveBrowser(steam_html_surface, unBrowserHandle);
+SetSize :: inline (unBrowserHandle: HHTMLBrowser, unWidth: uint32, unHeight: uint32) {
+    SteamAPI_ISteamHTMLSurface_SetSize(steam_html_surface, unBrowserHandle, unWidth, unHeight);
 }
 
 
-SteamHTMLSurface_LoadURL :: inline (unBrowserHandle: HHTMLBrowser, pchURL: *char, pchPostData: *char) {
-    SteamHTMLSurface_LoadURL(steam_html_surface, unBrowserHandle, pchURL, pchPostData);
+StopLoad :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_StopLoad(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_SetSize :: inline (unBrowserHandle: HHTMLBrowser, unWidth: uint32, unHeight: uint32) {
-    SteamHTMLSurface_SetSize(steam_html_surface, unBrowserHandle, unWidth, unHeight);
+Reload :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_Reload(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_StopLoad :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_StopLoad(steam_html_surface, unBrowserHandle);
+GoBack :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_GoBack(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_Reload :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_Reload(steam_html_surface, unBrowserHandle);
+GoForward :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_GoForward(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_GoBack :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_GoBack(steam_html_surface, unBrowserHandle);
+AddHeader :: inline (unBrowserHandle: HHTMLBrowser, pchKey: *char, pchValue: *char) {
+    SteamAPI_ISteamHTMLSurface_AddHeader(steam_html_surface, unBrowserHandle, pchKey, pchValue);
 }
 
 
-SteamHTMLSurface_GoForward :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_GoForward(steam_html_surface, unBrowserHandle);
+ExecuteJavascript :: inline (unBrowserHandle: HHTMLBrowser, pchScript: *char) {
+    SteamAPI_ISteamHTMLSurface_ExecuteJavascript(steam_html_surface, unBrowserHandle, pchScript);
 }
 
 
-SteamHTMLSurface_AddHeader :: inline (unBrowserHandle: HHTMLBrowser, pchKey: *char, pchValue: *char) {
-    SteamHTMLSurface_AddHeader(steam_html_surface, unBrowserHandle, pchKey, pchValue);
+MouseUp :: inline (unBrowserHandle: HHTMLBrowser, eMouseButton: EHTMLMouseButton) {
+    SteamAPI_ISteamHTMLSurface_MouseUp(steam_html_surface, unBrowserHandle, eMouseButton);
 }
 
 
-SteamHTMLSurface_ExecuteJavascript :: inline (unBrowserHandle: HHTMLBrowser, pchScript: *char) {
-    SteamHTMLSurface_ExecuteJavascript(steam_html_surface, unBrowserHandle, pchScript);
+MouseDown :: inline (unBrowserHandle: HHTMLBrowser, eMouseButton: EHTMLMouseButton) {
+    SteamAPI_ISteamHTMLSurface_MouseDown(steam_html_surface, unBrowserHandle, eMouseButton);
 }
 
 
-SteamHTMLSurface_MouseUp :: inline (unBrowserHandle: HHTMLBrowser, eMouseButton: EHTMLMouseButton) {
-    SteamHTMLSurface_MouseUp(steam_html_surface, unBrowserHandle, eMouseButton);
+MouseDoubleClick :: inline (unBrowserHandle: HHTMLBrowser, eMouseButton: EHTMLMouseButton) {
+    SteamAPI_ISteamHTMLSurface_MouseDoubleClick(steam_html_surface, unBrowserHandle, eMouseButton);
 }
 
 
-SteamHTMLSurface_MouseDown :: inline (unBrowserHandle: HHTMLBrowser, eMouseButton: EHTMLMouseButton) {
-    SteamHTMLSurface_MouseDown(steam_html_surface, unBrowserHandle, eMouseButton);
+MouseMove :: inline (unBrowserHandle: HHTMLBrowser, x: s32, y: s32) {
+    SteamAPI_ISteamHTMLSurface_MouseMove(steam_html_surface, unBrowserHandle, x, y);
 }
 
 
-SteamHTMLSurface_MouseDoubleClick :: inline (unBrowserHandle: HHTMLBrowser, eMouseButton: EHTMLMouseButton) {
-    SteamHTMLSurface_MouseDoubleClick(steam_html_surface, unBrowserHandle, eMouseButton);
+MouseWheel :: inline (unBrowserHandle: HHTMLBrowser, nDelta: int32) {
+    SteamAPI_ISteamHTMLSurface_MouseWheel(steam_html_surface, unBrowserHandle, nDelta);
 }
 
 
-SteamHTMLSurface_MouseMove :: inline (unBrowserHandle: HHTMLBrowser, x: s32, y: s32) {
-    SteamHTMLSurface_MouseMove(steam_html_surface, unBrowserHandle, x, y);
+KeyDown :: inline (unBrowserHandle: HHTMLBrowser, nNativeKeyCode: uint32, eHTMLKeyModifiers: EHTMLKeyModifiers, bIsSystemKey: bool) {
+    SteamAPI_ISteamHTMLSurface_KeyDown(steam_html_surface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers, bIsSystemKey);
 }
 
 
-SteamHTMLSurface_MouseWheel :: inline (unBrowserHandle: HHTMLBrowser, nDelta: int32) {
-    SteamHTMLSurface_MouseWheel(steam_html_surface, unBrowserHandle, nDelta);
+KeyUp :: inline (unBrowserHandle: HHTMLBrowser, nNativeKeyCode: uint32, eHTMLKeyModifiers: EHTMLKeyModifiers) {
+    SteamAPI_ISteamHTMLSurface_KeyUp(steam_html_surface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
 }
 
 
-SteamHTMLSurface_KeyDown :: inline (unBrowserHandle: HHTMLBrowser, nNativeKeyCode: uint32, eHTMLKeyModifiers: EHTMLKeyModifiers, bIsSystemKey: bool) {
-    SteamHTMLSurface_KeyDown(steam_html_surface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers, bIsSystemKey);
+KeyChar :: inline (unBrowserHandle: HHTMLBrowser, cUnicodeChar: uint32, eHTMLKeyModifiers: EHTMLKeyModifiers) {
+    SteamAPI_ISteamHTMLSurface_KeyChar(steam_html_surface, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
 }
 
 
-SteamHTMLSurface_KeyUp :: inline (unBrowserHandle: HHTMLBrowser, nNativeKeyCode: uint32, eHTMLKeyModifiers: EHTMLKeyModifiers) {
-    SteamHTMLSurface_KeyUp(steam_html_surface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+SetHorizontalScroll :: inline (unBrowserHandle: HHTMLBrowser, nAbsolutePixelScroll: uint32) {
+    SteamAPI_ISteamHTMLSurface_SetHorizontalScroll(steam_html_surface, unBrowserHandle, nAbsolutePixelScroll);
 }
 
 
-SteamHTMLSurface_KeyChar :: inline (unBrowserHandle: HHTMLBrowser, cUnicodeChar: uint32, eHTMLKeyModifiers: EHTMLKeyModifiers) {
-    SteamHTMLSurface_KeyChar(steam_html_surface, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+SetVerticalScroll :: inline (unBrowserHandle: HHTMLBrowser, nAbsolutePixelScroll: uint32) {
+    SteamAPI_ISteamHTMLSurface_SetVerticalScroll(steam_html_surface, unBrowserHandle, nAbsolutePixelScroll);
 }
 
 
-SteamHTMLSurface_SetHorizontalScroll :: inline (unBrowserHandle: HHTMLBrowser, nAbsolutePixelScroll: uint32) {
-    SteamHTMLSurface_SetHorizontalScroll(steam_html_surface, unBrowserHandle, nAbsolutePixelScroll);
+SetKeyFocus :: inline (unBrowserHandle: HHTMLBrowser, bHasKeyFocus: bool) {
+    SteamAPI_ISteamHTMLSurface_SetKeyFocus(steam_html_surface, unBrowserHandle, bHasKeyFocus);
 }
 
 
-SteamHTMLSurface_SetVerticalScroll :: inline (unBrowserHandle: HHTMLBrowser, nAbsolutePixelScroll: uint32) {
-    SteamHTMLSurface_SetVerticalScroll(steam_html_surface, unBrowserHandle, nAbsolutePixelScroll);
+ViewSource :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_ViewSource(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_SetKeyFocus :: inline (unBrowserHandle: HHTMLBrowser, bHasKeyFocus: bool) {
-    SteamHTMLSurface_SetKeyFocus(steam_html_surface, unBrowserHandle, bHasKeyFocus);
+CopyToClipboard :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_CopyToClipboard(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_ViewSource :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_ViewSource(steam_html_surface, unBrowserHandle);
+PasteFromClipboard :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_PasteFromClipboard(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_CopyToClipboard :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_CopyToClipboard(steam_html_surface, unBrowserHandle);
+Find :: inline (unBrowserHandle: HHTMLBrowser, pchSearchStr: *char, bCurrentlyInFind: bool, bReverse: bool) {
+    SteamAPI_ISteamHTMLSurface_Find(steam_html_surface, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
 }
 
 
-SteamHTMLSurface_PasteFromClipboard :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_PasteFromClipboard(steam_html_surface, unBrowserHandle);
+StopFind :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_StopFind(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_Find :: inline (unBrowserHandle: HHTMLBrowser, pchSearchStr: *char, bCurrentlyInFind: bool, bReverse: bool) {
-    SteamHTMLSurface_Find(steam_html_surface, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
+GetLinkAtPosition :: inline (unBrowserHandle: HHTMLBrowser, x: s32, y: s32) {
+    SteamAPI_ISteamHTMLSurface_GetLinkAtPosition(steam_html_surface, unBrowserHandle, x, y);
 }
 
 
-SteamHTMLSurface_StopFind :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_StopFind(steam_html_surface, unBrowserHandle);
+SetCookie :: inline (pchHostname: *char, pchKey: *char, pchValue: *char, pchPath: *char, nExpires: RTime32, bSecure: bool, bHTTPOnly: bool) {
+    SteamAPI_ISteamHTMLSurface_SetCookie(steam_html_surface, pchHostname, pchKey, pchValue, pchPath, nExpires, bSecure, bHTTPOnly);
 }
 
 
-SteamHTMLSurface_GetLinkAtPosition :: inline (unBrowserHandle: HHTMLBrowser, x: s32, y: s32) {
-    SteamHTMLSurface_GetLinkAtPosition(steam_html_surface, unBrowserHandle, x, y);
+SetPageScaleFactor :: inline (unBrowserHandle: HHTMLBrowser, flZoom: float, nPointX: s32, nPointY: s32) {
+    SteamAPI_ISteamHTMLSurface_SetPageScaleFactor(steam_html_surface, unBrowserHandle, flZoom, nPointX, nPointY);
 }
 
 
-SteamHTMLSurface_SetCookie :: inline (pchHostname: *char, pchKey: *char, pchValue: *char, pchPath: *char, nExpires: RTime32, bSecure: bool, bHTTPOnly: bool) {
-    SteamHTMLSurface_SetCookie(steam_html_surface, pchHostname, pchKey, pchValue, pchPath, nExpires, bSecure, bHTTPOnly);
+SetBackgroundMode :: inline (unBrowserHandle: HHTMLBrowser, bBackgroundMode: bool) {
+    SteamAPI_ISteamHTMLSurface_SetBackgroundMode(steam_html_surface, unBrowserHandle, bBackgroundMode);
 }
 
 
-SteamHTMLSurface_SetPageScaleFactor :: inline (unBrowserHandle: HHTMLBrowser, flZoom: float, nPointX: s32, nPointY: s32) {
-    SteamHTMLSurface_SetPageScaleFactor(steam_html_surface, unBrowserHandle, flZoom, nPointX, nPointY);
+SetDPIScalingFactor :: inline (unBrowserHandle: HHTMLBrowser, flDPIScaling: float) {
+    SteamAPI_ISteamHTMLSurface_SetDPIScalingFactor(steam_html_surface, unBrowserHandle, flDPIScaling);
 }
 
 
-SteamHTMLSurface_SetBackgroundMode :: inline (unBrowserHandle: HHTMLBrowser, bBackgroundMode: bool) {
-    SteamHTMLSurface_SetBackgroundMode(steam_html_surface, unBrowserHandle, bBackgroundMode);
+OpenDeveloperTools :: inline (unBrowserHandle: HHTMLBrowser) {
+    SteamAPI_ISteamHTMLSurface_OpenDeveloperTools(steam_html_surface, unBrowserHandle);
 }
 
 
-SteamHTMLSurface_SetDPIScalingFactor :: inline (unBrowserHandle: HHTMLBrowser, flDPIScaling: float) {
-    SteamHTMLSurface_SetDPIScalingFactor(steam_html_surface, unBrowserHandle, flDPIScaling);
+AllowStartRequest :: inline (unBrowserHandle: HHTMLBrowser, bAllowed: bool) {
+    SteamAPI_ISteamHTMLSurface_AllowStartRequest(steam_html_surface, unBrowserHandle, bAllowed);
 }
 
 
-SteamHTMLSurface_OpenDeveloperTools :: inline (unBrowserHandle: HHTMLBrowser) {
-    SteamHTMLSurface_OpenDeveloperTools(steam_html_surface, unBrowserHandle);
+JSDialogResponse :: inline (unBrowserHandle: HHTMLBrowser, bResult: bool) {
+    SteamAPI_ISteamHTMLSurface_JSDialogResponse(steam_html_surface, unBrowserHandle, bResult);
 }
 
 
-SteamHTMLSurface_AllowStartRequest :: inline (unBrowserHandle: HHTMLBrowser, bAllowed: bool) {
-    SteamHTMLSurface_AllowStartRequest(steam_html_surface, unBrowserHandle, bAllowed);
-}
-
-
-SteamHTMLSurface_JSDialogResponse :: inline (unBrowserHandle: HHTMLBrowser, bResult: bool) {
-    SteamHTMLSurface_JSDialogResponse(steam_html_surface, unBrowserHandle, bResult);
-}
-
-
-SteamHTMLSurface_FileLoadDialogResponse :: inline (unBrowserHandle: HHTMLBrowser, pchSelectedFiles: **char) {
-    SteamHTMLSurface_FileLoadDialogResponse(steam_html_surface, unBrowserHandle, pchSelectedFiles);
+FileLoadDialogResponse :: inline (unBrowserHandle: HHTMLBrowser, pchSelectedFiles: **char) {
+    SteamAPI_ISteamHTMLSurface_FileLoadDialogResponse(steam_html_surface, unBrowserHandle, pchSelectedFiles);
 }

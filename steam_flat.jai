@@ -1,21 +1,14 @@
-// Direct, unadulterated flat wrapper of the Steam SDK.
-
-#if OS == .WINDOWS {
-    steam :: #foreign_library "lib/win/steam_api64";
-} else #if OS == .MACOS {
-    steam :: #foreign_library "lib/mac/libsteam_api";
-} else #if OS == .LINUX {
-    steam :: #foreign_library "lib/linux/libsteam_api";
-}
-
-#import "Basic";
-
-#load "src-autogen/api_flat.jai";
-
+// Direct, unadulterated flat wrapper of the Steam SDK v1.50.
 
 // SteamAPI_Init must be called before using any other API functions. If it fails, an
 // error message will be output to the debugger (or stderr) with further information.
-SteamAPI_Init :: () -> bool #foreign steam;
+SteamAPI_Init :: () -> bool {
+	if SteamAPI_Init_Internal() {
+		SteamAPI_ManualDispatch_Init(); // We have to use manual dispatch, so let's just always call this
+		return true;
+	}
+	return false;
+}
 
 // SteamAPI_Shutdown should be called during process shutdown if possible.
 SteamAPI_Shutdown :: () #foreign steam;
@@ -302,3 +295,22 @@ for_expansion :: (_: *SteamGameServer_Callbacks_Type, body: Code, flags: For_Fla
 		}
 	}
 }
+
+
+#scope_module
+
+
+SteamAPI_Init_Internal :: () -> bool #foreign steam "SteamAPI_Init";
+
+
+#if OS == .WINDOWS {
+    steam :: #foreign_library "lib/win/steam_api64";
+} else #if OS == .MACOS {
+    steam :: #foreign_library "lib/mac/libsteam_api";
+} else #if OS == .LINUX {
+    steam :: #foreign_library "lib/linux/libsteam_api";
+}
+
+#import "Basic";
+
+#load "src-autogen/api_flat.jai";

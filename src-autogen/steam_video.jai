@@ -1,34 +1,21 @@
 steam_video : *ISteamVideo;
-SteamVideo : SteamVideo_Namespace;
 
 
-#scope_file
-
-
-SteamVideo_Namespace :: struct {
-    // procs
-    GetVideoURL                                        :: SteamVideo_GetVideoURL;
-    IsBroadcasting                                     :: SteamVideo_IsBroadcasting;
-    GetOPFSettings                                     :: SteamVideo_GetOPFSettings;
-    GetOPFStringForApp                                 :: SteamVideo_GetOPFStringForApp;
+GetVideoURL :: inline (unVideoAppID: AppId_t) {
+    SteamAPI_ISteamVideo_GetVideoURL(steam_video, unVideoAppID);
 }
 
 
-SteamVideo_GetVideoURL :: inline (unVideoAppID: AppId_t) {
-    SteamVideo_GetVideoURL(steam_video, unVideoAppID);
+IsBroadcasting :: inline (pnNumViewers: *s32) -> bool {
+    return SteamAPI_ISteamVideo_IsBroadcasting(steam_video, pnNumViewers);
 }
 
 
-SteamVideo_IsBroadcasting :: inline (pnNumViewers: *s32) -> bool #foreign steam "SteamAPI_ISteamVideo_ {
-    return SteamVideo_IsBroadcasting(steam_video, pnNumViewers);
+GetOPFSettings :: inline (unVideoAppID: AppId_t) {
+    SteamAPI_ISteamVideo_GetOPFSettings(steam_video, unVideoAppID);
 }
 
 
-SteamVideo_GetOPFSettings :: inline (unVideoAppID: AppId_t) {
-    SteamVideo_GetOPFSettings(steam_video, unVideoAppID);
-}
-
-
-SteamVideo_GetOPFStringForApp :: inline (unVideoAppID: AppId_t, pchBuffer: *char, pnBufferSize: *int32) -> bool #foreign steam "SteamAPI_ISteamVideo_GetO {
-    return SteamVideo_GetOPFStringForApp(steam_video, unVideoAppID, pchBuffer, pnBufferSize);
+GetOPFStringForApp :: inline (unVideoAppID: AppId_t, pchBuffer: *char, pnBufferSize: *int32) -> bool {
+    return SteamAPI_ISteamVideo_GetOPFStringForApp(steam_video, unVideoAppID, pchBuffer, pnBufferSize);
 }

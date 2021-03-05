@@ -1,46 +1,31 @@
 steam_game_server_networking_messages : *ISteamNetworkingMessages;
-SteamGameServerNetworkingMessages : SteamGameServerNetworkingMessages_Namespace;
 
 
-#scope_file
-
-
-SteamGameServerNetworkingMessages_Namespace :: struct {
-    // procs
-    SendMessageToUser                                  :: SteamNetworkingMessages_SendMessageToUser;
-    ReceiveMessagesOnChannel                           :: SteamNetworkingMessages_ReceiveMessagesOnChannel;
-    AcceptSessionWithUser                              :: SteamNetworkingMessages_AcceptSessionWithUser;
-    CloseSessionWithUser                               :: SteamNetworkingMessages_CloseSessionWithUser;
-    CloseChannelWithUser                               :: SteamNetworkingMessages_CloseChannelWithUser;
-    GetSessionConnectionInfo                           :: SteamNetworkingMessages_GetSessionConnectionInfo;
+ServerSendMessageToUser :: inline (identityRemote: *SteamNetworkingIdentity, pubData: *void, cubData: uint32, nSendFlags: s32, nRemoteChannel: s32) -> EResult {
+    return SteamAPI_ISteamNetworkingMessages_SendMessageToUser(steam_game_server_networking_messages, identityRemote, pubData, cubData, nSendFlags, nRemoteChannel);
 }
 
 
-SteamNetworkingMessages_SendMessageToUser :: inline (identityRemote: *SteamNetworkingIdentity, pubData: *void, cubData: uint32, nSendFlags: s32, nRemoteChannel: s32) -> EResult #foreign steam "SteamAPI_ISteamNetworkingMessages_Sen {
-    return SteamNetworkingMessages_SendMessageToUser(steam_game_server_networking_messages, identityRemote, pubData, cubData, nSendFlags, nRemoteChannel);
+ServerReceiveMessagesOnChannel :: inline (nLocalChannel: s32, ppOutMessages: **SteamNetworkingMessage_t, nMaxMessages: s32) -> s32 {
+    return SteamAPI_ISteamNetworkingMessages_ReceiveMessagesOnChannel(steam_game_server_networking_messages, nLocalChannel, ppOutMessages, nMaxMessages);
 }
 
 
-SteamNetworkingMessages_ReceiveMessagesOnChannel :: inline (nLocalChannel: s32, ppOutMessages: **SteamNetworkingMessage_t, nMaxMessages: s32) -> s32 #foreign steam "SteamAPI_ISteamNetworkingMessages_ReceiveMes {
-    return SteamNetworkingMessages_ReceiveMessagesOnChannel(steam_game_server_networking_messages, nLocalChannel, ppOutMessages, nMaxMessages);
+ServerAcceptSessionWithUser :: inline (identityRemote: *SteamNetworkingIdentity) -> bool {
+    return SteamAPI_ISteamNetworkingMessages_AcceptSessionWithUser(steam_game_server_networking_messages, identityRemote);
 }
 
 
-SteamNetworkingMessages_AcceptSessionWithUser :: inline (identityRemote: *SteamNetworkingIdentity) -> bool #foreign steam "SteamAPI_ISteamNetworkingMessages_AcceptS {
-    return SteamNetworkingMessages_AcceptSessionWithUser(steam_game_server_networking_messages, identityRemote);
+ServerCloseSessionWithUser :: inline (identityRemote: *SteamNetworkingIdentity) -> bool {
+    return SteamAPI_ISteamNetworkingMessages_CloseSessionWithUser(steam_game_server_networking_messages, identityRemote);
 }
 
 
-SteamNetworkingMessages_CloseSessionWithUser :: inline (identityRemote: *SteamNetworkingIdentity) -> bool #foreign steam "SteamAPI_ISteamNetworkingMessages_CloseS {
-    return SteamNetworkingMessages_CloseSessionWithUser(steam_game_server_networking_messages, identityRemote);
+ServerCloseChannelWithUser :: inline (identityRemote: *SteamNetworkingIdentity, nLocalChannel: s32) -> bool {
+    return SteamAPI_ISteamNetworkingMessages_CloseChannelWithUser(steam_game_server_networking_messages, identityRemote, nLocalChannel);
 }
 
 
-SteamNetworkingMessages_CloseChannelWithUser :: inline (identityRemote: *SteamNetworkingIdentity, nLocalChannel: s32) -> bool #foreign steam "SteamAPI_ISteamNetworkingMessages_CloseC {
-    return SteamNetworkingMessages_CloseChannelWithUser(steam_game_server_networking_messages, identityRemote, nLocalChannel);
-}
-
-
-SteamNetworkingMessages_GetSessionConnectionInfo :: inline (identityRemote: *SteamNetworkingIdentity, pConnectionInfo: *SteamNetConnectionInfo_t, pQuickStatus: *SteamNetworkingQuickConnectionStatus) -> ESteamNetworkingConnectionState #foreign steam "SteamAPI_ISteamNetworkingMessages_GetSession {
-    return SteamNetworkingMessages_GetSessionConnectionInfo(steam_game_server_networking_messages, identityRemote, pConnectionInfo, pQuickStatus);
+ServerGetSessionConnectionInfo :: inline (identityRemote: *SteamNetworkingIdentity, pConnectionInfo: *SteamNetConnectionInfo_t, pQuickStatus: *SteamNetworkingQuickConnectionStatus) -> ESteamNetworkingConnectionState {
+    return SteamAPI_ISteamNetworkingMessages_GetSessionConnectionInfo(steam_game_server_networking_messages, identityRemote, pConnectionInfo, pQuickStatus);
 }

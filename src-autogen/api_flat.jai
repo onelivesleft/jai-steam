@@ -1,8 +1,18 @@
 STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
 
+
 #scope_module
+
+
 SteamInternal_CreateInterface :: (version: *u8) -> *ISteamClient #foreign steam;
+
+SteamAPI_SteamClient :: () -> *ISteamClient {
+    return SteamInternal_CreateInterface(STEAMCLIENT_INTERFACE_VERSION);
+}
+
+
 #scope_export
+
 
 SteamClient :: () -> *ISteamClient {
     return SteamInternal_CreateInterface(STEAMCLIENT_INTERFACE_VERSION);
@@ -628,7 +638,8 @@ TriggerRepeatedHapticPulse :: (self: *ISteamController, controllerHandle: Contro
 TriggerVibration :: (self: *ISteamController, controllerHandle: ControllerHandle_t, usLeftSpeed: u16, usRightSpeed: u16) #foreign steam "SteamAPI_ISteamController_TriggerVibration";
 SetLEDColor :: (self: *ISteamController, controllerHandle: ControllerHandle_t, nColorR: uint8, nColorG: uint8, nColorB: uint8, nFlags: u32) #foreign steam "SteamAPI_ISteamController_SetLEDColor";
 ShowBindingPanel :: (self: *ISteamController, controllerHandle: ControllerHandle_t) -> bool #foreign steam "SteamAPI_ISteamController_ShowBindingPanel";
-GetInputTypeForHandle :: (self: *ISteamController, controllerHandle: ControllerHandle_t) -> ESteamInputType #foreign steam "SteamAPI_ISteamController_GetInputTypeForHandle";GetControllerForGamepadIndex :: (self: *ISteamController, nIndex: s32) -> ControllerHandle_t #foreign steam "SteamAPI_ISteamController_GetControllerForGamepadIndex";
+GetInputTypeForHandle :: (self: *ISteamController, controllerHandle: ControllerHandle_t) -> ESteamInputType #foreign steam "SteamAPI_ISteamController_GetInputTypeForHandle";
+GetControllerForGamepadIndex :: (self: *ISteamController, nIndex: s32) -> ControllerHandle_t #foreign steam "SteamAPI_ISteamController_GetControllerForGamepadIndex";
 GetGamepadIndexForController :: (self: *ISteamController, ulControllerHandle: ControllerHandle_t) -> s32 #foreign steam "SteamAPI_ISteamController_GetGamepadIndexForController";
 GetStringForXboxOrigin :: (self: *ISteamController, eOrigin: EXboxOrigin) -> *char #foreign steam "SteamAPI_ISteamController_GetStringForXboxOrigin";
 GetGlyphForXboxOrigin :: (self: *ISteamController, eOrigin: EXboxOrigin) -> *char #foreign steam "SteamAPI_ISteamController_GetGlyphForXboxOrigin";
@@ -4754,16 +4765,16 @@ EHTMLKeyModifiers :: enum s32 {
     k_eHTMLKeyModifier_CtrlDown :: 2;
     k_eHTMLKeyModifier_ShiftDown :: 4;
 }
-ISteamHTMLSurface :: void;
-ISteamInventory :: void;
-ISteamVideo :: void;
-ISteamParentalSettings :: void;
-ISteamRemotePlay :: void;
-ISteamNetworkingMessages :: void;
-ISteamNetworkingSockets :: void;
-ISteamNetworkingUtils :: void;
-ISteamGameServer :: void;
-ISteamGameServerStats :: void;
+ISteamHTMLSurface :: struct {};
+ISteamInventory :: struct {};
+ISteamVideo :: struct {};
+ISteamParentalSettings :: struct {};
+ISteamRemotePlay :: struct {};
+ISteamNetworkingMessages :: struct {};
+ISteamNetworkingSockets :: struct {};
+ISteamNetworkingUtils :: struct {};
+ISteamGameServer :: struct {};
+ISteamGameServerStats :: struct {};
 
 CallbackID :: enum s32 {
     SteamServerConnectFailure_t :: 102;
@@ -4976,25 +4987,11 @@ CallResultID :: enum s32 {
     LeaderboardUGCSet_t :: 1111;
 }
 
-// #scope_module @TODO namespace this?
-
-
-// @TODO could remove this file by making these subsitution in make_steam_api_flat?
-
-
 VALVE_BIG_ENDIAN :: false;
 UINT64_MAX :: -1;
 
-char :: u8;
-int32_t :: s32;
-int64_t :: s64;
-intptr_t :: u64;
 SteamAPIWarningMessageHook_t :: *void;
-double :: float64;
-uint :: u32;
 CGameID :: u64;
-size_t :: u64;
-
 
 //
 // clientpublic
@@ -5166,3 +5163,16 @@ CallbackMsg_t :: struct {
 	m_pubParam   : *uint8;      // Points to the callback structure
 	m_cubParam   : s32;         // Size of the data pointed to by m_pubParam
 };
+
+
+#scope_module
+
+
+// @TODO could remove this file by making these subsitution in make_steam_api_flat?
+char :: u8;
+int32_t :: s32;
+int64_t :: s64;
+intptr_t :: u64;
+double :: float64;
+uint :: u32;
+size_t :: u64;

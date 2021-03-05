@@ -28,6 +28,9 @@ output_assignments_filename :: "src-autogen/partial_steam_assignments.jai";
 output_loads_filename       :: "src-autogen/partial_steam_loads.jai";
 output_callbacks_filename   :: "src-autogen/partial_steam_callbacks.jai";
 
+
+steam_client_header :: "src/steam_client_header.jai";
+
 files_appended_to_flat :: string.[
     "src/steam_types.jai",
 ];
@@ -38,14 +41,30 @@ singletons_to_ignore :: string.[
     "ISteamAppList",    // undocumented and conflicts with `ISteamApps`
 ];
 
+server_singletons :: string.[
+    "ISteamGameServer",
+    "ISteamGameServerApps",
+    "ISteamGameServerHTTP",
+    "ISteamGameServerInventory",
+    "ISteamGameServerNetworking",
+    "ISteamGameServerNetworkingMessages",
+    "ISteamGameServerNetworkingSockets",
+    "ISteamGameServerStats",
+    "ISteamGameServerUGC",
+    "ISteamGameServerUtils",
+    "ISteamGameServerNetworkingSockets",
+];
+
 procs_to_ignore :: string.[
-    "SteamClient_GetIPCCallCount",       // duplicate of the proc in SteamUtils
-    "SteamClient_SetWarningMessageHook", // duplicate of the proc in SteamUtils
+    "SteamAPI_ISteamClient_GetIPCCallCount",       // duplicate of the proc in SteamUtils
+    "SteamAPI_ISteamClient_SetWarningMessageHook", // duplicate of the proc in SteamUtils
+    "SteamAPI_ISteamNetworkingSockets_RunCallbacks", // handled by our own callback system
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ToString",      // compiler bug @Urgent @Remove
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ParseString",   // compiler bug @Urgent @Remove
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ToString",    // compiler bug @Urgent @Remove
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ParseString", // compiler bug @Urgent @Remove
 ];
 
-attach_server_prefix :: string.[
-
-];
 
 Replacement :: struct {
     before : string;
@@ -90,15 +109,14 @@ const_val_replacements :: Replacement.[
 ];
 
 
-procs_builder            : String_Builder;
-types_builder            : String_Builder;
-steam_api_builder        : String_Builder;
-singleton_top_builder    : String_Builder;
-singleton_bottom_builder : String_Builder;
-header_assigns_builder   : String_Builder;
-header_loads_builder     : String_Builder;
+procs_builder          : String_Builder;
+types_builder          : String_Builder;
+steam_api_builder      : String_Builder;
+singleton_builder      : String_Builder;
+header_assigns_builder : String_Builder;
+header_loads_builder   : String_Builder;
 
-callbacks_builder      : String_Builder;
+callbacks_builder     : String_Builder;
 callbacks_callresults : String_Builder;
 callbacks_callbacks   : String_Builder;
 callbacks_enum        : String_Builder;
@@ -106,18 +124,18 @@ callbacks_struct      : String_Builder;
 callbacks_types       : String_Builder;
 callbacks_procs       : String_Builder;
 
-procs_out             :: #bake_arguments print_to_builder(builder = *procs_builder);
-types_out             :: #bake_arguments print_to_builder(builder = *types_builder);
-steam_api_out         :: #bake_arguments print_to_builder(builder = *steam_api_builder);
-singleton_top_out     :: #bake_arguments print_to_builder(builder = *singleton_top_builder);
-singleton_bottom_out  :: #bake_arguments print_to_builder(builder = *singleton_bottom_builder);
-header_assign_out     :: #bake_arguments print_to_builder(builder = *header_assigns_builder);
-header_load_out       :: #bake_arguments print_to_builder(builder = *header_loads_builder);
+procs_out         :: #bake_arguments print_to_builder(builder = *procs_builder);
+types_out         :: #bake_arguments print_to_builder(builder = *types_builder);
+steam_api_out     :: #bake_arguments print_to_builder(builder = *steam_api_builder);
+singleton_out     :: #bake_arguments print_to_builder(builder = *singleton_builder);
+header_assign_out :: #bake_arguments print_to_builder(builder = *header_assigns_builder);
+header_load_out   :: #bake_arguments print_to_builder(builder = *header_loads_builder);
 
 output :: print_to_builder;
 
 callback_structnames : Table(string, s32);
 callresult_structnames : Table(string, bool);
+callresult_procnames : Table(string, string);
 
 current_namespace := "";
 
@@ -177,8 +195,7 @@ main :: () {
 
     // singletones
     init_string_builder(*steam_api_builder);
-    init_string_builder(*singleton_top_builder);
-    init_string_builder(*singleton_bottom_builder);
+    init_string_builder(*singleton_builder);
     init_string_builder(*header_assigns_builder);
     init_string_builder(*header_loads_builder);
 
@@ -194,12 +211,12 @@ main :: () {
     write_entire_file(output_loads_filename, builder_to_string(*header_loads_builder));
 
     reset(*file_builder);
+    append_file(*file_builder, steam_client_header);
     append(*file_builder, #string ___JAI
-STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
 
-#scope_module
-SteamInternal_CreateInterface :: (version: *u8) -> *ISteamClient #foreign steam;
+
 #scope_export
+
 
 SteamClient :: () -> *ISteamClient {
     return SteamInternal_CreateInterface(STEAMCLIENT_INTERFACE_VERSION);
@@ -216,7 +233,7 @@ ___JAI);
                 backward_til(row, #char "_", #code underscore);
             }
             if row[underscore + 1] == #char "v" {
-                append(*file_builder, slice(row, 0, underscore));
+                append(*file_builder, mid(row, 9, underscore));
                 append(*file_builder, slice(row, end_of_name));
             }
             else if mid(row, underscore - 2, end_of_name) == "_c_str"
@@ -242,6 +259,8 @@ ___JAI);
         append(*file_builder, file_data);
     }
     write_entire_file(output_flat_filename, builder_to_string(*file_builder));
+
+    print("Done!\n");
 }
 
 
@@ -316,11 +335,11 @@ convert_steam_api_flat :: (file_data: string) {
             parameters := split(split(sections[1], ")")[0], ",");
 
             link_name := proc_name;
-            if starts_with(proc_name, "SteamAPI_") {
-                proc_name = slice(proc_name, 9);
-                if starts_with(proc_name, "I")
-                    proc_name = slice(proc_name, 1);
-            }
+            //if starts_with(proc_name, "SteamAPI_") {
+            //    proc_name = slice(proc_name, 9);
+            //    if starts_with(proc_name, "I")
+            //        proc_name = slice(proc_name, 1);
+            //}
 
             class_end := 1;
             forward_til(row, #char "_", #code class_end);
@@ -386,7 +405,7 @@ convert_steam_api_json :: (file_data: string) {
         case .STRING;
             if key == {
                 case "classname";
-                out("% :: void;\n", node.value.str);
+                out("% :: struct {};\n", node.value.str);
             }
 
         case .OBJECT;
@@ -484,7 +503,11 @@ convert_steam_api_json :: (file_data: string) {
                 for node.value.array {
                     object := it.value.object;
                     struct_name := get_str(object, "callresult");
-                    if struct_name  table_set(*callresult_structnames, struct_name, true);
+                    if struct_name  {
+                        proc_name := get_str(object, "methodname_flat");
+                        table_set(*callresult_procnames, proc_name, struct_name);
+                        table_set(*callresult_structnames, struct_name, true);
+                    }
                 }
 
                 case "callback_structs";
@@ -552,7 +575,7 @@ convert_steam_api_json :: (file_data: string) {
         output(*callbacks_struct, "    %1 : [..] %1_Callback;\n", struct_name);
         output(*callbacks_types, "%1_Callback :: #type(%1);\n", struct_name);
         output(*callbacks_procs, #string ___JAI
-SteamAPI_RegisterCallback :: (callback: (%1) -> ()) {
+RegisterCallback :: (callback: (%1) -> ()) {
 	array_add(*Callbacks.%1, callback);
 }
 
@@ -572,8 +595,9 @@ SteamAPI_RegisterCallback :: (callback: (%1) -> ()) {
         output(*callbacks_enum, "    % :: %;\n", struct_name, call_result_id);
         output(*callbacks_struct, "    %1 : Table(SteamAPICall_t, [..] %1_CallResult);\n", struct_name);
         output(*callbacks_types, "%1_CallResult :: #type(%1, bool);\n", struct_name);
+
         output(*callbacks_procs, #string ___JAI
-SteamAPI_RegisterCallResult :: (callback: (%1, bool) -> (), call_result_id: SteamAPICall_t) {
+RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (%1, bool) -> ()) {
     procs, found := table_find(CallResults.%1, call_result_id);
     if !found {
         array : [..] %1_CallResult;
@@ -584,6 +608,7 @@ SteamAPI_RegisterCallResult :: (callback: (%1, bool) -> (), call_result_id: Stea
 }
 
         ___JAI, struct_name);
+
         output(*callresult_internal_procs, #string ___JAI
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] %1_CallResult), call_id: SteamAPICall_t, call_result: *%1, io_failure: bool) {
     procs, found := table_find(callbacks, call_id);
@@ -659,18 +684,6 @@ run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
 		}
 	}
 }
-
-
-SteamAPI_RunCallbacks :: () {
-	steam_pipe := SteamAPI_GetHSteamPipe();
-	run_callbacks(steam_pipe, false);
-}
-
-
-SteamGameServer_RunCallbacks :: () {
-	steam_pipe := SteamGameServer_GetHSteamPipe();
-	run_callbacks(steam_pipe, true);
-}
 ___JAI
 
 
@@ -725,16 +738,11 @@ generate_classes :: (file_data: string) {
     class_name_override     := "";
     namespace               := "";
     singleton_count         := 0;
+    server_prefix           := "";
 
     header_assign_out("#scope_module\n\n\nassign_all_singletons :: () {\n");
 
     steam_api_current_type := "";
-
-    steam_api_header :: #string ___JAI
-
-    ___JAI
-
-    steam_api_out(steam_api_header);
 
     row_index := 0;
     while row_index < rows.count {
@@ -758,10 +766,8 @@ generate_classes :: (file_data: string) {
         else {
             if row == "" {
                 if in_singleton && !contains(singletons_to_ignore, section_name) {
-                    //singleton_top_out("}\n");
                     singleton_count += 1;
-                    append(*singleton_top_builder, builder_to_string(*singleton_bottom_builder));
-                    write_entire_file(sprint("%/%.jai", output_autogen_folder, singleton_instance), builder_to_string(*singleton_top_builder));
+                    write_entire_file(sprint("%/%.jai", output_autogen_folder, singleton_instance), builder_to_string(*singleton_builder));
                 }
 
                 if current_singleton_row != -1 {
@@ -775,8 +781,7 @@ generate_classes :: (file_data: string) {
 
                 in_singleton = false;
                 past_singleton_header = false;
-                reset(*singleton_top_builder);
-                reset(*singleton_bottom_builder);
+                reset(*singleton_builder);
 
                 continue;
             }
@@ -793,10 +798,11 @@ generate_classes :: (file_data: string) {
                                 class_name_override = section_name;
                             singleton_instance, namespace = write_header(section_name, class_name_override);
                             print("Generating %.jai...\n", singleton_instance);
-
-                            name := mid(row, 0, i);
+                            name := mid(row, 9, i);
                             name = snake_from_camel(name);
                             defer free(name);
+
+                            server_prefix = ifx contains(server_singletons, section_name) then "Server" else "";
 
                             if !contains(singletons_to_ignore, section_name) {
                                 space_at := index_of_string(row, " ");
@@ -820,47 +826,59 @@ generate_classes :: (file_data: string) {
 
             if in_singleton {
                 short_name, long_name, parameters, returns, return_is_string := singleton_parts_from_flat(row);
-                flat_name := long_name;
+                if contains(procs_to_ignore, long_name)  continue;
 
-                //singleton_top_out("    %", short_name);
-                //for short_name.count..50  singleton_top_out(" ");
-                //singleton_top_out(":: %;\n", long_name);
+                if short_name == "Init" || short_name == "Shutdown"
+                    short_name = sprint("%1%2", short_name, slice(section_name, 6));
 
-                singleton_bottom_out("\n\n");
+                singleton_out("\n\n");
                 if returns == "" {
-                    singleton_bottom_out("% :: inline (%) {\n", long_name, parameters);
+                    singleton_out("%1%2 :: inline (%3) {\n", server_prefix, short_name, parameters);
                     if parameters == ""
-                        singleton_bottom_out("    %(%);\n", flat_name, singleton_instance);
+                        singleton_out("    %(%);\n", long_name, singleton_instance);
                     else
-                        singleton_bottom_out("    %(%, %);\n", flat_name, singleton_instance, strip_types(parameters));
+                        singleton_out("    %(%, %);\n", long_name, singleton_instance, strip_types(parameters));
                 }
                 else {
-                    singleton_bottom_out("% :: inline (%) -> % {\n", long_name, parameters, returns);
+                    singleton_out("%1%2 :: inline (%3) -> %4 {\n", server_prefix, short_name, parameters, returns);
                     prefix, postfix : string;
                     if return_is_string {
                         prefix = "to_string(";
                         postfix = ")";
                     }
                     if parameters == ""
-                        singleton_bottom_out("    return %1%2(%3)%4;\n", prefix, flat_name, singleton_instance, postfix);
+                        singleton_out("    return %1%2(%3)%4;\n", prefix, long_name, singleton_instance, postfix);
                     else
-                        singleton_bottom_out("    return %1%2(%3, %4)%5;\n", prefix, flat_name, singleton_instance, strip_types(parameters), postfix);
+                        singleton_out("    return %1%2(%3, %4)%5;\n", prefix, long_name, singleton_instance, strip_types(parameters), postfix);
                 }
-                singleton_bottom_out("}\n");
+                singleton_out("}\n");
+
+                struct_name, found := table_find(callresult_procnames, long_name);
+                if found {
+                    singleton_out(#string ___JAI
+
+%1%2 :: inline (%3%4callback: (%6, bool) -> ()) {
+    RegisterCallResult(
+        %1%2(%5),
+        callback
+    );
+}
+
+//%1%2 :: (%3%4code: Code) #expand {
+//    RegisterCallResult(
+//        %1%2(%5),
+//        (result: %6, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+                    ___JAI, server_prefix, short_name, parameters, ifx parameters then ", " else "", strip_types(parameters), struct_name);
+                }
             }
             else {
                 method_name, steam_api_type, flat_name, parameters, returns, return_is_string := steam_api_parts_from_flat(row);
 
-                if steam_api_type != steam_api_current_type {
-                    if steam_api_current_type != "" {
-                        steam_api_out("    };\n\n");
-                    }
-
-                    steam_api_current_type = steam_api_type;
-                    steam_api_out("    % : struct {\n", steam_api_type);
-                }
-
-                steam_api_out("        %", method_name);
+                steam_api_out("%", method_name);
                 for method_name.count..30  steam_api_out(" ");
                 steam_api_out(":: %;\n", flat_name);
             }
@@ -868,7 +886,6 @@ generate_classes :: (file_data: string) {
     }
 
     header_assign_out("}\n");
-    steam_api_out("    };\n}\n");
 
     write_entire_file(output_steam_api_filename, builder_to_string(*steam_api_builder));
 
@@ -884,21 +901,16 @@ write_header :: (class_name: string, class_name_override: string) -> string, str
 
     header :: #string ___JAI
 %1 : *%2;
-
-
-%3_Namespace :: struct {
-    // procs
     ___JAI
 
-    singleton_top_out(header, instance, type_name, namespace);
-    if instance == "steam_game_server"
-        singleton_top_out("    RunCallbacks                                       :: SteamGameServer_RunCallbacks;\n");
+    singleton_out(header, instance, type_name);
+
     return instance, namespace;
 }
 
 
 section_name_from_instance_row :: (row: string) -> string {
-    return sprint("I%", split(row, "_")[0]);
+    return sprint("I%", split(row, "_")[1]);
 }
 
 
@@ -939,12 +951,17 @@ strip_types :: (str: string) -> string {
 singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: string, parameters: string, returns: string, return_is_string: bool {
     return_is_string := false;
 
-    short_start := 0;
-    forward_til(row, #char "_", #code short_start);
-    short_start += 1;
 
-    i := short_start + 1;
+    i := 0;
     forward_til(row, #char " ", #code i);
+
+    short_start := i;
+    backward_til(row, #char "_", #code short_start);
+    if !is_letter(row[short_start + 1]) {
+        short_start -= 1;
+        backward_til(row, #char "_", #code short_start);
+    }
+    short_start += 1;
 
     short_name := mid(row, short_start, i);
     long_name  := mid(row, 0, i);
@@ -962,7 +979,8 @@ singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: str
             returns = "";
         else {
             returns_at += 3;
-            returns = mid(row, returns_at, row.count - 16);
+            foreign_char := last_index_of_string(row, "#foreign");
+            returns = mid(row, returns_at, foreign_char - 1);
         }
     }
     else {
@@ -977,7 +995,8 @@ singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: str
         else {
             last_char -= 2;
             parameters = mid(row, parameters_start, last_char);
-            returns = mid(row, last_char + 5, row.count - 16);
+            foreign_char := last_index_of_string(row, "#foreign");
+            returns = mid(row, last_char + 5, foreign_char - 1);
         }
     }
 
@@ -1022,7 +1041,8 @@ steam_api_parts_from_flat :: (row: string) -> method_name: string, type_name: st
             returns = "";
         else {
             returns_at += 3;
-            returns = mid(row, returns_at, row.count - 16);
+            foreign_char := last_index_of_string(row, "#foreign");
+            returns = mid(row, returns_at, foreign_char - 1);
         }
     }
     else {
@@ -1037,7 +1057,8 @@ steam_api_parts_from_flat :: (row: string) -> method_name: string, type_name: st
         else {
             last_char -= 2;
             parameters = mid(row, parameters_start, last_char);
-            returns = mid(row, last_char + 5, row.count - 16);
+            foreign_char := last_index_of_string(row, "#foreign");
+            returns = mid(row, last_char + 5, foreign_char - 1);
         }
     }
 

@@ -1,269 +1,264 @@
 steam_game_server : *ISteamGameServer;
-SteamGameServer : SteamGameServer_Namespace;
 
 
-#scope_file
-
-
-SteamGameServer_Namespace :: struct {
-    // procs
-    RunCallbacks                                       :: SteamGameServer_RunCallbacks;
-    SetProduct                                         :: SteamGameServer_SetProduct;
-    SetGameDescription                                 :: SteamGameServer_SetGameDescription;
-    SetModDir                                          :: SteamGameServer_SetModDir;
-    SetDedicatedServer                                 :: SteamGameServer_SetDedicatedServer;
-    LogOn                                              :: SteamGameServer_LogOn;
-    LogOnAnonymous                                     :: SteamGameServer_LogOnAnonymous;
-    LogOff                                             :: SteamGameServer_LogOff;
-    BLoggedOn                                          :: SteamGameServer_BLoggedOn;
-    BSecure                                            :: SteamGameServer_BSecure;
-    GetSteamID                                         :: SteamGameServer_GetSteamID;
-    WasRestartRequested                                :: SteamGameServer_WasRestartRequested;
-    SetMaxPlayerCount                                  :: SteamGameServer_SetMaxPlayerCount;
-    SetBotPlayerCount                                  :: SteamGameServer_SetBotPlayerCount;
-    SetServerName                                      :: SteamGameServer_SetServerName;
-    SetMapName                                         :: SteamGameServer_SetMapName;
-    SetPasswordProtected                               :: SteamGameServer_SetPasswordProtected;
-    SetSpectatorPort                                   :: SteamGameServer_SetSpectatorPort;
-    SetSpectatorServerName                             :: SteamGameServer_SetSpectatorServerName;
-    ClearAllKeyValues                                  :: SteamGameServer_ClearAllKeyValues;
-    SetKeyValue                                        :: SteamGameServer_SetKeyValue;
-    SetGameTags                                        :: SteamGameServer_SetGameTags;
-    SetGameData                                        :: SteamGameServer_SetGameData;
-    SetRegion                                          :: SteamGameServer_SetRegion;
-    SendUserConnectAndAuthenticate                     :: SteamGameServer_SendUserConnectAndAuthenticate;
-    CreateUnauthenticatedUserConnection                :: SteamGameServer_CreateUnauthenticatedUserConnection;
-    SendUserDisconnect                                 :: SteamGameServer_SendUserDisconnect;
-    BUpdateUserData                                    :: SteamGameServer_BUpdateUserData;
-    GetAuthSessionTicket                               :: SteamGameServer_GetAuthSessionTicket;
-    BeginAuthSession                                   :: SteamGameServer_BeginAuthSession;
-    EndAuthSession                                     :: SteamGameServer_EndAuthSession;
-    CancelAuthTicket                                   :: SteamGameServer_CancelAuthTicket;
-    UserHasLicenseForApp                               :: SteamGameServer_UserHasLicenseForApp;
-    RequestUserGroupStatus                             :: SteamGameServer_RequestUserGroupStatus;
-    GetGameplayStats                                   :: SteamGameServer_GetGameplayStats;
-    GetServerReputation                                :: SteamGameServer_GetServerReputation;
-    GetPublicIP                                        :: SteamGameServer_GetPublicIP;
-    HandleIncomingPacket                               :: SteamGameServer_HandleIncomingPacket;
-    GetNextOutgoingPacket                              :: SteamGameServer_GetNextOutgoingPacket;
-    EnableHeartbeats                                   :: SteamGameServer_EnableHeartbeats;
-    SetHeartbeatInterval                               :: SteamGameServer_SetHeartbeatInterval;
-    ForceHeartbeat                                     :: SteamGameServer_ForceHeartbeat;
-    AssociateWithClan                                  :: SteamGameServer_AssociateWithClan;
-    ComputeNewPlayerCompatibility                      :: SteamGameServer_ComputeNewPlayerCompatibility;
+ServerSetProduct :: inline (pszProduct: *char) {
+    SteamAPI_ISteamGameServer_SetProduct(steam_game_server, pszProduct);
 }
 
 
-SteamGameServer_SetProduct :: inline (pszProduct: *char) {
-    SteamGameServer_SetProduct(steam_game_server, pszProduct);
+ServerSetGameDescription :: inline (pszGameDescription: *char) {
+    SteamAPI_ISteamGameServer_SetGameDescription(steam_game_server, pszGameDescription);
 }
 
 
-SteamGameServer_SetGameDescription :: inline (pszGameDescription: *char) {
-    SteamGameServer_SetGameDescription(steam_game_server, pszGameDescription);
+ServerSetModDir :: inline (pszModDir: *char) {
+    SteamAPI_ISteamGameServer_SetModDir(steam_game_server, pszModDir);
 }
 
 
-SteamGameServer_SetModDir :: inline (pszModDir: *char) {
-    SteamGameServer_SetModDir(steam_game_server, pszModDir);
+ServerSetDedicatedServer :: inline (bDedicated: bool) {
+    SteamAPI_ISteamGameServer_SetDedicatedServer(steam_game_server, bDedicated);
 }
 
 
-SteamGameServer_SetDedicatedServer :: inline (bDedicated: bool) {
-    SteamGameServer_SetDedicatedServer(steam_game_server, bDedicated);
+ServerLogOn :: inline (pszToken: *char) {
+    SteamAPI_ISteamGameServer_LogOn(steam_game_server, pszToken);
 }
 
 
-SteamGameServer_LogOn :: inline (pszToken: *char) {
-    SteamGameServer_LogOn(steam_game_server, pszToken);
+ServerLogOnAnonymous :: inline () {
+    SteamAPI_ISteamGameServer_LogOnAnonymous(steam_game_server);
 }
 
 
-SteamGameServer_LogOnAnonymous :: inline () {
-    SteamGameServer_LogOnAnonymous(steam_game_server);
+ServerLogOff :: inline () {
+    SteamAPI_ISteamGameServer_LogOff(steam_game_server);
 }
 
 
-SteamGameServer_LogOff :: inline () {
-    SteamGameServer_LogOff(steam_game_server);
+ServerBLoggedOn :: inline () -> bool {
+    return SteamAPI_ISteamGameServer_BLoggedOn(steam_game_server);
 }
 
 
-SteamGameServer_BLoggedOn :: inline () -> bool #foreign steam "SteamAPI_ISteamGameSe {
-    return SteamGameServer_BLoggedOn(steam_game_server);
+ServerBSecure :: inline () -> bool {
+    return SteamAPI_ISteamGameServer_BSecure(steam_game_server);
 }
 
 
-SteamGameServer_BSecure :: inline () -> bool #foreign steam "SteamAPI_ISteamGame {
-    return SteamGameServer_BSecure(steam_game_server);
+ServerGetSteamID :: inline () -> uint64_steamid {
+    return SteamAPI_ISteamGameServer_GetSteamID(steam_game_server);
 }
 
 
-SteamGameServer_GetSteamID :: inline () -> uint64_steamid #foreign steam "SteamAPI_ISteamGameSer {
-    return SteamGameServer_GetSteamID(steam_game_server);
+ServerWasRestartRequested :: inline () -> bool {
+    return SteamAPI_ISteamGameServer_WasRestartRequested(steam_game_server);
 }
 
 
-SteamGameServer_WasRestartRequested :: inline () -> bool #foreign steam "SteamAPI_ISteamGameServer_WasRe {
-    return SteamGameServer_WasRestartRequested(steam_game_server);
+ServerSetMaxPlayerCount :: inline (cPlayersMax: s32) {
+    SteamAPI_ISteamGameServer_SetMaxPlayerCount(steam_game_server, cPlayersMax);
 }
 
 
-SteamGameServer_SetMaxPlayerCount :: inline (cPlayersMax: s32) {
-    SteamGameServer_SetMaxPlayerCount(steam_game_server, cPlayersMax);
+ServerSetBotPlayerCount :: inline (cBotplayers: s32) {
+    SteamAPI_ISteamGameServer_SetBotPlayerCount(steam_game_server, cBotplayers);
 }
 
 
-SteamGameServer_SetBotPlayerCount :: inline (cBotplayers: s32) {
-    SteamGameServer_SetBotPlayerCount(steam_game_server, cBotplayers);
+ServerSetServerName :: inline (pszServerName: *char) {
+    SteamAPI_ISteamGameServer_SetServerName(steam_game_server, pszServerName);
 }
 
 
-SteamGameServer_SetServerName :: inline (pszServerName: *char) {
-    SteamGameServer_SetServerName(steam_game_server, pszServerName);
+ServerSetMapName :: inline (pszMapName: *char) {
+    SteamAPI_ISteamGameServer_SetMapName(steam_game_server, pszMapName);
 }
 
 
-SteamGameServer_SetMapName :: inline (pszMapName: *char) {
-    SteamGameServer_SetMapName(steam_game_server, pszMapName);
+ServerSetPasswordProtected :: inline (bPasswordProtected: bool) {
+    SteamAPI_ISteamGameServer_SetPasswordProtected(steam_game_server, bPasswordProtected);
 }
 
 
-SteamGameServer_SetPasswordProtected :: inline (bPasswordProtected: bool) {
-    SteamGameServer_SetPasswordProtected(steam_game_server, bPasswordProtected);
+ServerSetSpectatorPort :: inline (unSpectatorPort: uint16) {
+    SteamAPI_ISteamGameServer_SetSpectatorPort(steam_game_server, unSpectatorPort);
 }
 
 
-SteamGameServer_SetSpectatorPort :: inline (unSpectatorPort: uint16) {
-    SteamGameServer_SetSpectatorPort(steam_game_server, unSpectatorPort);
+ServerSetSpectatorServerName :: inline (pszSpectatorServerName: *char) {
+    SteamAPI_ISteamGameServer_SetSpectatorServerName(steam_game_server, pszSpectatorServerName);
 }
 
 
-SteamGameServer_SetSpectatorServerName :: inline (pszSpectatorServerName: *char) {
-    SteamGameServer_SetSpectatorServerName(steam_game_server, pszSpectatorServerName);
+ServerClearAllKeyValues :: inline () {
+    SteamAPI_ISteamGameServer_ClearAllKeyValues(steam_game_server);
 }
 
 
-SteamGameServer_ClearAllKeyValues :: inline () {
-    SteamGameServer_ClearAllKeyValues(steam_game_server);
+ServerSetKeyValue :: inline (pKey: *char, pValue: *char) {
+    SteamAPI_ISteamGameServer_SetKeyValue(steam_game_server, pKey, pValue);
 }
 
 
-SteamGameServer_SetKeyValue :: inline (pKey: *char, pValue: *char) {
-    SteamGameServer_SetKeyValue(steam_game_server, pKey, pValue);
+ServerSetGameTags :: inline (pchGameTags: *char) {
+    SteamAPI_ISteamGameServer_SetGameTags(steam_game_server, pchGameTags);
 }
 
 
-SteamGameServer_SetGameTags :: inline (pchGameTags: *char) {
-    SteamGameServer_SetGameTags(steam_game_server, pchGameTags);
+ServerSetGameData :: inline (pchGameData: *char) {
+    SteamAPI_ISteamGameServer_SetGameData(steam_game_server, pchGameData);
 }
 
 
-SteamGameServer_SetGameData :: inline (pchGameData: *char) {
-    SteamGameServer_SetGameData(steam_game_server, pchGameData);
+ServerSetRegion :: inline (pszRegion: *char) {
+    SteamAPI_ISteamGameServer_SetRegion(steam_game_server, pszRegion);
 }
 
 
-SteamGameServer_SetRegion :: inline (pszRegion: *char) {
-    SteamGameServer_SetRegion(steam_game_server, pszRegion);
+ServerSendUserConnectAndAuthenticate :: inline (unIPClient: uint32, pvAuthBlob: *void, cubAuthBlobSize: uint32, pSteamIDUser: *CSteamID) -> bool {
+    return SteamAPI_ISteamGameServer_SendUserConnectAndAuthenticate(steam_game_server, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
 }
 
 
-SteamGameServer_SendUserConnectAndAuthenticate :: inline (unIPClient: uint32, pvAuthBlob: *void, cubAuthBlobSize: uint32, pSteamIDUser: *CSteamID) -> bool #foreign steam "SteamAPI_ISteamGameServer_SendUserConnectA {
-    return SteamGameServer_SendUserConnectAndAuthenticate(steam_game_server, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
+ServerCreateUnauthenticatedUserConnection :: inline () -> uint64_steamid {
+    return SteamAPI_ISteamGameServer_CreateUnauthenticatedUserConnection(steam_game_server);
 }
 
 
-SteamGameServer_CreateUnauthenticatedUserConnection :: inline () -> uint64_steamid #foreign steam "SteamAPI_ISteamGameServer_CreateUnauthenticated {
-    return SteamGameServer_CreateUnauthenticatedUserConnection(steam_game_server);
+ServerSendUserDisconnect :: inline (steamIDUser: uint64_steamid) {
+    SteamAPI_ISteamGameServer_SendUserDisconnect(steam_game_server, steamIDUser);
 }
 
 
-SteamGameServer_SendUserDisconnect :: inline (steamIDUser: uint64_steamid) {
-    SteamGameServer_SendUserDisconnect(steam_game_server, steamIDUser);
+ServerBUpdateUserData :: inline (steamIDUser: uint64_steamid, pchPlayerName: *char, uScore: uint32) -> bool {
+    return SteamAPI_ISteamGameServer_BUpdateUserData(steam_game_server, steamIDUser, pchPlayerName, uScore);
 }
 
 
-SteamGameServer_BUpdateUserData :: inline (steamIDUser: uint64_steamid, pchPlayerName: *char, uScore: uint32) -> bool #foreign steam "SteamAPI_ISteamGameServer_B {
-    return SteamGameServer_BUpdateUserData(steam_game_server, steamIDUser, pchPlayerName, uScore);
+ServerGetAuthSessionTicket :: inline (pTicket: *void, cbMaxTicket: s32, pcbTicket: *uint32) -> HAuthTicket {
+    return SteamAPI_ISteamGameServer_GetAuthSessionTicket(steam_game_server, pTicket, cbMaxTicket, pcbTicket);
 }
 
 
-SteamGameServer_GetAuthSessionTicket :: inline (pTicket: *void, cbMaxTicket: s32, pcbTicket: *uint32) -> HAuthTicket #foreign steam "SteamAPI_ISteamGameServer_GetAut {
-    return SteamGameServer_GetAuthSessionTicket(steam_game_server, pTicket, cbMaxTicket, pcbTicket);
+ServerBeginAuthSession :: inline (pAuthTicket: *void, cbAuthTicket: s32, steamID: uint64_steamid) -> EBeginAuthSessionResult {
+    return SteamAPI_ISteamGameServer_BeginAuthSession(steam_game_server, pAuthTicket, cbAuthTicket, steamID);
 }
 
 
-SteamGameServer_BeginAuthSession :: inline (pAuthTicket: *void, cbAuthTicket: s32, steamID: uint64_steamid) -> EBeginAuthSessionResult #foreign steam "SteamAPI_ISteamGameServer_Be {
-    return SteamGameServer_BeginAuthSession(steam_game_server, pAuthTicket, cbAuthTicket, steamID);
+ServerEndAuthSession :: inline (steamID: uint64_steamid) {
+    SteamAPI_ISteamGameServer_EndAuthSession(steam_game_server, steamID);
 }
 
 
-SteamGameServer_EndAuthSession :: inline (steamID: uint64_steamid) {
-    SteamGameServer_EndAuthSession(steam_game_server, steamID);
+ServerCancelAuthTicket :: inline (hAuthTicket: HAuthTicket) {
+    SteamAPI_ISteamGameServer_CancelAuthTicket(steam_game_server, hAuthTicket);
 }
 
 
-SteamGameServer_CancelAuthTicket :: inline (hAuthTicket: HAuthTicket) {
-    SteamGameServer_CancelAuthTicket(steam_game_server, hAuthTicket);
+ServerUserHasLicenseForApp :: inline (steamID: uint64_steamid, appID: AppId_t) -> EUserHasLicenseForAppResult {
+    return SteamAPI_ISteamGameServer_UserHasLicenseForApp(steam_game_server, steamID, appID);
 }
 
 
-SteamGameServer_UserHasLicenseForApp :: inline (steamID: uint64_steamid, appID: AppId_t) -> EUserHasLicenseForAppResult #foreign steam "SteamAPI_ISteamGameServer_UserHa {
-    return SteamGameServer_UserHasLicenseForApp(steam_game_server, steamID, appID);
+ServerRequestUserGroupStatus :: inline (steamIDUser: uint64_steamid, steamIDGroup: uint64_steamid) -> bool {
+    return SteamAPI_ISteamGameServer_RequestUserGroupStatus(steam_game_server, steamIDUser, steamIDGroup);
 }
 
 
-SteamGameServer_RequestUserGroupStatus :: inline (steamIDUser: uint64_steamid, steamIDGroup: uint64_steamid) -> bool #foreign steam "SteamAPI_ISteamGameServer_RequestU {
-    return SteamGameServer_RequestUserGroupStatus(steam_game_server, steamIDUser, steamIDGroup);
+ServerGetGameplayStats :: inline () {
+    SteamAPI_ISteamGameServer_GetGameplayStats(steam_game_server);
 }
 
 
-SteamGameServer_GetGameplayStats :: inline () {
-    SteamGameServer_GetGameplayStats(steam_game_server);
+ServerGetServerReputation :: inline () -> SteamAPICall_t #must {
+    return SteamAPI_ISteamGameServer_GetServerReputation(steam_game_server);
+}
+
+ServerGetServerReputation :: inline (callback: (GSReputation_t, bool) -> ()) {
+    RegisterCallResult(
+        ServerGetServerReputation(),
+        callback
+    );
+}
+
+//ServerGetServerReputation :: (code: Code) #expand {
+//    RegisterCallResult(
+//        ServerGetServerReputation(),
+//        (result: GSReputation_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
+
+
+ServerGetPublicIP :: inline () -> SteamIPAddress_t {
+    return SteamAPI_ISteamGameServer_GetPublicIP(steam_game_server);
 }
 
 
-SteamGameServer_GetServerReputation :: inline () -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamGameServer_GetSe {
-    return SteamGameServer_GetServerReputation(steam_game_server);
+ServerHandleIncomingPacket :: inline (pData: *void, cbData: s32, srcIP: uint32, srcPort: uint16) -> bool {
+    return SteamAPI_ISteamGameServer_HandleIncomingPacket(steam_game_server, pData, cbData, srcIP, srcPort);
 }
 
 
-SteamGameServer_GetPublicIP :: inline () -> SteamIPAddress_t #foreign steam "SteamAPI_ISteamGameServ {
-    return SteamGameServer_GetPublicIP(steam_game_server);
+ServerGetNextOutgoingPacket :: inline (pOut: *void, cbMaxOut: s32, pNetAdr: *uint32, pPort: *uint16) -> s32 {
+    return SteamAPI_ISteamGameServer_GetNextOutgoingPacket(steam_game_server, pOut, cbMaxOut, pNetAdr, pPort);
 }
 
 
-SteamGameServer_HandleIncomingPacket :: inline (pData: *void, cbData: s32, srcIP: uint32, srcPort: uint16) -> bool #foreign steam "SteamAPI_ISteamGameServer_Handle {
-    return SteamGameServer_HandleIncomingPacket(steam_game_server, pData, cbData, srcIP, srcPort);
+ServerEnableHeartbeats :: inline (bActive: bool) {
+    SteamAPI_ISteamGameServer_EnableHeartbeats(steam_game_server, bActive);
 }
 
 
-SteamGameServer_GetNextOutgoingPacket :: inline (pOut: *void, cbMaxOut: s32, pNetAdr: *uint32, pPort: *uint16) -> s32 #foreign steam "SteamAPI_ISteamGameServer_GetNext {
-    return SteamGameServer_GetNextOutgoingPacket(steam_game_server, pOut, cbMaxOut, pNetAdr, pPort);
+ServerSetHeartbeatInterval :: inline (iHeartbeatInterval: s32) {
+    SteamAPI_ISteamGameServer_SetHeartbeatInterval(steam_game_server, iHeartbeatInterval);
 }
 
 
-SteamGameServer_EnableHeartbeats :: inline (bActive: bool) {
-    SteamGameServer_EnableHeartbeats(steam_game_server, bActive);
+ServerForceHeartbeat :: inline () {
+    SteamAPI_ISteamGameServer_ForceHeartbeat(steam_game_server);
 }
 
 
-SteamGameServer_SetHeartbeatInterval :: inline (iHeartbeatInterval: s32) {
-    SteamGameServer_SetHeartbeatInterval(steam_game_server, iHeartbeatInterval);
+ServerAssociateWithClan :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamGameServer_AssociateWithClan(steam_game_server, steamIDClan);
 }
 
-
-SteamGameServer_ForceHeartbeat :: inline () {
-    SteamGameServer_ForceHeartbeat(steam_game_server);
+ServerAssociateWithClan :: inline (steamIDClan: uint64_steamid, callback: (AssociateWithClanResult_t, bool) -> ()) {
+    RegisterCallResult(
+        ServerAssociateWithClan(steamIDClan),
+        callback
+    );
 }
 
+//ServerAssociateWithClan :: (steamIDClan: uint64_steamid, code: Code) #expand {
+//    RegisterCallResult(
+//        ServerAssociateWithClan(steamIDClan),
+//        (result: AssociateWithClanResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
 
-SteamGameServer_AssociateWithClan :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamGameServer_Ass {
-    return SteamGameServer_AssociateWithClan(steam_game_server, steamIDClan);
+
+ServerComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid) -> SteamAPICall_t #must {
+    return SteamAPI_ISteamGameServer_ComputeNewPlayerCompatibility(steam_game_server, steamIDNewPlayer);
 }
 
-
-SteamGameServer_ComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamGameServer_ComputeNewPlaye {
-    return SteamGameServer_ComputeNewPlayerCompatibility(steam_game_server, steamIDNewPlayer);
+ServerComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid, callback: (ComputeNewPlayerCompatibilityResult_t, bool) -> ()) {
+    RegisterCallResult(
+        ServerComputeNewPlayerCompatibility(steamIDNewPlayer),
+        callback
+    );
 }
+
+//ServerComputeNewPlayerCompatibility :: (steamIDNewPlayer: uint64_steamid, code: Code) #expand {
+//    RegisterCallResult(
+//        ServerComputeNewPlayerCompatibility(steamIDNewPlayer),
+//        (result: ComputeNewPlayerCompatibilityResult_t, io_failure: bool) -> () {
+//            #insert code;
+//        }
+//    );
+//}
