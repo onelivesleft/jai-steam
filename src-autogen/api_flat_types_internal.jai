@@ -1,5 +1,5 @@
 uint64_steamid :: uint64; // Used when passing or returning CSteamID
-uint64_gameid :: uint64;  // Used when passing or return CGameID
+uint64_gameid :: uint64; // Used when passing or return CGameID
 
 EFailureType :: enum s32 {
     k_EFailureFlushedCallbackQueue :: 0;
@@ -1528,6 +1528,9 @@ EResult :: enum s32 {
     k_EResultAccountDeleted :: 114;
     k_EResultExistingUserCancelledLicense :: 115;
     k_EResultCommunityCooldown :: 116;
+    k_EResultNoLauncherSpecified :: 117;
+    k_EResultMustAgreeToSSA :: 118;
+    k_EResultLauncherMigrated :: 119;
 }
 
 EVoiceResult :: enum s32 {
@@ -1659,7 +1662,7 @@ EAppType :: enum s32 {
     k_EAppType_Comic_UNUSED :: 32768;
     k_EAppType_Beta :: 65536;
     k_EAppType_Shortcut :: 1073741824;
-    k_EAppType_DepotOnly :: -2147483648;
+    k_EAppType_DepotOnly_DEPRECATED :: -2147483648;
 }
 
 ESteamUserStatType :: enum s32 {
@@ -1796,6 +1799,7 @@ EVRHMDType :: enum s32 {
     k_eEVRHMDType_HP_Unknown :: 80;
     k_eEVRHMDType_HP_WindowsMR :: 81;
     k_eEVRHMDType_HP_Reverb :: 82;
+    k_eEVRHMDType_HP_ReverbG2 :: 1463;
     k_eEVRHMDType_Samsung_Unknown :: 90;
     k_eEVRHMDType_Samsung_Odyssey :: 91;
     k_eEVRHMDType_Unannounced_Unknown :: 100;
@@ -2160,10 +2164,10 @@ ERegisterActivationCodeResult :: enum s32 {
 
 EP2PSessionError :: enum s32 {
     k_EP2PSessionErrorNone :: 0;
-    k_EP2PSessionErrorNotRunningApp :: 1;
     k_EP2PSessionErrorNoRightsToApp :: 2;
-    k_EP2PSessionErrorDestinationNotLoggedIn :: 3;
     k_EP2PSessionErrorTimeout :: 4;
+    k_EP2PSessionErrorNotRunningApp_DELETED :: 1;
+    k_EP2PSessionErrorDestinationNotLoggedIn_DELETED :: 3;
     k_EP2PSessionErrorMax :: 5;
 }
 
@@ -2548,7 +2552,82 @@ EInputActionOrigin :: enum s32 {
     k_EInputActionOrigin_Switch_Reserved18 :: 255;
     k_EInputActionOrigin_Switch_Reserved19 :: 256;
     k_EInputActionOrigin_Switch_Reserved20 :: 257;
-    k_EInputActionOrigin_Count :: 258;
+    k_EInputActionOrigin_PS5_X :: 258;
+    k_EInputActionOrigin_PS5_Circle :: 259;
+    k_EInputActionOrigin_PS5_Triangle :: 260;
+    k_EInputActionOrigin_PS5_Square :: 261;
+    k_EInputActionOrigin_PS5_LeftBumper :: 262;
+    k_EInputActionOrigin_PS5_RightBumper :: 263;
+    k_EInputActionOrigin_PS5_Option :: 264;
+    k_EInputActionOrigin_PS5_Create :: 265;
+    k_EInputActionOrigin_PS5_Mute :: 266;
+    k_EInputActionOrigin_PS5_LeftPad_Touch :: 267;
+    k_EInputActionOrigin_PS5_LeftPad_Swipe :: 268;
+    k_EInputActionOrigin_PS5_LeftPad_Click :: 269;
+    k_EInputActionOrigin_PS5_LeftPad_DPadNorth :: 270;
+    k_EInputActionOrigin_PS5_LeftPad_DPadSouth :: 271;
+    k_EInputActionOrigin_PS5_LeftPad_DPadWest :: 272;
+    k_EInputActionOrigin_PS5_LeftPad_DPadEast :: 273;
+    k_EInputActionOrigin_PS5_RightPad_Touch :: 274;
+    k_EInputActionOrigin_PS5_RightPad_Swipe :: 275;
+    k_EInputActionOrigin_PS5_RightPad_Click :: 276;
+    k_EInputActionOrigin_PS5_RightPad_DPadNorth :: 277;
+    k_EInputActionOrigin_PS5_RightPad_DPadSouth :: 278;
+    k_EInputActionOrigin_PS5_RightPad_DPadWest :: 279;
+    k_EInputActionOrigin_PS5_RightPad_DPadEast :: 280;
+    k_EInputActionOrigin_PS5_CenterPad_Touch :: 281;
+    k_EInputActionOrigin_PS5_CenterPad_Swipe :: 282;
+    k_EInputActionOrigin_PS5_CenterPad_Click :: 283;
+    k_EInputActionOrigin_PS5_CenterPad_DPadNorth :: 284;
+    k_EInputActionOrigin_PS5_CenterPad_DPadSouth :: 285;
+    k_EInputActionOrigin_PS5_CenterPad_DPadWest :: 286;
+    k_EInputActionOrigin_PS5_CenterPad_DPadEast :: 287;
+    k_EInputActionOrigin_PS5_LeftTrigger_Pull :: 288;
+    k_EInputActionOrigin_PS5_LeftTrigger_Click :: 289;
+    k_EInputActionOrigin_PS5_RightTrigger_Pull :: 290;
+    k_EInputActionOrigin_PS5_RightTrigger_Click :: 291;
+    k_EInputActionOrigin_PS5_LeftStick_Move :: 292;
+    k_EInputActionOrigin_PS5_LeftStick_Click :: 293;
+    k_EInputActionOrigin_PS5_LeftStick_DPadNorth :: 294;
+    k_EInputActionOrigin_PS5_LeftStick_DPadSouth :: 295;
+    k_EInputActionOrigin_PS5_LeftStick_DPadWest :: 296;
+    k_EInputActionOrigin_PS5_LeftStick_DPadEast :: 297;
+    k_EInputActionOrigin_PS5_RightStick_Move :: 298;
+    k_EInputActionOrigin_PS5_RightStick_Click :: 299;
+    k_EInputActionOrigin_PS5_RightStick_DPadNorth :: 300;
+    k_EInputActionOrigin_PS5_RightStick_DPadSouth :: 301;
+    k_EInputActionOrigin_PS5_RightStick_DPadWest :: 302;
+    k_EInputActionOrigin_PS5_RightStick_DPadEast :: 303;
+    k_EInputActionOrigin_PS5_DPad_North :: 304;
+    k_EInputActionOrigin_PS5_DPad_South :: 305;
+    k_EInputActionOrigin_PS5_DPad_West :: 306;
+    k_EInputActionOrigin_PS5_DPad_East :: 307;
+    k_EInputActionOrigin_PS5_Gyro_Move :: 308;
+    k_EInputActionOrigin_PS5_Gyro_Pitch :: 309;
+    k_EInputActionOrigin_PS5_Gyro_Yaw :: 310;
+    k_EInputActionOrigin_PS5_Gyro_Roll :: 311;
+    k_EInputActionOrigin_PS5_DPad_Move :: 312;
+    k_EInputActionOrigin_PS5_Reserved1 :: 313;
+    k_EInputActionOrigin_PS5_Reserved2 :: 314;
+    k_EInputActionOrigin_PS5_Reserved3 :: 315;
+    k_EInputActionOrigin_PS5_Reserved4 :: 316;
+    k_EInputActionOrigin_PS5_Reserved5 :: 317;
+    k_EInputActionOrigin_PS5_Reserved6 :: 318;
+    k_EInputActionOrigin_PS5_Reserved7 :: 319;
+    k_EInputActionOrigin_PS5_Reserved8 :: 320;
+    k_EInputActionOrigin_PS5_Reserved9 :: 321;
+    k_EInputActionOrigin_PS5_Reserved10 :: 322;
+    k_EInputActionOrigin_PS5_Reserved11 :: 323;
+    k_EInputActionOrigin_PS5_Reserved12 :: 324;
+    k_EInputActionOrigin_PS5_Reserved13 :: 325;
+    k_EInputActionOrigin_PS5_Reserved14 :: 326;
+    k_EInputActionOrigin_PS5_Reserved15 :: 327;
+    k_EInputActionOrigin_PS5_Reserved16 :: 328;
+    k_EInputActionOrigin_PS5_Reserved17 :: 329;
+    k_EInputActionOrigin_PS5_Reserved18 :: 330;
+    k_EInputActionOrigin_PS5_Reserved19 :: 331;
+    k_EInputActionOrigin_PS5_Reserved20 :: 332;
+    k_EInputActionOrigin_Count :: 333;
     k_EInputActionOrigin_MaximumPossibleValue :: 32767;
 }
 
@@ -2603,7 +2682,8 @@ ESteamInputType :: enum s32 {
     k_ESteamInputType_SwitchProController :: 10;
     k_ESteamInputType_MobileTouch :: 11;
     k_ESteamInputType_PS3Controller :: 12;
-    k_ESteamInputType_Count :: 13;
+    k_ESteamInputType_PS5Controller :: 13;
+    k_ESteamInputType_Count :: 14;
     k_ESteamInputType_MaximumPossibleValue :: 255;
 }
 
@@ -2858,7 +2938,62 @@ EControllerActionOrigin :: enum s32 {
     k_EControllerActionOrigin_XBoxOne_DPad_Move :: 242;
     k_EControllerActionOrigin_XBox360_DPad_Move :: 243;
     k_EControllerActionOrigin_Switch_DPad_Move :: 244;
-    k_EControllerActionOrigin_Count :: 245;
+    k_EControllerActionOrigin_PS5_X :: 245;
+    k_EControllerActionOrigin_PS5_Circle :: 246;
+    k_EControllerActionOrigin_PS5_Triangle :: 247;
+    k_EControllerActionOrigin_PS5_Square :: 248;
+    k_EControllerActionOrigin_PS5_LeftBumper :: 249;
+    k_EControllerActionOrigin_PS5_RightBumper :: 250;
+    k_EControllerActionOrigin_PS5_Option :: 251;
+    k_EControllerActionOrigin_PS5_Create :: 252;
+    k_EControllerActionOrigin_PS5_Mute :: 253;
+    k_EControllerActionOrigin_PS5_LeftPad_Touch :: 254;
+    k_EControllerActionOrigin_PS5_LeftPad_Swipe :: 255;
+    k_EControllerActionOrigin_PS5_LeftPad_Click :: 256;
+    k_EControllerActionOrigin_PS5_LeftPad_DPadNorth :: 257;
+    k_EControllerActionOrigin_PS5_LeftPad_DPadSouth :: 258;
+    k_EControllerActionOrigin_PS5_LeftPad_DPadWest :: 259;
+    k_EControllerActionOrigin_PS5_LeftPad_DPadEast :: 260;
+    k_EControllerActionOrigin_PS5_RightPad_Touch :: 261;
+    k_EControllerActionOrigin_PS5_RightPad_Swipe :: 262;
+    k_EControllerActionOrigin_PS5_RightPad_Click :: 263;
+    k_EControllerActionOrigin_PS5_RightPad_DPadNorth :: 264;
+    k_EControllerActionOrigin_PS5_RightPad_DPadSouth :: 265;
+    k_EControllerActionOrigin_PS5_RightPad_DPadWest :: 266;
+    k_EControllerActionOrigin_PS5_RightPad_DPadEast :: 267;
+    k_EControllerActionOrigin_PS5_CenterPad_Touch :: 268;
+    k_EControllerActionOrigin_PS5_CenterPad_Swipe :: 269;
+    k_EControllerActionOrigin_PS5_CenterPad_Click :: 270;
+    k_EControllerActionOrigin_PS5_CenterPad_DPadNorth :: 271;
+    k_EControllerActionOrigin_PS5_CenterPad_DPadSouth :: 272;
+    k_EControllerActionOrigin_PS5_CenterPad_DPadWest :: 273;
+    k_EControllerActionOrigin_PS5_CenterPad_DPadEast :: 274;
+    k_EControllerActionOrigin_PS5_LeftTrigger_Pull :: 275;
+    k_EControllerActionOrigin_PS5_LeftTrigger_Click :: 276;
+    k_EControllerActionOrigin_PS5_RightTrigger_Pull :: 277;
+    k_EControllerActionOrigin_PS5_RightTrigger_Click :: 278;
+    k_EControllerActionOrigin_PS5_LeftStick_Move :: 279;
+    k_EControllerActionOrigin_PS5_LeftStick_Click :: 280;
+    k_EControllerActionOrigin_PS5_LeftStick_DPadNorth :: 281;
+    k_EControllerActionOrigin_PS5_LeftStick_DPadSouth :: 282;
+    k_EControllerActionOrigin_PS5_LeftStick_DPadWest :: 283;
+    k_EControllerActionOrigin_PS5_LeftStick_DPadEast :: 284;
+    k_EControllerActionOrigin_PS5_RightStick_Move :: 285;
+    k_EControllerActionOrigin_PS5_RightStick_Click :: 286;
+    k_EControllerActionOrigin_PS5_RightStick_DPadNorth :: 287;
+    k_EControllerActionOrigin_PS5_RightStick_DPadSouth :: 288;
+    k_EControllerActionOrigin_PS5_RightStick_DPadWest :: 289;
+    k_EControllerActionOrigin_PS5_RightStick_DPadEast :: 290;
+    k_EControllerActionOrigin_PS5_DPad_Move :: 291;
+    k_EControllerActionOrigin_PS5_DPad_North :: 292;
+    k_EControllerActionOrigin_PS5_DPad_South :: 293;
+    k_EControllerActionOrigin_PS5_DPad_West :: 294;
+    k_EControllerActionOrigin_PS5_DPad_East :: 295;
+    k_EControllerActionOrigin_PS5_Gyro_Move :: 296;
+    k_EControllerActionOrigin_PS5_Gyro_Pitch :: 297;
+    k_EControllerActionOrigin_PS5_Gyro_Yaw :: 298;
+    k_EControllerActionOrigin_PS5_Gyro_Roll :: 299;
+    k_EControllerActionOrigin_Count :: 300;
     k_EControllerActionOrigin_MaximumPossibleValue :: 32767;
 }
 
@@ -3021,6 +3156,8 @@ ESteamNetworkingIdentityType :: enum s32 {
     k_ESteamNetworkingIdentityType_Invalid :: 0;
     k_ESteamNetworkingIdentityType_SteamID :: 16;
     k_ESteamNetworkingIdentityType_XboxPairwiseID :: 17;
+    k_ESteamNetworkingIdentityType_SonyPSN :: 18;
+    k_ESteamNetworkingIdentityType_GoogleStadia :: 19;
     k_ESteamNetworkingIdentityType_IPAddress :: 1;
     k_ESteamNetworkingIdentityType_GenericString :: 2;
     k_ESteamNetworkingIdentityType_GenericBytes :: 3;
@@ -3139,6 +3276,7 @@ ESteamNetworkingConfigValue :: enum s32 {
     k_ESteamNetworkingConfig_Callback_RelayNetworkStatusChanged :: 203;
     k_ESteamNetworkingConfig_Callback_MessagesSessionRequest :: 204;
     k_ESteamNetworkingConfig_Callback_MessagesSessionFailed :: 205;
+    k_ESteamNetworkingConfig_Callback_CreateConnectionSignaling :: 206;
     k_ESteamNetworkingConfig_P2P_STUN_ServerList :: 103;
     k_ESteamNetworkingConfig_P2P_Transport_ICE_Enable :: 104;
     k_ESteamNetworkingConfig_P2P_Transport_ICE_Penalty :: 105;
@@ -3358,13 +3496,6 @@ k_nSteamNetworkingConfig_P2P_Transport_ICE_Enable_Private : int : 2;
 k_nSteamNetworkingConfig_P2P_Transport_ICE_Enable_Public : int : 4;
 k_nSteamNetworkingConfig_P2P_Transport_ICE_Enable_All : int : 0x7fffffff;
 k_SteamDatagramPOPID_dev : SteamNetworkingPOPID : ( cast(uint32) #char "d" << 16 ) | ( cast(uint32) #char "e" << 8 ) | cast(uint32) #char "v";
-k_unServerFlagNone : uint32 : 0x00;
-k_unServerFlagActive : uint32 : 0x01;
-k_unServerFlagSecure : uint32 : 0x02;
-k_unServerFlagDedicated : uint32 : 0x04;
-k_unServerFlagLinux : uint32 : 0x08;
-k_unServerFlagPassworded : uint32 : 0x10;
-k_unServerFlagPrivate : uint32 : 0x20;
 k_cbSteamDatagramMaxSerializedTicket : uint32 : 512;
 k_cbMaxSteamDatagramGameCoordinatorServerLoginAppData : uint32 : 2048;
 k_cbMaxSteamDatagramGameCoordinatorServerLoginSerialized : uint32 : 4096;
@@ -3690,3 +3821,5 @@ ISteamNetworkingSockets :: struct {};
 ISteamNetworkingUtils :: struct {};
 ISteamGameServer :: struct {};
 ISteamGameServerStats :: struct {};
+ISteamNetworkingConnectionSignaling :: struct {}
+ISteamNetworkingSignalingRecvContext :: struct {}

@@ -176,12 +176,12 @@ ServerGetGameCoordinatorServerLogin :: inline (pLoginInfo: *SteamDatagramGameCoo
 }
 
 
-ServerConnectP2PCustomSignaling :: inline (pSignaling: *ISteamNetworkingConnectionCustomSignaling, pPeerIdentity: *SteamNetworkingIdentity, nRemoteVirtualPort: s32, nOptions: s32, pOptions: *SteamNetworkingConfigValue_t) -> HSteamNetConnection {
+ServerConnectP2PCustomSignaling :: inline (pSignaling: *ISteamNetworkingConnectionSignaling, pPeerIdentity: *SteamNetworkingIdentity, nRemoteVirtualPort: s32, nOptions: s32, pOptions: *SteamNetworkingConfigValue_t) -> HSteamNetConnection {
     return SteamAPI_ISteamNetworkingSockets_ConnectP2PCustomSignaling(steam_game_server_networking_sockets, pSignaling, pPeerIdentity, nRemoteVirtualPort, nOptions, pOptions);
 }
 
 
-ServerReceivedP2PCustomSignal :: inline (pMsg: *void, cbMsg: s32, pContext: *ISteamNetworkingCustomSignalingRecvContext) -> bool {
+ServerReceivedP2PCustomSignal :: inline (pMsg: *void, cbMsg: s32, pContext: *ISteamNetworkingSignalingRecvContext) -> bool {
     return SteamAPI_ISteamNetworkingSockets_ReceivedP2PCustomSignal(steam_game_server_networking_sockets, pMsg, cbMsg, pContext);
 }
 

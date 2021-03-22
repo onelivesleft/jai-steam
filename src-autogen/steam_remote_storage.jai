@@ -22,14 +22,14 @@ FileWriteAsync :: inline (pchFile: *char, pvData: *void, cubData: uint32, callba
     );
 }
 
-//FileWriteAsync :: (pchFile: *char, pvData: *void, cubData: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        FileWriteAsync(pchFile, pvData, cubData),
-//        (result: RemoteStorageFileWriteAsyncComplete_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+FileWriteAsync :: (pchFile: *char, pvData: *void, cubData: uint32, code: Code) #expand {
+    RegisterCallResult(
+        FileWriteAsync(pchFile, pvData, cubData),
+        (result: RemoteStorageFileWriteAsyncComplete_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 FileReadAsync :: inline (pchFile: *char, nOffset: uint32, cubToRead: uint32) -> SteamAPICall_t #must {
@@ -43,14 +43,14 @@ FileReadAsync :: inline (pchFile: *char, nOffset: uint32, cubToRead: uint32, cal
     );
 }
 
-//FileReadAsync :: (pchFile: *char, nOffset: uint32, cubToRead: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        FileReadAsync(pchFile, nOffset, cubToRead),
-//        (result: RemoteStorageFileReadAsyncComplete_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+FileReadAsync :: (pchFile: *char, nOffset: uint32, cubToRead: uint32, code: Code) #expand {
+    RegisterCallResult(
+        FileReadAsync(pchFile, nOffset, cubToRead),
+        (result: RemoteStorageFileReadAsyncComplete_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 FileReadAsyncComplete :: inline (hReadCall: SteamAPICall_t, pvBuffer: *void, cubToRead: uint32) -> bool {
@@ -79,14 +79,14 @@ FileShare :: inline (pchFile: *char, callback: (RemoteStorageFileShareResult_t, 
     );
 }
 
-//FileShare :: (pchFile: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        FileShare(pchFile),
-//        (result: RemoteStorageFileShareResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+FileShare :: (pchFile: *char, code: Code) #expand {
+    RegisterCallResult(
+        FileShare(pchFile),
+        (result: RemoteStorageFileShareResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 SetSyncPlatforms :: inline (pchFile: *char, eRemoteStoragePlatform: ERemoteStoragePlatform) -> bool {
@@ -180,14 +180,14 @@ UGCDownload :: inline (hContent: UGCHandle_t, unPriority: uint32, callback: (Rem
     );
 }
 
-//UGCDownload :: (hContent: UGCHandle_t, unPriority: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        UGCDownload(hContent, unPriority),
-//        (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+UGCDownload :: (hContent: UGCHandle_t, unPriority: uint32, code: Code) #expand {
+    RegisterCallResult(
+        UGCDownload(hContent, unPriority),
+        (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetUGCDownloadProgress :: inline (hContent: UGCHandle_t, pnBytesDownloaded: *int32, pnBytesExpected: *int32) -> bool {
@@ -226,14 +226,14 @@ PublishWorkshopFile :: inline (pchFile: *char, pchPreviewFile: *char, nConsumerA
     );
 }
 
-//PublishWorkshopFile :: (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType, code: Code) #expand {
-//    RegisterCallResult(
-//        PublishWorkshopFile(pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType),
-//        (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+PublishWorkshopFile :: (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, eWorkshopFileType: EWorkshopFileType, code: Code) #expand {
+    RegisterCallResult(
+        PublishWorkshopFile(pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType),
+        (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 CreatePublishedFileUpdateRequest :: inline (unPublishedFileId: PublishedFileId_t) -> PublishedFileUpdateHandle_t {
@@ -282,14 +282,14 @@ CommitPublishedFileUpdate :: inline (updateHandle: PublishedFileUpdateHandle_t, 
     );
 }
 
-//CommitPublishedFileUpdate :: (updateHandle: PublishedFileUpdateHandle_t, code: Code) #expand {
-//    RegisterCallResult(
-//        CommitPublishedFileUpdate(updateHandle),
-//        (result: RemoteStorageUpdatePublishedFileResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+CommitPublishedFileUpdate :: (updateHandle: PublishedFileUpdateHandle_t, code: Code) #expand {
+    RegisterCallResult(
+        CommitPublishedFileUpdate(updateHandle),
+        (result: RemoteStorageUpdatePublishedFileResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetPublishedFileDetails :: inline (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32) -> SteamAPICall_t #must {
@@ -303,14 +303,14 @@ GetPublishedFileDetails :: inline (unPublishedFileId: PublishedFileId_t, unMaxSe
     );
 }
 
-//GetPublishedFileDetails :: (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        GetPublishedFileDetails(unPublishedFileId, unMaxSecondsOld),
-//        (result: RemoteStorageGetPublishedFileDetailsResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetPublishedFileDetails :: (unPublishedFileId: PublishedFileId_t, unMaxSecondsOld: uint32, code: Code) #expand {
+    RegisterCallResult(
+        GetPublishedFileDetails(unPublishedFileId, unMaxSecondsOld),
+        (result: RemoteStorageGetPublishedFileDetailsResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 DeletePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -324,14 +324,14 @@ DeletePublishedFile :: inline (unPublishedFileId: PublishedFileId_t, callback: (
     );
 }
 
-//DeletePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        DeletePublishedFile(unPublishedFileId),
-//        (result: RemoteStorageDeletePublishedFileResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+DeletePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        DeletePublishedFile(unPublishedFileId),
+        (result: RemoteStorageDeletePublishedFileResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 EnumerateUserPublishedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
@@ -345,14 +345,14 @@ EnumerateUserPublishedFiles :: inline (unStartIndex: uint32, callback: (RemoteSt
     );
 }
 
-//EnumerateUserPublishedFiles :: (unStartIndex: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        EnumerateUserPublishedFiles(unStartIndex),
-//        (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+EnumerateUserPublishedFiles :: (unStartIndex: uint32, code: Code) #expand {
+    RegisterCallResult(
+        EnumerateUserPublishedFiles(unStartIndex),
+        (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 SubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -366,14 +366,14 @@ SubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t, callback
     );
 }
 
-//SubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        SubscribePublishedFile(unPublishedFileId),
-//        (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+SubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        SubscribePublishedFile(unPublishedFileId),
+        (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 EnumerateUserSubscribedFiles :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
@@ -387,14 +387,14 @@ EnumerateUserSubscribedFiles :: inline (unStartIndex: uint32, callback: (RemoteS
     );
 }
 
-//EnumerateUserSubscribedFiles :: (unStartIndex: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        EnumerateUserSubscribedFiles(unStartIndex),
-//        (result: RemoteStorageEnumerateUserSubscribedFilesResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+EnumerateUserSubscribedFiles :: (unStartIndex: uint32, code: Code) #expand {
+    RegisterCallResult(
+        EnumerateUserSubscribedFiles(unStartIndex),
+        (result: RemoteStorageEnumerateUserSubscribedFilesResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 UnsubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -408,14 +408,14 @@ UnsubscribePublishedFile :: inline (unPublishedFileId: PublishedFileId_t, callba
     );
 }
 
-//UnsubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        UnsubscribePublishedFile(unPublishedFileId),
-//        (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+UnsubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        UnsubscribePublishedFile(unPublishedFileId),
+        (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 UpdatePublishedFileSetChangeDescription :: inline (updateHandle: PublishedFileUpdateHandle_t, pchChangeDescription: *char) -> bool {
@@ -434,14 +434,14 @@ GetPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t, cal
     );
 }
 
-//GetPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        GetPublishedItemVoteDetails(unPublishedFileId),
-//        (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        GetPublishedItemVoteDetails(unPublishedFileId),
+        (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 UpdateUserPublishedItemVote :: inline (unPublishedFileId: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t #must {
@@ -455,14 +455,14 @@ UpdateUserPublishedItemVote :: inline (unPublishedFileId: PublishedFileId_t, bVo
     );
 }
 
-//UpdateUserPublishedItemVote :: (unPublishedFileId: PublishedFileId_t, bVoteUp: bool, code: Code) #expand {
-//    RegisterCallResult(
-//        UpdateUserPublishedItemVote(unPublishedFileId, bVoteUp),
-//        (result: RemoteStorageUpdateUserPublishedItemVoteResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+UpdateUserPublishedItemVote :: (unPublishedFileId: PublishedFileId_t, bVoteUp: bool, code: Code) #expand {
+    RegisterCallResult(
+        UpdateUserPublishedItemVote(unPublishedFileId, bVoteUp),
+        (result: RemoteStorageUpdateUserPublishedItemVoteResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetUserPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -476,14 +476,14 @@ GetUserPublishedItemVoteDetails :: inline (unPublishedFileId: PublishedFileId_t,
     );
 }
 
-//GetUserPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        GetUserPublishedItemVoteDetails(unPublishedFileId),
-//        (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetUserPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        GetUserPublishedItemVoteDetails(unPublishedFileId),
+        (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 EnumerateUserSharedWorkshopFiles :: inline (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
@@ -497,14 +497,14 @@ EnumerateUserSharedWorkshopFiles :: inline (steamId: uint64_steamid, unStartInde
     );
 }
 
-//EnumerateUserSharedWorkshopFiles :: (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t, code: Code) #expand {
-//    RegisterCallResult(
-//        EnumerateUserSharedWorkshopFiles(steamId, unStartIndex, pRequiredTags, pExcludedTags),
-//        (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+EnumerateUserSharedWorkshopFiles :: (steamId: uint64_steamid, unStartIndex: uint32, pRequiredTags: *SteamParamStringArray_t, pExcludedTags: *SteamParamStringArray_t, code: Code) #expand {
+    RegisterCallResult(
+        EnumerateUserSharedWorkshopFiles(steamId, unStartIndex, pRequiredTags, pExcludedTags),
+        (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 PublishVideo :: inline (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
@@ -518,14 +518,14 @@ PublishVideo :: inline (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount:
     );
 }
 
-//PublishVideo :: (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, code: Code) #expand {
-//    RegisterCallResult(
-//        PublishVideo(eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags),
-//        (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+PublishVideo :: (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char, pchVideoIdentifier: *char, pchPreviewFile: *char, nConsumerAppId: AppId_t, pchTitle: *char, pchDescription: *char, eVisibility: ERemoteStoragePublishedFileVisibility, pTags: *SteamParamStringArray_t, code: Code) #expand {
+    RegisterCallResult(
+        PublishVideo(eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags),
+        (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 SetUserPublishedFileAction :: inline (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction) -> SteamAPICall_t #must {
@@ -539,14 +539,14 @@ SetUserPublishedFileAction :: inline (unPublishedFileId: PublishedFileId_t, eAct
     );
 }
 
-//SetUserPublishedFileAction :: (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction, code: Code) #expand {
-//    RegisterCallResult(
-//        SetUserPublishedFileAction(unPublishedFileId, eAction),
-//        (result: RemoteStorageSetUserPublishedFileActionResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+SetUserPublishedFileAction :: (unPublishedFileId: PublishedFileId_t, eAction: EWorkshopFileAction, code: Code) #expand {
+    RegisterCallResult(
+        SetUserPublishedFileAction(unPublishedFileId, eAction),
+        (result: RemoteStorageSetUserPublishedFileActionResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 EnumeratePublishedFilesByUserAction :: inline (eAction: EWorkshopFileAction, unStartIndex: uint32) -> SteamAPICall_t #must {
@@ -560,14 +560,14 @@ EnumeratePublishedFilesByUserAction :: inline (eAction: EWorkshopFileAction, unS
     );
 }
 
-//EnumeratePublishedFilesByUserAction :: (eAction: EWorkshopFileAction, unStartIndex: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        EnumeratePublishedFilesByUserAction(eAction, unStartIndex),
-//        (result: RemoteStorageEnumeratePublishedFilesByUserActionResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+EnumeratePublishedFilesByUserAction :: (eAction: EWorkshopFileAction, unStartIndex: uint32, code: Code) #expand {
+    RegisterCallResult(
+        EnumeratePublishedFilesByUserAction(eAction, unStartIndex),
+        (result: RemoteStorageEnumeratePublishedFilesByUserActionResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 EnumeratePublishedWorkshopFiles :: inline (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t) -> SteamAPICall_t #must {
@@ -581,14 +581,14 @@ EnumeratePublishedWorkshopFiles :: inline (eEnumerationType: EWorkshopEnumeratio
     );
 }
 
-//EnumeratePublishedWorkshopFiles :: (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t, code: Code) #expand {
-//    RegisterCallResult(
-//        EnumeratePublishedWorkshopFiles(eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags),
-//        (result: RemoteStorageEnumerateWorkshopFilesResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+EnumeratePublishedWorkshopFiles :: (eEnumerationType: EWorkshopEnumerationType, unStartIndex: uint32, unCount: uint32, unDays: uint32, pTags: *SteamParamStringArray_t, pUserTags: *SteamParamStringArray_t, code: Code) #expand {
+    RegisterCallResult(
+        EnumeratePublishedWorkshopFiles(eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags),
+        (result: RemoteStorageEnumerateWorkshopFilesResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 UGCDownloadToLocation :: inline (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32) -> SteamAPICall_t #must {
@@ -602,11 +602,11 @@ UGCDownloadToLocation :: inline (hContent: UGCHandle_t, pchLocation: *char, unPr
     );
 }
 
-//UGCDownloadToLocation :: (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        UGCDownloadToLocation(hContent, pchLocation, unPriority),
-//        (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+UGCDownloadToLocation :: (hContent: UGCHandle_t, pchLocation: *char, unPriority: uint32, code: Code) #expand {
+    RegisterCallResult(
+        UGCDownloadToLocation(hContent, pchLocation, unPriority),
+        (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}

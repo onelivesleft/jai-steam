@@ -36,11 +36,6 @@ GetImageRGBA :: inline (iImage: s32, pubDest: *uint8, nDestBufferSize: s32) -> b
 }
 
 
-GetCSERIPPort :: inline (unIP: *uint32, usPort: *uint16) -> bool {
-    return SteamAPI_ISteamUtils_GetCSERIPPort(steam_utils, unIP, usPort);
-}
-
-
 GetCurrentBatteryPower :: inline () -> uint8 {
     return SteamAPI_ISteamUtils_GetCurrentBatteryPower(steam_utils);
 }
@@ -102,14 +97,14 @@ CheckFileSignature :: inline (szFileName: *char, callback: (CheckFileSignature_t
     );
 }
 
-//CheckFileSignature :: (szFileName: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        CheckFileSignature(szFileName),
-//        (result: CheckFileSignature_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+CheckFileSignature :: (szFileName: *char, code: Code) #expand {
+    RegisterCallResult(
+        CheckFileSignature(szFileName),
+        (result: CheckFileSignature_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ShowGamepadTextInput :: inline (eInputMode: EGamepadTextInputMode, eLineInputMode: EGamepadTextInputLineMode, pchDescription: *char, unCharMax: uint32, pchExistingText: *char) -> bool {

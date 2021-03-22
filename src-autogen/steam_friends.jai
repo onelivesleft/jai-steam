@@ -17,14 +17,14 @@ SetPersonaName :: inline (pchPersonaName: *char, callback: (SetPersonaNameRespon
     );
 }
 
-//SetPersonaName :: (pchPersonaName: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        SetPersonaName(pchPersonaName),
-//        (result: SetPersonaNameResponse_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+SetPersonaName :: (pchPersonaName: *char, code: Code) #expand {
+    RegisterCallResult(
+        SetPersonaName(pchPersonaName),
+        (result: SetPersonaNameResponse_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetPersonaState :: inline () -> EPersonaState {
@@ -143,14 +143,14 @@ DownloadClanActivityCounts :: inline (psteamIDClans: *CSteamID, cClansToRequest:
     );
 }
 
-//DownloadClanActivityCounts :: (psteamIDClans: *CSteamID, cClansToRequest: s32, code: Code) #expand {
-//    RegisterCallResult(
-//        DownloadClanActivityCounts(psteamIDClans, cClansToRequest),
-//        (result: DownloadClanActivityCountsResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+DownloadClanActivityCounts :: (psteamIDClans: *CSteamID, cClansToRequest: s32, code: Code) #expand {
+    RegisterCallResult(
+        DownloadClanActivityCounts(psteamIDClans, cClansToRequest),
+        (result: DownloadClanActivityCountsResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetFriendCountFromSource :: inline (steamIDSource: uint64_steamid) -> s32 {
@@ -234,14 +234,14 @@ RequestClanOfficerList :: inline (steamIDClan: uint64_steamid, callback: (ClanOf
     );
 }
 
-//RequestClanOfficerList :: (steamIDClan: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        RequestClanOfficerList(steamIDClan),
-//        (result: ClanOfficerListResponse_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestClanOfficerList :: (steamIDClan: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        RequestClanOfficerList(steamIDClan),
+        (result: ClanOfficerListResponse_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetClanOwner :: inline (steamIDClan: uint64_steamid) -> uint64_steamid {
@@ -330,14 +330,14 @@ JoinClanChatRoom :: inline (steamIDClan: uint64_steamid, callback: (JoinClanChat
     );
 }
 
-//JoinClanChatRoom :: (steamIDClan: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        JoinClanChatRoom(steamIDClan),
-//        (result: JoinClanChatRoomCompletionResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+JoinClanChatRoom :: (steamIDClan: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        JoinClanChatRoom(steamIDClan),
+        (result: JoinClanChatRoomCompletionResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 LeaveClanChatRoom :: inline (steamIDClan: uint64_steamid) -> bool {
@@ -411,14 +411,14 @@ GetFollowerCount :: inline (steamID: uint64_steamid, callback: (FriendsGetFollow
     );
 }
 
-//GetFollowerCount :: (steamID: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        GetFollowerCount(steamID),
-//        (result: FriendsGetFollowerCount_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetFollowerCount :: (steamID: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        GetFollowerCount(steamID),
+        (result: FriendsGetFollowerCount_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 IsFollowing :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must {
@@ -432,14 +432,14 @@ IsFollowing :: inline (steamID: uint64_steamid, callback: (FriendsIsFollowing_t,
     );
 }
 
-//IsFollowing :: (steamID: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        IsFollowing(steamID),
-//        (result: FriendsIsFollowing_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+IsFollowing :: (steamID: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        IsFollowing(steamID),
+        (result: FriendsIsFollowing_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 EnumerateFollowingList :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
@@ -453,14 +453,14 @@ EnumerateFollowingList :: inline (unStartIndex: uint32, callback: (FriendsEnumer
     );
 }
 
-//EnumerateFollowingList :: (unStartIndex: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        EnumerateFollowingList(unStartIndex),
-//        (result: FriendsEnumerateFollowingList_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+EnumerateFollowingList :: (unStartIndex: uint32, code: Code) #expand {
+    RegisterCallResult(
+        EnumerateFollowingList(unStartIndex),
+        (result: FriendsEnumerateFollowingList_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 IsClanPublic :: inline (steamIDClan: uint64_steamid) -> bool {
@@ -485,4 +485,9 @@ ActivateGameOverlayRemotePlayTogetherInviteDialog :: inline (steamIDLobby: uint6
 
 RegisterProtocolInOverlayBrowser :: inline (pchProtocol: *char) -> bool {
     return SteamAPI_ISteamFriends_RegisterProtocolInOverlayBrowser(steam_friends, pchProtocol);
+}
+
+
+ActivateGameOverlayInviteDialogConnectString :: inline (pchConnectString: *char) {
+    SteamAPI_ISteamFriends_ActivateGameOverlayInviteDialogConnectString(steam_friends, pchConnectString);
 }

@@ -27,14 +27,14 @@ JoinParty :: inline (ulBeaconID: PartyBeaconID_t, callback: (JoinPartyCallback_t
     );
 }
 
-//JoinParty :: (ulBeaconID: PartyBeaconID_t, code: Code) #expand {
-//    RegisterCallResult(
-//        JoinParty(ulBeaconID),
-//        (result: JoinPartyCallback_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+JoinParty :: (ulBeaconID: PartyBeaconID_t, code: Code) #expand {
+    RegisterCallResult(
+        JoinParty(ulBeaconID),
+        (result: JoinPartyCallback_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetNumAvailableBeaconLocations :: inline (puNumLocations: *uint32) -> bool {
@@ -58,14 +58,14 @@ CreateBeacon :: inline (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconL
     );
 }
 
-//CreateBeacon :: (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        CreateBeacon(unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata),
-//        (result: CreateBeaconCallback_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+CreateBeacon :: (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char, code: Code) #expand {
+    RegisterCallResult(
+        CreateBeacon(unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata),
+        (result: CreateBeaconCallback_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 OnReservationCompleted :: inline (ulBeacon: PartyBeaconID_t, steamIDUser: uint64_steamid) {
@@ -89,14 +89,14 @@ ChangeNumOpenSlots :: inline (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, ca
     );
 }
 
-//ChangeNumOpenSlots :: (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        ChangeNumOpenSlots(ulBeacon, unOpenSlots),
-//        (result: ChangeNumOpenSlotsCallback_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ChangeNumOpenSlots :: (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, code: Code) #expand {
+    RegisterCallResult(
+        ChangeNumOpenSlots(ulBeacon, unOpenSlots),
+        (result: ChangeNumOpenSlotsCallback_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 DestroyBeacon :: inline (ulBeacon: PartyBeaconID_t) -> bool {

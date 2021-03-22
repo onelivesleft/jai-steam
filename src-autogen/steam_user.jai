@@ -112,14 +112,14 @@ RequestEncryptedAppTicket :: inline (pDataToInclude: *void, cbDataToInclude: s32
     );
 }
 
-//RequestEncryptedAppTicket :: (pDataToInclude: *void, cbDataToInclude: s32, code: Code) #expand {
-//    RegisterCallResult(
-//        RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude),
-//        (result: EncryptedAppTicketResponse_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestEncryptedAppTicket :: (pDataToInclude: *void, cbDataToInclude: s32, code: Code) #expand {
+    RegisterCallResult(
+        RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude),
+        (result: EncryptedAppTicketResponse_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetEncryptedAppTicket :: inline (pTicket: *void, cbMaxTicket: s32, pcbTicket: *uint32) -> bool {
@@ -148,14 +148,14 @@ RequestStoreAuthURL :: inline (pchRedirectURL: *char, callback: (StoreAuthURLRes
     );
 }
 
-//RequestStoreAuthURL :: (pchRedirectURL: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        RequestStoreAuthURL(pchRedirectURL),
-//        (result: StoreAuthURLResponse_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestStoreAuthURL :: (pchRedirectURL: *char, code: Code) #expand {
+    RegisterCallResult(
+        RequestStoreAuthURL(pchRedirectURL),
+        (result: StoreAuthURLResponse_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 BIsPhoneVerified :: inline () -> bool {
@@ -189,14 +189,14 @@ GetMarketEligibility :: inline (callback: (MarketEligibilityResponse_t, bool) ->
     );
 }
 
-//GetMarketEligibility :: (code: Code) #expand {
-//    RegisterCallResult(
-//        GetMarketEligibility(),
-//        (result: MarketEligibilityResponse_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetMarketEligibility :: (code: Code) #expand {
+    RegisterCallResult(
+        GetMarketEligibility(),
+        (result: MarketEligibilityResponse_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetDurationControl :: inline () -> SteamAPICall_t #must {
@@ -210,14 +210,14 @@ GetDurationControl :: inline (callback: (DurationControl_t, bool) -> ()) {
     );
 }
 
-//GetDurationControl :: (code: Code) #expand {
-//    RegisterCallResult(
-//        GetDurationControl(),
-//        (result: DurationControl_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetDurationControl :: (code: Code) #expand {
+    RegisterCallResult(
+        GetDurationControl(),
+        (result: DurationControl_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 BSetDurationControlOnlineState :: inline (eNewState: EDurationControlOnlineState) -> bool {

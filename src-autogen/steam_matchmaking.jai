@@ -32,14 +32,14 @@ RequestLobbyList :: inline (callback: (LobbyMatchList_t, bool) -> ()) {
     );
 }
 
-//RequestLobbyList :: (code: Code) #expand {
-//    RegisterCallResult(
-//        RequestLobbyList(),
-//        (result: LobbyMatchList_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestLobbyList :: (code: Code) #expand {
+    RegisterCallResult(
+        RequestLobbyList(),
+        (result: LobbyMatchList_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 AddRequestLobbyListStringFilter :: inline (pchKeyToMatch: *char, pchValueToMatch: *char, eComparisonType: ELobbyComparison) {
@@ -93,14 +93,14 @@ CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32, callback: (Lobb
     );
 }
 
-//CreateLobby :: (eLobbyType: ELobbyType, cMaxMembers: s32, code: Code) #expand {
-//    RegisterCallResult(
-//        CreateLobby(eLobbyType, cMaxMembers),
-//        (result: LobbyCreated_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+CreateLobby :: (eLobbyType: ELobbyType, cMaxMembers: s32, code: Code) #expand {
+    RegisterCallResult(
+        CreateLobby(eLobbyType, cMaxMembers),
+        (result: LobbyCreated_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 JoinLobby :: inline (steamIDLobby: uint64_steamid) -> SteamAPICall_t #must {
@@ -114,14 +114,14 @@ JoinLobby :: inline (steamIDLobby: uint64_steamid, callback: (LobbyEnter_t, bool
     );
 }
 
-//JoinLobby :: (steamIDLobby: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        JoinLobby(steamIDLobby),
-//        (result: LobbyEnter_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+JoinLobby :: (steamIDLobby: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        JoinLobby(steamIDLobby),
+        (result: LobbyEnter_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 LeaveLobby :: inline (steamIDLobby: uint64_steamid) {

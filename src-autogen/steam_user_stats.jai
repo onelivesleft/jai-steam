@@ -92,14 +92,14 @@ RequestUserStats :: inline (steamIDUser: uint64_steamid, callback: (UserStatsRec
     );
 }
 
-//RequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        RequestUserStats(steamIDUser),
-//        (result: UserStatsReceived_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        RequestUserStats(steamIDUser),
+        (result: UserStatsReceived_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetUserStatInt32 :: inline (steamIDUser: uint64_steamid, pchName: *char, pData: *int32) -> bool {
@@ -138,14 +138,14 @@ FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMe
     );
 }
 
-//FindOrCreateLeaderboard :: (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType, code: Code) #expand {
-//    RegisterCallResult(
-//        FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType),
-//        (result: LeaderboardFindResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+FindOrCreateLeaderboard :: (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType, code: Code) #expand {
+    RegisterCallResult(
+        FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType),
+        (result: LeaderboardFindResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 FindLeaderboard :: inline (pchLeaderboardName: *char) -> SteamAPICall_t #must {
@@ -159,14 +159,14 @@ FindLeaderboard :: inline (pchLeaderboardName: *char, callback: (LeaderboardFind
     );
 }
 
-//FindLeaderboard :: (pchLeaderboardName: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        FindLeaderboard(pchLeaderboardName),
-//        (result: LeaderboardFindResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+FindLeaderboard :: (pchLeaderboardName: *char, code: Code) #expand {
+    RegisterCallResult(
+        FindLeaderboard(pchLeaderboardName),
+        (result: LeaderboardFindResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetLeaderboardName :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> string {
@@ -200,14 +200,14 @@ DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLe
     );
 }
 
-//DownloadLeaderboardEntries :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32, code: Code) #expand {
-//    RegisterCallResult(
-//        DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd),
-//        (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+DownloadLeaderboardEntries :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32, code: Code) #expand {
+    RegisterCallResult(
+        DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd),
+        (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32) -> SteamAPICall_t #must {
@@ -221,14 +221,14 @@ DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboar
     );
 }
 
-//DownloadLeaderboardEntriesForUsers :: (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32, code: Code) #expand {
-//    RegisterCallResult(
-//        DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers),
-//        (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+DownloadLeaderboardEntriesForUsers :: (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32, code: Code) #expand {
+    RegisterCallResult(
+        DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers),
+        (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetDownloadedLeaderboardEntry :: inline (hSteamLeaderboardEntries: SteamLeaderboardEntries_t, index: s32, pLeaderboardEntry: *LeaderboardEntry_t, pDetails: *int32, cDetailsMax: s32) -> bool {
@@ -247,14 +247,14 @@ UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeader
     );
 }
 
-//UploadLeaderboardScore :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32, code: Code) #expand {
-//    RegisterCallResult(
-//        UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount),
-//        (result: LeaderboardScoreUploaded_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+UploadLeaderboardScore :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32, code: Code) #expand {
+    RegisterCallResult(
+        UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount),
+        (result: LeaderboardScoreUploaded_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t) -> SteamAPICall_t #must {
@@ -268,14 +268,14 @@ AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGC
     );
 }
 
-//AttachLeaderboardUGC :: (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t, code: Code) #expand {
-//    RegisterCallResult(
-//        AttachLeaderboardUGC(hSteamLeaderboard, hUGC),
-//        (result: LeaderboardUGCSet_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+AttachLeaderboardUGC :: (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t, code: Code) #expand {
+    RegisterCallResult(
+        AttachLeaderboardUGC(hSteamLeaderboard, hUGC),
+        (result: LeaderboardUGCSet_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetNumberOfCurrentPlayers :: inline () -> SteamAPICall_t #must {
@@ -289,14 +289,14 @@ GetNumberOfCurrentPlayers :: inline (callback: (NumberOfCurrentPlayers_t, bool) 
     );
 }
 
-//GetNumberOfCurrentPlayers :: (code: Code) #expand {
-//    RegisterCallResult(
-//        GetNumberOfCurrentPlayers(),
-//        (result: NumberOfCurrentPlayers_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetNumberOfCurrentPlayers :: (code: Code) #expand {
+    RegisterCallResult(
+        GetNumberOfCurrentPlayers(),
+        (result: NumberOfCurrentPlayers_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 RequestGlobalAchievementPercentages :: inline () -> SteamAPICall_t #must {
@@ -310,14 +310,14 @@ RequestGlobalAchievementPercentages :: inline (callback: (GlobalAchievementPerce
     );
 }
 
-//RequestGlobalAchievementPercentages :: (code: Code) #expand {
-//    RegisterCallResult(
-//        RequestGlobalAchievementPercentages(),
-//        (result: GlobalAchievementPercentagesReady_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestGlobalAchievementPercentages :: (code: Code) #expand {
+    RegisterCallResult(
+        RequestGlobalAchievementPercentages(),
+        (result: GlobalAchievementPercentagesReady_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetMostAchievedAchievementInfo :: inline (pchName: *char, unNameBufLen: uint32, pflPercent: *float, pbAchieved: *bool) -> s32 {
@@ -346,14 +346,14 @@ RequestGlobalStats :: inline (nHistoryDays: s32, callback: (GlobalStatsReceived_
     );
 }
 
-//RequestGlobalStats :: (nHistoryDays: s32, code: Code) #expand {
-//    RegisterCallResult(
-//        RequestGlobalStats(nHistoryDays),
-//        (result: GlobalStatsReceived_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestGlobalStats :: (nHistoryDays: s32, code: Code) #expand {
+    RegisterCallResult(
+        RequestGlobalStats(nHistoryDays),
+        (result: GlobalStatsReceived_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetGlobalStatInt64 :: inline (pchStatName: *char, pData: *int64) -> bool {

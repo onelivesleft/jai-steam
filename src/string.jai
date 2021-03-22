@@ -26,11 +26,6 @@ lstrip :: inline (str: string) -> string #must {
 }
 
 
-slice :: inline (str: string, index: int) -> string #must {
-    return slice(str, index, str.count - index);
-}
-
-
 forward_til :: (str: string, sentinel: u8, index: Code) #expand {
     while (#insert index) < str.count && str[(#insert index)] != sentinel {
         (#insert index) += 1;

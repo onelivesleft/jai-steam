@@ -1,5 +1,6 @@
 // This generates all the files in the `src-autogen` folder.  If the Steamworks version has changed,
-// it's very likely this will break.  A manual edit after running is almost guaranteed to be necessary.
+// it's very likely this will break.  A manual edit before and/or after running is almost guaranteed
+// to be necessary.
 
 
 #import "Basic";
@@ -10,7 +11,7 @@
 
 #load "src/string.jai";
 #load "src/json.jai";
-#load "src/singletons_v150.jai";
+#load "src/singletons_v151.jai";
 
 
 steam_client_header :: "src/steam_client_header.jai";
@@ -19,14 +20,22 @@ steam_api_flat :: "sdk/public/steam/steam_api_flat.h";
 steam_api_json :: "sdk/public/steam/steam_api.json";
 steam_client_h :: "sdk/public/steam/isteamclient.h";
 
-output_autogen_folder       :: "src-autogen";
-output_flat_filename        :: "src-autogen/api_flat.jai";
-output_procs_filename       :: "src-autogen/api_flat_procs_internal.jai";
-output_types_filename       :: "src-autogen/api_flat_types_internal.jai";
-output_steam_api_filename   :: "src-autogen/steam_api.jai";  // for misc procs not attached to singletons
-output_assignments_filename :: "src-autogen/partial_steam_assignments.jai";
-output_loads_filename       :: "src-autogen/partial_steam_loads.jai";
-output_callbacks_filename   :: "src-autogen/partial_steam_callbacks.jai";
+autogen_folder          :: "src-autogen";
+flat_filename           :: "src-autogen/api_flat.jai";
+procs_internal_filename :: "src-autogen/api_flat_procs_internal.jai";
+procs_exposed_filename  :: "src-autogen/api_flat_procs_exposed.jai";
+types_filename          :: "src-autogen/api_flat_types_internal.jai";
+steam_api_filename      :: "src-autogen/steam_api.jai";
+assignments_filename    :: "src-autogen/partial_steam_assignments.jai";
+loads_filename          :: "src-autogen/partial_steam_loads.jai";
+callbacks_filename      :: "src-autogen/partial_steam_callbacks.jai";
+
+
+// There doesn't seem to be definitions for these in Valve's flat files
+kludges :: string.[
+    "ISteamNetworkingConnectionSignaling",  // introduced in v1.51
+    "ISteamNetworkingSignalingRecvContext", // introduced in v1.51
+];
 
 
 files_appended_to_flat :: string.[
@@ -36,6 +45,7 @@ files_appended_to_flat :: string.[
 
 singletons_to_ignore :: string.[
     "ISteamController", // deprecated and conflicts with `ISteamInput`
+    "ISteamNetworking", // deprecated
     "ISteamAppList",    // undocumented and conflicts with `ISteamApps`
 ];
 
@@ -54,13 +64,13 @@ server_singletons :: string.[
 ];
 
 procs_to_ignore :: string.[
-    "SteamAPI_ISteamClient_GetIPCCallCount",       // duplicate of the proc in SteamUtils
-    "SteamAPI_ISteamClient_SetWarningMessageHook", // duplicate of the proc in SteamUtils
-    "SteamAPI_ISteamNetworkingSockets_RunCallbacks", // handled by our own callback system
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ToString",      // compiler bug @Urgent @Remove @TODO
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ParseString",   // compiler bug @Urgent @Remove @TODO
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ToString",    // compiler bug @Urgent @Remove @TODO
-    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ParseString", // compiler bug @Urgent @Remove @TODO
+    "SteamAPI_ISteamClient_GetIPCCallCount",                               // duplicate of the proc in SteamUtils
+    "SteamAPI_ISteamClient_SetWarningMessageHook",                         // duplicate of the proc in SteamUtils
+    "SteamAPI_ISteamNetworkingSockets_RunCallbacks",                       // handled by our own callback system
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ToString",       // duplicate of the proc in SteamNetworkingIPAddr
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIPAddr_ParseString",    // duplicate of the proc in SteamNetworkingIPAddr
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ToString",     // duplicate of the proc in SteamNetworkingIdentity
+    "SteamAPI_ISteamNetworkingUtils_SteamNetworkingIdentity_ParseString",  // duplicate of the proc in SteamNetworkingIdentity
 ];
 
 
@@ -140,14 +150,14 @@ current_namespace := "";
 
 main :: () {
     if !interface_version_matches() {
-        print("Version mismatch between steam_client_header.jai and isteamclient.h");
+        print("\e[1;31m\nVersion mismatch between steam_client_header.jai and isteamclient.h\n\e[m");
         exit(1);
     }
 
     init_string_builder(*procs_builder);
     init_string_builder(*types_builder);
 
-    clear_output_folder();
+    clear_folder();
 
     // flat procs
     file_data, success := read_entire_file(steam_api_flat);
@@ -156,14 +166,18 @@ main :: () {
         exit(1);
     }
 
-    print("Generating %...\n", output_procs_filename);
+    print("Generating %...\n", procs_internal_filename);
     convert_steam_api_flat(file_data);
+
+    procs := builder_to_string(*procs_builder);
+    write_entire_file(procs_exposed_filename, procs);
 
     file_builder : String_Builder;
     init_string_builder(*file_builder);
-    append(*file_builder, "#scope_module\n\n\n");
-    append(*file_builder, builder_to_string(*procs_builder));
-    write_entire_file(output_procs_filename, builder_to_string(*file_builder));
+    append(*file_builder, "#scope_module\n");
+    append(*file_builder, procs);
+    write_entire_file(procs_internal_filename, builder_to_string(*file_builder));
+
 
     init_string_builder(*callbacks_builder);
     init_string_builder(*callbacks_callresults);
@@ -180,12 +194,12 @@ main :: () {
         exit(1);
     }
 
-    print("Generating %...\n", output_types_filename);
+    print("Generating %...\n", types_filename);
     convert_steam_api_json(file_data);
 
     reset(*file_builder);
     append(*file_builder, builder_to_string(*types_builder));
-    write_entire_file(output_types_filename, builder_to_string(*file_builder));
+    write_entire_file(types_filename, builder_to_string(*file_builder));
 
 
     output(*callbacks_builder, callbacks_header, builder_to_string(*callbacks_callresults), builder_to_string(*callbacks_callbacks));
@@ -193,7 +207,7 @@ main :: () {
     output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_struct));
     output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_types));
     output(*callbacks_builder, "\n%", builder_to_string(*callbacks_procs));
-    write_entire_file(output_callbacks_filename, builder_to_string(*callbacks_builder));
+    write_entire_file(callbacks_filename, builder_to_string(*callbacks_builder));
 
     // singletones
     init_string_builder(*steam_api_builder);
@@ -201,16 +215,16 @@ main :: () {
     init_string_builder(*header_assigns_builder);
     init_string_builder(*header_loads_builder);
 
-    file_data, success = read_entire_file(output_procs_filename);
+    file_data, success = read_entire_file(procs_internal_filename);
     if !success {
-        print("Failed to read %", output_procs_filename);
+        print("Failed to read %", procs_internal_filename);
         exit(1);
     }
 
     generate_classes(file_data);
 
-    write_entire_file(output_assignments_filename, builder_to_string(*header_assigns_builder));
-    write_entire_file(output_loads_filename, builder_to_string(*header_loads_builder));
+    write_entire_file(assignments_filename, builder_to_string(*header_assigns_builder));
+    write_entire_file(loads_filename, builder_to_string(*header_loads_builder));
 
     reset(*file_builder);
     append_file(*file_builder, steam_client_header);
@@ -224,8 +238,8 @@ SteamClient :: () -> *ISteamClient {
     return SteamInternal_CreateInterface(STEAMCLIENT_INTERFACE_VERSION);
 }
 ___JAI);
-    procs_data := builder_to_string(*procs_builder);
-    for row: split(procs_data, "\n") {
+
+    for row: split(procs, "\n") {
         end_of_name := index_of_string(row, " :: (");
         if end_of_name >= 0 {
             underscore := end_of_name;
@@ -236,12 +250,12 @@ ___JAI);
             }
             if row[underscore + 1] == #char "v" {
                 append(*file_builder, mid(row, 9, underscore));
-                append(*file_builder, slice(row, end_of_name));
+                append(*file_builder, mid(row, end_of_name));
             }
             else if mid(row, underscore - 2, end_of_name) == "_c_str"
-                append(*file_builder, slice(row, underscore - 1));
+                append(*file_builder, mid(row, underscore - 1));
             else
-                append(*file_builder, slice(row, underscore + 1));
+                append(*file_builder, mid(row, underscore + 1));
         }
         else
             append(*file_builder, row);
@@ -257,10 +271,10 @@ ___JAI);
         }
         file_data = lstrip(file_data);
         if starts_with(file_data, "#scope_module")
-            file_data = slice(file_data, 13);
+            file_data = mid(file_data, 13);
         append(*file_builder, file_data);
     }
-    write_entire_file(output_flat_filename, builder_to_string(*file_builder));
+    write_entire_file(flat_filename, builder_to_string(*file_builder));
 
     print("Done!\n");
 }
@@ -337,16 +351,14 @@ convert_steam_api_flat :: (file_data: string) {
             parameters := split(split(sections[1], ")")[0], ",");
 
             link_name := proc_name;
-            //if starts_with(proc_name, "SteamAPI_") {
-            //    proc_name = slice(proc_name, 9);
-            //    if starts_with(proc_name, "I")
-            //        proc_name = slice(proc_name, 1);
-            //}
+            if contains(proc_name, "_SteamAPI_") {
+                proc_name = replace(proc_name, "_SteamAPI_", "_");
+            }
 
             class_end := 1;
             forward_til(row, #char "_", #code class_end);
-            class_name := slice(proc_name, class_end);
-            belongs_to_singleton := contains(singletons_v150, class_name);
+            class_name := mid(proc_name, class_end);
+            belongs_to_singleton := contains(singletons_v151, class_name);
 
             out("% :: (", proc_name);
 
@@ -557,6 +569,7 @@ convert_steam_api_json :: (file_data: string) {
     root_value : JSON_Value;
     traverse_node("", root);
 
+    for kludges  out("% :: struct {}\n", it);
 
     output(*callbacks_enum, "CallbackID :: enum s32 {\n");
     output(*callbacks_struct, "Callbacks : struct {\n");
@@ -754,7 +767,7 @@ generate_classes :: (file_data: string) {
             if row == "" {
                 if in_singleton && !contains(singletons_to_ignore, section_name) {
                     singleton_count += 1;
-                    write_entire_file(sprint("%/%.jai", output_autogen_folder, singleton_instance), builder_to_string(*singleton_builder));
+                    write_entire_file(sprint("%/%.jai", autogen_folder, singleton_instance), builder_to_string(*singleton_builder));
                 }
 
                 if current_singleton_row != -1 {
@@ -786,8 +799,11 @@ generate_classes :: (file_data: string) {
                             singleton_instance, namespace = write_header(section_name, class_name_override);
                             print("Generating %.jai...\n", singleton_instance);
                             name := mid(row, 9, i);
-                            name = snake_from_camel(name);
-                            defer free(name);
+                            snake_name := snake_from_camel(name);
+                            defer free(snake_name);
+                            name = snake_name;
+                            if ends_with(name, "__steam_api")
+                                name = slice(name, 0, name.count - 11);
 
                             server_prefix = ifx contains(server_singletons, section_name) then "Server" else "";
 
@@ -816,7 +832,7 @@ generate_classes :: (file_data: string) {
                 if contains(procs_to_ignore, long_name)  continue;
 
                 if short_name == "Init" || short_name == "Shutdown"
-                    short_name = sprint("%1%2", short_name, slice(section_name, 6));
+                    short_name = sprint("%1%2", short_name, mid(section_name, 6));
 
                 singleton_out("\n\n");
                 if returns == "" {
@@ -833,7 +849,7 @@ generate_classes :: (file_data: string) {
                         prefix = "to_string(";
                         postfix = ")";
                     }
-                    if parameters == ""
+                    if (parameters == "")
                         singleton_out("    return %1%2(%3)%4;\n", prefix, long_name, singleton_instance, postfix);
                     else
                         singleton_out("    return %1%2(%3, %4)%5;\n", prefix, long_name, singleton_instance, strip_types(parameters), postfix);
@@ -851,14 +867,14 @@ generate_classes :: (file_data: string) {
     );
 }
 
-//%1%2 :: (%3%4code: Code) #expand {
-//    RegisterCallResult(
-//        %1%2(%5),
-//        (result: %6, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+%1%2 :: (%3%4code: Code) #expand {
+    RegisterCallResult(
+        %1%2(%5),
+        (result: %6, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
                     ___JAI, server_prefix, short_name, parameters, ifx parameters then ", " else "", strip_types(parameters), struct_name);
                 }
             }
@@ -874,10 +890,11 @@ generate_classes :: (file_data: string) {
 
     header_assign_out("}\n");
 
-    write_entire_file(output_steam_api_filename, builder_to_string(*steam_api_builder));
+    write_entire_file(steam_api_filename, builder_to_string(*steam_api_builder));
 
-    if singleton_count != 36 {
-        print("Singleton count should be 36! Has the version changed?");
+    desired_singleton_count := 38 - singletons_to_ignore.count;
+    if singleton_count != desired_singleton_count {
+        print("\e[1;31m\nSingleton count should be %! Has the version changed?\n\e[m", desired_singleton_count);
         exit(1);
     }
 }
@@ -902,9 +919,9 @@ interface_version_matches :: () -> matches: bool {
 
     if steam_version == ""  return false;
 
-    file_data, success = read_entire_file(steam_client_header);
+    file_data, success = read_entire_file("module.jai");
     if !success {
-        print("Failed to read %", steam_client_header);
+        print("Failed to read module.jai");
         exit(1);
     }
 
@@ -1105,10 +1122,10 @@ steam_api_parts_from_flat :: (row: string) -> method_name: string, type_name: st
 
 
 
-clear_output_folder :: () {
+clear_folder :: () {
     proc :: (info: *File_Visit_Info, user_data: *void) {
         file_delete(info.full_name);
     }
 
-    visit_files(output_autogen_folder, recursive=false, null, proc, visit_files=true, visit_directories=false);
+    visit_files(autogen_folder, recursive=false, null, proc, visit_files=true, visit_directories=false);
 }

@@ -12,14 +12,14 @@ ServerRequestUserStats :: inline (steamIDUser: uint64_steamid, callback: (GSStat
     );
 }
 
-//ServerRequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerRequestUserStats(steamIDUser),
-//        (result: GSStatsReceived_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerRequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        ServerRequestUserStats(steamIDUser),
+        (result: GSStatsReceived_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerGetUserStatInt32 :: inline (steamIDUser: uint64_steamid, pchName: *char, pData: *int32) -> bool {
@@ -73,11 +73,11 @@ ServerStoreUserStats :: inline (steamIDUser: uint64_steamid, callback: (GSStatsS
     );
 }
 
-//ServerStoreUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerStoreUserStats(steamIDUser),
-//        (result: GSStatsStored_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerStoreUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        ServerStoreUserStats(steamIDUser),
+        (result: GSStatsStored_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}

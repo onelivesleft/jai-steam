@@ -1,4 +1,9 @@
-// Jai wrapper for `Steamworks SDK v1.50`
+// Jai wrapper for `Steamworks SDK`
+
+JAI_STEAM_VERSION :: "1.51.0";
+
+STEAMWORKS_SDK_VERSION        :: "1.51";
+STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
 
 
 #module_parameters(
@@ -7,10 +12,16 @@
                                    // For normal module usage leave this alone, and look at `steam.jai`.
                                    // If you set this, then look at `steam_flat.jai` instead.
 
+    expose_raw_calls := false,     // You may not want to use the flat api, but find you want to use the raw
+                                   // api calls directly.  Enabling this will expose them, to be used like this:
+                                   // `SteamAPI_ISteamUser_GetHSteamUser(steam_user);`
+
     use_temporary_storage := true, // Set to false if you don't plan on calling `reset_temporary_storage`.
 
-    building := false              // Set to true when importing in your build file, then call `steam_build_step(message)`
+    building := false,             // Set to true when importing in your build file, then call `steam_build_step(message)`
                                    // for every compiler message.  See example build script below.
+
+    verbose := false               // When enabled extra debug output is displayed.
 );
 
 

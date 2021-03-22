@@ -1,4 +1,3 @@
-#scope_module
 
 
 // ISteamClient

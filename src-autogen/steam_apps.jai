@@ -137,14 +137,14 @@ GetFileDetails :: inline (pszFileName: *char, callback: (FileDetailsResult_t, bo
     );
 }
 
-//GetFileDetails :: (pszFileName: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        GetFileDetails(pszFileName),
-//        (result: FileDetailsResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+GetFileDetails :: (pszFileName: *char, code: Code) #expand {
+    RegisterCallResult(
+        GetFileDetails(pszFileName),
+        (result: FileDetailsResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetLaunchCommandLine :: inline (pszCommandLine: *char, cubCommandLine: s32) -> s32 {

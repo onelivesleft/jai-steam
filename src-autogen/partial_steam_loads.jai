@@ -10,7 +10,6 @@
 #load "steam_user_stats.jai";
 #load "steam_apps.jai";
 #load "steam_game_server_apps.jai";
-#load "steam_networking.jai";
 #load "steam_game_server_networking.jai";
 #load "steam_screenshots.jai";
 #load "steam_music.jai";

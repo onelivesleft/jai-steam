@@ -5,6 +5,7 @@
 #pragma once
 
 #include "steamnetworkingtypes.h"
+#include "steam_api_common.h"
 
 //-----------------------------------------------------------------------------
 /// The non-connection-oriented interface to send and receive messages
@@ -159,31 +160,40 @@ struct SteamNetworkingMessagesSessionFailed_t
 
 #pragma pack(pop)
 
-//
-// Global accessor
-//
+// Global accessors
+// Using standalone lib
+#ifdef STEAMNETWORKINGSOCKETS_STANDALONELIB
 
-#if defined( STEAMNETWORKINGSOCKETS_PARTNER )
+	// Standalone lib.
+	static_assert( STEAMNETWORKINGMESSAGES_INTERFACE_VERSION[25] == '2', "Version mismatch" );
+	STEAMNETWORKINGSOCKETS_INTERFACE ISteamNetworkingMessages *SteamNetworkingMessages_LibV2();
+	inline ISteamNetworkingMessages *SteamNetworkingMessages_Lib() { return SteamNetworkingMessages_LibV2(); }
 
-	// Standalone lib.  Use different symbol name, so that we can dynamically switch between steamclient.dll
-	// and the standalone lib
-	STEAMNETWORKINGSOCKETS_INTERFACE ISteamNetworkingMessages *SteamNetworkingMessages_Lib();
-	STEAMNETWORKINGSOCKETS_INTERFACE ISteamNetworkingMessages *SteamGameServerNetworkingMessages_Lib();
-	inline ISteamNetworkingMessages *SteamNetworkingMessages() { return SteamNetworkingMessages_Lib(); }
-	inline ISteamNetworkingMessages *SteamGameServerNetworkingMessages() { return SteamGameServerNetworkingMessages_Lib(); }
+	// If running in context of steam, we also define a gameserver instance.
+	#ifdef STEAMNETWORKINGSOCKETS_STEAM
+		STEAMNETWORKINGSOCKETS_INTERFACE ISteamNetworkingMessages *SteamGameServerNetworkingMessages_LibV2();
+		inline ISteamNetworkingMessages *SteamGameServerNetworkingMessages_Lib() { return SteamGameServerNetworkingMessages_LibV2(); }
+	#endif
 
-#elif defined( STEAMNETWORKINGSOCKETS_OPENSOURCE )
+	#ifndef STEAMNETWORKINGSOCKETS_STEAMAPI
+		inline ISteamNetworkingMessages *SteamNetworkingMessages() { return SteamNetworkingMessages_LibV2(); }
+		#ifdef STEAMNETWORKINGSOCKETS_STEAM
+			inline ISteamNetworkingMessages *SteamGameServerNetworkingMessages() { return SteamGameServerNetworkingMessages_LibV2(); }
+		#endif
+	#endif
+#endif
 
-	// Opensource GameNetworkingSockets
-	STEAMNETWORKINGSOCKETS_INTERFACE ISteamNetworkingMessages *SteamNetworkingMessages();
-
-#else
+// Using Steamworks SDK
+#ifdef STEAMNETWORKINGSOCKETS_STEAMAPI
 
 	// Steamworks SDK
-	inline ISteamNetworkingMessages *SteamNetworkingMessages();
-	STEAM_DEFINE_USER_INTERFACE_ACCESSOR( ISteamNetworkingMessages *, SteamNetworkingMessages, STEAMNETWORKINGMESSAGES_INTERFACE_VERSION );
-	inline ISteamNetworkingMessages *SteamGameServerNetworkingMessages();
-	STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamNetworkingMessages *, SteamGameServerNetworkingMessages, STEAMNETWORKINGMESSAGES_INTERFACE_VERSION );
+	STEAM_DEFINE_USER_INTERFACE_ACCESSOR( ISteamNetworkingMessages *, SteamNetworkingMessages_SteamAPI, STEAMNETWORKINGMESSAGES_INTERFACE_VERSION );
+	STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamNetworkingMessages *, SteamGameServerNetworkingMessages_SteamAPI, STEAMNETWORKINGMESSAGES_INTERFACE_VERSION );
+
+	#ifndef STEAMNETWORKINGSOCKETS_STANDALONELIB
+		inline ISteamNetworkingMessages *SteamNetworkingMessages() { return SteamNetworkingMessages_SteamAPI(); }
+		inline ISteamNetworkingMessages *SteamGameServerNetworkingMessages() { return SteamGameServerNetworkingMessages_SteamAPI(); }
+	#endif
 #endif
 
 #endif // ISTEAMNETWORKINGMESSAGES

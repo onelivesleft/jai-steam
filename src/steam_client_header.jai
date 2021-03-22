@@ -1,6 +1,3 @@
-STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
-
-
 #scope_module
 
 

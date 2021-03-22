@@ -22,14 +22,14 @@ CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char, callback: (HTML
     );
 }
 
-//CreateBrowser :: (pchUserAgent: *char, pchUserCSS: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        CreateBrowser(pchUserAgent, pchUserCSS),
-//        (result: HTML_BrowserReady_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+CreateBrowser :: (pchUserAgent: *char, pchUserCSS: *char, code: Code) #expand {
+    RegisterCallResult(
+        CreateBrowser(pchUserAgent, pchUserCSS),
+        (result: HTML_BrowserReady_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 RemoveBrowser :: inline (unBrowserHandle: HHTMLBrowser) {

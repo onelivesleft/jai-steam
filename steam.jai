@@ -1,14 +1,22 @@
-// Standard Jai wrapper of Steam SDK v1.50.
+// Standard Jai wrapper of `Steamworks SDK`
 //
 // Handles a lot of book-keeping for you; if you want full control then set the
 // `use_flat_api` module parameter, and switch to reading `steam_flat.jai`
+// (though if you just want to splash in the raw calls to handle edge cases you
+//  might want `expose_raw_calls` instead.)
 
 
 // `InitSteam` must be called before using any other API functions. If it fails, an
 // error message will be output to the debugger (or stderr) with further information.
 
-InitSteam :: (debug := false) -> success: bool {
-	return Steam_Init(debug);
+InitSteam :: () -> success: bool {
+	return Steam_Init();
+}
+
+
+InitSteam :: (success: *bool) #expand {
+	<<success = Steam_Init();
+	#insert SteamCallbacks;
 }
 
 
@@ -115,11 +123,7 @@ SetBreakpadAppID :: (unAppID: uint32) {
 #scope_module
 
 
-verbose := false;
-
-
-Steam_Init :: (debug := false) -> success: bool {
-    verbose = debug;
+Steam_Init :: () -> success: bool {
     success := SteamAPI_Init();
     if !success {
         if verbose {
@@ -160,10 +164,13 @@ Failed to init steam, this could be for one of the following reasons:
 #import "Basic";
 #import "Hash_Table";
 
+#if expose_raw_calls
+	#load "src-autogen/api_flat_procs_exposed.jai";
+else
+	#load "src-autogen/api_flat_procs_internal.jai";
 
 #load "src/steam_types.jai";
 #load "src/steam_client_header.jai";
-#load "src-autogen/api_flat_procs_internal.jai";
 #load "src-autogen/api_flat_types_internal.jai";
 #load "src-autogen/partial_steam_assignments.jai";
 #load "src-autogen/partial_steam_loads.jai";

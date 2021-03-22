@@ -1,4 +1,4 @@
-// Direct, unadulterated flat wrapper of the Steam SDK v1.50.
+// Direct, unadulterated flat wrapper of the Steamworks SDK.
 
 // SteamAPI_Init must be called before using any other API functions. If it fails, an
 // error message will be output to the debugger (or stderr) with further information.
@@ -78,7 +78,7 @@ SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;
 //
 // Here is the basic template for replacing SteamAPI_RunCallbacks() with manual dispatch
 /**
-```c
+```c++
 	HSteamPipe hSteamPipe = SteamAPI_GetHSteamPipe(); // See also SteamGameServer_GetHSteamPipe()
 	SteamAPI_ManualDispatch_RunFrame( hSteamPipe )
 	CallbackMsg_t callback;
@@ -104,7 +104,7 @@ SteamAPI_SetBreakpadAppID :: (unAppID: uint32) #foreign steam;
 		}
 		SteamAPI_ManualDispatch_FreeLastCallback( hSteamPipe );
 	}
-```c
+```
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -145,8 +145,8 @@ for message, is_call_result: SteamAPI_Callbacks {
 		if message.call_result_id == {
 			case .NumberOfCurrentPlayers_t;
 			if !message.io_failure {
-				number_of_current_players := << cast(*NumberOfCurrentPlayers_t) message.data;
-				if number_of_current_players.m_bSuccess
+				number_of_current_players := << cast(*NumberOfCurrentPlayers_t) messa`ge.data;
+				if number_of_current_players.m_bSuccess`
 					print("Num Players: %\n", number_of_current_players.m_cPlayers);
 				else
 					print("Failed to get Num Players\n");
@@ -159,8 +159,8 @@ for message, is_call_result: SteamAPI_Callbacks {
 	else {
 		if message.callback_id == {
 			case .GameOverlayActivated_t;
-			info := cast(*GameOverlayActivated_t) message.data;
-			print("\n---\nOverlay active: %\n", cast(bool) info.m_bActive);
+			info := cast(*GameOverlayActivated_t) messa`ge.data;
+			print("\n---\nOverlay active: %\n", cast(bo`ol) info.m_bActive);
 			steam_userstats := SteamAPI_SteamUserStats_v012();
 			handle := SteamAPI_ISteamUserStats_GetNumberOfCurrentPlayers(steam_userstats);
 			print("Requesting #players, handle = %\n", formatInt(handle, base=16));
@@ -190,66 +190,39 @@ SteamAPI_CallbackMessage :: struct {
 SteamAPI_GetHSteamPipe :: () -> HSteamPipe #foreign steam;
 SteamGameServer_GetHSteamPipe :: ()  -> HSteamPipe #foreign steam;
 
-SteamAPI_Callbacks_Type :: struct {}
+
 SteamAPI_Callbacks : SteamAPI_Callbacks_Type;
 
 for_expansion :: (_: *SteamAPI_Callbacks_Type, body: Code, flags: For_Flags) #expand {
 	#assert(flags == 0); // no options are supported
 
+	`it : SteamAPI_CallbackMessage;
+	`it_index : bool;
+
 	steam_pipe := SteamAPI_GetHSteamPipe();
-	SteamAPI_ManualDispatch_RunFrame(steam_pipe);
 
-	callback: CallbackMsg_t;
-
-	while SteamAPI_ManualDispatch_GetNextCallback(steam_pipe, *callback) {
-		defer SteamAPI_ManualDispatch_FreeLastCallback(steam_pipe);
-
-		`it : SteamAPI_CallbackMessage;
-		`it_index : bool;
-		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback {
-			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
-
-			call_result : *void;
-			#if use_temporary_storage
-				call_result = temporary_alloc(completed_call_result.m_cubParam);
-			else
-				call_result = alloc(completed_call_result.m_cubParam);
-
-			io_failure := false;
-			if SteamAPI_ManualDispatch_GetAPICallResult(
-				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *io_failure)
-			{
-				it.m_iCallback = completed_call_result.m_iCallback;
-				it.m_hAsyncCall = completed_call_result.m_hAsyncCall;
-				it.data = call_result;
-				it.callback = *callback;
-				it.call_result = completed_call_result;
-				it.io_failure = io_failure;
-				it_index = true;
-
-				#insert body;
-			}
-
-			#if !use_temporary_storage  free(call_result);
-		}
-		else {
-			it.m_iCallback = callback.m_iCallback;
-			it.data = callback.m_pubParam;
-			it.callback = *callback;
-			it_index = false;
-
-			#insert body;
-		}
-	}
+	for_expansion_message_loop(steam_pipe, body);
 }
 
-SteamGameServer_Callbacks_Type :: struct {}
+
 SteamGameServer_Callbacks : SteamGameServer_Callbacks_Type;
 
 for_expansion :: (_: *SteamGameServer_Callbacks_Type, body: Code, flags: For_Flags) #expand {
 	#assert(flags == 0); // no options are supported
 
+	`it : SteamAPI_CallbackMessage;
+	`it_index : bool;
+
 	steam_pipe := SteamGameServer_GetHSteamPipe();
+
+	for_expansion_message_loop(steam_pipe, body);
+}
+
+
+#scope_module
+
+
+for_expansion_message_loop :: (steam_pipe: HSteamPipe, body: Code) #expand {
 	SteamAPI_ManualDispatch_RunFrame(steam_pipe);
 
 	callback: CallbackMsg_t;
@@ -257,8 +230,6 @@ for_expansion :: (_: *SteamGameServer_Callbacks_Type, body: Code, flags: For_Fla
 	while SteamAPI_ManualDispatch_GetNextCallback(steam_pipe, *callback) {
 		defer SteamAPI_ManualDispatch_FreeLastCallback(steam_pipe);
 
-		`it : SteamAPI_CallbackMessage;
-		`it_index : bool;
 		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback {
 			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
 
@@ -272,33 +243,33 @@ for_expansion :: (_: *SteamGameServer_Callbacks_Type, body: Code, flags: For_Fla
 			if SteamAPI_ManualDispatch_GetAPICallResult(
 				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *io_failure)
 			{
-				it.m_iCallback = completed_call_result.m_iCallback;
-				it.m_hAsyncCall = completed_call_result.m_hAsyncCall;
-				it.data = call_result;
-				it.callback = *callback;
-				it.call_result = completed_call_result;
-				it.io_failure = io_failure;
-				it_index = true;
+				`it.m_iCallback = completed_call_result.m_iCallback;
+				`it.m_hAsyncCall = completed_call_result.m_hAsyncCall;
+				`it.data = call_result;
+				`it.callback = *callback;
+				`it.call_result = completed_call_result;
+				`it.io_failure = io_failure;
+				`it_index = true;
 
-				#insert body;
+				#insert (break = #assert(false)) body;
 			}
 
 			#if !use_temporary_storage  free(call_result);
 		}
 		else {
-			it.m_iCallback = callback.m_iCallback;
-			it.data = callback.m_pubParam;
-			it.callback = *callback;
-			it_index = false;
+			`it.m_iCallback = callback.m_iCallback;
+			`it.data = callback.m_pubParam;
+			`it.callback = *callback;
+			`it_index = false;
 
-			#insert body;
+			#insert (break = #assert(false)) body;
 		}
 	}
 }
 
 
-#scope_module
-
+SteamAPI_Callbacks_Type :: struct {}
+SteamGameServer_Callbacks_Type :: struct {}
 
 SteamAPI_Init_Internal :: () -> bool #foreign steam "SteamAPI_Init";
 

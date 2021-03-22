@@ -32,18 +32,33 @@ ServerSendQueryUGCRequest :: inline (handle: UGCQueryHandle_t, callback: (SteamU
     );
 }
 
-//ServerSendQueryUGCRequest :: (handle: UGCQueryHandle_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerSendQueryUGCRequest(handle),
-//        (result: SteamUGCQueryCompleted_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerSendQueryUGCRequest :: (handle: UGCQueryHandle_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerSendQueryUGCRequest(handle),
+        (result: SteamUGCQueryCompleted_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerGetQueryUGCResult :: inline (handle: UGCQueryHandle_t, index: uint32, pDetails: *SteamUGCDetails_t) -> bool {
     return SteamAPI_ISteamUGC_GetQueryUGCResult(steam_game_server_ugc, handle, index, pDetails);
+}
+
+
+ServerGetQueryUGCNumTags :: inline (handle: UGCQueryHandle_t, index: uint32) -> uint32 {
+    return SteamAPI_ISteamUGC_GetQueryUGCNumTags(steam_game_server_ugc, handle, index);
+}
+
+
+ServerGetQueryUGCTag :: inline (handle: UGCQueryHandle_t, index: uint32, indexTag: uint32, pchValue: *char, cchValueSize: uint32) -> bool {
+    return SteamAPI_ISteamUGC_GetQueryUGCTag(steam_game_server_ugc, handle, index, indexTag, pchValue, cchValueSize);
+}
+
+
+ServerGetQueryUGCTagDisplayName :: inline (handle: UGCQueryHandle_t, index: uint32, indexTag: uint32, pchValue: *char, cchValueSize: uint32) -> bool {
+    return SteamAPI_ISteamUGC_GetQueryUGCTagDisplayName(steam_game_server_ugc, handle, index, indexTag, pchValue, cchValueSize);
 }
 
 
@@ -198,14 +213,14 @@ ServerRequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAge
     );
 }
 
-//ServerRequestUGCDetails :: (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerRequestUGCDetails(nPublishedFileID, unMaxAgeSeconds),
-//        (result: SteamUGCRequestUGCDetailsResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerRequestUGCDetails :: (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32, code: Code) #expand {
+    RegisterCallResult(
+        ServerRequestUGCDetails(nPublishedFileID, unMaxAgeSeconds),
+        (result: SteamUGCRequestUGCDetailsResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerCreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType) -> SteamAPICall_t #must {
@@ -219,14 +234,14 @@ ServerCreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileTyp
     );
 }
 
-//ServerCreateItem :: (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerCreateItem(nConsumerAppId, eFileType),
-//        (result: CreateItemResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerCreateItem :: (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, code: Code) #expand {
+    RegisterCallResult(
+        ServerCreateItem(nConsumerAppId, eFileType),
+        (result: CreateItemResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerStartItemUpdate :: inline (nConsumerAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> UGCUpdateHandle_t {
@@ -330,14 +345,14 @@ ServerSubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *cha
     );
 }
 
-//ServerSubmitItemUpdate :: (handle: UGCUpdateHandle_t, pchChangeNote: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerSubmitItemUpdate(handle, pchChangeNote),
-//        (result: SubmitItemUpdateResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerSubmitItemUpdate :: (handle: UGCUpdateHandle_t, pchChangeNote: *char, code: Code) #expand {
+    RegisterCallResult(
+        ServerSubmitItemUpdate(handle, pchChangeNote),
+        (result: SubmitItemUpdateResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerGetItemUpdateProgress :: inline (handle: UGCUpdateHandle_t, punBytesProcessed: *uint64, punBytesTotal: *uint64) -> EItemUpdateStatus {
@@ -356,14 +371,14 @@ ServerSetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: b
     );
 }
 
-//ServerSetUserItemVote :: (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerSetUserItemVote(nPublishedFileID, bVoteUp),
-//        (result: SetUserItemVoteResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerSetUserItemVote :: (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, code: Code) #expand {
+    RegisterCallResult(
+        ServerSetUserItemVote(nPublishedFileID, bVoteUp),
+        (result: SetUserItemVoteResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerGetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -377,14 +392,14 @@ ServerGetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, callback: 
     );
 }
 
-//ServerGetUserItemVote :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerGetUserItemVote(nPublishedFileID),
-//        (result: GetUserItemVoteResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerGetUserItemVote :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerGetUserItemVote(nPublishedFileID),
+        (result: GetUserItemVoteResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerAddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -398,14 +413,14 @@ ServerAddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: Published
     );
 }
 
-//ServerAddItemToFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerAddItemToFavorites(nAppId, nPublishedFileID),
-//        (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerAddItemToFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerAddItemToFavorites(nAppId, nPublishedFileID),
+        (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerRemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -419,14 +434,14 @@ ServerRemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: Publ
     );
 }
 
-//ServerRemoveItemFromFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerRemoveItemFromFavorites(nAppId, nPublishedFileID),
-//        (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerRemoveItemFromFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerRemoveItemFromFavorites(nAppId, nPublishedFileID),
+        (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerSubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -440,14 +455,14 @@ ServerSubscribeItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (R
     );
 }
 
-//ServerSubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerSubscribeItem(nPublishedFileID),
-//        (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerSubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerSubscribeItem(nPublishedFileID),
+        (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerUnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -461,14 +476,14 @@ ServerUnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t, callback: 
     );
 }
 
-//ServerUnsubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerUnsubscribeItem(nPublishedFileID),
-//        (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerUnsubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerUnsubscribeItem(nPublishedFileID),
+        (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerGetNumSubscribedItems :: inline () -> uint32 {
@@ -522,14 +537,14 @@ ServerStartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, 
     );
 }
 
-//ServerStartPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerStartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
-//        (result: StartPlaytimeTrackingResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerStartPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) #expand {
+    RegisterCallResult(
+        ServerStartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
+        (result: StartPlaytimeTrackingResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerStopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t #must {
@@ -543,14 +558,14 @@ ServerStopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, u
     );
 }
 
-//ServerStopPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerStopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
-//        (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerStopPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) #expand {
+    RegisterCallResult(
+        ServerStopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
+        (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerStopPlaytimeTrackingForAllItems :: inline () -> SteamAPICall_t #must {
@@ -564,14 +579,14 @@ ServerStopPlaytimeTrackingForAllItems :: inline (callback: (StopPlaytimeTracking
     );
 }
 
-//ServerStopPlaytimeTrackingForAllItems :: (code: Code) #expand {
-//    RegisterCallResult(
-//        ServerStopPlaytimeTrackingForAllItems(),
-//        (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerStopPlaytimeTrackingForAllItems :: (code: Code) #expand {
+    RegisterCallResult(
+        ServerStopPlaytimeTrackingForAllItems(),
+        (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerAddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -585,14 +600,14 @@ ServerAddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChild
     );
 }
 
-//ServerAddDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerAddDependency(nParentPublishedFileID, nChildPublishedFileID),
-//        (result: AddUGCDependencyResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerAddDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerAddDependency(nParentPublishedFileID, nChildPublishedFileID),
+        (result: AddUGCDependencyResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerRemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -606,14 +621,14 @@ ServerRemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nCh
     );
 }
 
-//ServerRemoveDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerRemoveDependency(nParentPublishedFileID, nChildPublishedFileID),
-//        (result: RemoveUGCDependencyResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerRemoveDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerRemoveDependency(nParentPublishedFileID, nChildPublishedFileID),
+        (result: RemoveUGCDependencyResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerAddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t #must {
@@ -627,14 +642,14 @@ ServerAddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: A
     );
 }
 
-//ServerAddAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerAddAppDependency(nPublishedFileID, nAppID),
-//        (result: AddAppDependencyResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerAddAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerAddAppDependency(nPublishedFileID, nAppID),
+        (result: AddAppDependencyResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerRemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t #must {
@@ -648,14 +663,14 @@ ServerRemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID
     );
 }
 
-//ServerRemoveAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerRemoveAppDependency(nPublishedFileID, nAppID),
-//        (result: RemoveAppDependencyResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerRemoveAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerRemoveAppDependency(nPublishedFileID, nAppID),
+        (result: RemoveAppDependencyResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerGetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -669,14 +684,14 @@ ServerGetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t, callbac
     );
 }
 
-//ServerGetAppDependencies :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerGetAppDependencies(nPublishedFileID),
-//        (result: GetAppDependenciesResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerGetAppDependencies :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerGetAppDependencies(nPublishedFileID),
+        (result: GetAppDependenciesResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerDeleteItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
@@ -690,11 +705,11 @@ ServerDeleteItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (Dele
     );
 }
 
-//ServerDeleteItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerDeleteItem(nPublishedFileID),
-//        (result: DeleteItemResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerDeleteItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
+    RegisterCallResult(
+        ServerDeleteItem(nPublishedFileID),
+        (result: DeleteItemResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}

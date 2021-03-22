@@ -87,7 +87,7 @@ public:
 	virtual bool GetImageRGBA( int iImage, uint8 *pubDest, int nDestBufferSize ) = 0;
 
 	// Deprecated.  Do not call this.
-	STEAM_PRIVATE_API( virtual bool GetCSERIPPort( uint32 *unIP, uint16 *usPort ) = 0; );
+	STEAM_PRIVATE_API( virtual bool GetCSERIPPort( uint32 *unIP, uint16 *usPort ) = 0; )
 
 	// return the amount of battery power left in the current system in % [0..100], 255 for being on AC power
 	virtual uint8 GetCurrentBatteryPower() = 0;

@@ -127,14 +127,14 @@ RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid, callb
     );
 }
 
-//RequestEligiblePromoItemDefinitionsIDs :: (steamID: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        RequestEligiblePromoItemDefinitionsIDs(steamID),
-//        (result: SteamInventoryEligiblePromoItemDefIDs_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestEligiblePromoItemDefinitionsIDs :: (steamID: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        RequestEligiblePromoItemDefinitionsIDs(steamID),
+        (result: SteamInventoryEligiblePromoItemDefIDs_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetEligiblePromoItemDefinitionIDs :: inline (steamID: uint64_steamid, pItemDefIDs: *SteamItemDef_t, punItemDefIDsArraySize: *uint32) -> bool {
@@ -153,14 +153,14 @@ StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uin
     );
 }
 
-//StartPurchase :: (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32, code: Code) #expand {
-//    RegisterCallResult(
-//        StartPurchase(pArrayItemDefs, punArrayQuantity, unArrayLength),
-//        (result: SteamInventoryStartPurchaseResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+StartPurchase :: (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32, code: Code) #expand {
+    RegisterCallResult(
+        StartPurchase(pArrayItemDefs, punArrayQuantity, unArrayLength),
+        (result: SteamInventoryStartPurchaseResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 RequestPrices :: inline () -> SteamAPICall_t #must {
@@ -174,14 +174,14 @@ RequestPrices :: inline (callback: (SteamInventoryRequestPricesResult_t, bool) -
     );
 }
 
-//RequestPrices :: (code: Code) #expand {
-//    RegisterCallResult(
-//        RequestPrices(),
-//        (result: SteamInventoryRequestPricesResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+RequestPrices :: (code: Code) #expand {
+    RegisterCallResult(
+        RequestPrices(),
+        (result: SteamInventoryRequestPricesResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 GetNumItemsWithPrices :: inline () -> uint32 {

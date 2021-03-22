@@ -66,8 +66,6 @@ STEAM_CONTROLLER_MAX_ANALOG_ACTION_DATA ::   1.0;
 // networkingsockets
 //
 
-ISteamNetworkingCustomSignalingRecvContext :: *void;
-ISteamNetworkingConnectionCustomSignaling :: *void;
 
 EType :: enum {
     k_EType_String;

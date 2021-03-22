@@ -182,14 +182,14 @@ ServerGetServerReputation :: inline (callback: (GSReputation_t, bool) -> ()) {
     );
 }
 
-//ServerGetServerReputation :: (code: Code) #expand {
-//    RegisterCallResult(
-//        ServerGetServerReputation(),
-//        (result: GSReputation_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerGetServerReputation :: (code: Code) #expand {
+    RegisterCallResult(
+        ServerGetServerReputation(),
+        (result: GSReputation_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerGetPublicIP :: inline () -> SteamIPAddress_t {
@@ -233,14 +233,14 @@ ServerAssociateWithClan :: inline (steamIDClan: uint64_steamid, callback: (Assoc
     );
 }
 
-//ServerAssociateWithClan :: (steamIDClan: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerAssociateWithClan(steamIDClan),
-//        (result: AssociateWithClanResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerAssociateWithClan :: (steamIDClan: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        ServerAssociateWithClan(steamIDClan),
+        (result: AssociateWithClanResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid) -> SteamAPICall_t #must {
@@ -254,11 +254,11 @@ ServerComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid,
     );
 }
 
-//ServerComputeNewPlayerCompatibility :: (steamIDNewPlayer: uint64_steamid, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerComputeNewPlayerCompatibility(steamIDNewPlayer),
-//        (result: ComputeNewPlayerCompatibilityResult_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerComputeNewPlayerCompatibility :: (steamIDNewPlayer: uint64_steamid, code: Code) #expand {
+    RegisterCallResult(
+        ServerComputeNewPlayerCompatibility(steamIDNewPlayer),
+        (result: ComputeNewPlayerCompatibilityResult_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}

@@ -36,11 +36,6 @@ ServerGetImageRGBA :: inline (iImage: s32, pubDest: *uint8, nDestBufferSize: s32
 }
 
 
-ServerGetCSERIPPort :: inline (unIP: *uint32, usPort: *uint16) -> bool {
-    return SteamAPI_ISteamUtils_GetCSERIPPort(steam_game_server_utils, unIP, usPort);
-}
-
-
 ServerGetCurrentBatteryPower :: inline () -> uint8 {
     return SteamAPI_ISteamUtils_GetCurrentBatteryPower(steam_game_server_utils);
 }
@@ -102,14 +97,14 @@ ServerCheckFileSignature :: inline (szFileName: *char, callback: (CheckFileSigna
     );
 }
 
-//ServerCheckFileSignature :: (szFileName: *char, code: Code) #expand {
-//    RegisterCallResult(
-//        ServerCheckFileSignature(szFileName),
-//        (result: CheckFileSignature_t, io_failure: bool) -> () {
-//            #insert code;
-//        }
-//    );
-//}
+ServerCheckFileSignature :: (szFileName: *char, code: Code) #expand {
+    RegisterCallResult(
+        ServerCheckFileSignature(szFileName),
+        (result: CheckFileSignature_t, io_failure: bool) -> () {
+            #insert code;
+        }
+    );
+}
 
 
 ServerShowGamepadTextInput :: inline (eInputMode: EGamepadTextInputMode, eLineInputMode: EGamepadTextInputLineMode, pchDescription: *char, unCharMax: uint32, pchExistingText: *char) -> bool {

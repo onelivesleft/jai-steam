@@ -1,6 +1,6 @@
-// singletons for steamworks api v1.50 : update when the version increases!
+// singletons for steamworks api v1.51 : update when the version increases!
 
-singletons_v150 :: string.[
+singletons_v151 :: string.[
     "SteamClient",
     "SteamUser",
     "SteamFriends",
