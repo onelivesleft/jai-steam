@@ -141,7 +141,7 @@ ServerGetFileDetails :: (pszFileName: *char, code: Code) #expand {
     RegisterCallResult(
         ServerGetFileDetails(pszFileName),
         (result: FileDetailsResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

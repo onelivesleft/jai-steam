@@ -116,7 +116,7 @@ RequestEncryptedAppTicket :: (pDataToInclude: *void, cbDataToInclude: s32, code:
     RegisterCallResult(
         RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude),
         (result: EncryptedAppTicketResponse_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -152,7 +152,7 @@ RequestStoreAuthURL :: (pchRedirectURL: *char, code: Code) #expand {
     RegisterCallResult(
         RequestStoreAuthURL(pchRedirectURL),
         (result: StoreAuthURLResponse_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -193,7 +193,7 @@ GetMarketEligibility :: (code: Code) #expand {
     RegisterCallResult(
         GetMarketEligibility(),
         (result: MarketEligibilityResponse_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -214,7 +214,7 @@ GetDurationControl :: (code: Code) #expand {
     RegisterCallResult(
         GetDurationControl(),
         (result: DurationControl_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

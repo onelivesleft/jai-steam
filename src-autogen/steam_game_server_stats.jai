@@ -16,7 +16,7 @@ ServerRequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         ServerRequestUserStats(steamIDUser),
         (result: GSStatsReceived_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -77,7 +77,7 @@ ServerStoreUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         ServerStoreUserStats(steamIDUser),
         (result: GSStatsStored_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

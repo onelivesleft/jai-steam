@@ -251,7 +251,8 @@ for_expansion_message_loop :: (steam_pipe: HSteamPipe, body: Code) #expand {
 				`it.io_failure = io_failure;
 				`it_index = true;
 
-				#insert (break = #assert(false)) body;
+				//#insert (break = #assert(false)) body; // @TODO
+				#insert body;
 			}
 
 			#if !use_temporary_storage  free(call_result);
@@ -262,7 +263,8 @@ for_expansion_message_loop :: (steam_pipe: HSteamPipe, body: Code) #expand {
 			`it.callback = *callback;
 			`it_index = false;
 
-			#insert (break = #assert(false)) body;
+			//#insert (break = #assert(false)) body; // @TODO
+			#insert body;
 		}
 	}
 }

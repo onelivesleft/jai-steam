@@ -26,7 +26,7 @@ FileWriteAsync :: (pchFile: *char, pvData: *void, cubData: uint32, code: Code) #
     RegisterCallResult(
         FileWriteAsync(pchFile, pvData, cubData),
         (result: RemoteStorageFileWriteAsyncComplete_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -47,7 +47,7 @@ FileReadAsync :: (pchFile: *char, nOffset: uint32, cubToRead: uint32, code: Code
     RegisterCallResult(
         FileReadAsync(pchFile, nOffset, cubToRead),
         (result: RemoteStorageFileReadAsyncComplete_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -83,7 +83,7 @@ FileShare :: (pchFile: *char, code: Code) #expand {
     RegisterCallResult(
         FileShare(pchFile),
         (result: RemoteStorageFileShareResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -184,7 +184,7 @@ UGCDownload :: (hContent: UGCHandle_t, unPriority: uint32, code: Code) #expand {
     RegisterCallResult(
         UGCDownload(hContent, unPriority),
         (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -230,7 +230,7 @@ PublishWorkshopFile :: (pchFile: *char, pchPreviewFile: *char, nConsumerAppId: A
     RegisterCallResult(
         PublishWorkshopFile(pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType),
         (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -286,7 +286,7 @@ CommitPublishedFileUpdate :: (updateHandle: PublishedFileUpdateHandle_t, code: C
     RegisterCallResult(
         CommitPublishedFileUpdate(updateHandle),
         (result: RemoteStorageUpdatePublishedFileResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -307,7 +307,7 @@ GetPublishedFileDetails :: (unPublishedFileId: PublishedFileId_t, unMaxSecondsOl
     RegisterCallResult(
         GetPublishedFileDetails(unPublishedFileId, unMaxSecondsOld),
         (result: RemoteStorageGetPublishedFileDetailsResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -328,7 +328,7 @@ DeletePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #expan
     RegisterCallResult(
         DeletePublishedFile(unPublishedFileId),
         (result: RemoteStorageDeletePublishedFileResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -349,7 +349,7 @@ EnumerateUserPublishedFiles :: (unStartIndex: uint32, code: Code) #expand {
     RegisterCallResult(
         EnumerateUserPublishedFiles(unStartIndex),
         (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -370,7 +370,7 @@ SubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #ex
     RegisterCallResult(
         SubscribePublishedFile(unPublishedFileId),
         (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -391,7 +391,7 @@ EnumerateUserSubscribedFiles :: (unStartIndex: uint32, code: Code) #expand {
     RegisterCallResult(
         EnumerateUserSubscribedFiles(unStartIndex),
         (result: RemoteStorageEnumerateUserSubscribedFilesResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -412,7 +412,7 @@ UnsubscribePublishedFile :: (unPublishedFileId: PublishedFileId_t, code: Code) #
     RegisterCallResult(
         UnsubscribePublishedFile(unPublishedFileId),
         (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -438,7 +438,7 @@ GetPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: Code
     RegisterCallResult(
         GetPublishedItemVoteDetails(unPublishedFileId),
         (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -459,7 +459,7 @@ UpdateUserPublishedItemVote :: (unPublishedFileId: PublishedFileId_t, bVoteUp: b
     RegisterCallResult(
         UpdateUserPublishedItemVote(unPublishedFileId, bVoteUp),
         (result: RemoteStorageUpdateUserPublishedItemVoteResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -480,7 +480,7 @@ GetUserPublishedItemVoteDetails :: (unPublishedFileId: PublishedFileId_t, code: 
     RegisterCallResult(
         GetUserPublishedItemVoteDetails(unPublishedFileId),
         (result: RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -501,7 +501,7 @@ EnumerateUserSharedWorkshopFiles :: (steamId: uint64_steamid, unStartIndex: uint
     RegisterCallResult(
         EnumerateUserSharedWorkshopFiles(steamId, unStartIndex, pRequiredTags, pExcludedTags),
         (result: RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -522,7 +522,7 @@ PublishVideo :: (eVideoProvider: EWorkshopVideoProvider, pchVideoAccount: *char,
     RegisterCallResult(
         PublishVideo(eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags),
         (result: RemoteStoragePublishFileProgress_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -543,7 +543,7 @@ SetUserPublishedFileAction :: (unPublishedFileId: PublishedFileId_t, eAction: EW
     RegisterCallResult(
         SetUserPublishedFileAction(unPublishedFileId, eAction),
         (result: RemoteStorageSetUserPublishedFileActionResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -564,7 +564,7 @@ EnumeratePublishedFilesByUserAction :: (eAction: EWorkshopFileAction, unStartInd
     RegisterCallResult(
         EnumeratePublishedFilesByUserAction(eAction, unStartIndex),
         (result: RemoteStorageEnumeratePublishedFilesByUserActionResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -585,7 +585,7 @@ EnumeratePublishedWorkshopFiles :: (eEnumerationType: EWorkshopEnumerationType, 
     RegisterCallResult(
         EnumeratePublishedWorkshopFiles(eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags),
         (result: RemoteStorageEnumerateWorkshopFilesResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -606,7 +606,7 @@ UGCDownloadToLocation :: (hContent: UGCHandle_t, pchLocation: *char, unPriority:
     RegisterCallResult(
         UGCDownloadToLocation(hContent, pchLocation, unPriority),
         (result: RemoteStorageDownloadUGCResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

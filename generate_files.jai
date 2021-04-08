@@ -871,7 +871,7 @@ generate_classes :: (file_data: string) {
     RegisterCallResult(
         %1%2(%5),
         (result: %6, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

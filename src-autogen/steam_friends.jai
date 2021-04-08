@@ -21,7 +21,7 @@ SetPersonaName :: (pchPersonaName: *char, code: Code) #expand {
     RegisterCallResult(
         SetPersonaName(pchPersonaName),
         (result: SetPersonaNameResponse_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -147,7 +147,7 @@ DownloadClanActivityCounts :: (psteamIDClans: *CSteamID, cClansToRequest: s32, c
     RegisterCallResult(
         DownloadClanActivityCounts(psteamIDClans, cClansToRequest),
         (result: DownloadClanActivityCountsResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -238,7 +238,7 @@ RequestClanOfficerList :: (steamIDClan: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         RequestClanOfficerList(steamIDClan),
         (result: ClanOfficerListResponse_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -334,7 +334,7 @@ JoinClanChatRoom :: (steamIDClan: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         JoinClanChatRoom(steamIDClan),
         (result: JoinClanChatRoomCompletionResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -415,7 +415,7 @@ GetFollowerCount :: (steamID: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         GetFollowerCount(steamID),
         (result: FriendsGetFollowerCount_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -436,7 +436,7 @@ IsFollowing :: (steamID: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         IsFollowing(steamID),
         (result: FriendsIsFollowing_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -457,7 +457,7 @@ EnumerateFollowingList :: (unStartIndex: uint32, code: Code) #expand {
     RegisterCallResult(
         EnumerateFollowingList(unStartIndex),
         (result: FriendsEnumerateFollowingList_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

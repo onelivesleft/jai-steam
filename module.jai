@@ -6,7 +6,7 @@ STEAMWORKS_SDK_VERSION        :: "1.51";
 STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
 
 
-#module_parameters(
+#module_parameters (
     use_flat_api := false,         // Gives direct access to the equivalent of `steam_api_flat.h`,
                                    // if you want direct control over everything.
                                    // For normal module usage leave this alone, and look at `steam.jai`.
@@ -38,7 +38,7 @@ STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
 
 your_jai :: "game.jai";
 your_exe :: "game.exe";
-path_to_exe :: ".";
+path_to_exe :: "./";
 
 #run {
     build_options := get_build_options();
@@ -58,8 +58,7 @@ path_to_exe :: ".";
 
     while true {
         message := compiler_wait_for_message();
-        if !message continue;
-        if message.workspace != workspace continue;
+        if !message || message.workspace != workspace continue;
         if message.kind == .COMPLETE break;
 
         steam_build_step(message);
@@ -80,8 +79,9 @@ else
 
 
 // TODO
-// [ ] Example game
-// [.] CallResult macro in nice api
+// [.] Example game
+// [.] Documentation
+// [x] CallResult macro in nice api
 // [x] Callbacks
 // [x] string overloads for *char procs
 // [x] @SteamCallback for callbacks in nice api

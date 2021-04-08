@@ -186,7 +186,7 @@ ServerGetServerReputation :: (code: Code) #expand {
     RegisterCallResult(
         ServerGetServerReputation(),
         (result: GSReputation_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -237,7 +237,7 @@ ServerAssociateWithClan :: (steamIDClan: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         ServerAssociateWithClan(steamIDClan),
         (result: AssociateWithClanResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -258,7 +258,7 @@ ServerComputeNewPlayerCompatibility :: (steamIDNewPlayer: uint64_steamid, code: 
     RegisterCallResult(
         ServerComputeNewPlayerCompatibility(steamIDNewPlayer),
         (result: ComputeNewPlayerCompatibilityResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

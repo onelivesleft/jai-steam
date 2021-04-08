@@ -2,11 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "jai build",
+            "label": "spacewar build+run",
             "type": "shell",
-            "command": "c:\\jai\\bin\\jai.exe",
-            "args": ["${file}"],
+            "command": "compilerun.bat",
+            "args": [],
             "group": "build",
+            "options": {"cwd": ".\\example"},
             "presentation": {
                 "reveal": "always",
                 "clear": true,
@@ -16,7 +17,7 @@
                 "owner": "jai",
                 "fileLocation": ["absolute"],
                 "pattern": {
-                  "regexp": "^[^:]*:(.*):(\\d+),(\\d+):\\s+(Warning|Error):\\s+(.*)$",
+                  "regexp": "[^:]*:(.*):(\\d+),(\\d+):\\s+(Warning|Error):\\s+(.*)",
                   "file": 1,
                   "line": 2,
                   "column": 3,

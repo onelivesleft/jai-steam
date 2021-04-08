@@ -36,7 +36,7 @@ SendQueryUGCRequest :: (handle: UGCQueryHandle_t, code: Code) #expand {
     RegisterCallResult(
         SendQueryUGCRequest(handle),
         (result: SteamUGCQueryCompleted_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -217,7 +217,7 @@ RequestUGCDetails :: (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint
     RegisterCallResult(
         RequestUGCDetails(nPublishedFileID, unMaxAgeSeconds),
         (result: SteamUGCRequestUGCDetailsResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -238,7 +238,7 @@ CreateItem :: (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, code: Code
     RegisterCallResult(
         CreateItem(nConsumerAppId, eFileType),
         (result: CreateItemResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -349,7 +349,7 @@ SubmitItemUpdate :: (handle: UGCUpdateHandle_t, pchChangeNote: *char, code: Code
     RegisterCallResult(
         SubmitItemUpdate(handle, pchChangeNote),
         (result: SubmitItemUpdateResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -375,7 +375,7 @@ SetUserItemVote :: (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, code: Co
     RegisterCallResult(
         SetUserItemVote(nPublishedFileID, bVoteUp),
         (result: SetUserItemVoteResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -396,7 +396,7 @@ GetUserItemVote :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
     RegisterCallResult(
         GetUserItemVote(nPublishedFileID),
         (result: GetUserItemVoteResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -417,7 +417,7 @@ AddItemToFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, cod
     RegisterCallResult(
         AddItemToFavorites(nAppId, nPublishedFileID),
         (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -438,7 +438,7 @@ RemoveItemFromFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t
     RegisterCallResult(
         RemoveItemFromFavorites(nAppId, nPublishedFileID),
         (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -459,7 +459,7 @@ SubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
     RegisterCallResult(
         SubscribeItem(nPublishedFileID),
         (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -480,7 +480,7 @@ UnsubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
     RegisterCallResult(
         UnsubscribeItem(nPublishedFileID),
         (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -541,7 +541,7 @@ StartPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishe
     RegisterCallResult(
         StartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
         (result: StartPlaytimeTrackingResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -562,7 +562,7 @@ StopPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublished
     RegisterCallResult(
         StopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
         (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -583,7 +583,7 @@ StopPlaytimeTrackingForAllItems :: (code: Code) #expand {
     RegisterCallResult(
         StopPlaytimeTrackingForAllItems(),
         (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -604,7 +604,7 @@ AddDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFile
     RegisterCallResult(
         AddDependency(nParentPublishedFileID, nChildPublishedFileID),
         (result: AddUGCDependencyResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -625,7 +625,7 @@ RemoveDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedF
     RegisterCallResult(
         RemoveDependency(nParentPublishedFileID, nChildPublishedFileID),
         (result: RemoveUGCDependencyResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -646,7 +646,7 @@ AddAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code:
     RegisterCallResult(
         AddAppDependency(nPublishedFileID, nAppID),
         (result: AddAppDependencyResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -667,7 +667,7 @@ RemoveAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, co
     RegisterCallResult(
         RemoveAppDependency(nPublishedFileID, nAppID),
         (result: RemoveAppDependencyResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -688,7 +688,7 @@ GetAppDependencies :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand 
     RegisterCallResult(
         GetAppDependencies(nPublishedFileID),
         (result: GetAppDependenciesResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -709,7 +709,7 @@ DeleteItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
     RegisterCallResult(
         DeleteItem(nPublishedFileID),
         (result: DeleteItemResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

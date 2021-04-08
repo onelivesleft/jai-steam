@@ -2,3 +2,5 @@ sdk/glmgr/
 sdk/steamworksexample/
 sdk/tools/
 .build/
+example/.build
+*.pdb

@@ -101,7 +101,7 @@ CheckFileSignature :: (szFileName: *char, code: Code) #expand {
     RegisterCallResult(
         CheckFileSignature(szFileName),
         (result: CheckFileSignature_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

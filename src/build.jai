@@ -5,67 +5,41 @@
 
 
 steam_build_step :: (message: *Message) {
-    if !began_building {
-        began_building = true;
-        if verbose  print("Steam: began building\n");
-    }
     if inserted_generated_code  return;
 
-    if message.kind == {
+    if !began_building {
+        began_building = true;
+        if verbose  print("Steam: Began building\n");
+    }
 
+    if message.kind == {
         case .TYPECHECKED;
         type_checked := cast(*Message_Typechecked) message;
-
         for decl : type_checked.declarations {
-            if decl.filename == "" || contains(decl.filename, "modules")
+            // @TODO Normally we'd want to exclude module code and only worry about the user program
+            //       However, the only way to do this currently is by checking if the filename contains
+            //       "modules", and this can give false-positives (e.g. when compiling example programs).
+            //       Once the compiler has some kind of decl.is_import equivalent we can use that
+            if decl.filename == "" // || contains(decl.filename, "modules")
                 continue;
 
             if decl.kind == .DECLARATION {
-                check_decl(decl);
-            }
-        }
+                table_set(*processed_decls, xx decl, true);
 
-        check_decl :: (decl: *Code_Declaration) {
-            table_set(*processed_decls, xx decl, true);
-
-            if has_note(decl.notes, "SteamCallback") {
-                declaration := cast(*Code_Declaration) decl;
-                if declaration.type.type == .PROCEDURE {
-                    if declaration.name {
-                        table_set(*callback_procs, declaration.name, true);
-                        if verbose  print("Steam: found callback: %\n", declaration.name);
+                if has_note(decl.notes, "SteamCallback") {
+                    declaration := cast(*Code_Declaration) decl;
+                    if declaration.type.type == .PROCEDURE {
+                        if declaration.name {
+                            table_set(*callback_procs, declaration.name, true);
+                            if verbose  print("Steam: Found callback: %\n", declaration.name);
+                        }
                     }
-                }
-                else {
-                    compiler_report("You may only tag procedures with @SteamCallback!", make_location(declaration));
-                }
-            }
-
-            for expression: decl.expressions {
-                if expression.kind == .PROCEDURE_CALL {
-                    call := cast(*Code_Procedure_Call) expression;
-                    ident := cast(*Code_Ident) call.procedure_expression;
-                    if ident.name == "InitSteam"
-                        print("Calling %\n", ident.name);
-                }
-                else if expression.kind == .DECLARATION {
-                    _, found := table_find(processed_decls, xx expression);
-                    if !found {
-                        check_decl(cast(*Code_Declaration) expression);
+                    else {
+                        compiler_report("You may only tag procedures with @SteamCallback!", make_location(declaration));
                     }
                 }
             }
         }
-/*
-
-    InnerInit :: () -> bool {
-        result := InitSteam();
-        if result {
-            #insert SteamCallbacks;
-        }
-        return result;
-    }
-*/
 
         case .COMPILATION_PHASE;
         phase_message := cast (*Message_Phase) message;
@@ -84,7 +58,7 @@ steam_build_step :: (message: *Message) {
             append(*builder, "___JAI;\n");
 
             add_build_string(builder_to_string(*builder), message.workspace);
-            if verbose  print("Steam: done building\n");
+            if verbose  print("Steam: Done building\n");
         }
     }
 }

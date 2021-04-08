@@ -36,7 +36,7 @@ RequestLobbyList :: (code: Code) #expand {
     RegisterCallResult(
         RequestLobbyList(),
         (result: LobbyMatchList_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -97,7 +97,7 @@ CreateLobby :: (eLobbyType: ELobbyType, cMaxMembers: s32, code: Code) #expand {
     RegisterCallResult(
         CreateLobby(eLobbyType, cMaxMembers),
         (result: LobbyCreated_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -118,7 +118,7 @@ JoinLobby :: (steamIDLobby: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         JoinLobby(steamIDLobby),
         (result: LobbyEnter_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

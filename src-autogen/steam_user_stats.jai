@@ -96,7 +96,7 @@ RequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
     RegisterCallResult(
         RequestUserStats(steamIDUser),
         (result: UserStatsReceived_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -142,7 +142,7 @@ FindOrCreateLeaderboard :: (pchLeaderboardName: *char, eLeaderboardSortMethod: E
     RegisterCallResult(
         FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType),
         (result: LeaderboardFindResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -163,7 +163,7 @@ FindLeaderboard :: (pchLeaderboardName: *char, code: Code) #expand {
     RegisterCallResult(
         FindLeaderboard(pchLeaderboardName),
         (result: LeaderboardFindResult_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -204,7 +204,7 @@ DownloadLeaderboardEntries :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboa
     RegisterCallResult(
         DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd),
         (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -225,7 +225,7 @@ DownloadLeaderboardEntriesForUsers :: (hSteamLeaderboard: SteamLeaderboard_t, pr
     RegisterCallResult(
         DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers),
         (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -251,7 +251,7 @@ UploadLeaderboardScore :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUp
     RegisterCallResult(
         UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount),
         (result: LeaderboardScoreUploaded_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -272,7 +272,7 @@ AttachLeaderboardUGC :: (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_
     RegisterCallResult(
         AttachLeaderboardUGC(hSteamLeaderboard, hUGC),
         (result: LeaderboardUGCSet_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -293,7 +293,7 @@ GetNumberOfCurrentPlayers :: (code: Code) #expand {
     RegisterCallResult(
         GetNumberOfCurrentPlayers(),
         (result: NumberOfCurrentPlayers_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -314,7 +314,7 @@ RequestGlobalAchievementPercentages :: (code: Code) #expand {
     RegisterCallResult(
         RequestGlobalAchievementPercentages(),
         (result: GlobalAchievementPercentagesReady_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
@@ -350,7 +350,7 @@ RequestGlobalStats :: (nHistoryDays: s32, code: Code) #expand {
     RegisterCallResult(
         RequestGlobalStats(nHistoryDays),
         (result: GlobalStatsReceived_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }

@@ -26,7 +26,7 @@ CreateBrowser :: (pchUserAgent: *char, pchUserCSS: *char, code: Code) #expand {
     RegisterCallResult(
         CreateBrowser(pchUserAgent, pchUserCSS),
         (result: HTML_BrowserReady_t, io_failure: bool) -> () {
-            #insert code;
+            #insert_internal code;
         }
     );
 }
