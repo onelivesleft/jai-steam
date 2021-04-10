@@ -10,7 +10,7 @@
 
 // @Steam tags denote example API usage
 
-width  :: 1024;
+width  :: 1280;
 height :: 768;
 
 window: Window_Type;
@@ -20,11 +20,13 @@ window_height : s32 = height;
 render_width  : s32 = width;
 render_height : s32 = height;
 
-ship_length :: width / 50;
-ship_width  :: height / 75;
+ship_length :: height / 36;
+ship_width  :: ship_length / 2;
 ship_cut    :: 0.75;
 
-player := Player.{position = .{width / 4, height / 2, 0}, color = .{1, 0.5, 0, 1}};
+shot_gravity_multiplier :: 20.0;
+
+player := Player.{position = .{width / 4, height / 2}, color = .{1, 0.5, 0, 1}};
 
 shots : [MAX_SHOTS] Shot;
 MAX_SHOTS :: 1024;
@@ -52,13 +54,14 @@ main :: () {
         name := GetPersonaName();
         memcpy(*player.buffer, name.data, 16);
         player.name.data = *player.buffer[0];
-        player.name.count = name.count;
+        player.name.count = min(name.count, 16);
     }
 
     window = create_window(window_width, window_height, "Spacewar");
     Simp.simp_init(window, window_width, window_height, render_width, render_height);
 
     my_init_fonts();
+    player.label.width = Simp.get_string_width_in_pixels(my_font, player.name);
 
     while !quit {
         prev_raw_time = curr_raw_time;
@@ -116,7 +119,7 @@ simulate :: () {
         c := cos(rotation);
         s := sin(rotation);
 
-        acceleration : Vector3;
+        acceleration : Vector2;
         k := dt * ifx thrusting > 0 then FORWARD_THRUST * thrusting else REVERSE_THRUST * thrusting;
         acceleration.x = k * c;
         acceleration.y = k * s;
@@ -129,17 +132,20 @@ simulate :: () {
 
         rotation = cast(float) fmod(rotation - dt * turning * TURN_RATE, TAU);
 
-        d := label.actual_position - position;
+        label.actual_position = lerp(label.actual_position, position, dt * 2);
+        end := label.actual_position;
+        end.x += label.width;
+        d, dx, dy := d2_point_line_segment(position, label.actual_position, end);
         minimum :: ship_length;
         min_squared :: minimum * minimum;
-        //if d.x * d.x + d.y * d.y < min_squared {
-        {
-            theta := atan2(d.y, d.x);
+        if d < min_squared {
+            theta := atan2(dy, dx);
             label.actual_position.x = position.x + cos(theta) * minimum;
             label.actual_position.y = position.y + sin(theta) * minimum;
         }
 
-        label.visual_position = label.actual_position;
+        label.visual_position.x = label.actual_position.x;
+        label.visual_position.y = label.actual_position.y;
     }
 
     for * shot: shots {
@@ -181,7 +187,9 @@ fire_shot :: (player: *Player) {
     shots[next_shot_index].position.y = position.y + s * ship_length * 0.5;
     shots[next_shot_index].velocity.x = velocity.x + c * Shot.MUZZLE_VELOCITY;
     shots[next_shot_index].velocity.y = velocity.y + s * Shot.MUZZLE_VELOCITY;
+    shots[next_shot_index].gravity_multiplier = shot_gravity_multiplier;
     shots[next_shot_index].fired_at = now;
+
 
     next_shot_index = (next_shot_index + 1) % MAX_SHOTS;
 }
@@ -196,8 +204,20 @@ attract :: (planet: Planet, object: *Object) {
     theta := atan2(d.y, d.x);
     c := cos(theta);
     s := sin(theta);
-    object.velocity.x = object.velocity.x + c * f;
-    object.velocity.y = object.velocity.y + s * f;
+
+    dp := abs(dot_product(d, object.velocity));
+    dp = sqrt(dp);
+    //if object != *player  log("%\n", dp);
+
+    k : float;
+    if object.gravity_multiplier == 1.0
+        k = 1;
+    else
+        k = ifx dp == 0 then object.gravity_multiplier else lerp(1.0, object.gravity_multiplier, 1/dp);
+
+
+    object.velocity.x = object.velocity.x + c * f * k;
+    object.velocity.y = object.velocity.y + s * f * k;
 }
 
 
@@ -228,10 +248,11 @@ color_background :: Vector4.{.02, .02, .03, 0.51};
 
 draw_one_frame :: () {
     Simp.update_window(window, window_width, window_height, render_width, render_height);
-    Simp.clear_render_target(color_background.x, color_background.y, color_background.z, color_background.w);
-    //Simp.immediate_quad(0, 0, width, height, color_background);
 
     Simp.set_shader_for_color();
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    Simp.immediate_quad(0, 0, width, height, color_background);
 
     draw_player(player, ship);
 
@@ -278,11 +299,11 @@ draw_player_name :: (player: Player) {
     //offset :: Vector3.{ship_width, ship_width, 0};
     color := player.color;
     color.w = 0.5;
-    draw_text(player.name, player.label.visual_position, color);
+    draw_text(player.name, player.label.visual_position, color, player.label.width);
 }
 
 
-// @TODO factor these together
+// @TODO factor shot and player together
 
 
 draw_shot :: (shot: Shot) {
@@ -307,7 +328,7 @@ draw_planet :: (planet: Planet) {
     SLICES :: 21;
 
     t : Triangle;
-    t.p0 = planet.position;
+    t.p0 = v3(planet.position);
 
     step :: TAU / SLICES;
     radius := planet.radius + random_get_zero_to_one() * 1.5;
@@ -353,8 +374,9 @@ the_planet :: Planet.{position = .{x = width / 2, y = height / 2}, radius = widt
 
 
 Object :: struct {
-    position : Vector3;
-    velocity : Vector3;
+    position : Vector2;
+    velocity : Vector2;
+    gravity_multiplier := 1.0;
 }
 
 
@@ -404,7 +426,45 @@ Planet :: struct {
 
 Label :: struct {
     visual_position : Vector3;
-    actual_position : Vector3;
+    actual_position : Vector2;
+    width : int;
+}
+
+
+operator+ :: (vector2: Vector2, vector3: Vector3) -> Vector3 #symmetric {
+    result := vector3;
+    result.x += vector2.x;
+    result.y += vector2.y;
+    return result;
+}
+
+
+operator- :: (vector3: Vector3, vector2: Vector2) -> Vector3 #symmetric {
+    result := vector3;
+    result.x -= vector2.x;
+    result.y -= vector2.y;
+    return result;
+}
+
+
+v3 :: inline (v2: Vector2) -> Vector3 {
+    return <<cast(*Vector3)(*v2);
+}
+
+
+d2 :: inline (a: Vector2, b: Vector2) -> float, float, float {
+    dx := b.x - a.x;
+    dy := b.y - a.y;
+    return dx * dx + dy * dy, dx, dy;
+}
+
+
+d2_point_line_segment :: (point: Vector2, line_start: Vector2, line_end: Vector2) -> float, float, float {
+  l2 := d2(line_start, line_end);
+  if l2 == 0  return d2(point, line_start), line_start.x - point.x, line_start.y - point.y;
+  t := max(0.0, min(1.0, dot(point - line_start, line_end - line_start) / l2));
+  closest := lerp(line_start, line_end, t);
+  return d2(point, closest), closest.x - point.x, closest.y - point.y;
 }
 
 
@@ -424,8 +484,9 @@ my_init_fonts :: () {
 my_font: *Simp.Dynamic_Font;
 
 
-draw_text :: (text: string, position: Vector3, color: Vector4) {
-    text_width := Simp.get_string_width_in_pixels(my_font, text);
+draw_text :: (text: string, position: Vector3, color: Vector4, text_width := -1) {
+    if text_width < 0
+        text_width = Simp.get_string_width_in_pixels(my_font, text);
 
     text_x := cast,trunc(s64) position.x;
     text_y := cast,trunc(s64) position.y;
@@ -454,6 +515,7 @@ Input :: #import "Input";
 #import "Random";
 #import "System";  // For get_path_of_running_executable. @Cleanup.
 #import "String";  // For path_strip_filename. @Cleanup.
+#import "GL"; // For glBlend
 
 
 
