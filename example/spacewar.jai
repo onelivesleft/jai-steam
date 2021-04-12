@@ -1,15 +1,20 @@
 // @TODO
-// [ ] get better font
 // [ ] sfx, or: in space no-one can hear you
 // [ ] fx: death explosion, shot explosion
-// [ ] menu
-// [ ] color selection
+// [ ] particles
+// [ ] background stars
 // [ ] networking
 // [ ] scoring
 // [ ] steam status
-// [ ] window sizing : lock arena at 1920x1080
+// [ ] window sizing
+// [ ] leaderboards
+// [ ] stats / achievements
+// [ ] remote storage (player color)
+// [.] menu
 // [.] multiple players
 // [.] names
+// [x] color selection
+// [x] get better font
 // [x] dying
 // [x] check how to glBlend in Simp
 
@@ -29,7 +34,8 @@ ship_length :: height / 36;
 ship_width  :: ship_length / 2;
 ship_cut    :: 0.75;
 
-shot_gravity_multiplier :: 1.0;//20.0;
+font_height_game :: height / 64;
+font_height_menu :: height / 16;
 
 players : [MAX_PLAYERS] Player;
 MAX_PLAYERS :: 24;
@@ -57,6 +63,7 @@ debug_triangles : [1] Triangle = .[Triangle.{
 }];
 
 
+
 main :: () {
     // @Steam
     init_steam := InitSteam();
@@ -72,7 +79,7 @@ main :: () {
     window = create_window(window_width, window_height, "Spacewar");
     Simp.simp_init(window, window_width, window_height, render_width, render_height);
 
-    my_init_fonts();
+    init_fonts();
 
     make_player(*players[0], GetPersonaName(), .{width / 4, height / 2}, .{1, 0.5, 0, 1});
 
@@ -87,9 +94,10 @@ main :: () {
         handle_steam_input();
         handle_window_events();
 
-        if !was_paused {
-            simulate();
-        }
+        if was_paused
+            one_menu_tick();
+        else
+            one_game_tick();
 
         draw_one_frame();
 
@@ -102,15 +110,27 @@ main :: () {
 
 make_player :: (player: *Player, name: string, position: Vector2, color: Vector4) {
     player.position = position;
-    player.color = color;
+    randomize_player_color();
 
     memcpy(*player.buffer, name.data, 16);
     player.name.data = *player.buffer[0];
     player.name.count = min(name.count, 16);
 
-    player.label.width = Simp.get_string_width_in_pixels(game_font, player.name);
+    player.label.width = Simp.get_string_width_in_pixels(font_game, player.name);
 
     player_count += 1;
+}
+
+
+current_hue : float;
+
+randomize_player_color :: () {
+    hue : float;
+    while abs(hue - current_hue) < 0.1
+        hue = random_get_zero_to_one();
+    current_hue = hue;
+    players[0].color      = rgb_from_hsl(hue, 1.0, 0.6);
+    players[0].shot_color = rgb_from_hsl(hue, 1.0, 0.6);
 }
 
 
@@ -150,7 +170,7 @@ handle_window_events :: () {
 }
 
 
-simulate :: () {
+one_game_tick :: () {
     for * player, player_index: active_players {
         using player;
 
@@ -221,6 +241,12 @@ simulate :: () {
 }
 
 
+one_menu_tick :: () {
+    menu_ship_rotation += menu_ship_torque * dt;
+    menu_ship_torque *= menu_ship_dampening;
+}
+
+
 wrap_object :: (using object: *Object) {
     if position.x > width   position.x -= width;
     else if position.x < 0  position.x += width;
@@ -242,7 +268,7 @@ fire_shot :: (using player: *Player) {
     shots[next_shot_index].position.y = position.y + s * ship_length * 0.5;
     shots[next_shot_index].velocity.x = velocity.x + c * Shot.MUZZLE_VELOCITY;
     shots[next_shot_index].velocity.y = velocity.y + s * Shot.MUZZLE_VELOCITY;
-    shots[next_shot_index].gravity_multiplier = shot_gravity_multiplier;
+    shots[next_shot_index].player = player;
     shots[next_shot_index].fired_at = now;
 
 
@@ -263,21 +289,109 @@ attract :: (planet: Planet, object: *Object) {
     dp := abs(dot_product(d, object.velocity));
     dp = sqrt(dp);
 
-    k : float;
-    if object.gravity_multiplier == 1.0
-        k = 1;
-    else
-        k = ifx dp == 0 then object.gravity_multiplier else lerp(1.0, object.gravity_multiplier, 1/dp);
-
-    object.velocity.x = object.velocity.x + c * f * k;
-    object.velocity.y = object.velocity.y + s * f * k;
+    object.velocity.x = object.velocity.x + c * f;
+    object.velocity.y = object.velocity.y + s * f;
 }
+
+
+
+// :types
+
+
+
+ship : Ship(ship_length, ship_width, ship_cut);
+menu_factor :: 3;
+ship_menu : Ship(ship_length * menu_factor, ship_width * menu_factor, ship_cut);
+laser_bolt : Ship(ship_length / 5, ship_length / 5, 1);
+the_planet :: Planet.{position = .{x = width / 2, y = height / 2}, radius = width / 20, gravity = 0.00025};
+
+
+Object :: struct {
+    position : Vector2;
+    velocity : Vector2;
+}
+
+
+Ship :: struct(length: float, width: float, cut: float) {
+    triangles :: Triangle.[
+        .{.{length * 0.5, 0, 0}, .{-length * 0.5, -width * 0.5, 0}, .{-length * 0.5 * cut, 0, 0}},
+        .{.{length * 0.5, 0, 0}, .{-length * 0.5, +width * 0.5, 0}, .{-length * 0.5 * cut, 0, 0}},
+    ];
+}
+
+
+Player :: struct {
+    using base: Object;
+
+    FORWARD_THRUST : float : 0.5;
+    REVERSE_THRUST : float : 0.2;
+    TURN_RATE      : float : 1.0;
+    LASER_COOLDOWN : float64 : 1.0;
+
+    buffer     : [16] u8;
+    name       : string;
+    label      : Label;
+    color      : Vector4;
+    shot_color : Vector4;
+
+    rotation : float;
+
+    last_fired_at : float64;
+
+    turning : float;
+    thrusting : float;
+    pausing : bool;
+
+    controller : InputHandle_t;  // @Steam
+}
+
+
+Shot :: struct {
+    using base: Object;
+
+    MUZZLE_VELOCITY :: 2.0;
+    ARMING_DELAY :: 0.5;
+    FUSE :: 100.0;
+
+    fired_at : float64;
+    player :   *Player;
+}
+
+
+Planet :: struct {
+    using base: Object;
+
+    gravity : float;
+    radius : float;
+}
+
+
+Label :: struct {
+    visual_position : Vector3;
+    actual_position : Vector2;
+    width : int;
+}
+
+
+Triangle :: struct {
+    p0: Vector3;
+    p1: Vector3;
+    p2: Vector3;
+
+    #place p0;
+    points : [3] Vector3;
+}
+
+
+
+// :menu
+
 
 
 paused : enum_flags u8 {
     USER  :: 1;
     STEAM :: 2;
-};
+} = .USER;
 
 
 paused_at : float64;
@@ -296,19 +410,130 @@ set_pause :: (should_pause: bool, pause_type: type_of(paused)) {
 }
 
 
-color_background :: Vector4.{.02, .02, .03, 0.51};
+menu_index_main := 0;
+menu_index_games := 0;
+current_menu : enum {
+    MAIN;
+    GAMES;
+} = .MAIN;
+
+menu_ship_rotation  := 0.0;
+menu_ship_torque    := 0.0;
+menu_ship_dampening :: 0.99;
+menu_ship_force     :: TAU / 2;
+
+menu_input_state : enum_flags u8 {
+    UP;
+    DOWN;
+    LEFT;
+    RIGHT;
+    SELECT;
+    CANCEL;
+};
+
+
+bump_menu_ship :: (sgn: float) {
+    menu_ship_torque += sgn * menu_ship_force * (random_get_zero_to_one() + 0.5);
+}
+
+menu_up :: () {
+    if current_menu == .MAIN {
+        if menu_index_main == 0  menu_index_main = main_menu.count - 1;
+        else                     menu_index_main -= 1;
+    }
+    bump_menu_ship(+1);
+}
+
+menu_down :: () {
+    if current_menu == .MAIN {
+        menu_index_main = (menu_index_main + 1) % main_menu.count;
+    }
+    bump_menu_ship(-1);
+}
+
+menu_swap :: () {
+
+}
+
+menu_select :: () {
+    if current_menu == .MAIN {
+        menu_item := main_menu[menu_index_main];
+        if menu_item == {
+            case .COLOR;
+            randomize_player_color();
+
+            case .QUIT;
+            quit = true;
+        }
+    }
+}
+
+menu_cancel :: () {
+    set_pause(false, .USER);
+}
+
+
+Menu_Item :: struct {
+    id : Menu_ID;
+    label : string;
+}
+
+
+Menu_ID :: enum {
+    QUIT;
+    COLOR;
+}
+
+menu_items :: Menu_Item.[
+    .{ .QUIT, "QUIT" },
+    .{ .COLOR, "COLOR" },
+];
+
+main_menu :: Menu_ID.[
+    .COLOR,
+    .QUIT,
+];
+
+/*
+find_index :: (index: Menu_ID, menu: [] Menu_ID) -> int {
+    for menu  if it == index  return it_index;
+    return 0; // never happens
+}
+
+color_menu_index         :: #run find_index(.COLOR,  main_menu);
+*/
+
+#run {
+    for menu_items  if it.id != xx it_index
+        compiler_report("menu_items array must be in same order as Menu_ID enum");
+    if menu_items.count != type_info(Menu_ID).values.count
+        compiler_report("menu_items array must have same items as Menu_ID enum");
+}
+
+
+
+// :drawing
+
+
+
+color_background          :: Vector4.{.02, .02, .03, 0.51};
+color_menu_text           :: Vector4.{1, 1, 1, 1};
+color_menu_selected_text  :: Vector4.{0, 0, 0, 1};
+color_menu_selected_fill  :: Vector4.{1, 1, 1, 1};
 
 
 draw_one_frame :: () {
     Simp.update_window(window, window_width, window_height, render_width, render_height);
 
     Simp.set_shader_for_color();
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    Simp.immediate_quad(0, 0, width, height, color_background);
+    if !paused {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        Simp.immediate_quad(0, 0, width, height, color_background);
+    }
 
     for player: active_players
-        draw_player(player, ship);
+        draw_player(player);
 
     for shot: shots
         if shot.fired_at
@@ -316,12 +541,62 @@ draw_one_frame :: () {
 
     draw_planet(the_planet);
 
-    for player: active_players
-        draw_player_name(player);
+
+    if paused {
+        draw_menu();
+    }
+    else {
+        for player: active_players
+            draw_player_name(player);
+    }
 
     //draw_debug_info();
 
     Simp.swap_buffers(window);
+}
+
+
+draw_menu :: () {
+    left :: height / 5;
+    top  :: height - left;
+    font_width_offset  :: -5;
+    font_height_offset :: -9;
+    spacing :: font_height_menu / 4;
+    padding :: font_height_menu / 6;
+    ship_offset :: -(1.0 * font_height_menu);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    Simp.immediate_quad(0, 0, width, height, .{0, 0, 0, 0.51});
+
+    x := left;
+    y := top;
+    for menu_index: 0 .. main_menu.count - 1 {
+        menu_item := menu_items[main_menu[menu_index]];
+        if current_menu == .MAIN && menu_index == menu_index_main {
+            w := Simp.get_string_width_in_pixels(font_menu, menu_item.label);
+            x0 := cast(float)(x - padding);
+            y0 := cast(float)(y - padding);
+            x1 := cast(float)(x + w + padding + font_width_offset);
+            y1 := cast(float)(y + font_height_menu + padding + font_height_offset);
+            Simp.immediate_quad(x0, y0, x1, y1, color_menu_selected_fill);
+            draw_triangles(v2(x0 + ship_offset, y + font_height_menu * 0.5),
+                           menu_ship_rotation,
+                           ship_menu.triangles, players[0].color);
+        }
+        y -= (font_height_menu + spacing);
+    }
+
+    y = top;
+    for menu_index: 0 .. main_menu.count - 1 {
+        menu_item := menu_items[main_menu[menu_index]];
+        if current_menu == .MAIN && menu_index == menu_index_main
+            draw_menu_text(menu_item.label, x, y, color_menu_selected_text);
+        else
+            draw_menu_text(menu_item.label, x, y);
+        y -= (font_height_menu + spacing);
+    }
 }
 
 
@@ -334,7 +609,7 @@ wrap_deltas :: Vector2.[
 ];
 
 
-draw_player :: (player: Player, ship: Ship) {
+draw_player :: (player: Player) {
     draw_triangles(player.position, player.rotation, ship.triangles, player.color);
 }
 
@@ -343,14 +618,39 @@ draw_player_name :: (player: Player) {
     //offset :: Vector3.{ship_width, ship_width, 0};
     color := player.color;
     color.w = 0.5;
-    draw_text(player.name, player.label.visual_position, color, player.label.width);
+    draw_text(player.name, player.label.visual_position, color);
 }
 
 
 draw_shot :: (shot: Shot) {
     rotation := random_get_zero_to_one() * TAU;
-    color :: Vector4.{1, 1, 1, 1};
-    draw_triangles(shot.position, rotation, laser_bolt.triangles, color);
+    draw_triangles(shot.position, rotation, laser_bolt.triangles, shot.player.shot_color);
+}
+
+
+draw_planet :: (planet: Planet) {
+    SLICES :: 21;
+
+    t : Triangle;
+    t.p0 = v3(planet.position);
+
+    step :: TAU / SLICES;
+    radius := planet.radius + random_get_zero_to_one() * 1.5;
+    noise := random_get_zero_to_one() / TAU;
+    t.p1.x = radius * cos(-step + noise) + t.p0.x;
+    t.p1.y = radius * sin(-step + noise) + t.p0.y;
+
+    for i: 0 .. SLICES {
+        t.p2 = t.p1;
+        t.p1.x = radius * cos(i * step + noise) + t.p0.x;
+        t.p1.y = radius * sin(i * step + noise) + t.p0.y;
+        immediate_triangle(t, .{1, 1, 1, 1});
+    }
+}
+
+
+immediate_triangle :: inline (triangle: Triangle, color: Vector4) {
+    Simp.immediate_triangle(triangle.p0, triangle.p1, triangle.p2, color);
 }
 
 
@@ -425,6 +725,33 @@ draw_triangles :: (position: Vector2, rotation: float, triangles: [] Triangle, c
 }
 
 
+rgb_from_hsl :: (h: float, s: float, l: float) -> Vector4 {
+    r, g, b : float;
+
+    if s == 0 {
+        r, g, b = l, l, l; // achromatic
+    }
+    else {
+        rgb_from_hue :: (p: float, q: float, t: float) -> float {
+            if t < 0  t += 1;
+            if t > 1  t -= 1;
+            if t < 1.0/6.0  return p + (q - p) * 6 * t;
+            if t < 1.0/2.0  return q;
+            if t < 2.0/3.0  return p + (q - p) * (2.0/3.0 - t) * 6;
+            return p;
+        }
+
+        q := ifx l < 0.5 then l * (1 + s) else l + s - l * s;
+        p := 2 * l - q;
+        r = rgb_from_hue(p, q, h + 1.0/3.0);
+        g = rgb_from_hue(p, q, h);
+        b = rgb_from_hue(p, q, h - 1.0/3.0);
+    }
+
+    return v4(r, g, b, 1.0);
+}
+
+
 point_inside_planet :: inline (point: Vector2) -> bool {
     return d2(the_planet.position, point) <= the_planet.radius * the_planet.radius;
 }
@@ -485,167 +812,6 @@ line_segment_inside_player :: (p0: Vector2, p1: Vector2, player: *Player) -> boo
         }
     }
     return false;
-}
-
-
-draw_planet :: (planet: Planet) {
-    SLICES :: 21;
-
-    t : Triangle;
-    t.p0 = v3(planet.position);
-
-    step :: TAU / SLICES;
-    radius := planet.radius + random_get_zero_to_one() * 1.5;
-    noise := random_get_zero_to_one() / TAU;
-    t.p1.x = radius * cos(-step + noise) + t.p0.x;
-    t.p1.y = radius * sin(-step + noise) + t.p0.y;
-
-    for i: 0 .. SLICES {
-        t.p2 = t.p1;
-        t.p1.x = radius * cos(i * step + noise) + t.p0.x;
-        t.p1.y = radius * sin(i * step + noise) + t.p0.y;
-        immediate_triangle(t, .{1, 1, 1, 1});
-    }
-}
-
-
-immediate_triangle :: inline (triangle: Triangle, color: Vector4) {
-    Simp.immediate_triangle(triangle.p0, triangle.p1, triangle.p2, color);
-}
-
-
-Triangle :: struct {
-    p0: Vector3;
-    p1: Vector3;
-    p2: Vector3;
-
-    #place p0;
-    points : [3] Vector3;
-}
-
-
-Ship :: struct(length: float, width: float, cut: float) {
-    triangles :: Triangle.[
-        .{.{length * 0.5, 0, 0}, .{-length * 0.5, -width * 0.5, 0}, .{-length * 0.5 * cut, 0, 0}},
-        .{.{length * 0.5, 0, 0}, .{-length * 0.5, +width * 0.5, 0}, .{-length * 0.5 * cut, 0, 0}},
-    ];
-}
-
-
-ship : Ship(ship_length, ship_width, ship_cut);
-laser_bolt : Ship(ship_length / 5, ship_length / 5, 1);
-the_planet :: Planet.{position = .{x = width / 2, y = height / 2}, radius = width / 20, gravity = 0.00025};
-
-
-Object :: struct {
-    position : Vector2;
-    velocity : Vector2;
-    gravity_multiplier := 1.0;
-}
-
-
-Player :: struct {
-    using base: Object;
-
-    FORWARD_THRUST : float : 0.5;
-    REVERSE_THRUST : float : 0.2;
-    TURN_RATE      : float : 1.0;
-    LASER_COOLDOWN : float64 : 1.0;
-
-    buffer   : [16] u8;
-    name     : string;
-    label    : Label;
-    color    : Vector4;
-
-    rotation : float;
-
-    last_fired_at : float64;
-
-    turning : float;
-    thrusting : float;
-    pausing : bool;
-
-    controller : InputHandle_t;  // @Steam
-}
-
-
-Shot :: struct {
-    using base: Object;
-
-    MUZZLE_VELOCITY :: 2.0;
-    ARMING_DELAY :: 0.5;
-    FUSE :: 100.0;
-
-    fired_at : float64;
-    player :   *Player;
-}
-
-
-Planet :: struct {
-    using base: Object;
-
-    gravity : float;
-    radius : float;
-}
-
-
-Label :: struct {
-    visual_position : Vector3;
-    actual_position : Vector2;
-    width : int;
-}
-
-
-operator+ :: (vector2: Vector2, vector3: Vector3) -> Vector3 #symmetric {
-    result := vector3;
-    result.x += vector2.x;
-    result.y += vector2.y;
-    return result;
-}
-
-
-operator- :: (vector3: Vector3, vector2: Vector2) -> Vector3 #symmetric {
-    result := vector3;
-    result.x -= vector2.x;
-    result.y -= vector2.y;
-    return result;
-}
-
-
-v2 :: inline (x: $T, y: T) -> Vector2 #must {
-    result : Vector2 = ---;
-    result.x = xx x;
-    result.y = xx y;
-    return result;
-}
-
-
-v2 :: inline (vector3: Vector3) -> Vector2 #must {
-    return <<cast(*Vector2)(*vector3);
-}
-
-
-v3 :: inline (x: $T, y: T) -> Vector3 #must {
-    result : Vector3 = ---;
-    result.x = xx x;
-    result.y = xx y;
-    result.z = 0;
-    return result;
-}
-
-
-v3 :: inline (vector2: Vector2) -> Vector3 #must {
-    return <<cast(*Vector3)(*vector2);
-}
-
-
-v4 :: inline (p0: Vector2, p1: Vector2) -> Vector4 #must {
-    result : Vector4 = ---;
-    result.x = p0.x;
-    result.y = p0.y;
-    result.z = p1.x;
-    result.w = p1.y;
-    return result;
 }
 
 
@@ -716,43 +882,108 @@ line_segments_intersect :: (a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> b
 }
 
 
-my_init_fonts :: () {
-    // So that we can load our font, set to path of running executable.
-    // @Incomplete: Pack a default font into Simp.
-    path := path_strip_filename(get_path_of_running_executable());
 
-    set_working_directory(path);
-    pixel_height := window_height / 64;
+// :fonts
 
-    // @Cleanup: Don't have path + name be separate.
-    game_font = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", pixel_height);
-    assert(game_font != null);
+
+
+init_fonts :: () {
+    font_game = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_game);
+    assert(font_game != null);
+
+    font_menu = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_menu);
+    assert(font_menu != null);
 }
 
-game_font: *Simp.Dynamic_Font;
+
+font_game: *Simp.Dynamic_Font;
+font_menu: *Simp.Dynamic_Font;
 
 
-draw_text :: (text: string, position: Vector3, color: Vector4, text_width := -1) {
-    if text_width < 0
-        text_width = Simp.get_string_width_in_pixels(game_font, text);
-
+draw_text :: (text: string, position: Vector3, color: Vector4) {
     text_x := cast,trunc(s64) position.x;
     text_y := cast,trunc(s64) position.y;
 
-//    theta := cast(float) fmod(now*3, TAU);
-//    color: Vector4;
-//    color.x = cos(theta)*.5+.5;
-//    Clamp(*color.x, 0, 1);
-//    color.y = 1;
-//    color.z = sin(theta)*.5+.5;
-//    Clamp(*color.z, 0, 1);
-//    color.w = 1;
-
-    Simp.draw_text(game_font, text_x, text_y, text, color);
+    Simp.draw_text(font_game, text_x, text_y, text, color);
 }
 
 
-for_expansion :: (_: *Active_Players, body: Code, flags: For_Flags) #expand {
+draw_menu_text :: (text: string, x: int, y: int, color := color_menu_text) {
+    Simp.draw_text(font_menu, x, y, text, color);
+}
+
+
+
+// :internal
+
+
+
+operator+ :: (vector2: Vector2, vector3: Vector3) -> Vector3 #symmetric {
+    result := vector3;
+    result.x += vector2.x;
+    result.y += vector2.y;
+    return result;
+}
+
+
+operator- :: (vector3: Vector3, vector2: Vector2) -> Vector3 #symmetric {
+    result := vector3;
+    result.x -= vector2.x;
+    result.y -= vector2.y;
+    return result;
+}
+
+
+v2 :: inline (x: $T, y: T) -> Vector2 #must {
+    result : Vector2 = ---;
+    result.x = xx x;
+    result.y = xx y;
+    return result;
+}
+
+
+v2 :: inline (vector3: Vector3) -> Vector2 #must {
+    return <<cast(*Vector2)(*vector3);
+}
+
+
+v3 :: inline (x: $T, y: T) -> Vector3 #must {
+    result : Vector3 = ---;
+    result.x = xx x;
+    result.y = xx y;
+    result.z = 0;
+    return result;
+}
+
+
+v3 :: inline (vector2: Vector2) -> Vector3 #must {
+    return <<cast(*Vector3)(*vector2);
+}
+
+
+v4 :: inline (p0: Vector2, p1: Vector2) -> Vector4 #must {
+    result : Vector4 = ---;
+    result.x = p0.x;
+    result.y = p0.y;
+    result.z = p1.x;
+    result.w = p1.y;
+    return result;
+}
+
+
+v4 :: inline (x: float, y: float, z: float, w: float) -> Vector4 #must {
+    result : Vector4 = ---;
+    result.x = x;
+    result.y = y;
+    result.z = z;
+    result.w = w;
+    return result;
+}
+
+
+active_players : struct {};
+
+for_expansion :: (_: *type_of(active_players), body: Code, flags: For_Flags) #expand {
     #assert(flags == 0 || flags == .POINTER);
 
     by_pointer : bool : flags & .POINTER || false;
@@ -763,22 +994,18 @@ for_expansion :: (_: *Active_Players, body: Code, flags: For_Flags) #expand {
     }
 }
 
-Active_Players :: struct {}
-active_players : Active_Players;
-
 
 Simp  :: #import "Simp";
 Input :: #import "Input";
 #import "Steam";
 
-#import "Window_Creation";
+#import "GL"; // For glBlend
 
 #import "Basic";
+#import "Compiler";
 #import "Math";
 #import "Random";
-#import "System";  // For get_path_of_running_executable. @Cleanup.
-#import "String";  // For path_strip_filename. @Cleanup.
-#import "GL"; // For glBlend
+#import "Window_Creation";
 
 
 
@@ -857,30 +1084,24 @@ handle_steam_input :: () {
         if paused {
             ActivateActionSet(controller, menu_action_set);
 
-            if GetDigitalActionData(controller, action_menu_up).bState {
-                log("Menu Up\n");
+            check_input :: (action: InputAnalogActionHandle_t, menu_input: type_of(menu_input_state), proc: () -> ()) #expand {
+                if GetDigitalActionData(controller, action).bState {
+                    if !(`menu_input_state & menu_input) {
+                        `menu_input_state |= menu_input;
+                        proc();
+                    }
+                }
+                else {
+                    `menu_input_state &= ~menu_input;
+                }
             }
 
-            if GetDigitalActionData(controller, action_menu_down).bState {
-                log("Menu Down\n");
-            }
-
-            if GetDigitalActionData(controller, action_menu_left).bState {
-                log("Menu Left\n");
-            }
-
-            if GetDigitalActionData(controller, action_menu_right).bState {
-                log("Menu Right\n");
-            }
-
-            if GetDigitalActionData(controller, action_menu_select).bState {
-                log("Menu Select\n");
-            }
-
-            if GetDigitalActionData(controller, action_menu_cancel).bState {
-                log("Menu Cancel\n");
-                set_pause(false, .USER);
-            }
+            check_input(action_menu_up,     .UP,     menu_up);
+            check_input(action_menu_down,   .DOWN,   menu_down);
+            check_input(action_menu_left,   .LEFT,   menu_swap);
+            check_input(action_menu_right,  .RIGHT,  menu_swap);
+            check_input(action_menu_select, .SELECT, menu_select);
+            check_input(action_menu_cancel, .CANCEL, menu_cancel);
         }
         else {
             ActivateActionSet(controller, game_action_set);
