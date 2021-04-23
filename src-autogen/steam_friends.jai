@@ -10,20 +10,28 @@ SetPersonaName :: inline (pchPersonaName: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamFriends_SetPersonaName(steam_friends, pchPersonaName);
 }
 
-SetPersonaName :: inline (pchPersonaName: *char, callback: (SetPersonaNameResponse_t, bool) -> ()) {
-    RegisterCallResult(
-        SetPersonaName(pchPersonaName),
-        callback
-    );
+SetPersonaName :: inline (pchPersonaName: *char, callback: (SetPersonaNameResponse_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := SetPersonaName(pchPersonaName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-SetPersonaName :: (pchPersonaName: *char, code: Code) #expand {
-    RegisterCallResult(
-        SetPersonaName(pchPersonaName),
-        (result: SetPersonaNameResponse_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+SetPersonaName :: (pchPersonaName: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := SetPersonaName(pchPersonaName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SetPersonaNameResponse_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -136,20 +144,28 @@ DownloadClanActivityCounts :: inline (psteamIDClans: *CSteamID, cClansToRequest:
     return SteamAPI_ISteamFriends_DownloadClanActivityCounts(steam_friends, psteamIDClans, cClansToRequest);
 }
 
-DownloadClanActivityCounts :: inline (psteamIDClans: *CSteamID, cClansToRequest: s32, callback: (DownloadClanActivityCountsResult_t, bool) -> ()) {
-    RegisterCallResult(
-        DownloadClanActivityCounts(psteamIDClans, cClansToRequest),
-        callback
-    );
+DownloadClanActivityCounts :: inline (psteamIDClans: *CSteamID, cClansToRequest: s32, callback: (DownloadClanActivityCountsResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := DownloadClanActivityCounts(psteamIDClans, cClansToRequest);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-DownloadClanActivityCounts :: (psteamIDClans: *CSteamID, cClansToRequest: s32, code: Code) #expand {
-    RegisterCallResult(
-        DownloadClanActivityCounts(psteamIDClans, cClansToRequest),
-        (result: DownloadClanActivityCountsResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+DownloadClanActivityCounts :: (psteamIDClans: *CSteamID, cClansToRequest: s32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := DownloadClanActivityCounts(psteamIDClans, cClansToRequest);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: DownloadClanActivityCountsResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -227,20 +243,28 @@ RequestClanOfficerList :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t
     return SteamAPI_ISteamFriends_RequestClanOfficerList(steam_friends, steamIDClan);
 }
 
-RequestClanOfficerList :: inline (steamIDClan: uint64_steamid, callback: (ClanOfficerListResponse_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestClanOfficerList(steamIDClan),
-        callback
-    );
+RequestClanOfficerList :: inline (steamIDClan: uint64_steamid, callback: (ClanOfficerListResponse_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestClanOfficerList(steamIDClan);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestClanOfficerList :: (steamIDClan: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        RequestClanOfficerList(steamIDClan),
-        (result: ClanOfficerListResponse_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestClanOfficerList :: (steamIDClan: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestClanOfficerList(steamIDClan);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: ClanOfficerListResponse_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -323,20 +347,28 @@ JoinClanChatRoom :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t #must
     return SteamAPI_ISteamFriends_JoinClanChatRoom(steam_friends, steamIDClan);
 }
 
-JoinClanChatRoom :: inline (steamIDClan: uint64_steamid, callback: (JoinClanChatRoomCompletionResult_t, bool) -> ()) {
-    RegisterCallResult(
-        JoinClanChatRoom(steamIDClan),
-        callback
-    );
+JoinClanChatRoom :: inline (steamIDClan: uint64_steamid, callback: (JoinClanChatRoomCompletionResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := JoinClanChatRoom(steamIDClan);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-JoinClanChatRoom :: (steamIDClan: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        JoinClanChatRoom(steamIDClan),
-        (result: JoinClanChatRoomCompletionResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+JoinClanChatRoom :: (steamIDClan: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := JoinClanChatRoom(steamIDClan);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: JoinClanChatRoomCompletionResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -404,20 +436,28 @@ GetFollowerCount :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamFriends_GetFollowerCount(steam_friends, steamID);
 }
 
-GetFollowerCount :: inline (steamID: uint64_steamid, callback: (FriendsGetFollowerCount_t, bool) -> ()) {
-    RegisterCallResult(
-        GetFollowerCount(steamID),
-        callback
-    );
+GetFollowerCount :: inline (steamID: uint64_steamid, callback: (FriendsGetFollowerCount_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := GetFollowerCount(steamID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-GetFollowerCount :: (steamID: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        GetFollowerCount(steamID),
-        (result: FriendsGetFollowerCount_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+GetFollowerCount :: (steamID: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := GetFollowerCount(steamID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: FriendsGetFollowerCount_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -425,20 +465,28 @@ IsFollowing :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamFriends_IsFollowing(steam_friends, steamID);
 }
 
-IsFollowing :: inline (steamID: uint64_steamid, callback: (FriendsIsFollowing_t, bool) -> ()) {
-    RegisterCallResult(
-        IsFollowing(steamID),
-        callback
-    );
+IsFollowing :: inline (steamID: uint64_steamid, callback: (FriendsIsFollowing_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := IsFollowing(steamID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-IsFollowing :: (steamID: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        IsFollowing(steamID),
-        (result: FriendsIsFollowing_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+IsFollowing :: (steamID: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := IsFollowing(steamID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: FriendsIsFollowing_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -446,20 +494,28 @@ EnumerateFollowingList :: inline (unStartIndex: uint32) -> SteamAPICall_t #must 
     return SteamAPI_ISteamFriends_EnumerateFollowingList(steam_friends, unStartIndex);
 }
 
-EnumerateFollowingList :: inline (unStartIndex: uint32, callback: (FriendsEnumerateFollowingList_t, bool) -> ()) {
-    RegisterCallResult(
-        EnumerateFollowingList(unStartIndex),
-        callback
-    );
+EnumerateFollowingList :: inline (unStartIndex: uint32, callback: (FriendsEnumerateFollowingList_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := EnumerateFollowingList(unStartIndex);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-EnumerateFollowingList :: (unStartIndex: uint32, code: Code) #expand {
-    RegisterCallResult(
-        EnumerateFollowingList(unStartIndex),
-        (result: FriendsEnumerateFollowingList_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+EnumerateFollowingList :: (unStartIndex: uint32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := EnumerateFollowingList(unStartIndex);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: FriendsEnumerateFollowingList_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

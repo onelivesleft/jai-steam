@@ -15,20 +15,28 @@ CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char) -> SteamAPICall
     return SteamAPI_ISteamHTMLSurface_CreateBrowser(steam_html_surface, pchUserAgent, pchUserCSS);
 }
 
-CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char, callback: (HTML_BrowserReady_t, bool) -> ()) {
-    RegisterCallResult(
-        CreateBrowser(pchUserAgent, pchUserCSS),
-        callback
-    );
+CreateBrowser :: inline (pchUserAgent: *char, pchUserCSS: *char, callback: (HTML_BrowserReady_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := CreateBrowser(pchUserAgent, pchUserCSS);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-CreateBrowser :: (pchUserAgent: *char, pchUserCSS: *char, code: Code) #expand {
-    RegisterCallResult(
-        CreateBrowser(pchUserAgent, pchUserCSS),
-        (result: HTML_BrowserReady_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+CreateBrowser :: (pchUserAgent: *char, pchUserCSS: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := CreateBrowser(pchUserAgent, pchUserCSS);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: HTML_BrowserReady_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

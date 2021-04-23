@@ -120,20 +120,28 @@ RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid) -> St
     return SteamAPI_ISteamInventory_RequestEligiblePromoItemDefinitionsIDs(steam_inventory, steamID);
 }
 
-RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid, callback: (SteamInventoryEligiblePromoItemDefIDs_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestEligiblePromoItemDefinitionsIDs(steamID),
-        callback
-    );
+RequestEligiblePromoItemDefinitionsIDs :: inline (steamID: uint64_steamid, callback: (SteamInventoryEligiblePromoItemDefIDs_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestEligiblePromoItemDefinitionsIDs(steamID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestEligiblePromoItemDefinitionsIDs :: (steamID: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        RequestEligiblePromoItemDefinitionsIDs(steamID),
-        (result: SteamInventoryEligiblePromoItemDefIDs_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestEligiblePromoItemDefinitionsIDs :: (steamID: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestEligiblePromoItemDefinitionsIDs(steamID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SteamInventoryEligiblePromoItemDefIDs_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -146,20 +154,28 @@ StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uin
     return SteamAPI_ISteamInventory_StartPurchase(steam_inventory, pArrayItemDefs, punArrayQuantity, unArrayLength);
 }
 
-StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32, callback: (SteamInventoryStartPurchaseResult_t, bool) -> ()) {
-    RegisterCallResult(
-        StartPurchase(pArrayItemDefs, punArrayQuantity, unArrayLength),
-        callback
-    );
+StartPurchase :: inline (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32, callback: (SteamInventoryStartPurchaseResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := StartPurchase(pArrayItemDefs, punArrayQuantity, unArrayLength);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-StartPurchase :: (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32, code: Code) #expand {
-    RegisterCallResult(
-        StartPurchase(pArrayItemDefs, punArrayQuantity, unArrayLength),
-        (result: SteamInventoryStartPurchaseResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+StartPurchase :: (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint32, unArrayLength: uint32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := StartPurchase(pArrayItemDefs, punArrayQuantity, unArrayLength);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SteamInventoryStartPurchaseResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -167,20 +183,28 @@ RequestPrices :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamInventory_RequestPrices(steam_inventory);
 }
 
-RequestPrices :: inline (callback: (SteamInventoryRequestPricesResult_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestPrices(),
-        callback
-    );
+RequestPrices :: inline (callback: (SteamInventoryRequestPricesResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestPrices();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestPrices :: (code: Code) #expand {
-    RegisterCallResult(
-        RequestPrices(),
-        (result: SteamInventoryRequestPricesResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestPrices :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestPrices();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SteamInventoryRequestPricesResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

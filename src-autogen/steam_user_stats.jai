@@ -85,20 +85,28 @@ RequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must
     return SteamAPI_ISteamUserStats_RequestUserStats(steam_user_stats, steamIDUser);
 }
 
-RequestUserStats :: inline (steamIDUser: uint64_steamid, callback: (UserStatsReceived_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestUserStats(steamIDUser),
-        callback
-    );
+RequestUserStats :: inline (steamIDUser: uint64_steamid, callback: (UserStatsReceived_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestUserStats(steamIDUser);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        RequestUserStats(steamIDUser),
-        (result: UserStatsReceived_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestUserStats :: (steamIDUser: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestUserStats(steamIDUser);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: UserStatsReceived_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -131,20 +139,28 @@ FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMe
     return SteamAPI_ISteamUserStats_FindOrCreateLeaderboard(steam_user_stats, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
 }
 
-FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType, callback: (LeaderboardFindResult_t, bool) -> ()) {
-    RegisterCallResult(
-        FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType),
-        callback
-    );
+FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType, callback: (LeaderboardFindResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-FindOrCreateLeaderboard :: (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType, code: Code) #expand {
-    RegisterCallResult(
-        FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType),
-        (result: LeaderboardFindResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+FindOrCreateLeaderboard :: (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LeaderboardFindResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -152,20 +168,28 @@ FindLeaderboard :: inline (pchLeaderboardName: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUserStats_FindLeaderboard(steam_user_stats, pchLeaderboardName);
 }
 
-FindLeaderboard :: inline (pchLeaderboardName: *char, callback: (LeaderboardFindResult_t, bool) -> ()) {
-    RegisterCallResult(
-        FindLeaderboard(pchLeaderboardName),
-        callback
-    );
+FindLeaderboard :: inline (pchLeaderboardName: *char, callback: (LeaderboardFindResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := FindLeaderboard(pchLeaderboardName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-FindLeaderboard :: (pchLeaderboardName: *char, code: Code) #expand {
-    RegisterCallResult(
-        FindLeaderboard(pchLeaderboardName),
-        (result: LeaderboardFindResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+FindLeaderboard :: (pchLeaderboardName: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := FindLeaderboard(pchLeaderboardName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LeaderboardFindResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -193,20 +217,28 @@ DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLe
     return SteamAPI_ISteamUserStats_DownloadLeaderboardEntries(steam_user_stats, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
 }
 
-DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32, callback: (LeaderboardScoresDownloaded_t, bool) -> ()) {
-    RegisterCallResult(
-        DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd),
-        callback
-    );
+DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32, callback: (LeaderboardScoresDownloaded_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-DownloadLeaderboardEntries :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32, code: Code) #expand {
-    RegisterCallResult(
-        DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd),
-        (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+DownloadLeaderboardEntries :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -214,20 +246,28 @@ DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboar
     return SteamAPI_ISteamUserStats_DownloadLeaderboardEntriesForUsers(steam_user_stats, hSteamLeaderboard, prgUsers, cUsers);
 }
 
-DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32, callback: (LeaderboardScoresDownloaded_t, bool) -> ()) {
-    RegisterCallResult(
-        DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers),
-        callback
-    );
+DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32, callback: (LeaderboardScoresDownloaded_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-DownloadLeaderboardEntriesForUsers :: (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32, code: Code) #expand {
-    RegisterCallResult(
-        DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers),
-        (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+DownloadLeaderboardEntriesForUsers :: (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LeaderboardScoresDownloaded_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -240,20 +280,28 @@ UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeader
     return SteamAPI_ISteamUserStats_UploadLeaderboardScore(steam_user_stats, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
 }
 
-UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32, callback: (LeaderboardScoreUploaded_t, bool) -> ()) {
-    RegisterCallResult(
-        UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount),
-        callback
-    );
+UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32, callback: (LeaderboardScoreUploaded_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-UploadLeaderboardScore :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32, code: Code) #expand {
-    RegisterCallResult(
-        UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount),
-        (result: LeaderboardScoreUploaded_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+UploadLeaderboardScore :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LeaderboardScoreUploaded_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -261,20 +309,28 @@ AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGC
     return SteamAPI_ISteamUserStats_AttachLeaderboardUGC(steam_user_stats, hSteamLeaderboard, hUGC);
 }
 
-AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t, callback: (LeaderboardUGCSet_t, bool) -> ()) {
-    RegisterCallResult(
-        AttachLeaderboardUGC(hSteamLeaderboard, hUGC),
-        callback
-    );
+AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t, callback: (LeaderboardUGCSet_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := AttachLeaderboardUGC(hSteamLeaderboard, hUGC);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-AttachLeaderboardUGC :: (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t, code: Code) #expand {
-    RegisterCallResult(
-        AttachLeaderboardUGC(hSteamLeaderboard, hUGC),
-        (result: LeaderboardUGCSet_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+AttachLeaderboardUGC :: (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := AttachLeaderboardUGC(hSteamLeaderboard, hUGC);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LeaderboardUGCSet_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -282,20 +338,28 @@ GetNumberOfCurrentPlayers :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamUserStats_GetNumberOfCurrentPlayers(steam_user_stats);
 }
 
-GetNumberOfCurrentPlayers :: inline (callback: (NumberOfCurrentPlayers_t, bool) -> ()) {
-    RegisterCallResult(
-        GetNumberOfCurrentPlayers(),
-        callback
-    );
+GetNumberOfCurrentPlayers :: inline (callback: (NumberOfCurrentPlayers_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := GetNumberOfCurrentPlayers();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-GetNumberOfCurrentPlayers :: (code: Code) #expand {
-    RegisterCallResult(
-        GetNumberOfCurrentPlayers(),
-        (result: NumberOfCurrentPlayers_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+GetNumberOfCurrentPlayers :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := GetNumberOfCurrentPlayers();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: NumberOfCurrentPlayers_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -303,20 +367,28 @@ RequestGlobalAchievementPercentages :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamUserStats_RequestGlobalAchievementPercentages(steam_user_stats);
 }
 
-RequestGlobalAchievementPercentages :: inline (callback: (GlobalAchievementPercentagesReady_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestGlobalAchievementPercentages(),
-        callback
-    );
+RequestGlobalAchievementPercentages :: inline (callback: (GlobalAchievementPercentagesReady_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestGlobalAchievementPercentages();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestGlobalAchievementPercentages :: (code: Code) #expand {
-    RegisterCallResult(
-        RequestGlobalAchievementPercentages(),
-        (result: GlobalAchievementPercentagesReady_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestGlobalAchievementPercentages :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestGlobalAchievementPercentages();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: GlobalAchievementPercentagesReady_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -339,20 +411,28 @@ RequestGlobalStats :: inline (nHistoryDays: s32) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUserStats_RequestGlobalStats(steam_user_stats, nHistoryDays);
 }
 
-RequestGlobalStats :: inline (nHistoryDays: s32, callback: (GlobalStatsReceived_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestGlobalStats(nHistoryDays),
-        callback
-    );
+RequestGlobalStats :: inline (nHistoryDays: s32, callback: (GlobalStatsReceived_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestGlobalStats(nHistoryDays);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestGlobalStats :: (nHistoryDays: s32, code: Code) #expand {
-    RegisterCallResult(
-        RequestGlobalStats(nHistoryDays),
-        (result: GlobalStatsReceived_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestGlobalStats :: (nHistoryDays: s32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestGlobalStats(nHistoryDays);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: GlobalStatsReceived_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

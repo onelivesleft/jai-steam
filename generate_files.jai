@@ -124,13 +124,15 @@ singleton_builder      : String_Builder;
 header_assigns_builder : String_Builder;
 header_loads_builder   : String_Builder;
 
-callbacks_builder     : String_Builder;
-callbacks_callresults : String_Builder;
-callbacks_callbacks   : String_Builder;
-callbacks_enum        : String_Builder;
-callbacks_struct      : String_Builder;
-callbacks_types       : String_Builder;
-callbacks_procs       : String_Builder;
+callbacks_builder                    : String_Builder;
+callbacks_callresults                : String_Builder;
+callbacks_awaiting_callresults_count : String_Builder;
+callbacks_awaiting_callresults_index : String_Builder;
+callbacks_callbacks                  : String_Builder;
+callbacks_enum                       : String_Builder;
+callbacks_struct                     : String_Builder;
+callbacks_types                      : String_Builder;
+callbacks_procs                      : String_Builder;
 
 procs_out         :: #bake_arguments print_to_builder(builder = *procs_builder);
 types_out         :: #bake_arguments print_to_builder(builder = *types_builder);
@@ -181,6 +183,8 @@ main :: () {
 
     init_string_builder(*callbacks_builder);
     init_string_builder(*callbacks_callresults);
+    init_string_builder(*callbacks_awaiting_callresults_count);
+    init_string_builder(*callbacks_awaiting_callresults_index);
     init_string_builder(*callbacks_callbacks);
     init_string_builder(*callbacks_enum);
     init_string_builder(*callbacks_struct);
@@ -202,11 +206,16 @@ main :: () {
     write_entire_file(types_filename, builder_to_string(*file_builder));
 
 
-    output(*callbacks_builder, callbacks_header, builder_to_string(*callbacks_callresults), builder_to_string(*callbacks_callbacks));
+    output(*callbacks_builder, callbacks_header,
+        builder_to_string(*callbacks_callresults),
+        builder_to_string(*callbacks_callbacks),
+        builder_to_string(*callbacks_awaiting_callresults_count),
+        builder_to_string(*callbacks_awaiting_callresults_index)
+    );
     output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_enum));
     output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_struct));
     output(*callbacks_builder, "\n\n%", builder_to_string(*callbacks_types));
-    output(*callbacks_builder, "\n%", builder_to_string(*callbacks_procs));
+    output(*callbacks_builder, "\n%",   builder_to_string(*callbacks_procs));
     write_entire_file(callbacks_filename, builder_to_string(*callbacks_builder));
 
     // singletones
@@ -607,6 +616,7 @@ RegisterCallback :: (callback: (%1) -> ()) {
         call_result_id, found := table_find(callback_structnames, struct_name);
         assert(found, sprint("Can't find callback ID for %", struct_name));
         output(*callbacks_callresults, "                    case .%1;  run_call_results(CallResults.%1, completed_call_result.m_hAsyncCall, cast(*%1) call_result, io_failure);\n", struct_name);
+        output(*callbacks_awaiting_callresults_count, "    for CallResults.%1  result += 1;\n", struct_name);
         output(*callbacks_enum, "    % :: %;\n", struct_name, call_result_id);
         output(*callbacks_struct, "    %1 : Table(SteamAPICall_t, [..] %1_CallResult);\n", struct_name);
         output(*callbacks_types, "%1_CallResult :: #type(%1, bool);\n", struct_name);
@@ -620,6 +630,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (%1, bool) -> (
     }
     array_add(*procs, callback);
     table_set(*CallResults.%1, call_result_id, procs);
+    #if verbose  log("Registered CallResult: %1 = %%", call_result_id);
 }
 
         ___JAI, struct_name);
@@ -634,6 +645,13 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] %1_CallResult), call_
     }
 }
 
+        ___JAI, struct_name);
+
+        output(*callbacks_awaiting_callresults_index, #string ___JAI
+    for CallResults.%1 {
+        count += 1;
+        if count >= index  return it_index, %1.k_iCallback;
+    }
         ___JAI, struct_name);
     }
 
@@ -657,19 +675,27 @@ run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
 		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback { // is a call result
 			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
 			call_result : *void;
+            call_result_size := completed_call_result.m_cubParam;
 			#if use_temporary_storage
-				call_result = temporary_alloc(completed_call_result.m_cubParam);
+				call_result = talloc(call_result_size);
 			else
-				call_result = alloc(completed_call_result.m_cubParam);
+				call_result = alloc(call_result_size);
+
+            #if verbose
+                log("Received CallResult: [%%] %%...", completed_call_result.m_iCallback, completed_call_result.m_hAsyncCall);
 
 			io_failure := false;
 			if SteamAPI_ManualDispatch_GetAPICallResult(
-				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *io_failure)
+				steam_pipe, completed_call_result.m_hAsyncCall, call_result, call_result_size, completed_call_result.m_iCallback, *io_failure)
 			{
+                #if verbose  log("Successfully got CallResult data");
                 call_result_id := cast(CallResultID) completed_call_result.m_iCallback;
                 if #complete call_result_id == {
 %                }
 			}
+            else {
+                #if verbose  log("Failed to get CallResult data");
+            }
 
 			#if !use_temporary_storage  free(call_result);
 		}
@@ -684,6 +710,21 @@ run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
 		}
 	}
 }
+
+
+awaiting_call_results :: (steam_pipe: HSteamPipe) -> int {
+    result := 0;
+%
+    return result;
+}
+
+
+awaiting_call_results :: (steam_pipe: HSteamPipe, index: int) -> handle: SteamAPICall_t, callresult_type: s32 {
+    count := -1;
+%
+    return 0, 0;
+}
+
 ___JAI
 
 
@@ -860,20 +901,28 @@ generate_classes :: (file_data: string) {
                 if found {
                     singleton_out(#string ___JAI
 
-%1%2 :: inline (%3%4callback: (%6, bool) -> ()) {
-    RegisterCallResult(
-        %1%2(%5),
-        callback
-    );
+%1%2 :: inline (%3%4callback: (%6, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := %1%2(%5);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-%1%2 :: (%3%4code: Code) #expand {
-    RegisterCallResult(
-        %1%2(%5),
-        (result: %6, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+%1%2 :: (%3%4code: Code) -> SteamAPICall_t #expand {
+    call_result_id := %1%2(%5);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: %6, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
                     ___JAI, server_prefix, short_name, parameters, ifx parameters then ", " else "", strip_types(parameters), struct_name);
                 }

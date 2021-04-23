@@ -15,8 +15,8 @@ By default Jai-Steam will make accessing the Steamworks API as simple as possibl
 To use it you should call these things:
 
 * `InitSteam()` when your program starts.
-* `RunCallbacks()` periodically, ideally more often than 10Hz.  Usually you just call this once per game loop.
-* `ShutdownSteam()` as your program exits.
+* `RunCallbacks()` periodically, ideally more often than 10Hz.  Usually you call this once per game loop.
+* `ShutdownSteam(timeout = 0.0) -> bool` as your program exits.  If you provide an optional `timeout` in seconds then should there be are any outstanding `CallResults` awaiting resolution, the shutdown will be delayed for up to that duration to give them a chance to finish.  This will return true if the shutdown occurred cleanly - either because there were no `CallResults` outstanding when it was called, or because any such `CallResults` managed to resolve within the `timeout` period.
 
 Example:
 ```jai
@@ -28,12 +28,13 @@ main :: () {
 
     should_quit := false;
     while !should_quit {
-        // ...game loop...
-
         RunCallbacks();
+
+        // ...game loop...
     }
 
-    ShutdownSteam();
+    shutdown_cleanly := ShutdownSteam(3.0);
+    if !shutdown_cleanly  log_error("Failed to finish up cleanly!");
 }
 ```
 
@@ -89,6 +90,8 @@ main :: () {
 `Call Results` are how the Steamworks API gives you access to data asynchronously.  Unlike callbacks, which are bound for the duration of your program, a Call Result will fire once with the data you have requested.
 
 The simplest way to use a call result is to append a lambda to the API function.
+
+@TODO Macro version, check return value
 
 Example:
 ```jai

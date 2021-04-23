@@ -79,11 +79,13 @@ else
 
 
 // TODO
+// [ ] #must on functions?
+// [ ] reverse callbackID lookup
 // [.] Example game
 // [.] Documentation
+// [.] string overloads for *char procs : functions with *char + count could have a string overload?
 // [x] CallResult macro in nice api
 // [x] Callbacks
-// [x] string overloads for *char procs
 // [x] @SteamCallback for callbacks in nice api
 // [x] CallResult proc with function in nice api
 // [x] Change internal flat names: SteamAPI_ISteamClient_GetISteamGenericInterface -> SteamClient_GetISteamGenericInterface

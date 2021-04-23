@@ -105,20 +105,28 @@ RequestEncryptedAppTicket :: inline (pDataToInclude: *void, cbDataToInclude: s32
     return SteamAPI_ISteamUser_RequestEncryptedAppTicket(steam_user, pDataToInclude, cbDataToInclude);
 }
 
-RequestEncryptedAppTicket :: inline (pDataToInclude: *void, cbDataToInclude: s32, callback: (EncryptedAppTicketResponse_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude),
-        callback
-    );
+RequestEncryptedAppTicket :: inline (pDataToInclude: *void, cbDataToInclude: s32, callback: (EncryptedAppTicketResponse_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestEncryptedAppTicket :: (pDataToInclude: *void, cbDataToInclude: s32, code: Code) #expand {
-    RegisterCallResult(
-        RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude),
-        (result: EncryptedAppTicketResponse_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestEncryptedAppTicket :: (pDataToInclude: *void, cbDataToInclude: s32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: EncryptedAppTicketResponse_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -141,20 +149,28 @@ RequestStoreAuthURL :: inline (pchRedirectURL: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUser_RequestStoreAuthURL(steam_user, pchRedirectURL);
 }
 
-RequestStoreAuthURL :: inline (pchRedirectURL: *char, callback: (StoreAuthURLResponse_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestStoreAuthURL(pchRedirectURL),
-        callback
-    );
+RequestStoreAuthURL :: inline (pchRedirectURL: *char, callback: (StoreAuthURLResponse_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestStoreAuthURL(pchRedirectURL);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestStoreAuthURL :: (pchRedirectURL: *char, code: Code) #expand {
-    RegisterCallResult(
-        RequestStoreAuthURL(pchRedirectURL),
-        (result: StoreAuthURLResponse_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestStoreAuthURL :: (pchRedirectURL: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestStoreAuthURL(pchRedirectURL);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: StoreAuthURLResponse_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -182,20 +198,28 @@ GetMarketEligibility :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamUser_GetMarketEligibility(steam_user);
 }
 
-GetMarketEligibility :: inline (callback: (MarketEligibilityResponse_t, bool) -> ()) {
-    RegisterCallResult(
-        GetMarketEligibility(),
-        callback
-    );
+GetMarketEligibility :: inline (callback: (MarketEligibilityResponse_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := GetMarketEligibility();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-GetMarketEligibility :: (code: Code) #expand {
-    RegisterCallResult(
-        GetMarketEligibility(),
-        (result: MarketEligibilityResponse_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+GetMarketEligibility :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := GetMarketEligibility();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: MarketEligibilityResponse_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -203,20 +227,28 @@ GetDurationControl :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamUser_GetDurationControl(steam_user);
 }
 
-GetDurationControl :: inline (callback: (DurationControl_t, bool) -> ()) {
-    RegisterCallResult(
-        GetDurationControl(),
-        callback
-    );
+GetDurationControl :: inline (callback: (DurationControl_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := GetDurationControl();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-GetDurationControl :: (code: Code) #expand {
-    RegisterCallResult(
-        GetDurationControl(),
-        (result: DurationControl_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+GetDurationControl :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := GetDurationControl();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: DurationControl_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

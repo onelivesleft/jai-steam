@@ -20,20 +20,28 @@ JoinParty :: inline (ulBeaconID: PartyBeaconID_t) -> SteamAPICall_t #must {
     return SteamAPI_ISteamParties_JoinParty(steam_parties, ulBeaconID);
 }
 
-JoinParty :: inline (ulBeaconID: PartyBeaconID_t, callback: (JoinPartyCallback_t, bool) -> ()) {
-    RegisterCallResult(
-        JoinParty(ulBeaconID),
-        callback
-    );
+JoinParty :: inline (ulBeaconID: PartyBeaconID_t, callback: (JoinPartyCallback_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := JoinParty(ulBeaconID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-JoinParty :: (ulBeaconID: PartyBeaconID_t, code: Code) #expand {
-    RegisterCallResult(
-        JoinParty(ulBeaconID),
-        (result: JoinPartyCallback_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+JoinParty :: (ulBeaconID: PartyBeaconID_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := JoinParty(ulBeaconID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: JoinPartyCallback_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -51,20 +59,28 @@ CreateBeacon :: inline (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconL
     return SteamAPI_ISteamParties_CreateBeacon(steam_parties, unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata);
 }
 
-CreateBeacon :: inline (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char, callback: (CreateBeaconCallback_t, bool) -> ()) {
-    RegisterCallResult(
-        CreateBeacon(unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata),
-        callback
-    );
+CreateBeacon :: inline (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char, callback: (CreateBeaconCallback_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := CreateBeacon(unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-CreateBeacon :: (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char, code: Code) #expand {
-    RegisterCallResult(
-        CreateBeacon(unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata),
-        (result: CreateBeaconCallback_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+CreateBeacon :: (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation_t, pchConnectString: *char, pchMetadata: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := CreateBeacon(unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: CreateBeaconCallback_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -82,20 +98,28 @@ ChangeNumOpenSlots :: inline (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32) ->
     return SteamAPI_ISteamParties_ChangeNumOpenSlots(steam_parties, ulBeacon, unOpenSlots);
 }
 
-ChangeNumOpenSlots :: inline (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, callback: (ChangeNumOpenSlotsCallback_t, bool) -> ()) {
-    RegisterCallResult(
-        ChangeNumOpenSlots(ulBeacon, unOpenSlots),
-        callback
-    );
+ChangeNumOpenSlots :: inline (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, callback: (ChangeNumOpenSlotsCallback_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := ChangeNumOpenSlots(ulBeacon, unOpenSlots);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-ChangeNumOpenSlots :: (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, code: Code) #expand {
-    RegisterCallResult(
-        ChangeNumOpenSlots(ulBeacon, unOpenSlots),
-        (result: ChangeNumOpenSlotsCallback_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+ChangeNumOpenSlots :: (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := ChangeNumOpenSlots(ulBeacon, unOpenSlots);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: ChangeNumOpenSlotsCallback_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

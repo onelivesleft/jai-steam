@@ -25,20 +25,28 @@ SendQueryUGCRequest :: inline (handle: UGCQueryHandle_t) -> SteamAPICall_t #must
     return SteamAPI_ISteamUGC_SendQueryUGCRequest(steam_ugc, handle);
 }
 
-SendQueryUGCRequest :: inline (handle: UGCQueryHandle_t, callback: (SteamUGCQueryCompleted_t, bool) -> ()) {
-    RegisterCallResult(
-        SendQueryUGCRequest(handle),
-        callback
-    );
+SendQueryUGCRequest :: inline (handle: UGCQueryHandle_t, callback: (SteamUGCQueryCompleted_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := SendQueryUGCRequest(handle);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-SendQueryUGCRequest :: (handle: UGCQueryHandle_t, code: Code) #expand {
-    RegisterCallResult(
-        SendQueryUGCRequest(handle),
-        (result: SteamUGCQueryCompleted_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+SendQueryUGCRequest :: (handle: UGCQueryHandle_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := SendQueryUGCRequest(handle);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SteamUGCQueryCompleted_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -206,20 +214,28 @@ RequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAgeSecond
     return SteamAPI_ISteamUGC_RequestUGCDetails(steam_ugc, nPublishedFileID, unMaxAgeSeconds);
 }
 
-RequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32, callback: (SteamUGCRequestUGCDetailsResult_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestUGCDetails(nPublishedFileID, unMaxAgeSeconds),
-        callback
-    );
+RequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32, callback: (SteamUGCRequestUGCDetailsResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestUGCDetails(nPublishedFileID, unMaxAgeSeconds);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestUGCDetails :: (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32, code: Code) #expand {
-    RegisterCallResult(
-        RequestUGCDetails(nPublishedFileID, unMaxAgeSeconds),
-        (result: SteamUGCRequestUGCDetailsResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestUGCDetails :: (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestUGCDetails(nPublishedFileID, unMaxAgeSeconds);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SteamUGCRequestUGCDetailsResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -227,20 +243,28 @@ CreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType) -> 
     return SteamAPI_ISteamUGC_CreateItem(steam_ugc, nConsumerAppId, eFileType);
 }
 
-CreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, callback: (CreateItemResult_t, bool) -> ()) {
-    RegisterCallResult(
-        CreateItem(nConsumerAppId, eFileType),
-        callback
-    );
+CreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, callback: (CreateItemResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := CreateItem(nConsumerAppId, eFileType);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-CreateItem :: (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, code: Code) #expand {
-    RegisterCallResult(
-        CreateItem(nConsumerAppId, eFileType),
-        (result: CreateItemResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+CreateItem :: (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := CreateItem(nConsumerAppId, eFileType);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: CreateItemResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -338,20 +362,28 @@ SubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *char) -> 
     return SteamAPI_ISteamUGC_SubmitItemUpdate(steam_ugc, handle, pchChangeNote);
 }
 
-SubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *char, callback: (SubmitItemUpdateResult_t, bool) -> ()) {
-    RegisterCallResult(
-        SubmitItemUpdate(handle, pchChangeNote),
-        callback
-    );
+SubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *char, callback: (SubmitItemUpdateResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := SubmitItemUpdate(handle, pchChangeNote);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-SubmitItemUpdate :: (handle: UGCUpdateHandle_t, pchChangeNote: *char, code: Code) #expand {
-    RegisterCallResult(
-        SubmitItemUpdate(handle, pchChangeNote),
-        (result: SubmitItemUpdateResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+SubmitItemUpdate :: (handle: UGCUpdateHandle_t, pchChangeNote: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := SubmitItemUpdate(handle, pchChangeNote);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SubmitItemUpdateResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -364,20 +396,28 @@ SetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: bool) -
     return SteamAPI_ISteamUGC_SetUserItemVote(steam_ugc, nPublishedFileID, bVoteUp);
 }
 
-SetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, callback: (SetUserItemVoteResult_t, bool) -> ()) {
-    RegisterCallResult(
-        SetUserItemVote(nPublishedFileID, bVoteUp),
-        callback
-    );
+SetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, callback: (SetUserItemVoteResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := SetUserItemVote(nPublishedFileID, bVoteUp);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-SetUserItemVote :: (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, code: Code) #expand {
-    RegisterCallResult(
-        SetUserItemVote(nPublishedFileID, bVoteUp),
-        (result: SetUserItemVoteResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+SetUserItemVote :: (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := SetUserItemVote(nPublishedFileID, bVoteUp);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: SetUserItemVoteResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -385,20 +425,28 @@ GetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_
     return SteamAPI_ISteamUGC_GetUserItemVote(steam_ugc, nPublishedFileID);
 }
 
-GetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, callback: (GetUserItemVoteResult_t, bool) -> ()) {
-    RegisterCallResult(
-        GetUserItemVote(nPublishedFileID),
-        callback
-    );
+GetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, callback: (GetUserItemVoteResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := GetUserItemVote(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-GetUserItemVote :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        GetUserItemVote(nPublishedFileID),
-        (result: GetUserItemVoteResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+GetUserItemVote :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := GetUserItemVote(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: GetUserItemVoteResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -406,20 +454,28 @@ AddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId
     return SteamAPI_ISteamUGC_AddItemToFavorites(steam_ugc, nAppId, nPublishedFileID);
 }
 
-AddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, callback: (UserFavoriteItemsListChanged_t, bool) -> ()) {
-    RegisterCallResult(
-        AddItemToFavorites(nAppId, nPublishedFileID),
-        callback
-    );
+AddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, callback: (UserFavoriteItemsListChanged_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := AddItemToFavorites(nAppId, nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-AddItemToFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        AddItemToFavorites(nAppId, nPublishedFileID),
-        (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+AddItemToFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := AddItemToFavorites(nAppId, nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -427,20 +483,28 @@ RemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedF
     return SteamAPI_ISteamUGC_RemoveItemFromFavorites(steam_ugc, nAppId, nPublishedFileID);
 }
 
-RemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, callback: (UserFavoriteItemsListChanged_t, bool) -> ()) {
-    RegisterCallResult(
-        RemoveItemFromFavorites(nAppId, nPublishedFileID),
-        callback
-    );
+RemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, callback: (UserFavoriteItemsListChanged_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RemoveItemFromFavorites(nAppId, nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RemoveItemFromFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        RemoveItemFromFavorites(nAppId, nPublishedFileID),
-        (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RemoveItemFromFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RemoveItemFromFavorites(nAppId, nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -448,20 +512,28 @@ SubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t 
     return SteamAPI_ISteamUGC_SubscribeItem(steam_ugc, nPublishedFileID);
 }
 
-SubscribeItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (RemoteStorageSubscribePublishedFileResult_t, bool) -> ()) {
-    RegisterCallResult(
-        SubscribeItem(nPublishedFileID),
-        callback
-    );
+SubscribeItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (RemoteStorageSubscribePublishedFileResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := SubscribeItem(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-SubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        SubscribeItem(nPublishedFileID),
-        (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+SubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := SubscribeItem(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -469,20 +541,28 @@ UnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_
     return SteamAPI_ISteamUGC_UnsubscribeItem(steam_ugc, nPublishedFileID);
 }
 
-UnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (RemoteStorageUnsubscribePublishedFileResult_t, bool) -> ()) {
-    RegisterCallResult(
-        UnsubscribeItem(nPublishedFileID),
-        callback
-    );
+UnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (RemoteStorageUnsubscribePublishedFileResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := UnsubscribeItem(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-UnsubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        UnsubscribeItem(nPublishedFileID),
-        (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+UnsubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := UnsubscribeItem(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -530,20 +610,28 @@ StartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumP
     return SteamAPI_ISteamUGC_StartPlaytimeTracking(steam_ugc, pvecPublishedFileID, unNumPublishedFileIDs);
 }
 
-StartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, callback: (StartPlaytimeTrackingResult_t, bool) -> ()) {
-    RegisterCallResult(
-        StartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
-        callback
-    );
+StartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, callback: (StartPlaytimeTrackingResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := StartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-StartPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) #expand {
-    RegisterCallResult(
-        StartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
-        (result: StartPlaytimeTrackingResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+StartPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := StartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: StartPlaytimeTrackingResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -551,20 +639,28 @@ StopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPu
     return SteamAPI_ISteamUGC_StopPlaytimeTracking(steam_ugc, pvecPublishedFileID, unNumPublishedFileIDs);
 }
 
-StopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, callback: (StopPlaytimeTrackingResult_t, bool) -> ()) {
-    RegisterCallResult(
-        StopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
-        callback
-    );
+StopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, callback: (StopPlaytimeTrackingResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := StopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-StopPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) #expand {
-    RegisterCallResult(
-        StopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs),
-        (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+StopPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := StopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -572,20 +668,28 @@ StopPlaytimeTrackingForAllItems :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamUGC_StopPlaytimeTrackingForAllItems(steam_ugc);
 }
 
-StopPlaytimeTrackingForAllItems :: inline (callback: (StopPlaytimeTrackingResult_t, bool) -> ()) {
-    RegisterCallResult(
-        StopPlaytimeTrackingForAllItems(),
-        callback
-    );
+StopPlaytimeTrackingForAllItems :: inline (callback: (StopPlaytimeTrackingResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := StopPlaytimeTrackingForAllItems();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-StopPlaytimeTrackingForAllItems :: (code: Code) #expand {
-    RegisterCallResult(
-        StopPlaytimeTrackingForAllItems(),
-        (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+StopPlaytimeTrackingForAllItems :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := StopPlaytimeTrackingForAllItems();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -593,20 +697,28 @@ AddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublis
     return SteamAPI_ISteamUGC_AddDependency(steam_ugc, nParentPublishedFileID, nChildPublishedFileID);
 }
 
-AddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, callback: (AddUGCDependencyResult_t, bool) -> ()) {
-    RegisterCallResult(
-        AddDependency(nParentPublishedFileID, nChildPublishedFileID),
-        callback
-    );
+AddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, callback: (AddUGCDependencyResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := AddDependency(nParentPublishedFileID, nChildPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-AddDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        AddDependency(nParentPublishedFileID, nChildPublishedFileID),
-        (result: AddUGCDependencyResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+AddDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := AddDependency(nParentPublishedFileID, nChildPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: AddUGCDependencyResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -614,20 +726,28 @@ RemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPub
     return SteamAPI_ISteamUGC_RemoveDependency(steam_ugc, nParentPublishedFileID, nChildPublishedFileID);
 }
 
-RemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, callback: (RemoveUGCDependencyResult_t, bool) -> ()) {
-    RegisterCallResult(
-        RemoveDependency(nParentPublishedFileID, nChildPublishedFileID),
-        callback
-    );
+RemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, callback: (RemoveUGCDependencyResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RemoveDependency(nParentPublishedFileID, nChildPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RemoveDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        RemoveDependency(nParentPublishedFileID, nChildPublishedFileID),
-        (result: RemoveUGCDependencyResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RemoveDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RemoveDependency(nParentPublishedFileID, nChildPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: RemoveUGCDependencyResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -635,20 +755,28 @@ AddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t
     return SteamAPI_ISteamUGC_AddAppDependency(steam_ugc, nPublishedFileID, nAppID);
 }
 
-AddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, callback: (AddAppDependencyResult_t, bool) -> ()) {
-    RegisterCallResult(
-        AddAppDependency(nPublishedFileID, nAppID),
-        callback
-    );
+AddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, callback: (AddAppDependencyResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := AddAppDependency(nPublishedFileID, nAppID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-AddAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) #expand {
-    RegisterCallResult(
-        AddAppDependency(nPublishedFileID, nAppID),
-        (result: AddAppDependencyResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+AddAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := AddAppDependency(nPublishedFileID, nAppID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: AddAppDependencyResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -656,20 +784,28 @@ RemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppI
     return SteamAPI_ISteamUGC_RemoveAppDependency(steam_ugc, nPublishedFileID, nAppID);
 }
 
-RemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, callback: (RemoveAppDependencyResult_t, bool) -> ()) {
-    RegisterCallResult(
-        RemoveAppDependency(nPublishedFileID, nAppID),
-        callback
-    );
+RemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, callback: (RemoveAppDependencyResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RemoveAppDependency(nPublishedFileID, nAppID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RemoveAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) #expand {
-    RegisterCallResult(
-        RemoveAppDependency(nPublishedFileID, nAppID),
-        (result: RemoveAppDependencyResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RemoveAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RemoveAppDependency(nPublishedFileID, nAppID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: RemoveAppDependencyResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -677,20 +813,28 @@ GetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICa
     return SteamAPI_ISteamUGC_GetAppDependencies(steam_ugc, nPublishedFileID);
 }
 
-GetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t, callback: (GetAppDependenciesResult_t, bool) -> ()) {
-    RegisterCallResult(
-        GetAppDependencies(nPublishedFileID),
-        callback
-    );
+GetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t, callback: (GetAppDependenciesResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := GetAppDependencies(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-GetAppDependencies :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        GetAppDependencies(nPublishedFileID),
-        (result: GetAppDependenciesResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+GetAppDependencies :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := GetAppDependencies(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: GetAppDependenciesResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -698,18 +842,26 @@ DeleteItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #mu
     return SteamAPI_ISteamUGC_DeleteItem(steam_ugc, nPublishedFileID);
 }
 
-DeleteItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (DeleteItemResult_t, bool) -> ()) {
-    RegisterCallResult(
-        DeleteItem(nPublishedFileID),
-        callback
-    );
+DeleteItem :: inline (nPublishedFileID: PublishedFileId_t, callback: (DeleteItemResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := DeleteItem(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-DeleteItem :: (nPublishedFileID: PublishedFileId_t, code: Code) #expand {
-    RegisterCallResult(
-        DeleteItem(nPublishedFileID),
-        (result: DeleteItemResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+DeleteItem :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := DeleteItem(nPublishedFileID);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: DeleteItemResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }

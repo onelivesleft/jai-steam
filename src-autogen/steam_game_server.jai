@@ -175,20 +175,28 @@ ServerGetServerReputation :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamGameServer_GetServerReputation(steam_game_server);
 }
 
-ServerGetServerReputation :: inline (callback: (GSReputation_t, bool) -> ()) {
-    RegisterCallResult(
-        ServerGetServerReputation(),
-        callback
-    );
+ServerGetServerReputation :: inline (callback: (GSReputation_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := ServerGetServerReputation();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-ServerGetServerReputation :: (code: Code) #expand {
-    RegisterCallResult(
-        ServerGetServerReputation(),
-        (result: GSReputation_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+ServerGetServerReputation :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := ServerGetServerReputation();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: GSReputation_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -226,20 +234,28 @@ ServerAssociateWithClan :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_
     return SteamAPI_ISteamGameServer_AssociateWithClan(steam_game_server, steamIDClan);
 }
 
-ServerAssociateWithClan :: inline (steamIDClan: uint64_steamid, callback: (AssociateWithClanResult_t, bool) -> ()) {
-    RegisterCallResult(
-        ServerAssociateWithClan(steamIDClan),
-        callback
-    );
+ServerAssociateWithClan :: inline (steamIDClan: uint64_steamid, callback: (AssociateWithClanResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := ServerAssociateWithClan(steamIDClan);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-ServerAssociateWithClan :: (steamIDClan: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        ServerAssociateWithClan(steamIDClan),
-        (result: AssociateWithClanResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+ServerAssociateWithClan :: (steamIDClan: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := ServerAssociateWithClan(steamIDClan);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: AssociateWithClanResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -247,18 +263,26 @@ ServerComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid)
     return SteamAPI_ISteamGameServer_ComputeNewPlayerCompatibility(steam_game_server, steamIDNewPlayer);
 }
 
-ServerComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid, callback: (ComputeNewPlayerCompatibilityResult_t, bool) -> ()) {
-    RegisterCallResult(
-        ServerComputeNewPlayerCompatibility(steamIDNewPlayer),
-        callback
-    );
+ServerComputeNewPlayerCompatibility :: inline (steamIDNewPlayer: uint64_steamid, callback: (ComputeNewPlayerCompatibilityResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := ServerComputeNewPlayerCompatibility(steamIDNewPlayer);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-ServerComputeNewPlayerCompatibility :: (steamIDNewPlayer: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        ServerComputeNewPlayerCompatibility(steamIDNewPlayer),
-        (result: ComputeNewPlayerCompatibilityResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+ServerComputeNewPlayerCompatibility :: (steamIDNewPlayer: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := ServerComputeNewPlayerCompatibility(steamIDNewPlayer);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: ComputeNewPlayerCompatibilityResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }

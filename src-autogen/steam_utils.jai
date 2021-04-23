@@ -90,20 +90,28 @@ CheckFileSignature :: inline (szFileName: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamUtils_CheckFileSignature(steam_utils, szFileName);
 }
 
-CheckFileSignature :: inline (szFileName: *char, callback: (CheckFileSignature_t, bool) -> ()) {
-    RegisterCallResult(
-        CheckFileSignature(szFileName),
-        callback
-    );
+CheckFileSignature :: inline (szFileName: *char, callback: (CheckFileSignature_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := CheckFileSignature(szFileName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-CheckFileSignature :: (szFileName: *char, code: Code) #expand {
-    RegisterCallResult(
-        CheckFileSignature(szFileName),
-        (result: CheckFileSignature_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+CheckFileSignature :: (szFileName: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := CheckFileSignature(szFileName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: CheckFileSignature_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

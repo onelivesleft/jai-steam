@@ -5,20 +5,28 @@ ServerRequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t
     return SteamAPI_ISteamGameServerStats_RequestUserStats(steam_game_server_stats, steamIDUser);
 }
 
-ServerRequestUserStats :: inline (steamIDUser: uint64_steamid, callback: (GSStatsReceived_t, bool) -> ()) {
-    RegisterCallResult(
-        ServerRequestUserStats(steamIDUser),
-        callback
-    );
+ServerRequestUserStats :: inline (steamIDUser: uint64_steamid, callback: (GSStatsReceived_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := ServerRequestUserStats(steamIDUser);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-ServerRequestUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        ServerRequestUserStats(steamIDUser),
-        (result: GSStatsReceived_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+ServerRequestUserStats :: (steamIDUser: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := ServerRequestUserStats(steamIDUser);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: GSStatsReceived_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -66,18 +74,26 @@ ServerStoreUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #
     return SteamAPI_ISteamGameServerStats_StoreUserStats(steam_game_server_stats, steamIDUser);
 }
 
-ServerStoreUserStats :: inline (steamIDUser: uint64_steamid, callback: (GSStatsStored_t, bool) -> ()) {
-    RegisterCallResult(
-        ServerStoreUserStats(steamIDUser),
-        callback
-    );
+ServerStoreUserStats :: inline (steamIDUser: uint64_steamid, callback: (GSStatsStored_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := ServerStoreUserStats(steamIDUser);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-ServerStoreUserStats :: (steamIDUser: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        ServerStoreUserStats(steamIDUser),
-        (result: GSStatsStored_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+ServerStoreUserStats :: (steamIDUser: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := ServerStoreUserStats(steamIDUser);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: GSStatsStored_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }

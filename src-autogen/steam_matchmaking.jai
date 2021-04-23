@@ -25,20 +25,28 @@ RequestLobbyList :: inline () -> SteamAPICall_t #must {
     return SteamAPI_ISteamMatchmaking_RequestLobbyList(steam_matchmaking);
 }
 
-RequestLobbyList :: inline (callback: (LobbyMatchList_t, bool) -> ()) {
-    RegisterCallResult(
-        RequestLobbyList(),
-        callback
-    );
+RequestLobbyList :: inline (callback: (LobbyMatchList_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := RequestLobbyList();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-RequestLobbyList :: (code: Code) #expand {
-    RegisterCallResult(
-        RequestLobbyList(),
-        (result: LobbyMatchList_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+RequestLobbyList :: (code: Code) -> SteamAPICall_t #expand {
+    call_result_id := RequestLobbyList();
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LobbyMatchList_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -86,20 +94,28 @@ CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32) -> SteamAPICall
     return SteamAPI_ISteamMatchmaking_CreateLobby(steam_matchmaking, eLobbyType, cMaxMembers);
 }
 
-CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32, callback: (LobbyCreated_t, bool) -> ()) {
-    RegisterCallResult(
-        CreateLobby(eLobbyType, cMaxMembers),
-        callback
-    );
+CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32, callback: (LobbyCreated_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := CreateLobby(eLobbyType, cMaxMembers);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-CreateLobby :: (eLobbyType: ELobbyType, cMaxMembers: s32, code: Code) #expand {
-    RegisterCallResult(
-        CreateLobby(eLobbyType, cMaxMembers),
-        (result: LobbyCreated_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+CreateLobby :: (eLobbyType: ELobbyType, cMaxMembers: s32, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := CreateLobby(eLobbyType, cMaxMembers);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LobbyCreated_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 
@@ -107,20 +123,28 @@ JoinLobby :: inline (steamIDLobby: uint64_steamid) -> SteamAPICall_t #must {
     return SteamAPI_ISteamMatchmaking_JoinLobby(steam_matchmaking, steamIDLobby);
 }
 
-JoinLobby :: inline (steamIDLobby: uint64_steamid, callback: (LobbyEnter_t, bool) -> ()) {
-    RegisterCallResult(
-        JoinLobby(steamIDLobby),
-        callback
-    );
+JoinLobby :: inline (steamIDLobby: uint64_steamid, callback: (LobbyEnter_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := JoinLobby(steamIDLobby);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-JoinLobby :: (steamIDLobby: uint64_steamid, code: Code) #expand {
-    RegisterCallResult(
-        JoinLobby(steamIDLobby),
-        (result: LobbyEnter_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+JoinLobby :: (steamIDLobby: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := JoinLobby(steamIDLobby);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: LobbyEnter_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

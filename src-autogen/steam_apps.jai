@@ -130,20 +130,28 @@ GetFileDetails :: inline (pszFileName: *char) -> SteamAPICall_t #must {
     return SteamAPI_ISteamApps_GetFileDetails(steam_apps, pszFileName);
 }
 
-GetFileDetails :: inline (pszFileName: *char, callback: (FileDetailsResult_t, bool) -> ()) {
-    RegisterCallResult(
-        GetFileDetails(pszFileName),
-        callback
-    );
+GetFileDetails :: inline (pszFileName: *char, callback: (FileDetailsResult_t, bool) -> ()) -> SteamAPICall_t {
+    call_result_id := GetFileDetails(pszFileName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            callback
+        );
+    }
+    return call_result_id;
 }
 
-GetFileDetails :: (pszFileName: *char, code: Code) #expand {
-    RegisterCallResult(
-        GetFileDetails(pszFileName),
-        (result: FileDetailsResult_t, io_failure: bool) -> () {
-            #insert_internal code;
-        }
-    );
+GetFileDetails :: (pszFileName: *char, code: Code) -> SteamAPICall_t #expand {
+    call_result_id := GetFileDetails(pszFileName);
+    if call_result_id {
+        RegisterCallResult(
+            call_result_id,
+            (result: FileDetailsResult_t, io_failure: bool) -> () {
+                #insert_internal code;
+            }
+        );
+    }
+    return call_result_id;
 }
 
 

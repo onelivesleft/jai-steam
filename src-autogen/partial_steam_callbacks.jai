@@ -11,15 +11,20 @@ run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
 		if callback.m_iCallback == SteamAPICallCompleted_t.k_iCallback { // is a call result
 			completed_call_result := cast(*SteamAPICallCompleted_t) callback.m_pubParam;
 			call_result : *void;
+            call_result_size := completed_call_result.m_cubParam;
 			#if use_temporary_storage
-				call_result = temporary_alloc(completed_call_result.m_cubParam);
+				call_result = talloc(call_result_size);
 			else
-				call_result = alloc(completed_call_result.m_cubParam);
+				call_result = alloc(call_result_size);
+
+            #if verbose
+                log("Received CallResult: [%] %...", completed_call_result.m_iCallback, completed_call_result.m_hAsyncCall);
 
 			io_failure := false;
 			if SteamAPI_ManualDispatch_GetAPICallResult(
-				steam_pipe, completed_call_result.m_hAsyncCall, call_result, completed_call_result.m_cubParam, completed_call_result.m_iCallback, *io_failure)
+				steam_pipe, completed_call_result.m_hAsyncCall, call_result, call_result_size, completed_call_result.m_iCallback, *io_failure)
 			{
+                #if verbose  log("Successfully got CallResult data");
                 call_result_id := cast(CallResultID) completed_call_result.m_iCallback;
                 if #complete call_result_id == {
                     case .StoreAuthURLResponse_t;  run_call_results(CallResults.StoreAuthURLResponse_t, completed_call_result.m_hAsyncCall, cast(*StoreAuthURLResponse_t) call_result, io_failure);
@@ -92,6 +97,9 @@ run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
                     case .LeaderboardUGCSet_t;  run_call_results(CallResults.LeaderboardUGCSet_t, completed_call_result.m_hAsyncCall, cast(*LeaderboardUGCSet_t) call_result, io_failure);
                 }
 			}
+            else {
+                #if verbose  log("Failed to get CallResult data");
+            }
 
 			#if !use_temporary_storage  free(call_result);
 		}
@@ -242,6 +250,361 @@ run_callbacks :: (steam_pipe: HSteamPipe, is_server: bool) {
 		}
 	}
 }
+
+
+awaiting_call_results :: (steam_pipe: HSteamPipe) -> int {
+    result := 0;
+    for CallResults.StoreAuthURLResponse_t  result += 1;
+    for CallResults.RemoteStorageDeletePublishedFileResult_t  result += 1;
+    for CallResults.RemoteStorageSubscribePublishedFileResult_t  result += 1;
+    for CallResults.EncryptedAppTicketResponse_t  result += 1;
+    for CallResults.CreateItemResult_t  result += 1;
+    for CallResults.LobbyMatchList_t  result += 1;
+    for CallResults.DownloadClanActivityCountsResult_t  result += 1;
+    for CallResults.RemoteStorageFileReadAsyncComplete_t  result += 1;
+    for CallResults.RemoteStorageEnumeratePublishedFilesByUserActionResult_t  result += 1;
+    for CallResults.LobbyCreated_t  result += 1;
+    for CallResults.GlobalStatsReceived_t  result += 1;
+    for CallResults.RemoteStorageEnumerateWorkshopFilesResult_t  result += 1;
+    for CallResults.SetPersonaNameResponse_t  result += 1;
+    for CallResults.StopPlaytimeTrackingResult_t  result += 1;
+    for CallResults.NumberOfCurrentPlayers_t  result += 1;
+    for CallResults.ChangeNumOpenSlotsCallback_t  result += 1;
+    for CallResults.RemoveAppDependencyResult_t  result += 1;
+    for CallResults.UserFavoriteItemsListChanged_t  result += 1;
+    for CallResults.SteamInventoryRequestPricesResult_t  result += 1;
+    for CallResults.AddAppDependencyResult_t  result += 1;
+    for CallResults.LeaderboardFindResult_t  result += 1;
+    for CallResults.RemoteStorageDownloadUGCResult_t  result += 1;
+    for CallResults.CheckFileSignature_t  result += 1;
+    for CallResults.RemoteStorageGetPublishedFileDetailsResult_t  result += 1;
+    for CallResults.FileDetailsResult_t  result += 1;
+    for CallResults.ComputeNewPlayerCompatibilityResult_t  result += 1;
+    for CallResults.RemoteStorageSetUserPublishedFileActionResult_t  result += 1;
+    for CallResults.RemoteStorageEnumerateUserPublishedFilesResult_t  result += 1;
+    for CallResults.RemoteStorageUnsubscribePublishedFileResult_t  result += 1;
+    for CallResults.RemoteStoragePublishFileProgress_t  result += 1;
+    for CallResults.CreateBeaconCallback_t  result += 1;
+    for CallResults.HTML_BrowserReady_t  result += 1;
+    for CallResults.MarketEligibilityResponse_t  result += 1;
+    for CallResults.RemoteStorageUpdatePublishedFileResult_t  result += 1;
+    for CallResults.UserStatsReceived_t  result += 1;
+    for CallResults.JoinClanChatRoomCompletionResult_t  result += 1;
+    for CallResults.GlobalAchievementPercentagesReady_t  result += 1;
+    for CallResults.AssociateWithClanResult_t  result += 1;
+    for CallResults.GetAppDependenciesResult_t  result += 1;
+    for CallResults.FriendsIsFollowing_t  result += 1;
+    for CallResults.SteamUGCRequestUGCDetailsResult_t  result += 1;
+    for CallResults.ClanOfficerListResponse_t  result += 1;
+    for CallResults.FriendsEnumerateFollowingList_t  result += 1;
+    for CallResults.RemoteStorageGetPublishedItemVoteDetailsResult_t  result += 1;
+    for CallResults.LobbyEnter_t  result += 1;
+    for CallResults.SteamUGCQueryCompleted_t  result += 1;
+    for CallResults.GSReputation_t  result += 1;
+    for CallResults.FriendsGetFollowerCount_t  result += 1;
+    for CallResults.SteamInventoryEligiblePromoItemDefIDs_t  result += 1;
+    for CallResults.SteamInventoryStartPurchaseResult_t  result += 1;
+    for CallResults.RemoteStorageFileShareResult_t  result += 1;
+    for CallResults.RemoveUGCDependencyResult_t  result += 1;
+    for CallResults.StartPlaytimeTrackingResult_t  result += 1;
+    for CallResults.GSStatsReceived_t  result += 1;
+    for CallResults.GSStatsStored_t  result += 1;
+    for CallResults.SubmitItemUpdateResult_t  result += 1;
+    for CallResults.GetUserItemVoteResult_t  result += 1;
+    for CallResults.LeaderboardScoreUploaded_t  result += 1;
+    for CallResults.RemoteStorageEnumerateUserSubscribedFilesResult_t  result += 1;
+    for CallResults.JoinPartyCallback_t  result += 1;
+    for CallResults.AddUGCDependencyResult_t  result += 1;
+    for CallResults.LeaderboardScoresDownloaded_t  result += 1;
+    for CallResults.DeleteItemResult_t  result += 1;
+    for CallResults.RemoteStorageFileWriteAsyncComplete_t  result += 1;
+    for CallResults.SetUserItemVoteResult_t  result += 1;
+    for CallResults.DurationControl_t  result += 1;
+    for CallResults.RemoteStorageUpdateUserPublishedItemVoteResult_t  result += 1;
+    for CallResults.LeaderboardUGCSet_t  result += 1;
+
+    return result;
+}
+
+
+awaiting_call_results :: (steam_pipe: HSteamPipe, index: int) -> handle: SteamAPICall_t, callresult_type: s32 {
+    count := -1;
+    for CallResults.StoreAuthURLResponse_t {
+        count += 1;
+        if count >= index  return it_index, StoreAuthURLResponse_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageDeletePublishedFileResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageDeletePublishedFileResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageSubscribePublishedFileResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageSubscribePublishedFileResult_t.k_iCallback;
+    }
+    for CallResults.EncryptedAppTicketResponse_t {
+        count += 1;
+        if count >= index  return it_index, EncryptedAppTicketResponse_t.k_iCallback;
+    }
+    for CallResults.CreateItemResult_t {
+        count += 1;
+        if count >= index  return it_index, CreateItemResult_t.k_iCallback;
+    }
+    for CallResults.LobbyMatchList_t {
+        count += 1;
+        if count >= index  return it_index, LobbyMatchList_t.k_iCallback;
+    }
+    for CallResults.DownloadClanActivityCountsResult_t {
+        count += 1;
+        if count >= index  return it_index, DownloadClanActivityCountsResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageFileReadAsyncComplete_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageFileReadAsyncComplete_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageEnumeratePublishedFilesByUserActionResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageEnumeratePublishedFilesByUserActionResult_t.k_iCallback;
+    }
+    for CallResults.LobbyCreated_t {
+        count += 1;
+        if count >= index  return it_index, LobbyCreated_t.k_iCallback;
+    }
+    for CallResults.GlobalStatsReceived_t {
+        count += 1;
+        if count >= index  return it_index, GlobalStatsReceived_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageEnumerateWorkshopFilesResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageEnumerateWorkshopFilesResult_t.k_iCallback;
+    }
+    for CallResults.SetPersonaNameResponse_t {
+        count += 1;
+        if count >= index  return it_index, SetPersonaNameResponse_t.k_iCallback;
+    }
+    for CallResults.StopPlaytimeTrackingResult_t {
+        count += 1;
+        if count >= index  return it_index, StopPlaytimeTrackingResult_t.k_iCallback;
+    }
+    for CallResults.NumberOfCurrentPlayers_t {
+        count += 1;
+        if count >= index  return it_index, NumberOfCurrentPlayers_t.k_iCallback;
+    }
+    for CallResults.ChangeNumOpenSlotsCallback_t {
+        count += 1;
+        if count >= index  return it_index, ChangeNumOpenSlotsCallback_t.k_iCallback;
+    }
+    for CallResults.RemoveAppDependencyResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoveAppDependencyResult_t.k_iCallback;
+    }
+    for CallResults.UserFavoriteItemsListChanged_t {
+        count += 1;
+        if count >= index  return it_index, UserFavoriteItemsListChanged_t.k_iCallback;
+    }
+    for CallResults.SteamInventoryRequestPricesResult_t {
+        count += 1;
+        if count >= index  return it_index, SteamInventoryRequestPricesResult_t.k_iCallback;
+    }
+    for CallResults.AddAppDependencyResult_t {
+        count += 1;
+        if count >= index  return it_index, AddAppDependencyResult_t.k_iCallback;
+    }
+    for CallResults.LeaderboardFindResult_t {
+        count += 1;
+        if count >= index  return it_index, LeaderboardFindResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageDownloadUGCResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageDownloadUGCResult_t.k_iCallback;
+    }
+    for CallResults.CheckFileSignature_t {
+        count += 1;
+        if count >= index  return it_index, CheckFileSignature_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageGetPublishedFileDetailsResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageGetPublishedFileDetailsResult_t.k_iCallback;
+    }
+    for CallResults.FileDetailsResult_t {
+        count += 1;
+        if count >= index  return it_index, FileDetailsResult_t.k_iCallback;
+    }
+    for CallResults.ComputeNewPlayerCompatibilityResult_t {
+        count += 1;
+        if count >= index  return it_index, ComputeNewPlayerCompatibilityResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageSetUserPublishedFileActionResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageSetUserPublishedFileActionResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageEnumerateUserPublishedFilesResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageEnumerateUserPublishedFilesResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageUnsubscribePublishedFileResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageUnsubscribePublishedFileResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStoragePublishFileProgress_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStoragePublishFileProgress_t.k_iCallback;
+    }
+    for CallResults.CreateBeaconCallback_t {
+        count += 1;
+        if count >= index  return it_index, CreateBeaconCallback_t.k_iCallback;
+    }
+    for CallResults.HTML_BrowserReady_t {
+        count += 1;
+        if count >= index  return it_index, HTML_BrowserReady_t.k_iCallback;
+    }
+    for CallResults.MarketEligibilityResponse_t {
+        count += 1;
+        if count >= index  return it_index, MarketEligibilityResponse_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageUpdatePublishedFileResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageUpdatePublishedFileResult_t.k_iCallback;
+    }
+    for CallResults.UserStatsReceived_t {
+        count += 1;
+        if count >= index  return it_index, UserStatsReceived_t.k_iCallback;
+    }
+    for CallResults.JoinClanChatRoomCompletionResult_t {
+        count += 1;
+        if count >= index  return it_index, JoinClanChatRoomCompletionResult_t.k_iCallback;
+    }
+    for CallResults.GlobalAchievementPercentagesReady_t {
+        count += 1;
+        if count >= index  return it_index, GlobalAchievementPercentagesReady_t.k_iCallback;
+    }
+    for CallResults.AssociateWithClanResult_t {
+        count += 1;
+        if count >= index  return it_index, AssociateWithClanResult_t.k_iCallback;
+    }
+    for CallResults.GetAppDependenciesResult_t {
+        count += 1;
+        if count >= index  return it_index, GetAppDependenciesResult_t.k_iCallback;
+    }
+    for CallResults.FriendsIsFollowing_t {
+        count += 1;
+        if count >= index  return it_index, FriendsIsFollowing_t.k_iCallback;
+    }
+    for CallResults.SteamUGCRequestUGCDetailsResult_t {
+        count += 1;
+        if count >= index  return it_index, SteamUGCRequestUGCDetailsResult_t.k_iCallback;
+    }
+    for CallResults.ClanOfficerListResponse_t {
+        count += 1;
+        if count >= index  return it_index, ClanOfficerListResponse_t.k_iCallback;
+    }
+    for CallResults.FriendsEnumerateFollowingList_t {
+        count += 1;
+        if count >= index  return it_index, FriendsEnumerateFollowingList_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageGetPublishedItemVoteDetailsResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageGetPublishedItemVoteDetailsResult_t.k_iCallback;
+    }
+    for CallResults.LobbyEnter_t {
+        count += 1;
+        if count >= index  return it_index, LobbyEnter_t.k_iCallback;
+    }
+    for CallResults.SteamUGCQueryCompleted_t {
+        count += 1;
+        if count >= index  return it_index, SteamUGCQueryCompleted_t.k_iCallback;
+    }
+    for CallResults.GSReputation_t {
+        count += 1;
+        if count >= index  return it_index, GSReputation_t.k_iCallback;
+    }
+    for CallResults.FriendsGetFollowerCount_t {
+        count += 1;
+        if count >= index  return it_index, FriendsGetFollowerCount_t.k_iCallback;
+    }
+    for CallResults.SteamInventoryEligiblePromoItemDefIDs_t {
+        count += 1;
+        if count >= index  return it_index, SteamInventoryEligiblePromoItemDefIDs_t.k_iCallback;
+    }
+    for CallResults.SteamInventoryStartPurchaseResult_t {
+        count += 1;
+        if count >= index  return it_index, SteamInventoryStartPurchaseResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageFileShareResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageFileShareResult_t.k_iCallback;
+    }
+    for CallResults.RemoveUGCDependencyResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoveUGCDependencyResult_t.k_iCallback;
+    }
+    for CallResults.StartPlaytimeTrackingResult_t {
+        count += 1;
+        if count >= index  return it_index, StartPlaytimeTrackingResult_t.k_iCallback;
+    }
+    for CallResults.GSStatsReceived_t {
+        count += 1;
+        if count >= index  return it_index, GSStatsReceived_t.k_iCallback;
+    }
+    for CallResults.GSStatsStored_t {
+        count += 1;
+        if count >= index  return it_index, GSStatsStored_t.k_iCallback;
+    }
+    for CallResults.SubmitItemUpdateResult_t {
+        count += 1;
+        if count >= index  return it_index, SubmitItemUpdateResult_t.k_iCallback;
+    }
+    for CallResults.GetUserItemVoteResult_t {
+        count += 1;
+        if count >= index  return it_index, GetUserItemVoteResult_t.k_iCallback;
+    }
+    for CallResults.LeaderboardScoreUploaded_t {
+        count += 1;
+        if count >= index  return it_index, LeaderboardScoreUploaded_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageEnumerateUserSubscribedFilesResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageEnumerateUserSubscribedFilesResult_t.k_iCallback;
+    }
+    for CallResults.JoinPartyCallback_t {
+        count += 1;
+        if count >= index  return it_index, JoinPartyCallback_t.k_iCallback;
+    }
+    for CallResults.AddUGCDependencyResult_t {
+        count += 1;
+        if count >= index  return it_index, AddUGCDependencyResult_t.k_iCallback;
+    }
+    for CallResults.LeaderboardScoresDownloaded_t {
+        count += 1;
+        if count >= index  return it_index, LeaderboardScoresDownloaded_t.k_iCallback;
+    }
+    for CallResults.DeleteItemResult_t {
+        count += 1;
+        if count >= index  return it_index, DeleteItemResult_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageFileWriteAsyncComplete_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageFileWriteAsyncComplete_t.k_iCallback;
+    }
+    for CallResults.SetUserItemVoteResult_t {
+        count += 1;
+        if count >= index  return it_index, SetUserItemVoteResult_t.k_iCallback;
+    }
+    for CallResults.DurationControl_t {
+        count += 1;
+        if count >= index  return it_index, DurationControl_t.k_iCallback;
+    }
+    for CallResults.RemoteStorageUpdateUserPublishedItemVoteResult_t {
+        count += 1;
+        if count >= index  return it_index, RemoteStorageUpdateUserPublishedItemVoteResult_t.k_iCallback;
+    }
+    for CallResults.LeaderboardUGCSet_t {
+        count += 1;
+        if count >= index  return it_index, LeaderboardUGCSet_t.k_iCallback;
+    }
+
+    return 0, 0;
+}
+
 
 
 CallbackID :: enum s32 {
@@ -1444,6 +1807,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StoreAuthURLRe
     }
     array_add(*procs, callback);
     table_set(*CallResults.StoreAuthURLResponse_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: StoreAuthURLResponse_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageDeletePublishedFileResult_t, bool) -> ()) {
@@ -1454,6 +1818,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageD
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageDeletePublishedFileResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageDeletePublishedFileResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageSubscribePublishedFileResult_t, bool) -> ()) {
@@ -1464,6 +1829,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageS
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageSubscribePublishedFileResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageSubscribePublishedFileResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (EncryptedAppTicketResponse_t, bool) -> ()) {
@@ -1474,6 +1840,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (EncryptedAppTi
     }
     array_add(*procs, callback);
     table_set(*CallResults.EncryptedAppTicketResponse_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: EncryptedAppTicketResponse_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateItemResult_t, bool) -> ()) {
@@ -1484,6 +1851,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateItemResu
     }
     array_add(*procs, callback);
     table_set(*CallResults.CreateItemResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: CreateItemResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyMatchList_t, bool) -> ()) {
@@ -1494,6 +1862,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyMatchList
     }
     array_add(*procs, callback);
     table_set(*CallResults.LobbyMatchList_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: LobbyMatchList_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DownloadClanActivityCountsResult_t, bool) -> ()) {
@@ -1504,6 +1873,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DownloadClanAc
     }
     array_add(*procs, callback);
     table_set(*CallResults.DownloadClanActivityCountsResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: DownloadClanActivityCountsResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileReadAsyncComplete_t, bool) -> ()) {
@@ -1514,6 +1884,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageF
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageFileReadAsyncComplete_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageFileReadAsyncComplete_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumeratePublishedFilesByUserActionResult_t, bool) -> ()) {
@@ -1524,6 +1895,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageEnumeratePublishedFilesByUserActionResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageEnumeratePublishedFilesByUserActionResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyCreated_t, bool) -> ()) {
@@ -1534,6 +1906,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyCreated_t
     }
     array_add(*procs, callback);
     table_set(*CallResults.LobbyCreated_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: LobbyCreated_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalStatsReceived_t, bool) -> ()) {
@@ -1544,6 +1917,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalStatsRec
     }
     array_add(*procs, callback);
     table_set(*CallResults.GlobalStatsReceived_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: GlobalStatsReceived_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateWorkshopFilesResult_t, bool) -> ()) {
@@ -1554,6 +1928,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageEnumerateWorkshopFilesResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageEnumerateWorkshopFilesResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetPersonaNameResponse_t, bool) -> ()) {
@@ -1564,6 +1939,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetPersonaName
     }
     array_add(*procs, callback);
     table_set(*CallResults.SetPersonaNameResponse_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SetPersonaNameResponse_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StopPlaytimeTrackingResult_t, bool) -> ()) {
@@ -1574,6 +1950,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StopPlaytimeTr
     }
     array_add(*procs, callback);
     table_set(*CallResults.StopPlaytimeTrackingResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: StopPlaytimeTrackingResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (NumberOfCurrentPlayers_t, bool) -> ()) {
@@ -1584,6 +1961,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (NumberOfCurren
     }
     array_add(*procs, callback);
     table_set(*CallResults.NumberOfCurrentPlayers_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: NumberOfCurrentPlayers_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ChangeNumOpenSlotsCallback_t, bool) -> ()) {
@@ -1594,6 +1972,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ChangeNumOpenS
     }
     array_add(*procs, callback);
     table_set(*CallResults.ChangeNumOpenSlotsCallback_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: ChangeNumOpenSlotsCallback_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveAppDependencyResult_t, bool) -> ()) {
@@ -1604,6 +1983,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveAppDepen
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoveAppDependencyResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoveAppDependencyResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserFavoriteItemsListChanged_t, bool) -> ()) {
@@ -1614,6 +1994,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserFavoriteIt
     }
     array_add(*procs, callback);
     table_set(*CallResults.UserFavoriteItemsListChanged_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: UserFavoriteItemsListChanged_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryRequestPricesResult_t, bool) -> ()) {
@@ -1624,6 +2005,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventory
     }
     array_add(*procs, callback);
     table_set(*CallResults.SteamInventoryRequestPricesResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SteamInventoryRequestPricesResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddAppDependencyResult_t, bool) -> ()) {
@@ -1634,6 +2016,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddAppDependen
     }
     array_add(*procs, callback);
     table_set(*CallResults.AddAppDependencyResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: AddAppDependencyResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardFindResult_t, bool) -> ()) {
@@ -1644,6 +2027,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardFin
     }
     array_add(*procs, callback);
     table_set(*CallResults.LeaderboardFindResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: LeaderboardFindResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageDownloadUGCResult_t, bool) -> ()) {
@@ -1654,6 +2038,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageD
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageDownloadUGCResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageDownloadUGCResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CheckFileSignature_t, bool) -> ()) {
@@ -1664,6 +2049,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CheckFileSigna
     }
     array_add(*procs, callback);
     table_set(*CallResults.CheckFileSignature_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: CheckFileSignature_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageGetPublishedFileDetailsResult_t, bool) -> ()) {
@@ -1674,6 +2060,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageG
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageGetPublishedFileDetailsResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageGetPublishedFileDetailsResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FileDetailsResult_t, bool) -> ()) {
@@ -1684,6 +2071,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FileDetailsRes
     }
     array_add(*procs, callback);
     table_set(*CallResults.FileDetailsResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: FileDetailsResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ComputeNewPlayerCompatibilityResult_t, bool) -> ()) {
@@ -1694,6 +2082,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ComputeNewPlay
     }
     array_add(*procs, callback);
     table_set(*CallResults.ComputeNewPlayerCompatibilityResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: ComputeNewPlayerCompatibilityResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageSetUserPublishedFileActionResult_t, bool) -> ()) {
@@ -1704,6 +2093,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageS
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageSetUserPublishedFileActionResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageSetUserPublishedFileActionResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateUserPublishedFilesResult_t, bool) -> ()) {
@@ -1714,6 +2104,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageEnumerateUserPublishedFilesResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageEnumerateUserPublishedFilesResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUnsubscribePublishedFileResult_t, bool) -> ()) {
@@ -1724,6 +2115,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageU
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageUnsubscribePublishedFileResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageUnsubscribePublishedFileResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStoragePublishFileProgress_t, bool) -> ()) {
@@ -1734,6 +2126,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageP
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStoragePublishFileProgress_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStoragePublishFileProgress_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateBeaconCallback_t, bool) -> ()) {
@@ -1744,6 +2137,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateBeaconCa
     }
     array_add(*procs, callback);
     table_set(*CallResults.CreateBeaconCallback_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: CreateBeaconCallback_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (HTML_BrowserReady_t, bool) -> ()) {
@@ -1754,6 +2148,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (HTML_BrowserRe
     }
     array_add(*procs, callback);
     table_set(*CallResults.HTML_BrowserReady_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: HTML_BrowserReady_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (MarketEligibilityResponse_t, bool) -> ()) {
@@ -1764,6 +2159,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (MarketEligibil
     }
     array_add(*procs, callback);
     table_set(*CallResults.MarketEligibilityResponse_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: MarketEligibilityResponse_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUpdatePublishedFileResult_t, bool) -> ()) {
@@ -1774,6 +2170,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageU
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageUpdatePublishedFileResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageUpdatePublishedFileResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserStatsReceived_t, bool) -> ()) {
@@ -1784,6 +2181,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserStatsRecei
     }
     array_add(*procs, callback);
     table_set(*CallResults.UserStatsReceived_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: UserStatsReceived_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinClanChatRoomCompletionResult_t, bool) -> ()) {
@@ -1794,6 +2192,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinClanChatRo
     }
     array_add(*procs, callback);
     table_set(*CallResults.JoinClanChatRoomCompletionResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: JoinClanChatRoomCompletionResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalAchievementPercentagesReady_t, bool) -> ()) {
@@ -1804,6 +2203,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalAchievem
     }
     array_add(*procs, callback);
     table_set(*CallResults.GlobalAchievementPercentagesReady_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: GlobalAchievementPercentagesReady_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AssociateWithClanResult_t, bool) -> ()) {
@@ -1814,6 +2214,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AssociateWithC
     }
     array_add(*procs, callback);
     table_set(*CallResults.AssociateWithClanResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: AssociateWithClanResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetAppDependenciesResult_t, bool) -> ()) {
@@ -1824,6 +2225,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetAppDependen
     }
     array_add(*procs, callback);
     table_set(*CallResults.GetAppDependenciesResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: GetAppDependenciesResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsIsFollowing_t, bool) -> ()) {
@@ -1834,6 +2236,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsIsFollo
     }
     array_add(*procs, callback);
     table_set(*CallResults.FriendsIsFollowing_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: FriendsIsFollowing_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCRequestUGCDetailsResult_t, bool) -> ()) {
@@ -1844,6 +2247,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCReques
     }
     array_add(*procs, callback);
     table_set(*CallResults.SteamUGCRequestUGCDetailsResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SteamUGCRequestUGCDetailsResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ClanOfficerListResponse_t, bool) -> ()) {
@@ -1854,6 +2258,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ClanOfficerLis
     }
     array_add(*procs, callback);
     table_set(*CallResults.ClanOfficerListResponse_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: ClanOfficerListResponse_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsEnumerateFollowingList_t, bool) -> ()) {
@@ -1864,6 +2269,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsEnumera
     }
     array_add(*procs, callback);
     table_set(*CallResults.FriendsEnumerateFollowingList_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: FriendsEnumerateFollowingList_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageGetPublishedItemVoteDetailsResult_t, bool) -> ()) {
@@ -1874,6 +2280,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageG
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageGetPublishedItemVoteDetailsResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageGetPublishedItemVoteDetailsResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyEnter_t, bool) -> ()) {
@@ -1884,6 +2291,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyEnter_t, 
     }
     array_add(*procs, callback);
     table_set(*CallResults.LobbyEnter_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: LobbyEnter_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCQueryCompleted_t, bool) -> ()) {
@@ -1894,6 +2302,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCQueryC
     }
     array_add(*procs, callback);
     table_set(*CallResults.SteamUGCQueryCompleted_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SteamUGCQueryCompleted_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSReputation_t, bool) -> ()) {
@@ -1904,6 +2313,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSReputation_t
     }
     array_add(*procs, callback);
     table_set(*CallResults.GSReputation_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: GSReputation_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsGetFollowerCount_t, bool) -> ()) {
@@ -1914,6 +2324,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsGetFoll
     }
     array_add(*procs, callback);
     table_set(*CallResults.FriendsGetFollowerCount_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: FriendsGetFollowerCount_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryEligiblePromoItemDefIDs_t, bool) -> ()) {
@@ -1924,6 +2335,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventory
     }
     array_add(*procs, callback);
     table_set(*CallResults.SteamInventoryEligiblePromoItemDefIDs_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SteamInventoryEligiblePromoItemDefIDs_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryStartPurchaseResult_t, bool) -> ()) {
@@ -1934,6 +2346,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventory
     }
     array_add(*procs, callback);
     table_set(*CallResults.SteamInventoryStartPurchaseResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SteamInventoryStartPurchaseResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileShareResult_t, bool) -> ()) {
@@ -1944,6 +2357,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageF
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageFileShareResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageFileShareResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveUGCDependencyResult_t, bool) -> ()) {
@@ -1954,6 +2368,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveUGCDepen
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoveUGCDependencyResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoveUGCDependencyResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StartPlaytimeTrackingResult_t, bool) -> ()) {
@@ -1964,6 +2379,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StartPlaytimeT
     }
     array_add(*procs, callback);
     table_set(*CallResults.StartPlaytimeTrackingResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: StartPlaytimeTrackingResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsReceived_t, bool) -> ()) {
@@ -1974,6 +2390,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsReceive
     }
     array_add(*procs, callback);
     table_set(*CallResults.GSStatsReceived_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: GSStatsReceived_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsStored_t, bool) -> ()) {
@@ -1984,6 +2401,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsStored_
     }
     array_add(*procs, callback);
     table_set(*CallResults.GSStatsStored_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: GSStatsStored_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SubmitItemUpdateResult_t, bool) -> ()) {
@@ -1994,6 +2412,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SubmitItemUpda
     }
     array_add(*procs, callback);
     table_set(*CallResults.SubmitItemUpdateResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SubmitItemUpdateResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetUserItemVoteResult_t, bool) -> ()) {
@@ -2004,6 +2423,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetUserItemVot
     }
     array_add(*procs, callback);
     table_set(*CallResults.GetUserItemVoteResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: GetUserItemVoteResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardScoreUploaded_t, bool) -> ()) {
@@ -2014,6 +2434,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardSco
     }
     array_add(*procs, callback);
     table_set(*CallResults.LeaderboardScoreUploaded_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: LeaderboardScoreUploaded_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateUserSubscribedFilesResult_t, bool) -> ()) {
@@ -2024,6 +2445,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageEnumerateUserSubscribedFilesResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageEnumerateUserSubscribedFilesResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinPartyCallback_t, bool) -> ()) {
@@ -2034,6 +2456,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinPartyCallb
     }
     array_add(*procs, callback);
     table_set(*CallResults.JoinPartyCallback_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: JoinPartyCallback_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddUGCDependencyResult_t, bool) -> ()) {
@@ -2044,6 +2467,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddUGCDependen
     }
     array_add(*procs, callback);
     table_set(*CallResults.AddUGCDependencyResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: AddUGCDependencyResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardScoresDownloaded_t, bool) -> ()) {
@@ -2054,6 +2478,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardSco
     }
     array_add(*procs, callback);
     table_set(*CallResults.LeaderboardScoresDownloaded_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: LeaderboardScoresDownloaded_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DeleteItemResult_t, bool) -> ()) {
@@ -2064,6 +2489,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DeleteItemResu
     }
     array_add(*procs, callback);
     table_set(*CallResults.DeleteItemResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: DeleteItemResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileWriteAsyncComplete_t, bool) -> ()) {
@@ -2074,6 +2500,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageF
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageFileWriteAsyncComplete_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageFileWriteAsyncComplete_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetUserItemVoteResult_t, bool) -> ()) {
@@ -2084,6 +2511,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetUserItemVot
     }
     array_add(*procs, callback);
     table_set(*CallResults.SetUserItemVoteResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: SetUserItemVoteResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DurationControl_t, bool) -> ()) {
@@ -2094,6 +2522,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DurationContro
     }
     array_add(*procs, callback);
     table_set(*CallResults.DurationControl_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: DurationControl_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUpdateUserPublishedItemVoteResult_t, bool) -> ()) {
@@ -2104,6 +2533,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageU
     }
     array_add(*procs, callback);
     table_set(*CallResults.RemoteStorageUpdateUserPublishedItemVoteResult_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: RemoteStorageUpdateUserPublishedItemVoteResult_t = %", call_result_id);
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardUGCSet_t, bool) -> ()) {
@@ -2114,6 +2544,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardUGC
     }
     array_add(*procs, callback);
     table_set(*CallResults.LeaderboardUGCSet_t, call_result_id, procs);
+    #if verbose  log("Registered CallResult: LeaderboardUGCSet_t = %", call_result_id);
 }
 
 

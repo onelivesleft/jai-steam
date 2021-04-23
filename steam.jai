@@ -21,9 +21,23 @@ InitSteam :: (success: *bool) #expand {
 
 
 // `ShutdownSteam` should be called during process shutdown if possible.
+// If you specify the optional `timeout` parameter then it will wait that long for
+// any outstanding CallResults to complete.
 
-ShutdownSteam :: () {
+ShutdownSteam :: (timeout : float64 = 0) -> clean: bool{
+	if timeout {
+		end_time := get_time() + timeout;
+		while get_time() < end_time && (awaiting_call_results(steam_pipe) || awaiting_call_results(steam_server_pipe)) {
+			sleep_milliseconds(10);
+			RunCallbacks();
+		}
+	}
+
+	clean := !(awaiting_call_results(steam_pipe) || awaiting_call_results(steam_server_pipe));
+
 	SteamAPI_Shutdown();
+
+	return clean;
 }
 
 
@@ -51,6 +65,30 @@ RunCallbacks :: () {
 ServerRunCallbacks :: () {
 	run_callbacks(steam_server_pipe, true);
 	SteamAPI_ReleaseCurrentThreadMemory();
+}
+
+
+// These will return the number of unhandled CallResults currently outstanding.
+AwaitingCallResults :: () -> int {
+	return awaiting_call_results(steam_pipe);
+}
+
+ServerAwaitingCallResults :: () -> int {
+	return awaiting_call_results(server_steam_pipe);
+}
+
+// @TODO RemoveCallResult(handle), ServerRemoveCallResult(handle)
+
+
+// You may query for specific outstanding CallResults using these:
+GetCallResult :: (index: int) -> handle: SteamAPICall_t, callresult_type: s32 {
+	handle, callresult_type := awaiting_call_results(steam_pipe, index);
+	return handle, callresult_type;
+}
+
+ServerGetCallResult :: (index: int) -> handle: SteamAPICall_t, callresult_type: s32 {
+	handle, callresult_type := awaiting_call_results(server_steam_pipe, index);
+	return handle, callresult_type;
 }
 
 
