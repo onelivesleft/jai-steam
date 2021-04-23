@@ -1,7 +1,7 @@
 steam_game_server_stats : *ISteamGameServerStats;
 
 
-ServerRequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must {
+ServerRequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamGameServerStats_RequestUserStats(steam_game_server_stats, steamIDUser);
 }
 
@@ -70,7 +70,7 @@ ServerClearUserAchievement :: inline (steamIDUser: uint64_steamid, pchName: *cha
 }
 
 
-ServerStoreUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must {
+ServerStoreUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamGameServerStats_StoreUserStats(steam_game_server_stats, steamIDUser);
 }
 

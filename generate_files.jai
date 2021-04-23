@@ -585,8 +585,12 @@ convert_steam_api_json :: (file_data: string) {
     output(*callbacks_procs, "\n#scope_export\n\n\n");
 
     for callback_id, struct_name: callback_structnames {
-        _, found := table_find(callresult_structnames, struct_name);
-        if found  continue;
+        // @Note The below `table_find` assumed anything that was a CallResult was not a Callback as
+        //       well... this is not the case: sometimes a thing can be both.
+        //       @TODO Find a way to remove things which are only CallResults from the Callbacks list.
+
+        //_, found := table_find(callresult_structnames, struct_name);
+        //if found  continue;
 
         // @Note We special case UserStatsUnloaded_t / GSStatsUnloaded_t because they share their enum ID.
         //       We also skip PS3TrophiesInstalled_t entirely (because it shares ID with GlobalStatsReceived_t,
@@ -1091,7 +1095,10 @@ singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: str
         }
     }
 
-    if returns == "*char" {
+    if returns == "SteamAPICall_t #must" {
+        returns = "SteamAPICall_t";
+    }
+    else if returns == "*char" {
         return_is_string = true;
         returns = "string";
     }

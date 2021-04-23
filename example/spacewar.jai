@@ -55,12 +55,12 @@ ship_length :: height / 36;
 ship_width  :: ship_length / 2;
 ship_cut    :: 0.75;
 
-font_height_game    :: height / 64;
-font_height_menu    :: height / 16;
-font_height_lobbies :: height / 32;
+font_height_game :: height / 64;
+font_height_menu :: height / 16;
+font_height_list :: height / 32;
 
 players : [MAX_PLAYERS] Player;
-MAX_PLAYERS :: 24;
+MAX_PLAYERS :: 12;
 player_count := 0;
 
 shots : [MAX_SHOTS] Shot;
@@ -98,6 +98,8 @@ main :: () {
 
     init();
 
+    debug_count := 0;
+
     while !quit {
         prev_raw_time = raw_time;
         raw_time = get_time();
@@ -117,6 +119,13 @@ main :: () {
             one_game_tick();
 
         draw_one_frame();
+
+        if joined_lobby && debug_count == 0 {
+            debug_count += 1;
+            id := joined_lobby;
+            leave_current_lobby();
+            join_lobby(id);
+        }
 
         reset_temporary_storage();
         sleep_milliseconds(10);
@@ -511,20 +520,23 @@ set_pause :: (should_pause: bool, pause_type: type_of(paused)) {
 
 Menu :: enum {
     MAIN;
-    LOBBIES;
+    LIST;
 }
 
 current_menu := Menu.MAIN;
 
+// @TODO refactor into AoS
 menu_current_index : [2] int;
-menu_item_count : [2] int = .[main_menu.count, 0];
+menu_item_count := int.[main_menu.count, 0];
+menu_first_index := int.[0, -1];
 
-menu_lobby_page := 0;
-menu_lobby_page_last_index := 0;
-lobbies_per_page :: 14;
+scoreboard_page :: -1;
+menu_list_page := scoreboard_page; // -1 = Scoreboard, 0+ = Lobbies
+menu_list_page_last_index := 0;
+list_per_page :: 12;
 
 lobby_from_menu_index :: inline (menu_index: int) -> Lobby, found: bool {
-    lobby_index := menu_index + lobbies_per_page * menu_lobby_page;
+    lobby_index := menu_index + list_per_page * menu_list_page;
     found := lobby_index >= 0 && lobby_index < lobby_list.count;
     if found
         return lobby_list[lobby_index], true;
@@ -554,41 +566,47 @@ bump_menu_ship :: (sgn: float) {
 }
 
 menu_up :: () {
-    if menu_current_index[current_menu] == 0
+    bump_menu_ship(+1);
+
+    if menu_current_index[current_menu] == menu_first_index[current_menu]
         menu_current_index[current_menu] = menu_item_count[current_menu] - 1;
     else
         menu_current_index[current_menu] -= 1;
-
-    bump_menu_ship(+1);
 }
 
 menu_down :: () {
-    menu_current_index[current_menu] = (menu_current_index[current_menu] + 1) % menu_item_count[current_menu];
-
     bump_menu_ship(-1);
+
+    if menu_current_index[current_menu] == menu_item_count[current_menu] - 1
+        menu_current_index[current_menu] = menu_first_index[current_menu];
+    else
+        menu_current_index[current_menu] += 1;
 }
 
 menu_left :: () {
+    bump_menu_ship(+1);
+
     if current_menu == .MAIN  return;
 
-    if menu_lobby_page > 0 {
-        menu_lobby_page -= 1;
-        update_lobby_menu();
+    if menu_list_page > -1 {
+        menu_list_page -= 1;
+        update_list_menu();
     }
     else
         current_menu = .MAIN;
 }
 
 menu_right :: () {
+    bump_menu_ship(-1);
+
     if current_menu == .MAIN {
-        if lobby_list.count > 0
-            current_menu = .LOBBIES;
+        current_menu = .LIST;
         return;
     }
 
-    if menu_lobby_page < menu_lobby_page_last_index {
-        menu_lobby_page += 1;
-        update_lobby_menu();
+    if menu_list_page < menu_list_page_last_index {
+        menu_list_page += 1;
+        update_list_menu();
     }
 }
 
@@ -613,18 +631,23 @@ menu_cancel :: () {
 }
 
 
-update_lobby_menu :: () {
-    menu_lobby_page_last_index = xx ceil(cast(float)lobby_list.count / lobbies_per_page) - 1;
-    menu_lobby_page = min(menu_lobby_page, menu_lobby_page_last_index);
+update_list_menu :: () {
+    menu_list_page_last_index = xx ceil(cast(float)lobby_list.count / list_per_page) - 1;
+    menu_list_page = min(menu_list_page, menu_list_page_last_index);
 
-    if menu_lobby_page < menu_lobby_page_last_index
-        menu_item_count[Menu.LOBBIES] = lobbies_per_page;
-    else
-        menu_item_count[Menu.LOBBIES] = lobby_list.count % lobbies_per_page;
+    if menu_list_page == scoreboard_page {
+        menu_item_count[Menu.LIST] = max(1, current_lobby.player_count);
+    }
+    else {
+        if menu_list_page < menu_list_page_last_index
+            menu_item_count[Menu.LIST] = list_per_page;
+        else
+            menu_item_count[Menu.LIST] = lobby_list.count % list_per_page;
 
-    menu_current_index[Menu.LOBBIES] = clamp(menu_current_index[Menu.LOBBIES], 0, menu_item_count[Menu.LOBBIES] - 1);
+        menu_current_index[Menu.LIST] = clamp(menu_current_index[Menu.LIST], -1, menu_item_count[Menu.LIST] - 1);
+    }
 
-    menu_item_count[Menu.MAIN] = ifx hosted_lobby then main_menu.count - 1else main_menu.count;
+    menu_item_count[Menu.MAIN] = main_menu.count;
 }
 
 
@@ -639,29 +662,23 @@ Menu_ID :: enum {
     PLAY;
     COLOR;
     QUIT;
-    LOBBY;
 }
 
 menu_items :: Menu_Item.[
     .{ .PLAY,  "PLAY",  0 },
     .{ .COLOR, "COLOR", 0 },
     .{ .QUIT,  "QUIT",  0 },
-    .{ .LOBBY, "", margin - font_height_menu},
 ];
 
 main_menu :: Menu_ID.[
     .PLAY,
     .COLOR,
     .QUIT,
-    .LOBBY,
 ];
 
 
 get_menu_label :: (menu_item: Menu_Item) -> string {
-    if menu_item.id == .LOBBY
-        return ifx hosted_lobby then "HOSTING" else current_lobby_label;
-    else
-        return menu_item.label;
+    return menu_item.label;
 }
 
 /*
@@ -768,31 +785,47 @@ draw_menu :: () {
             y -= (font_height_menu + spacing);
         }
 
-        case .LOBBIES;
-        x = lobbies_left;
-        y = lobbies_top;
+        case .LIST;
+        x = list_left;
+        y = list_top;
 
-        for menu_index: 0 .. lobbies_per_page - 1 {
-            if menu_index == menu_current_index[Menu.LOBBIES] {
-                x0 := cast(float)(x - padding);
-                y0 := cast(float)(y - padding);
-                x1 := cast(float)(x + lobbies_width + padding + font_width_offset);
-                y1 := cast(float)(y + font_height_lobbies + padding + font_height_offset);
-                Simp.immediate_quad(x0, y0, x1, y1, color_menu_selected_fill);
-                draw_triangles(v2(x0 + ship_offset, y + font_height_lobbies * 0.5),
-                            menu_ship_rotation,
-                            ship_menu.triangles, players[0].color);
-                break;
+        draw_menu_list_block :: (x: int, y: int) {
+                    x0 := cast(float)(x - padding);
+                    y0 := cast(float)(y - padding);
+                    x1 := cast(float)(x + list_width + padding + font_width_offset);
+                    y1 := cast(float)(y + font_height_list + padding + font_height_offset);
+                    Simp.immediate_quad(x0, y0, x1, y1, color_menu_selected_fill);
+                    draw_triangles(v2(x0 + ship_offset, y + font_height_list * 0.5),
+                                   menu_ship_rotation,
+                                   ship_menu.triangles, players[0].color);
+        }
+
+        if menu_current_index[Menu.LIST] == -1 {
+            draw_menu_list_block(x, y);
+        }
+        else {
+            y -= font_height_list * 2;
+            for menu_index: 0 .. list_per_page - 1 {
+                if menu_index == menu_current_index[Menu.LIST] {
+                    draw_menu_list_block(x, y);
+                    break;
+                }
+                y -= (font_height_list + spacing);
             }
-            y -= (font_height_lobbies + spacing);
         }
     }
+
+    if menu_list_page < menu_list_page_last_index
+        draw_arrow(right + 0.5 * (margin - ship_length * 2), 0.5 * (height - ship_length), true);
+    if menu_list_page > scoreboard_page
+        draw_arrow(list_left - 0.5 * (margin - ship_length * 2), 0.5 * (height - ship_length), false);
 
 
     //  menu text
 
     x = left;
     y = top;
+
     for menu_index: 0 .. main_menu.count - 1 {
         menu_item := menu_items[main_menu[menu_index]];
         if menu_item.y != 0  y = menu_item.y;
@@ -804,40 +837,58 @@ draw_menu :: () {
         y -= (font_height_menu + spacing);
     }
 
-    lobbies_width :: left * 2;
-    lobbies_top   :: top + (font_height_menu - font_height_lobbies);
-    lobbies_left  :: right - lobbies_width;
-    x = lobbies_left;
-    y = lobbies_top;
+    list_width :: left * 2;
+    list_top   :: top + (font_height_menu - font_height_list);
+    list_left  :: right - list_width;
+    x = list_left;
+    y = list_top;
 
-    draw_lobby :: (lobby: Lobby, x: int, y: int, color := color_menu_text) {
-        draw_lobbies_text(lobby.host_name, x, y, color);
+    header_selected := current_menu == .LIST && menu_current_index[Menu.LIST] == -1;
+    color := ifx header_selected then color_menu_selected_text else color_menu_text;
+
+    if hosted_lobby && false {
+        draw_list_text("Hosting", x, y, color);
+        // @TODO public/private
+    }
+    else if header_selected {
+        draw_list_text("Disconnect", x, y, color);
+    }
+    else {
+        draw_list_text("Joined:", x, y, color);
+        width := Simp.get_string_width_in_pixels(font_list, current_lobby.host_name);
+        draw_list_text(current_lobby.host_name, x + list_width - width, y, color);
+    }
+
+    y -= font_height_list * 2;
+
+    draw_lobby_entry :: (lobby: Lobby, x: int, y: int, color := color_menu_text) {
+        draw_list_text(lobby.host_name, x, y, color);
         player_count := tprint("%/%", lobby.player_count, MAX_PLAYERS);
-        width := Simp.get_string_width_in_pixels(font_lobbies, player_count);
-        draw_lobbies_text(player_count, right - width, y, color);
+        width := Simp.get_string_width_in_pixels(font_list, player_count);
+        draw_list_text(player_count, right - width, y, color);
         // @TODO ping
     }
 
-    for menu_index: 0 .. lobbies_per_page - 1{
+    for menu_index: 0 .. list_per_page - 1{
         lobby, ok := lobby_from_menu_index(menu_index);
         if ok {
-            if current_menu == .LOBBIES && menu_index == menu_current_index[Menu.LOBBIES]
-                draw_lobby(lobby, x, y, color_menu_selected_text);
+            if current_menu == .LIST && menu_index == menu_current_index[Menu.LIST]
+                draw_lobby_entry(lobby, x, y, color_menu_selected_text);
             else
-                draw_lobby(lobby, x, y);
+                draw_lobby_entry(lobby, x, y);
         }
         else
             break;
 
-        y -= (font_height_lobbies + spacing);
+        y -= (font_height_list + spacing);
     }
 
-    if menu_lobby_page_last_index > 0 {
-        y = height - top - (font_height_lobbies + spacing);
-        page := tprint("%/%", menu_lobby_page + 1, menu_lobby_page_last_index + 1);
-        w := Simp.get_string_width_in_pixels(font_lobbies, page);
-        x = lobbies_left + lobbies_width / 2 - w / 2;
-        draw_lobbies_text(page, x, y);
+    if menu_list_page_last_index > 0 {
+        y = height - top - (font_height_list + spacing);
+        page := tprint("%/%", menu_list_page + 1, menu_list_page_last_index + 1);
+        w := Simp.get_string_width_in_pixels(font_list, page);
+        x = list_left + list_width / 2 - w / 2;
+        draw_list_text(page, x, y);
     }
 }
 
@@ -867,6 +918,17 @@ draw_player_name :: (player: Player) {
 draw_shot :: (shot: Shot) {
     rotation := random_get_zero_to_one() * TAU;
     draw_triangles(shot.position, rotation, laser_bolt.triangles, shot.player.shot_color);
+}
+
+
+draw_arrow :: (x: float, y: float, pointing_right: bool, color := color_menu_text) {
+    length :: ship_length;
+    t :: Triangle.[.{
+        Vector3.{length * 0.5, 0, 0}, Vector3.{-length * 0.5, -length, 0}, Vector3.{-length * 0.5, +length, 0}
+    }];
+
+    r := ifx pointing_right then 0 else PI;
+    draw_triangles(v2(x, y), r, t, color);
 }
 
 
@@ -1131,7 +1193,7 @@ line_segments_intersect :: (a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> b
 
 font_game: *Simp.Dynamic_Font;
 font_menu: *Simp.Dynamic_Font;
-font_lobbies: *Simp.Dynamic_Font;
+font_list: *Simp.Dynamic_Font;
 
 
 init_fonts :: () {
@@ -1141,8 +1203,8 @@ init_fonts :: () {
     font_menu = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_menu);
     assert(font_menu != null);
 
-    font_lobbies = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_lobbies);
-    assert(font_lobbies != null);
+    font_list = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_list);
+    assert(font_list != null);
 }
 
 
@@ -1159,8 +1221,8 @@ draw_menu_text :: (text: string, x: int, y: int, color := color_menu_text) {
 }
 
 
-draw_lobbies_text :: (text: string, x: int, y: int, color := color_menu_text) {
-    Simp.draw_text(font_lobbies, x, y, text, color);
+draw_list_text :: (text: string, x: int, y: int, color := color_menu_text) {
+    Simp.draw_text(font_list, x, y, text, color);
 }
 
 
@@ -1409,9 +1471,8 @@ handle_steam_input :: () {
 
 
 
-hosted_lobby : u64 = 0;
-joined_lobby  : u64 = 0;
-current_lobby_label : string;
+hosted_lobby : CSteamID = 0;
+joined_lobby  : CSteamID = 0;
 
 last_lobby_creation_attempt : float64;
 lobby_creation_interval :: 5;
@@ -1421,6 +1482,7 @@ lobby_list : [..] Lobby;
 LOBBY_BUFFER_SIZE :: 1024 * 1024;
 lobby_buffer : [LOBBY_BUFFER_SIZE] u8;
 lobby_buffer_cursor := 0;
+current_lobby : Lobby;
 
 Lobby :: struct {
     handle : CSteamID;
@@ -1445,7 +1507,7 @@ add_lobby :: (handle: CSteamID, host_name: string, player_count_string: string) 
     lobby.player_count = ifx ok then player_count else 0;
 
     array_add(*lobby_list, lobby);
-    update_lobby_menu();
+    update_list_menu();
 }
 
 
@@ -1467,6 +1529,47 @@ create_lobby :: () {
 
         log("Hosted lobby: %", `hosted_lobby);
     });
+
+    // @Note When the lobby is created you automatically join it, triggering a LobbyEnter_t callback
+}
+
+
+join_lobby :: (lobby_id: CSteamID) {
+    JoinLobby(lobby_id);
+}
+
+
+lobby_joined :: (result: LobbyEnter_t) {
+    joined_lobby = result.m_ulSteamIDLobby;
+    update_current_lobby_info();
+
+    #if verbose  log("Joined lobby: %\n", joined_lobby);
+} @SteamCallback
+
+
+update_current_lobby_info :: () {
+    if !joined_lobby  return;
+
+    for lobby: lobby_list {
+        if lobby.handle == joined_lobby {
+            current_lobby = lobby;
+            return;
+        }
+    }
+
+    host_name := GetLobbyData(joined_lobby, "HostName");
+    player_count := GetLobbyData(joined_lobby, "PlayerCount");
+    add_lobby(joined_lobby, host_name, player_count);
+    current_lobby = lobby_list[lobby_list.count - 1];
+}
+
+
+leave_current_lobby :: () {
+    if !joined_lobby  return;
+
+    #if verbose  log("Leaving lobby: %\n", joined_lobby);
+    LeaveLobby(joined_lobby);
+    joined_lobby = 0;
 }
 
 
@@ -1487,7 +1590,7 @@ request_lobbies :: () {
 
         dummy_lobby_count :: 40; // @TODO remove
         for 0 .. dummy_lobby_count - 1 {
-            player_count := cast(s64) `random_get_within_range(1, 24);
+            player_count := cast(s64) `random_get_within_range(1, `MAX_PLAYERS);
             name_index := cast(s64) `random_get_within_range(0, `random_names.count);
             `add_lobby(xx `random_get(), `random_names[name_index], tprint("%", player_count));
         }

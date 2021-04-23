@@ -86,7 +86,7 @@ ServerBOverlayNeedsPresent :: inline () -> bool {
 }
 
 
-ServerCheckFileSignature :: inline (szFileName: *char) -> SteamAPICall_t #must {
+ServerCheckFileSignature :: inline (szFileName: *char) -> SteamAPICall_t {
     return SteamAPI_ISteamUtils_CheckFileSignature(steam_game_server_utils, szFileName);
 }
 

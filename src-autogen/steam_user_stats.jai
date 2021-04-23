@@ -81,7 +81,7 @@ GetAchievementName :: inline (iAchievement: uint32) -> string {
 }
 
 
-RequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t #must {
+RequestUserStats :: inline (steamIDUser: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_RequestUserStats(steam_user_stats, steamIDUser);
 }
 
@@ -135,7 +135,7 @@ ResetAllStats :: inline (bAchievementsToo: bool) -> bool {
 }
 
 
-FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType) -> SteamAPICall_t #must {
+FindOrCreateLeaderboard :: inline (pchLeaderboardName: *char, eLeaderboardSortMethod: ELeaderboardSortMethod, eLeaderboardDisplayType: ELeaderboardDisplayType) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_FindOrCreateLeaderboard(steam_user_stats, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
 }
 
@@ -164,7 +164,7 @@ FindOrCreateLeaderboard :: (pchLeaderboardName: *char, eLeaderboardSortMethod: E
 }
 
 
-FindLeaderboard :: inline (pchLeaderboardName: *char) -> SteamAPICall_t #must {
+FindLeaderboard :: inline (pchLeaderboardName: *char) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_FindLeaderboard(steam_user_stats, pchLeaderboardName);
 }
 
@@ -213,7 +213,7 @@ GetLeaderboardDisplayType :: inline (hSteamLeaderboard: SteamLeaderboard_t) -> E
 }
 
 
-DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32) -> SteamAPICall_t #must {
+DownloadLeaderboardEntries :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardDataRequest: ELeaderboardDataRequest, nRangeStart: s32, nRangeEnd: s32) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_DownloadLeaderboardEntries(steam_user_stats, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
 }
 
@@ -242,7 +242,7 @@ DownloadLeaderboardEntries :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboa
 }
 
 
-DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32) -> SteamAPICall_t #must {
+DownloadLeaderboardEntriesForUsers :: inline (hSteamLeaderboard: SteamLeaderboard_t, prgUsers: *CSteamID, cUsers: s32) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_DownloadLeaderboardEntriesForUsers(steam_user_stats, hSteamLeaderboard, prgUsers, cUsers);
 }
 
@@ -276,7 +276,7 @@ GetDownloadedLeaderboardEntry :: inline (hSteamLeaderboardEntries: SteamLeaderbo
 }
 
 
-UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32) -> SteamAPICall_t #must {
+UploadLeaderboardScore :: inline (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUploadScoreMethod: ELeaderboardUploadScoreMethod, nScore: int32, pScoreDetails: *int32, cScoreDetailsCount: s32) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_UploadLeaderboardScore(steam_user_stats, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
 }
 
@@ -305,7 +305,7 @@ UploadLeaderboardScore :: (hSteamLeaderboard: SteamLeaderboard_t, eLeaderboardUp
 }
 
 
-AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t) -> SteamAPICall_t #must {
+AttachLeaderboardUGC :: inline (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_AttachLeaderboardUGC(steam_user_stats, hSteamLeaderboard, hUGC);
 }
 
@@ -334,7 +334,7 @@ AttachLeaderboardUGC :: (hSteamLeaderboard: SteamLeaderboard_t, hUGC: UGCHandle_
 }
 
 
-GetNumberOfCurrentPlayers :: inline () -> SteamAPICall_t #must {
+GetNumberOfCurrentPlayers :: inline () -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_GetNumberOfCurrentPlayers(steam_user_stats);
 }
 
@@ -363,7 +363,7 @@ GetNumberOfCurrentPlayers :: (code: Code) -> SteamAPICall_t #expand {
 }
 
 
-RequestGlobalAchievementPercentages :: inline () -> SteamAPICall_t #must {
+RequestGlobalAchievementPercentages :: inline () -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_RequestGlobalAchievementPercentages(steam_user_stats);
 }
 
@@ -407,7 +407,7 @@ GetAchievementAchievedPercent :: inline (pchName: *char, pflPercent: *float) -> 
 }
 
 
-RequestGlobalStats :: inline (nHistoryDays: s32) -> SteamAPICall_t #must {
+RequestGlobalStats :: inline (nHistoryDays: s32) -> SteamAPICall_t {
     return SteamAPI_ISteamUserStats_RequestGlobalStats(steam_user_stats, nHistoryDays);
 }
 

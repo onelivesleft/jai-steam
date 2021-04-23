@@ -21,7 +21,7 @@ RemoveFavoriteGame :: inline (nAppID: AppId_t, nIP: uint32, nConnPort: uint16, n
 }
 
 
-RequestLobbyList :: inline () -> SteamAPICall_t #must {
+RequestLobbyList :: inline () -> SteamAPICall_t {
     return SteamAPI_ISteamMatchmaking_RequestLobbyList(steam_matchmaking);
 }
 
@@ -90,7 +90,7 @@ GetLobbyByIndex :: inline (iLobby: s32) -> uint64_steamid {
 }
 
 
-CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32) -> SteamAPICall_t #must {
+CreateLobby :: inline (eLobbyType: ELobbyType, cMaxMembers: s32) -> SteamAPICall_t {
     return SteamAPI_ISteamMatchmaking_CreateLobby(steam_matchmaking, eLobbyType, cMaxMembers);
 }
 
@@ -119,7 +119,7 @@ CreateLobby :: (eLobbyType: ELobbyType, cMaxMembers: s32, code: Code) -> SteamAP
 }
 
 
-JoinLobby :: inline (steamIDLobby: uint64_steamid) -> SteamAPICall_t #must {
+JoinLobby :: inline (steamIDLobby: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamMatchmaking_JoinLobby(steam_matchmaking, steamIDLobby);
 }
 

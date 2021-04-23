@@ -126,7 +126,7 @@ RequestAllProofOfPurchaseKeys :: inline () {
 }
 
 
-GetFileDetails :: inline (pszFileName: *char) -> SteamAPICall_t #must {
+GetFileDetails :: inline (pszFileName: *char) -> SteamAPICall_t {
     return SteamAPI_ISteamApps_GetFileDetails(steam_apps, pszFileName);
 }
 

@@ -101,7 +101,7 @@ AdvertiseGame :: inline (steamIDGameServer: uint64_steamid, unIPServer: uint32, 
 }
 
 
-RequestEncryptedAppTicket :: inline (pDataToInclude: *void, cbDataToInclude: s32) -> SteamAPICall_t #must {
+RequestEncryptedAppTicket :: inline (pDataToInclude: *void, cbDataToInclude: s32) -> SteamAPICall_t {
     return SteamAPI_ISteamUser_RequestEncryptedAppTicket(steam_user, pDataToInclude, cbDataToInclude);
 }
 
@@ -145,7 +145,7 @@ GetPlayerSteamLevel :: inline () -> s32 {
 }
 
 
-RequestStoreAuthURL :: inline (pchRedirectURL: *char) -> SteamAPICall_t #must {
+RequestStoreAuthURL :: inline (pchRedirectURL: *char) -> SteamAPICall_t {
     return SteamAPI_ISteamUser_RequestStoreAuthURL(steam_user, pchRedirectURL);
 }
 
@@ -194,7 +194,7 @@ BIsPhoneRequiringVerification :: inline () -> bool {
 }
 
 
-GetMarketEligibility :: inline () -> SteamAPICall_t #must {
+GetMarketEligibility :: inline () -> SteamAPICall_t {
     return SteamAPI_ISteamUser_GetMarketEligibility(steam_user);
 }
 
@@ -223,7 +223,7 @@ GetMarketEligibility :: (code: Code) -> SteamAPICall_t #expand {
 }
 
 
-GetDurationControl :: inline () -> SteamAPICall_t #must {
+GetDurationControl :: inline () -> SteamAPICall_t {
     return SteamAPI_ISteamUser_GetDurationControl(steam_user);
 }
 

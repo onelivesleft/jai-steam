@@ -6,7 +6,7 @@ GetPersonaName :: inline () -> string {
 }
 
 
-SetPersonaName :: inline (pchPersonaName: *char) -> SteamAPICall_t #must {
+SetPersonaName :: inline (pchPersonaName: *char) -> SteamAPICall_t {
     return SteamAPI_ISteamFriends_SetPersonaName(steam_friends, pchPersonaName);
 }
 
@@ -140,7 +140,7 @@ GetClanActivityCounts :: inline (steamIDClan: uint64_steamid, pnOnline: *s32, pn
 }
 
 
-DownloadClanActivityCounts :: inline (psteamIDClans: *CSteamID, cClansToRequest: s32) -> SteamAPICall_t #must {
+DownloadClanActivityCounts :: inline (psteamIDClans: *CSteamID, cClansToRequest: s32) -> SteamAPICall_t {
     return SteamAPI_ISteamFriends_DownloadClanActivityCounts(steam_friends, psteamIDClans, cClansToRequest);
 }
 
@@ -239,7 +239,7 @@ RequestUserInformation :: inline (steamIDUser: uint64_steamid, bRequireNameOnly:
 }
 
 
-RequestClanOfficerList :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t #must {
+RequestClanOfficerList :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamFriends_RequestClanOfficerList(steam_friends, steamIDClan);
 }
 
@@ -343,7 +343,7 @@ GetFriendCoplayGame :: inline (steamIDFriend: uint64_steamid) -> AppId_t {
 }
 
 
-JoinClanChatRoom :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t #must {
+JoinClanChatRoom :: inline (steamIDClan: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamFriends_JoinClanChatRoom(steam_friends, steamIDClan);
 }
 
@@ -432,7 +432,7 @@ GetFriendMessage :: inline (steamIDFriend: uint64_steamid, iMessageID: s32, pvDa
 }
 
 
-GetFollowerCount :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must {
+GetFollowerCount :: inline (steamID: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamFriends_GetFollowerCount(steam_friends, steamID);
 }
 
@@ -461,7 +461,7 @@ GetFollowerCount :: (steamID: uint64_steamid, code: Code) -> SteamAPICall_t #exp
 }
 
 
-IsFollowing :: inline (steamID: uint64_steamid) -> SteamAPICall_t #must {
+IsFollowing :: inline (steamID: uint64_steamid) -> SteamAPICall_t {
     return SteamAPI_ISteamFriends_IsFollowing(steam_friends, steamID);
 }
 
@@ -490,7 +490,7 @@ IsFollowing :: (steamID: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
 }
 
 
-EnumerateFollowingList :: inline (unStartIndex: uint32) -> SteamAPICall_t #must {
+EnumerateFollowingList :: inline (unStartIndex: uint32) -> SteamAPICall_t {
     return SteamAPI_ISteamFriends_EnumerateFollowingList(steam_friends, unStartIndex);
 }
 

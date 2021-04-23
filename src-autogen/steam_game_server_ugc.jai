@@ -21,7 +21,7 @@ ServerCreateQueryUGCDetailsRequest :: inline (pvecPublishedFileID: *PublishedFil
 }
 
 
-ServerSendQueryUGCRequest :: inline (handle: UGCQueryHandle_t) -> SteamAPICall_t #must {
+ServerSendQueryUGCRequest :: inline (handle: UGCQueryHandle_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_SendQueryUGCRequest(steam_game_server_ugc, handle);
 }
 
@@ -210,7 +210,7 @@ ServerAddRequiredKeyValueTag :: inline (handle: UGCQueryHandle_t, pKey: *char, p
 }
 
 
-ServerRequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32) -> SteamAPICall_t #must {
+ServerRequestUGCDetails :: inline (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint32) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_RequestUGCDetails(steam_game_server_ugc, nPublishedFileID, unMaxAgeSeconds);
 }
 
@@ -239,7 +239,7 @@ ServerRequestUGCDetails :: (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds
 }
 
 
-ServerCreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType) -> SteamAPICall_t #must {
+ServerCreateItem :: inline (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_CreateItem(steam_game_server_ugc, nConsumerAppId, eFileType);
 }
 
@@ -358,7 +358,7 @@ ServerRemoveItemPreview :: inline (handle: UGCUpdateHandle_t, index: uint32) -> 
 }
 
 
-ServerSubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *char) -> SteamAPICall_t #must {
+ServerSubmitItemUpdate :: inline (handle: UGCUpdateHandle_t, pchChangeNote: *char) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_SubmitItemUpdate(steam_game_server_ugc, handle, pchChangeNote);
 }
 
@@ -392,7 +392,7 @@ ServerGetItemUpdateProgress :: inline (handle: UGCUpdateHandle_t, punBytesProces
 }
 
 
-ServerSetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t #must {
+ServerSetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t, bVoteUp: bool) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_SetUserItemVote(steam_game_server_ugc, nPublishedFileID, bVoteUp);
 }
 
@@ -421,7 +421,7 @@ ServerSetUserItemVote :: (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, co
 }
 
 
-ServerGetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerGetUserItemVote :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_GetUserItemVote(steam_game_server_ugc, nPublishedFileID);
 }
 
@@ -450,7 +450,7 @@ ServerGetUserItemVote :: (nPublishedFileID: PublishedFileId_t, code: Code) -> St
 }
 
 
-ServerAddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerAddItemToFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_AddItemToFavorites(steam_game_server_ugc, nAppId, nPublishedFileID);
 }
 
@@ -479,7 +479,7 @@ ServerAddItemToFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_
 }
 
 
-ServerRemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerRemoveItemFromFavorites :: inline (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_RemoveItemFromFavorites(steam_game_server_ugc, nAppId, nPublishedFileID);
 }
 
@@ -508,7 +508,7 @@ ServerRemoveItemFromFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFi
 }
 
 
-ServerSubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerSubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_SubscribeItem(steam_game_server_ugc, nPublishedFileID);
 }
 
@@ -537,7 +537,7 @@ ServerSubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) -> Stea
 }
 
 
-ServerUnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerUnsubscribeItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_UnsubscribeItem(steam_game_server_ugc, nPublishedFileID);
 }
 
@@ -606,7 +606,7 @@ ServerSuspendDownloads :: inline (bSuspend: bool) {
 }
 
 
-ServerStartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t #must {
+ServerStartPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_StartPlaytimeTracking(steam_game_server_ugc, pvecPublishedFileID, unNumPublishedFileIDs);
 }
 
@@ -635,7 +635,7 @@ ServerStartPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPu
 }
 
 
-ServerStopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t #must {
+ServerStopPlaytimeTracking :: inline (pvecPublishedFileID: *PublishedFileId_t, unNumPublishedFileIDs: uint32) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_StopPlaytimeTracking(steam_game_server_ugc, pvecPublishedFileID, unNumPublishedFileIDs);
 }
 
@@ -664,7 +664,7 @@ ServerStopPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPub
 }
 
 
-ServerStopPlaytimeTrackingForAllItems :: inline () -> SteamAPICall_t #must {
+ServerStopPlaytimeTrackingForAllItems :: inline () -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_StopPlaytimeTrackingForAllItems(steam_game_server_ugc);
 }
 
@@ -693,7 +693,7 @@ ServerStopPlaytimeTrackingForAllItems :: (code: Code) -> SteamAPICall_t #expand 
 }
 
 
-ServerAddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerAddDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_AddDependency(steam_game_server_ugc, nParentPublishedFileID, nChildPublishedFileID);
 }
 
@@ -722,7 +722,7 @@ ServerAddDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublish
 }
 
 
-ServerRemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerRemoveDependency :: inline (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_RemoveDependency(steam_game_server_ugc, nParentPublishedFileID, nChildPublishedFileID);
 }
 
@@ -751,7 +751,7 @@ ServerRemoveDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPubl
 }
 
 
-ServerAddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t #must {
+ServerAddAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_AddAppDependency(steam_game_server_ugc, nPublishedFileID, nAppID);
 }
 
@@ -780,7 +780,7 @@ ServerAddAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t,
 }
 
 
-ServerRemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t #must {
+ServerRemoveAppDependency :: inline (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_RemoveAppDependency(steam_game_server_ugc, nPublishedFileID, nAppID);
 }
 
@@ -809,7 +809,7 @@ ServerRemoveAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId
 }
 
 
-ServerGetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerGetAppDependencies :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_GetAppDependencies(steam_game_server_ugc, nPublishedFileID);
 }
 
@@ -838,7 +838,7 @@ ServerGetAppDependencies :: (nPublishedFileID: PublishedFileId_t, code: Code) ->
 }
 
 
-ServerDeleteItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t #must {
+ServerDeleteItem :: inline (nPublishedFileID: PublishedFileId_t) -> SteamAPICall_t {
     return SteamAPI_ISteamUGC_DeleteItem(steam_game_server_ugc, nPublishedFileID);
 }
 

@@ -86,7 +86,7 @@ BOverlayNeedsPresent :: inline () -> bool {
 }
 
 
-CheckFileSignature :: inline (szFileName: *char) -> SteamAPICall_t #must {
+CheckFileSignature :: inline (szFileName: *char) -> SteamAPICall_t {
     return SteamAPI_ISteamUtils_CheckFileSignature(steam_utils, szFileName);
 }
 
