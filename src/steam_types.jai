@@ -29,6 +29,10 @@ ValvePackingSentinel_t :: struct {
     m_d : double;
 }
 
+IsValid :: (steam_id: CSteamID) -> bool {
+	return steam_id != 0; // @TODO @Urgent this is not right
+}
+
 
 //
 // input

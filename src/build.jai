@@ -52,9 +52,9 @@ steam_build_step :: (message: *Message) {
             init_string_builder(*builder);
             defer reset(*builder);
 
-            append(*builder, "SteamCallbacks :: #string ___JAI\n");
+            append(*builder, "Cannot_Generate_This_Codeblock_Without_A_Build_Script :: #string ___JAI\n");
             for _, proc_name: callback_procs
-                print_to_builder(*builder, "    RegisterCallback(%);\n", proc_name);
+                print_to_builder(*builder, "    RegisterCallback(`%);\n", proc_name);
             append(*builder, "___JAI;\n");
 
             add_build_string(builder_to_string(*builder), message.workspace);

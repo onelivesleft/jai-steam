@@ -40,12 +40,12 @@ GetPersonaState :: inline () -> EPersonaState {
 }
 
 
-GetFriendCount :: inline (iFriendFlags: s32) -> s32 {
+GetFriendCount :: inline (iFriendFlags: EFriendFlags) -> s32 {
     return SteamAPI_ISteamFriends_GetFriendCount(steam_friends, iFriendFlags);
 }
 
 
-GetFriendByIndex :: inline (iFriend: s32, iFriendFlags: s32) -> uint64_steamid {
+GetFriendByIndex :: inline (iFriend: s32, iFriendFlags: EFriendFlags) -> uint64_steamid {
     return SteamAPI_ISteamFriends_GetFriendByIndex(steam_friends, iFriend, iFriendFlags);
 }
 
@@ -110,7 +110,7 @@ GetFriendsGroupMembersList :: inline (friendsGroupID: FriendsGroupID_t, pOutStea
 }
 
 
-HasFriend :: inline (steamIDFriend: uint64_steamid, iFriendFlags: s32) -> bool {
+HasFriend :: inline (steamIDFriend: uint64_steamid, iFriendFlags: EFriendFlags) -> bool {
     return SteamAPI_ISteamFriends_HasFriend(steam_friends, steamIDFriend, iFriendFlags);
 }
 

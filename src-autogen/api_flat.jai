@@ -94,8 +94,8 @@ SteamFriends :: () -> *ISteamFriends #foreign steam "SteamAPI_SteamFriends_v017"
 GetPersonaName :: (self: *ISteamFriends) -> *char #foreign steam "SteamAPI_ISteamFriends_GetPersonaName";
 SetPersonaName :: (self: *ISteamFriends, pchPersonaName: *char) -> SteamAPICall_t #must #foreign steam "SteamAPI_ISteamFriends_SetPersonaName";
 GetPersonaState :: (self: *ISteamFriends) -> EPersonaState #foreign steam "SteamAPI_ISteamFriends_GetPersonaState";
-GetFriendCount :: (self: *ISteamFriends, iFriendFlags: s32) -> s32 #foreign steam "SteamAPI_ISteamFriends_GetFriendCount";
-GetFriendByIndex :: (self: *ISteamFriends, iFriend: s32, iFriendFlags: s32) -> uint64_steamid #foreign steam "SteamAPI_ISteamFriends_GetFriendByIndex";
+GetFriendCount :: (self: *ISteamFriends, iFriendFlags: EFriendFlags) -> s32 #foreign steam "SteamAPI_ISteamFriends_GetFriendCount";
+GetFriendByIndex :: (self: *ISteamFriends, iFriend: s32, iFriendFlags: EFriendFlags) -> uint64_steamid #foreign steam "SteamAPI_ISteamFriends_GetFriendByIndex";
 GetFriendRelationship :: (self: *ISteamFriends, steamIDFriend: uint64_steamid) -> EFriendRelationship #foreign steam "SteamAPI_ISteamFriends_GetFriendRelationship";
 GetFriendPersonaState :: (self: *ISteamFriends, steamIDFriend: uint64_steamid) -> EPersonaState #foreign steam "SteamAPI_ISteamFriends_GetFriendPersonaState";
 GetFriendPersonaName :: (self: *ISteamFriends, steamIDFriend: uint64_steamid) -> *char #foreign steam "SteamAPI_ISteamFriends_GetFriendPersonaName";
@@ -108,7 +108,7 @@ GetFriendsGroupIDByIndex :: (self: *ISteamFriends, iFG: s32) -> FriendsGroupID_t
 GetFriendsGroupName :: (self: *ISteamFriends, friendsGroupID: FriendsGroupID_t) -> *char #foreign steam "SteamAPI_ISteamFriends_GetFriendsGroupName";
 GetFriendsGroupMembersCount :: (self: *ISteamFriends, friendsGroupID: FriendsGroupID_t) -> s32 #foreign steam "SteamAPI_ISteamFriends_GetFriendsGroupMembersCount";
 GetFriendsGroupMembersList :: (self: *ISteamFriends, friendsGroupID: FriendsGroupID_t, pOutSteamIDMembers: *CSteamID, nMembersCount: s32) #foreign steam "SteamAPI_ISteamFriends_GetFriendsGroupMembersList";
-HasFriend :: (self: *ISteamFriends, steamIDFriend: uint64_steamid, iFriendFlags: s32) -> bool #foreign steam "SteamAPI_ISteamFriends_HasFriend";
+HasFriend :: (self: *ISteamFriends, steamIDFriend: uint64_steamid, iFriendFlags: EFriendFlags) -> bool #foreign steam "SteamAPI_ISteamFriends_HasFriend";
 GetClanCount :: (self: *ISteamFriends) -> s32 #foreign steam "SteamAPI_ISteamFriends_GetClanCount";
 GetClanByIndex :: (self: *ISteamFriends, iClan: s32) -> uint64_steamid #foreign steam "SteamAPI_ISteamFriends_GetClanByIndex";
 GetClanName :: (self: *ISteamFriends, steamIDClan: uint64_steamid) -> *char #foreign steam "SteamAPI_ISteamFriends_GetClanName";

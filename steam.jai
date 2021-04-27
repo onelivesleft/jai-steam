@@ -8,15 +8,16 @@
 
 // `InitSteam` must be called before using any other API functions. If it fails, an
 // error message will be output to the debugger (or stderr) with further information.
+// If you are not using a build script (which is required to automate registering callbacks)
+// then you must import this module with `has_built_script = false`, or it will be unable to find
+// the generated string code block.
 
-InitSteam :: () -> success: bool {
-	return Steam_Init();
-}
-
-
-InitSteam :: (success: *bool) #expand {
-	<<success = Steam_Init();
-	#insert SteamCallbacks;
+InitSteam :: () -> success: bool #expand {
+	success := Steam_Init();
+	// You need to compile via a build script to enable code generation for callbacks (see documentation). If you do not wish to do that then you need to set the `has_build_script` module parameter to false so that the module knows it can skip inserting the callback code it is not able to generate.
+	#if has_build_script
+		#insert `Cannot_Generate_This_Codeblock_Without_A_Build_Script;
+	return success;
 }
 
 

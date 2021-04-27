@@ -39,6 +39,7 @@ Simp  :: #import "Simp";
 // [x] dying
 // [x] check how to glBlend in Simp
 
+steam_appid :: 480;
 
 width  :: 1280;
 height :: 768;
@@ -62,6 +63,7 @@ font_height_list :: height / 32;
 players : [MAX_PLAYERS] Player;
 MAX_PLAYERS :: 12;
 player_count := 0;
+me : *Player;
 
 shots : [MAX_SHOTS] Shot;
 MAX_SHOTS :: 1024;
@@ -93,12 +95,9 @@ main :: () {
             log_error("Failed to initialize Steam");
             exit(1);
         }
-        #insert SteamCallbacks;
     }
 
     init();
-
-    debug_count := 0;
 
     while !quit {
         prev_raw_time = raw_time;
@@ -120,13 +119,6 @@ main :: () {
 
         draw_one_frame();
 
-        if joined_lobby && debug_count == 0 {
-            debug_count += 1;
-            id := joined_lobby;
-            leave_current_lobby();
-            join_lobby(id);
-        }
-
         reset_temporary_storage();
         sleep_milliseconds(10);
     }
@@ -134,7 +126,7 @@ main :: () {
     run_scheduled_tasks(force = true);
 
     clean := ShutdownSteam(timeout = 5.0); // @Steam
-    if !clean  log_error("Steam did not shut down cleanly; cloud config may not have stored!");
+    if !clean  log_error("Steam did not shut down cleanly!");
 }
 
 
@@ -145,7 +137,8 @@ init :: () {
     random_seed(xx get_time());
     init_fonts();
 
-    make_player(*players[0], GetPersonaName(), .{width / 4, height / 2}, .{1, 0.5, 0, 0});
+    me = *players[0];
+    make_player(me, GetSteamID(), GetPersonaName(), .{width / 4, height / 2}, .{1, 0.5, 0, 0});
     load_settings();
 
     register_steam_input();
@@ -154,7 +147,8 @@ init :: () {
 }
 
 
-make_player :: (player: *Player, name: string, position: Vector2, color: Vector4) {
+make_player :: (player: *Player, handle: CSteamID, name: string, position: Vector2, color: Vector4) {
+    player.handle = handle;
     player.position = position;
     player.color = color;
 
@@ -168,6 +162,19 @@ make_player :: (player: *Player, name: string, position: Vector2, color: Vector4
 }
 
 
+add_player :: (handle: CSteamID, name: string, position: Vector2, color: Vector4) {
+    make_player(*players[player_count], handle, name, position, color);
+}
+
+
+remove_player :: (player_index: int) {
+    assert(player_index != 0, "Cannot remove local player");
+    if player_index < player_count - 1
+        players[player_index] = players[player_count - 1];
+    player_count -= 1;
+}
+
+
 current_hue : float;
 player_color_randomized_at : float64 = 0;
 
@@ -176,7 +183,7 @@ randomize_player_color :: () {
     while abs(hue - current_hue) < 0.2
         hue = random_get_zero_to_one();
     current_hue = hue;
-    set_player_color(*players[0], rgb_from_hsl(hue, 1.0, 0.6));
+    set_player_color(me, rgb_from_hsl(hue, 1.0, 0.6));
     player_color_randomized_at = raw_time;
 }
 
@@ -207,6 +214,7 @@ handle_window_events :: () {
             case .KEYBOARD;
             if event.key_pressed {
                 if event.key_code == {
+                    case .SPACEBAR; // @TODO remove
                     case .F6; // @TODO remove
                     quit = true;
 
@@ -426,8 +434,10 @@ Player :: struct {
     buffer     : [MAX_NAME_LENGTH] u8;  // @TODO move to player_buffer
     name       : string;
     label      : Label;
+    handle     : CSteamID;
     color      : Vector4;
     shot_color : Vector4;
+    score      : int;
 
     rotation : float;
 
@@ -438,6 +448,11 @@ Player :: struct {
     pausing : bool;
 
     controller : InputHandle_t;  // @Steam
+}
+
+
+is_me :: (player: *Player) -> bool {
+    return player.handle == me.handle;
 }
 
 
@@ -624,7 +639,29 @@ menu_select :: () {
             quit = true;
         }
     }
+    else { // current_menu == .LIST
+        menu_index := menu_current_index[current_menu];
+        if menu_index == -1 {
+            if hosted_lobby {
+                set_lobby_type(!hosted_lobby_is_public);
+            }
+            else {
+                // @TODO disconnect
+            }
+        }
+        else {
+            menu_item := main_menu[menu_index];
+            if menu_list_page == scoreboard_page {
+                // @TODO kick(menu_item)
+            }
+            else { // lobby list
+                // @TODO join_lobby(menu_item + lobby_offset)
+            }
+
+        }
+    }
 }
+
 
 menu_cancel :: () {
     set_pause(false, .USER);
@@ -644,10 +681,8 @@ update_list_menu :: () {
         else
             menu_item_count[Menu.LIST] = lobby_list.count % list_per_page;
 
-        menu_current_index[Menu.LIST] = clamp(menu_current_index[Menu.LIST], -1, menu_item_count[Menu.LIST] - 1);
     }
-
-    menu_item_count[Menu.MAIN] = main_menu.count;
+    menu_current_index[Menu.LIST] = clamp(menu_current_index[Menu.LIST], -1, menu_item_count[Menu.LIST] - 1);
 }
 
 
@@ -707,7 +742,7 @@ color_background          :: Vector4.{.02, .02, .03, 0.51};
 color_menu_text           :: Vector4.{1, 1, 1, 1};
 color_menu_selected_text  :: Vector4.{0, 0, 0, 1};
 color_menu_selected_fill  :: Vector4.{1, 1, 1, 1};
-
+color_menu_label          :: Vector4.{0.5, 0.5, 0.5, 1};
 
 draw_one_frame :: () {
     Simp.update_window(window, window_width, window_height, render_width, render_height);
@@ -753,6 +788,11 @@ draw_menu :: () {
     padding :: font_height_menu / 6;
     ship_offset :: -(1.0 * font_height_menu);
 
+    list_width :: left * 2;
+    list_top   :: top + (font_height_menu - font_height_list);
+    list_left  :: right - list_width;
+    list_header_gap :: font_height_list * 2;
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -760,6 +800,13 @@ draw_menu :: () {
 
     x := left;
     y := top;
+
+    arrow_spacing :: 0.5 * (margin - ship_length * 4);
+
+    if menu_list_page < menu_list_page_last_index
+        draw_arrow(right + arrow_spacing, 0.5 * (height - ship_length), true);
+    if menu_list_page > scoreboard_page
+        draw_arrow(list_left - arrow_spacing, 0.5 * (height - ship_length), false);
 
 
     // highlight box
@@ -779,7 +826,7 @@ draw_menu :: () {
                 Simp.immediate_quad(x0, y0, x1, y1, color_menu_selected_fill);
                 draw_triangles(v2(x0 + ship_offset, y + font_height_menu * 0.5),
                             menu_ship_rotation,
-                            ship_menu.triangles, players[0].color);
+                            ship_menu.triangles, me.color);
                 break;
             }
             y -= (font_height_menu + spacing);
@@ -797,15 +844,15 @@ draw_menu :: () {
                     Simp.immediate_quad(x0, y0, x1, y1, color_menu_selected_fill);
                     draw_triangles(v2(x0 + ship_offset, y + font_height_list * 0.5),
                                    menu_ship_rotation,
-                                   ship_menu.triangles, players[0].color);
+                                   ship_menu.triangles, me.color);
         }
 
         if menu_current_index[Menu.LIST] == -1 {
             draw_menu_list_block(x, y);
         }
         else {
-            y -= font_height_list * 2;
-            for menu_index: 0 .. list_per_page - 1 {
+            y -= (font_height_list + list_header_gap + spacing);
+            for menu_index: 0 .. menu_item_count[Menu.LIST] - 1 {
                 if menu_index == menu_current_index[Menu.LIST] {
                     draw_menu_list_block(x, y);
                     break;
@@ -814,11 +861,6 @@ draw_menu :: () {
             }
         }
     }
-
-    if menu_list_page < menu_list_page_last_index
-        draw_arrow(right + 0.5 * (margin - ship_length * 2), 0.5 * (height - ship_length), true);
-    if menu_list_page > scoreboard_page
-        draw_arrow(list_left - 0.5 * (margin - ship_length * 2), 0.5 * (height - ship_length), false);
 
 
     //  menu text
@@ -837,18 +879,17 @@ draw_menu :: () {
         y -= (font_height_menu + spacing);
     }
 
-    list_width :: left * 2;
-    list_top   :: top + (font_height_menu - font_height_list);
-    list_left  :: right - list_width;
     x = list_left;
     y = list_top;
 
     header_selected := current_menu == .LIST && menu_current_index[Menu.LIST] == -1;
     color := ifx header_selected then color_menu_selected_text else color_menu_text;
 
-    if hosted_lobby && false {
+    if hosted_lobby {
         draw_list_text("Hosting", x, y, color);
-        // @TODO public/private
+        lobby_type_text := ifx hosted_lobby_is_public then "Public" else "Friends";
+        width := Simp.get_string_width_in_pixels(font_list, lobby_type_text);
+        draw_list_text(lobby_type_text, x + list_width - width, y, color);
     }
     else if header_selected {
         draw_list_text("Disconnect", x, y, color);
@@ -859,7 +900,18 @@ draw_menu :: () {
         draw_list_text(current_lobby.host_name, x + list_width - width, y, color);
     }
 
-    y -= font_height_list * 2;
+    y -= list_header_gap;
+    if menu_list_page == scoreboard_page {
+        draw_list_text("Player", x, y, color_menu_label);
+        score_text :: "Score";
+        width := Simp.get_string_width_in_pixels(font_list, score_text);
+        draw_list_text(score_text, x + list_width - width, y, color_menu_label);
+    }
+    else {
+        draw_list_text("Lobbies", x, y, color_menu_label);
+    }
+
+    y -= (font_height_list + spacing);
 
     draw_lobby_entry :: (lobby: Lobby, x: int, y: int, color := color_menu_text) {
         draw_list_text(lobby.host_name, x, y, color);
@@ -869,26 +921,45 @@ draw_menu :: () {
         // @TODO ping
     }
 
-    for menu_index: 0 .. list_per_page - 1{
-        lobby, ok := lobby_from_menu_index(menu_index);
-        if ok {
-            if current_menu == .LIST && menu_index == menu_current_index[Menu.LIST]
-                draw_lobby_entry(lobby, x, y, color_menu_selected_text);
-            else
-                draw_lobby_entry(lobby, x, y);
-        }
-        else
-            break;
+    draw_player_entry :: (player: *Player, x: int, y: int, selected: bool) {
+        color := ifx selected then color_menu_selected_text else color_menu_text;
+        draw_list_text(player.name, x, y, color);
+        right_text := ifx hosted_lobby && selected && !is_me(player)
+                      then "Kick" else tprint("%", player.score);
+        width := Simp.get_string_width_in_pixels(font_list, right_text);
+        draw_list_text(right_text, right - width, y, color);
+    }
 
-        y -= (font_height_list + spacing);
+
+    if menu_list_page == scoreboard_page {
+        // @TODO sort by high score (but disable sorting while menu open)
+        for menu_index: 0 .. menu_item_count[Menu.LIST] - 1 {
+            draw_player_entry(*players[menu_index], x, y, current_menu == .LIST && menu_index == menu_current_index[Menu.LIST]);
+        }
+    }
+    else {
+        for menu_index: 0 .. menu_item_count[Menu.LIST] - 1 {
+            lobby, ok := lobby_from_menu_index(menu_index);
+            if ok {
+                if current_menu == .LIST && menu_index == menu_current_index[Menu.LIST]
+                    draw_lobby_entry(lobby, x, y, color_menu_selected_text);
+                else
+                    draw_lobby_entry(lobby, x, y);
+            }
+            else
+                break;
+
+            y -= (font_height_list + spacing);
+        }
     }
 
     if menu_list_page_last_index > 0 {
         y = height - top - (font_height_list + spacing);
-        page := tprint("%/%", menu_list_page + 1, menu_list_page_last_index + 1);
+        page := ifx menu_list_page >= 0 then tprint("%/%", menu_list_page + 1, menu_list_page_last_index + 1)
+                                        else "Lobbies >";
         w := Simp.get_string_width_in_pixels(font_list, page);
         x = list_left + list_width / 2 - w / 2;
-        draw_list_text(page, x, y);
+        draw_list_text(page, x, y, color_menu_label);
     }
 }
 
@@ -923,12 +994,16 @@ draw_shot :: (shot: Shot) {
 
 draw_arrow :: (x: float, y: float, pointing_right: bool, color := color_menu_text) {
     length :: ship_length;
-    t :: Triangle.[.{
-        Vector3.{length * 0.5, 0, 0}, Vector3.{-length * 0.5, -length, 0}, Vector3.{-length * 0.5, +length, 0}
-    }];
+    half_height :: ship_length; //(font_height_list + font_height_menu / 4) * list_per_page / 4;
+    t :: Triangle.[
+        .{.{length * 0.5, 0, 0}, Vector3.{-length * 0.5, -half_height, 0}, Vector3.{-length * 0.125, 0, 0}},
+        .{.{length * 0.5, 0, 0}, Vector3.{-length * 0.5, +half_height, 0}, Vector3.{-length * 0.125, 0, 0}},
+    ];
 
     r := ifx pointing_right then 0 else PI;
-    draw_triangles(v2(x, y), r, t, color);
+    c := color;
+    c.w = abs(sin(cast(float32) raw_time));
+    draw_triangles(v2(x, y), r, t, c);
 }
 
 
@@ -981,7 +1056,7 @@ draw_debug_info :: () {
     draw_triangles(v2(debug_triangles[0].p0), 0, laser_bolt.triangles, .{1, 0, 0, 1});
 
 //    color : = ifx //line_segment_inside_triangle(v2(width/2, height/2), v2(mouse_x, mouse_y), debug_triangles[0])
-//                    line_segment_inside_player(v2(width/2, height/2), v2(mouse_x, mouse_y), *players[0])
+//                    line_segment_inside_player(v2(width/2, height/2), v2(mouse_x, mouse_y), me)
 //             then Vector4.{0, 1, 0, 1}
 //             else Vector4.{0, 0, 1, 1};
 //    draw_line(width / 2, height / 2, mouse_x, mouse_y, color);
@@ -996,7 +1071,7 @@ draw_mouse :: () {
         for y: mouse_y - size .. mouse_y + size
             //if point_inside_triangle(v2(x, y), debug_triangles[0])
             //if line_segment_inside_triangle(v2(mouse_x, mouse_y), v2(x, y), debug_triangles[0])
-            if line_segment_inside_player(v2(mouse_x, mouse_y), v2(x, y), *players[0])
+            if line_segment_inside_player(v2(mouse_x, mouse_y), v2(x, y), me)
                 draw_dot(x, y, .{1, 0.5, 0.5, 1});
 }
 
@@ -1379,7 +1454,7 @@ register_steam_input :: () {
 
 
 handle_steam_input :: () {
-    player := *players[0];
+    player := me;
 
     RunFrame();
     controller_count := GetConnectedControllers(*raw_controllers[0]);
@@ -1471,8 +1546,9 @@ handle_steam_input :: () {
 
 
 
-hosted_lobby : CSteamID = 0;
 joined_lobby  : CSteamID = 0;
+hosted_lobby : CSteamID = 0;
+hosted_lobby_is_public := true;
 
 last_lobby_creation_attempt : float64;
 lobby_creation_interval :: 5;
@@ -1492,16 +1568,11 @@ Lobby :: struct {
 
 
 add_lobby :: (handle: CSteamID, host_name: string, player_count_string: string) {
+    log("% % %", handle, host_name, player_count_string);
     lobby : Lobby = ---;
     lobby.handle = handle;
 
-    count := min(host_name.count, Player.MAX_NAME_LENGTH);
-    if lobby_buffer_cursor + count >= LOBBY_BUFFER_SIZE
-        lobby_buffer_cursor = 0;
-    memcpy(*lobby_buffer[lobby_buffer_cursor], host_name.data, count);
-    lobby.host_name.data = *lobby_buffer[lobby_buffer_cursor];
-    lobby.host_name.count = count;
-    lobby_buffer_cursor += count;
+    lobby.host_name = stash_lobby_name_string(host_name);
 
     player_count, ok := parse_int(*player_count_string);
     lobby.player_count = ifx ok then player_count else 0;
@@ -1511,12 +1582,34 @@ add_lobby :: (handle: CSteamID, host_name: string, player_count_string: string) 
 }
 
 
+remove_lobby :: (lobby_index: int) {
+    if lobby_index >= lobby_list.count  return;
+
+    if lobby_index < lobby_list.count - 1
+        lobby_list[lobby_index] = lobby_list[lobby_list.count - 1];
+    lobby_list.count -= 1;
+}
+
+
+stash_lobby_name_string :: (s: string) -> result: string {
+    result : string = ---;
+    result.count = min(s.count, Player.MAX_NAME_LENGTH);
+    if lobby_buffer_cursor + result.count >= LOBBY_BUFFER_SIZE
+        lobby_buffer_cursor = 0;
+    result.data = *lobby_buffer[lobby_buffer_cursor];
+    memcpy(result.data, s.data, result.count);
+    lobby_buffer_cursor += result.count;
+
+    return result;
+}
+
+
 create_lobby :: () {
     log("Attempting to create lobby...");
     hosted_lobby = 0;
     last_lobby_creation_attempt = raw_time;
 
-    CreateLobby(.k_ELobbyTypePublic, MAX_PLAYERS, #code {
+    CreateLobby(lobby_type(hosted_lobby_is_public), MAX_PLAYERS, #code {
         if result.m_eResult != .k_EResultOK {
             log_error("Failed to create lobby");
             return;
@@ -1524,8 +1617,12 @@ create_lobby :: () {
 
         `hosted_lobby = result.m_ulSteamIDLobby;
         SetLobbyData(`hosted_lobby, "Language", "Jai");
-        SetLobbyData(`hosted_lobby, "HostName", to_c_string(`players[0].name));
+        SetLobbyData(`hosted_lobby, "HostName", to_c_string(`me.name));
         SetLobbyData(`hosted_lobby, "PlayerCount", "1");
+
+        `current_lobby.handle = `hosted_lobby;
+        `current_lobby.host_name = `me.name;
+        `current_lobby.player_count = 1;
 
         log("Hosted lobby: %", `hosted_lobby);
     });
@@ -1541,14 +1638,35 @@ join_lobby :: (lobby_id: CSteamID) {
 
 lobby_joined :: (result: LobbyEnter_t) {
     joined_lobby = result.m_ulSteamIDLobby;
+    if hosted_lobby != joined_lobby  hosted_lobby = 0;
     update_current_lobby_info();
 
     #if verbose  log("Joined lobby: %\n", joined_lobby);
 } @SteamCallback
 
 
+lobby_chat_update :: (result: LobbyChatUpdate_t) {
+
+}
+
+
+lobby_type :: inline (is_public: bool) -> ELobbyType {
+    return ifx is_public then ELobbyType.k_ELobbyTypePublic else ELobbyType.k_ELobbyTypeFriendsOnly;
+}
+
+
+set_lobby_type :: (is_public: bool) {
+    if !hosted_lobby  return;
+
+    SetLobbyType(hosted_lobby, lobby_type(is_public));
+    hosted_lobby_is_public = is_public;
+    request_lobbies();
+}
+
+
 update_current_lobby_info :: () {
-    if !joined_lobby  return;
+    if !joined_lobby || joined_lobby == hosted_lobby
+        return;
 
     for lobby: lobby_list {
         if lobby.handle == joined_lobby {
@@ -1574,28 +1692,80 @@ leave_current_lobby :: () {
 
 
 request_lobbies :: () {
-    AddRequestLobbyListDistanceFilter(.k_ELobbyDistanceFilterWorldwide);
-    AddRequestLobbyListStringFilter("Language", "Jai", .k_ELobbyComparisonEqual);
+    if hosted_lobby_is_public {
+        AddRequestLobbyListDistanceFilter(.k_ELobbyDistanceFilterWorldwide);
+        AddRequestLobbyListStringFilter("Language", "Jai", .k_ELobbyComparisonEqual);
 
-    RequestLobbyList(#code {
-        array_reset(*`lobby_list);
-        lobby_count : int = result.m_nLobbiesMatching;  // needs explicit type to avoid unsigned wrap-around in for loop
+        RequestLobbyList(#code {
+            if !`hosted_lobby_is_public  return;  // We're in friends-only mode, so ignore these public lobbies
+
+            array_reset(*`lobby_list);
+            lobby_count : int = result.m_nLobbiesMatching;  // needs explicit type to avoid unsigned wrap-around in for loop
+            #if verbose  log("Found lobbies: %", lobby_count);
+            for lobby_index: 0 .. lobby_count - 1 {
+                handle := GetLobbyByIndex(xx lobby_index);
+                log("---> % %", handle, `hosted_lobby); // @TODO remove
+                if handle == `hosted_lobby  continue;
+                host_name := GetLobbyData(handle, "HostName"); // tprint("%", handle);
+                player_count := GetLobbyData(handle, "PlayerCount");
+                `add_lobby(handle, host_name, player_count);
+            }
+
+            `update_list_menu();
+
+            /*
+            dummy_lobby_count :: 40; // @TODO remove
+            for 0 .. dummy_lobby_count - 1 {
+                player_count := cast(s64) `random_get_within_range(1, `MAX_PLAYERS);
+                name_index := cast(s64) `random_get_within_range(0, `random_names.count);
+                `add_lobby(xx `random_get(), `random_names[name_index], tprint("%", player_count));
+            }
+            */
+
+        });
+    }
+    else { // friends-only mode
+        array_reset(*lobby_list);
+        friend_count := GetFriendCount(.k_EFriendFlagImmediate);
+        lobby_count := 0;
+        for i: 0 .. friend_count - 1 {
+            friend_handle := GetFriendByIndex(i, .k_EFriendFlagImmediate);
+            game_info : FriendGameInfo_t = ---;
+
+            if GetFriendGamePlayed(friend_handle, *game_info) && game_info.m_gameID == steam_appid {
+                log("%", game_info);
+            }
+            if GetFriendGamePlayed(friend_handle, *game_info) && IsValid(game_info.m_steamIDLobby) {
+                lobby_count += 1;
+                lobby_handle := game_info.m_steamIDLobby;
+                RequestLobbyData(lobby_handle);
+                add_lobby(lobby_handle, GetFriendPersonaName(friend_handle), "1");
+            }
+        }
         #if verbose  log("Found lobbies: %", lobby_count);
-        for lobby_index: 0 .. lobby_count - 1 {
-            handle := GetLobbyByIndex(xx lobby_index);
-            host_name := GetLobbyData(handle, "HostName");
-            player_count := GetLobbyData(handle, "PlayerCount");
-            `add_lobby(handle, host_name, player_count);
-        }
-
-        dummy_lobby_count :: 40; // @TODO remove
-        for 0 .. dummy_lobby_count - 1 {
-            player_count := cast(s64) `random_get_within_range(1, `MAX_PLAYERS);
-            name_index := cast(s64) `random_get_within_range(0, `random_names.count);
-            `add_lobby(xx `random_get(), `random_names[name_index], tprint("%", player_count));
-        }
-    });
+    }
 }
+
+
+lobby_data_update :: (result: LobbyDataUpdate_t) {
+    handle := result.m_ulSteamIDLobby;
+    for * lobby, lobby_index: lobby_list {
+        if lobby.handle == handle {
+            if GetLobbyData(handle, "Language") == "Jai" {
+                lobby.host_name = stash_lobby_name_string(GetLobbyData(handle, "HostName"));
+
+                player_count, ok := parse_int(*GetLobbyData(handle, "PlayerCount"));
+                lobby.player_count = ifx ok then player_count else 0;
+            }
+            else {
+                remove_lobby(lobby_index);
+            }
+
+            update_list_menu();
+            break;
+        }
+    }
+} @SteamCallback
 
 
 
@@ -1609,7 +1779,8 @@ load_settings_attempts := 10;
 
 store_settings :: () {
     // Only setting is player color
-    v := players[0].color;
+    // @TODO friend/public lobby setting
+    v := me.color;
     s := tprint("%,%,%,%:%", v.component[0], v.component[1], v.component[2], v.component[3], current_hue);
     #if verbose  log("Storing: %", s);
 
@@ -1638,7 +1809,7 @@ load_settings :: () {
                 parts := `split(s, ":");
                 if parts.count == 2 {
                     vector, ok := `parse_vector4(parts[0]);
-                    if ok  `set_player_color(*`players[0], vector);
+                    if ok  `set_player_color(`me, vector);
                     else   success = false;
 
                     if success
@@ -1650,7 +1821,7 @@ load_settings :: () {
         if !success
             log_error("Failed to load config file from steam cloud.");
         else {
-            #if verbose  log("Loaded: % %", `players[0].color, `current_hue);
+            #if verbose  log("Loaded: % %", `me.color, `current_hue);
         }
     });
 

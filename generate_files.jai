@@ -84,6 +84,7 @@ replacements :: Replacement.[
     .{"unsigned short", "u16"},
     .{"unsigned int", "u32"},
     .{"ISteamHTMLSurface::", ""},
+    .{"int iFriendFlags", "EFriendFlags iFriendFlags"},
 ];
 
 type_replacements :: Replacement.[
