@@ -16,12 +16,8 @@ steam_build_step :: (message: *Message) {
         case .TYPECHECKED;
         type_checked := cast(*Message_Typechecked) message;
         for decl : type_checked.declarations {
-            // @TODO Normally we'd want to exclude module code and only worry about the user program
-            //       However, the only way to do this currently is by checking if the filename contains
-            //       "modules", and this can give false-positives (e.g. when compiling example programs).
-            //       Once the compiler has some kind of decl.is_import equivalent we can use that
-            if decl.filename == "" // || contains(decl.filename, "modules")
-                continue;
+//            if decl.enclosing_load && decl.enclosing_load.enclosing_import.module_type != .MAIN_PROGRAM
+//                continue;
 
             if decl.kind == .DECLARATION {
                 table_set(*processed_decls, xx decl, true);

@@ -1,4 +1,4 @@
-#import "Steam"(building = true, verbose = true);
+#import "Steam"(building = true, verbose = false);
 #import "Compiler";
 
 src :: "spacewar.jai";

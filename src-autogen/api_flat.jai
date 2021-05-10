@@ -1107,27 +1107,54 @@ SteamServersConnected_t :: struct {
 
 SteamServerConnectFailure_t :: struct {
     k_iCallback : s32 : 102;
-    m_eResult : EResult;
-    m_bStillRetrying : bool;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_bStillRetrying : bool;
+        StillRetrying : bool;
+    }
 }
 
 SteamServersDisconnected_t :: struct {
     k_iCallback : s32 : 103;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 ClientGameServerDeny_t :: struct {
     k_iCallback : s32 : 113;
-    m_uAppID : uint32;
-    m_unGameServerIP : uint32;
-    m_usGameServerPort : uint16;
-    m_bSecure : uint16;
-    m_uReason : uint32;
+    union {
+        m_uAppID : uint32;
+        AppID : uint32;
+    }
+    union {
+        m_unGameServerIP : uint32;
+        GameServerIP : uint32;
+    }
+    union {
+        m_usGameServerPort : uint16;
+        GameServerPort : uint16;
+    }
+    union {
+        m_bSecure : uint16;
+        Secure : uint16;
+    }
+    union {
+        m_uReason : uint32;
+        Reason : uint32;
+    }
 }
 
 IPCFailure_t :: struct {
     k_iCallback : s32 : 117;
-    m_eFailureType : uint8;
+    union {
+        m_eFailureType : uint8;
+        FailureType : uint8;
+    }
 }
 
 LicensesUpdated_t :: struct {
@@ -1136,174 +1163,369 @@ LicensesUpdated_t :: struct {
 
 ValidateAuthTicketResponse_t :: struct {
     k_iCallback : s32 : 143;
-    m_SteamID : CSteamID;
-    m_eAuthSessionResponse : EAuthSessionResponse;
-    m_OwnerSteamID : CSteamID;
+    union {
+        m_SteamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_eAuthSessionResponse : EAuthSessionResponse;
+        AuthSessionResponse : EAuthSessionResponse;
+    }
+    union {
+        m_OwnerSteamID : CSteamID;
+        OwnerSteamID : CSteamID;
+    }
 }
 
 MicroTxnAuthorizationResponse_t :: struct {
     k_iCallback : s32 : 152;
-    m_unAppID : uint32;
-    m_ulOrderID : uint64;
-    m_bAuthorized : uint8;
+    union {
+        m_unAppID : uint32;
+        AppID : uint32;
+    }
+    union {
+        m_ulOrderID : uint64;
+        OrderID : uint64;
+    }
+    union {
+        m_bAuthorized : uint8;
+        Authorized : uint8;
+    }
 }
 
 EncryptedAppTicketResponse_t :: struct {
     k_iCallback : s32 : 154;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 GetAuthSessionTicketResponse_t :: struct {
     k_iCallback : s32 : 163;
-    m_hAuthTicket : HAuthTicket;
-    m_eResult : EResult;
+    union {
+        m_hAuthTicket : HAuthTicket;
+        AuthTicket : HAuthTicket;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 GameWebCallback_t :: struct {
     k_iCallback : s32 : 164;
-    m_szURL : [256] char ;
+    union {
+        m_szURL : [256] char ;
+        URL : [256] char ;
+    }
 }
 
 StoreAuthURLResponse_t :: struct {
     k_iCallback : s32 : 165;
-    m_szURL : [512] char ;
+    union {
+        m_szURL : [512] char ;
+        URL : [512] char ;
+    }
 }
 
 MarketEligibilityResponse_t :: struct {
     k_iCallback : s32 : 166;
-    m_bAllowed : bool;
-    m_eNotAllowedReason : EMarketNotAllowedReasonFlags;
-    m_rtAllowedAtTime : RTime32;
-    m_cdaySteamGuardRequiredDays : s32;
-    m_cdayNewDeviceCooldown : s32;
+    union {
+        m_bAllowed : bool;
+        Allowed : bool;
+    }
+    union {
+        m_eNotAllowedReason : EMarketNotAllowedReasonFlags;
+        NotAllowedReason : EMarketNotAllowedReasonFlags;
+    }
+    union {
+        m_rtAllowedAtTime : RTime32;
+        AllowedAtTime : RTime32;
+    }
+    union {
+        m_cdaySteamGuardRequiredDays : s32;
+        CdaySteamGuardRequiredDays : s32;
+    }
+    union {
+        m_cdayNewDeviceCooldown : s32;
+        CdayNewDeviceCooldown : s32;
+    }
 }
 
 DurationControl_t :: struct {
     k_iCallback : s32 : 167;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
     m_appid : AppId_t;
-    m_bApplicable : bool;
-    m_csecsLast5h : int32;
+    union {
+        m_bApplicable : bool;
+        Applicable : bool;
+    }
+    union {
+        m_csecsLast5h : int32;
+        CsecsLast5h : int32;
+    }
     m_progress : EDurationControlProgress;
     m_notification : EDurationControlNotification;
-    m_csecsToday : int32;
-    m_csecsRemaining : int32;
+    union {
+        m_csecsToday : int32;
+        CsecsToday : int32;
+    }
+    union {
+        m_csecsRemaining : int32;
+        CsecsRemaining : int32;
+    }
 }
 
 PersonaStateChange_t :: struct {
     k_iCallback : s32 : 304;
-    m_ulSteamID : uint64;
-    m_nChangeFlags : s32;
+    union {
+        m_ulSteamID : uint64;
+        SteamID : uint64;
+    }
+    union {
+        m_nChangeFlags : s32;
+        ChangeFlags : s32;
+    }
 }
 
 GameOverlayActivated_t :: struct {
     k_iCallback : s32 : 331;
-    m_bActive : uint8;
+    union {
+        m_bActive : uint8;
+        Active : uint8;
+    }
 }
 
 GameServerChangeRequested_t :: struct {
     k_iCallback : s32 : 332;
-    m_rgchServer : [64] char ;
-    m_rgchPassword : [64] char ;
+    union {
+        m_rgchServer : [64] char ;
+        RgchServer : [64] char ;
+    }
+    union {
+        m_rgchPassword : [64] char ;
+        RgchPassword : [64] char ;
+    }
 }
 
 GameLobbyJoinRequested_t :: struct {
     k_iCallback : s32 : 333;
-    m_steamIDLobby : CSteamID;
-    m_steamIDFriend : CSteamID;
+    union {
+        m_steamIDLobby : CSteamID;
+        SteamIDLobby : CSteamID;
+    }
+    union {
+        m_steamIDFriend : CSteamID;
+        SteamIDFriend : CSteamID;
+    }
 }
 
 AvatarImageLoaded_t :: struct {
     k_iCallback : s32 : 334;
-    m_steamID : CSteamID;
-    m_iImage : s32;
-    m_iWide : s32;
-    m_iTall : s32;
+    union {
+        m_steamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_iImage : s32;
+        Image : s32;
+    }
+    union {
+        m_iWide : s32;
+        Wide : s32;
+    }
+    union {
+        m_iTall : s32;
+        Tall : s32;
+    }
 }
 
 ClanOfficerListResponse_t :: struct {
     k_iCallback : s32 : 335;
-    m_steamIDClan : CSteamID;
-    m_cOfficers : s32;
-    m_bSuccess : uint8;
+    union {
+        m_steamIDClan : CSteamID;
+        SteamIDClan : CSteamID;
+    }
+    union {
+        m_cOfficers : s32;
+        Officers : s32;
+    }
+    union {
+        m_bSuccess : uint8;
+        Success : uint8;
+    }
 }
 
 FriendRichPresenceUpdate_t :: struct {
     k_iCallback : s32 : 336;
-    m_steamIDFriend : CSteamID;
-    m_nAppID : AppId_t;
+    union {
+        m_steamIDFriend : CSteamID;
+        SteamIDFriend : CSteamID;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 GameRichPresenceJoinRequested_t :: struct {
     k_iCallback : s32 : 337;
-    m_steamIDFriend : CSteamID;
-    m_rgchConnect : [256] char ;
+    union {
+        m_steamIDFriend : CSteamID;
+        SteamIDFriend : CSteamID;
+    }
+    union {
+        m_rgchConnect : [256] char ;
+        RgchConnect : [256] char ;
+    }
 }
 
 GameConnectedClanChatMsg_t :: struct {
     k_iCallback : s32 : 338;
-    m_steamIDClanChat : CSteamID;
-    m_steamIDUser : CSteamID;
-    m_iMessageID : s32;
+    union {
+        m_steamIDClanChat : CSteamID;
+        SteamIDClanChat : CSteamID;
+    }
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
+    union {
+        m_iMessageID : s32;
+        MessageID : s32;
+    }
 }
 
 GameConnectedChatJoin_t :: struct {
     k_iCallback : s32 : 339;
-    m_steamIDClanChat : CSteamID;
-    m_steamIDUser : CSteamID;
+    union {
+        m_steamIDClanChat : CSteamID;
+        SteamIDClanChat : CSteamID;
+    }
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
 }
 
 GameConnectedChatLeave_t :: struct {
     k_iCallback : s32 : 340;
-    m_steamIDClanChat : CSteamID;
-    m_steamIDUser : CSteamID;
-    m_bKicked : bool;
-    m_bDropped : bool;
+    union {
+        m_steamIDClanChat : CSteamID;
+        SteamIDClanChat : CSteamID;
+    }
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
+    union {
+        m_bKicked : bool;
+        Kicked : bool;
+    }
+    union {
+        m_bDropped : bool;
+        Dropped : bool;
+    }
 }
 
 DownloadClanActivityCountsResult_t :: struct {
     k_iCallback : s32 : 341;
-    m_bSuccess : bool;
+    union {
+        m_bSuccess : bool;
+        Success : bool;
+    }
 }
 
 JoinClanChatRoomCompletionResult_t :: struct {
     k_iCallback : s32 : 342;
-    m_steamIDClanChat : CSteamID;
-    m_eChatRoomEnterResponse : EChatRoomEnterResponse;
+    union {
+        m_steamIDClanChat : CSteamID;
+        SteamIDClanChat : CSteamID;
+    }
+    union {
+        m_eChatRoomEnterResponse : EChatRoomEnterResponse;
+        ChatRoomEnterResponse : EChatRoomEnterResponse;
+    }
 }
 
 GameConnectedFriendChatMsg_t :: struct {
     k_iCallback : s32 : 343;
-    m_steamIDUser : CSteamID;
-    m_iMessageID : s32;
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
+    union {
+        m_iMessageID : s32;
+        MessageID : s32;
+    }
 }
 
 FriendsGetFollowerCount_t :: struct {
     k_iCallback : s32 : 344;
-    m_eResult : EResult;
-    m_steamID : CSteamID;
-    m_nCount : s32;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_steamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_nCount : s32;
+        Count : s32;
+    }
 }
 
 FriendsIsFollowing_t :: struct {
     k_iCallback : s32 : 345;
-    m_eResult : EResult;
-    m_steamID : CSteamID;
-    m_bIsFollowing : bool;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_steamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_bIsFollowing : bool;
+        IsFollowing : bool;
+    }
 }
 
 FriendsEnumerateFollowingList_t :: struct {
     k_iCallback : s32 : 346;
-    m_eResult : EResult;
-    m_rgSteamID : [50] CSteamID ;
-    m_nResultsReturned : int32;
-    m_nTotalResultCount : int32;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_rgSteamID : [50] CSteamID ;
+        SteamID : [50] CSteamID ;
+    }
+    union {
+        m_nResultsReturned : int32;
+        ResultsReturned : int32;
+    }
+    union {
+        m_nTotalResultCount : int32;
+        TotalResultCount : int32;
+    }
 }
 
 SetPersonaNameResponse_t :: struct {
     k_iCallback : s32 : 347;
-    m_bSuccess : bool;
-    m_bLocalSuccess : bool;
+    union {
+        m_bSuccess : bool;
+        Success : bool;
+    }
+    union {
+        m_bLocalSuccess : bool;
+        LocalSuccess : bool;
+    }
     m_result : EResult;
 }
 
@@ -1322,14 +1544,26 @@ IPCountry_t :: struct {
 
 LowBatteryPower_t :: struct {
     k_iCallback : s32 : 702;
-    m_nMinutesBatteryLeft : uint8;
+    union {
+        m_nMinutesBatteryLeft : uint8;
+        MinutesBatteryLeft : uint8;
+    }
 }
 
 SteamAPICallCompleted_t :: struct {
     k_iCallback : s32 : 703;
-    m_hAsyncCall : SteamAPICall_t;
-    m_iCallback : s32;
-    m_cubParam : uint32;
+    union {
+        m_hAsyncCall : SteamAPICall_t;
+        AsyncCall : SteamAPICall_t;
+    }
+    union {
+        m_iCallback : s32;
+        Callback : s32;
+    }
+    union {
+        m_cubParam : uint32;
+        Param : uint32;
+    }
 }
 
 SteamShutdown_t :: struct {
@@ -1338,184 +1572,421 @@ SteamShutdown_t :: struct {
 
 CheckFileSignature_t :: struct {
     k_iCallback : s32 : 705;
-    m_eCheckFileSignature : ECheckFileSignature;
+    union {
+        m_eCheckFileSignature : ECheckFileSignature;
+        CheckFileSignature : ECheckFileSignature;
+    }
 }
 
 GamepadTextInputDismissed_t :: struct {
     k_iCallback : s32 : 714;
-    m_bSubmitted : bool;
-    m_unSubmittedText : uint32;
+    union {
+        m_bSubmitted : bool;
+        Submitted : bool;
+    }
+    union {
+        m_unSubmittedText : uint32;
+        SubmittedText : uint32;
+    }
 }
 
 FavoritesListChanged_t :: struct {
     k_iCallback : s32 : 502;
-    m_nIP : uint32;
-    m_nQueryPort : uint32;
-    m_nConnPort : uint32;
-    m_nAppID : uint32;
-    m_nFlags : uint32;
-    m_bAdd : bool;
-    m_unAccountId : AccountID_t;
+    union {
+        m_nIP : uint32;
+        IP : uint32;
+    }
+    union {
+        m_nQueryPort : uint32;
+        QueryPort : uint32;
+    }
+    union {
+        m_nConnPort : uint32;
+        ConnPort : uint32;
+    }
+    union {
+        m_nAppID : uint32;
+        AppID : uint32;
+    }
+    union {
+        m_nFlags : uint32;
+        Flags : uint32;
+    }
+    union {
+        m_bAdd : bool;
+        Add : bool;
+    }
+    union {
+        m_unAccountId : AccountID_t;
+        AccountId : AccountID_t;
+    }
 }
 
 LobbyInvite_t :: struct {
     k_iCallback : s32 : 503;
-    m_ulSteamIDUser : uint64;
-    m_ulSteamIDLobby : uint64;
-    m_ulGameID : uint64;
+    union {
+        m_ulSteamIDUser : uint64;
+        SteamIDUser : uint64;
+    }
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
+    union {
+        m_ulGameID : uint64;
+        GameID : uint64;
+    }
 }
 
 LobbyEnter_t :: struct {
     k_iCallback : s32 : 504;
-    m_ulSteamIDLobby : uint64;
-    m_rgfChatPermissions : uint32;
-    m_bLocked : bool;
-    m_EChatRoomEnterResponse : uint32;
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
+    union {
+        m_rgfChatPermissions : uint32;
+        ChatPermissions : uint32;
+    }
+    union {
+        m_bLocked : bool;
+        Locked : bool;
+    }
+    union {
+        m_EChatRoomEnterResponse : uint32;
+        EChatRoomEnterResponse : uint32;
+    }
 }
 
 LobbyDataUpdate_t :: struct {
     k_iCallback : s32 : 505;
-    m_ulSteamIDLobby : uint64;
-    m_ulSteamIDMember : uint64;
-    m_bSuccess : uint8;
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
+    union {
+        m_ulSteamIDMember : uint64;
+        SteamIDMember : uint64;
+    }
+    union {
+        m_bSuccess : uint8;
+        Success : uint8;
+    }
 }
 
 LobbyChatUpdate_t :: struct {
     k_iCallback : s32 : 506;
-    m_ulSteamIDLobby : uint64;
-    m_ulSteamIDUserChanged : uint64;
-    m_ulSteamIDMakingChange : uint64;
-    m_rgfChatMemberStateChange : uint32;
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
+    union {
+        m_ulSteamIDUserChanged : uint64;
+        SteamIDUserChanged : uint64;
+    }
+    union {
+        m_ulSteamIDMakingChange : uint64;
+        SteamIDMakingChange : uint64;
+    }
+    union {
+        m_rgfChatMemberStateChange : uint32;
+        ChatMemberStateChange : uint32;
+    }
 }
 
 LobbyChatMsg_t :: struct {
     k_iCallback : s32 : 507;
-    m_ulSteamIDLobby : uint64;
-    m_ulSteamIDUser : uint64;
-    m_eChatEntryType : uint8;
-    m_iChatID : uint32;
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
+    union {
+        m_ulSteamIDUser : uint64;
+        SteamIDUser : uint64;
+    }
+    union {
+        m_eChatEntryType : uint8;
+        ChatEntryType : uint8;
+    }
+    union {
+        m_iChatID : uint32;
+        ChatID : uint32;
+    }
 }
 
 LobbyGameCreated_t :: struct {
     k_iCallback : s32 : 509;
-    m_ulSteamIDLobby : uint64;
-    m_ulSteamIDGameServer : uint64;
-    m_unIP : uint32;
-    m_usPort : uint16;
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
+    union {
+        m_ulSteamIDGameServer : uint64;
+        SteamIDGameServer : uint64;
+    }
+    union {
+        m_unIP : uint32;
+        IP : uint32;
+    }
+    union {
+        m_usPort : uint16;
+        Port : uint16;
+    }
 }
 
 LobbyMatchList_t :: struct {
     k_iCallback : s32 : 510;
-    m_nLobbiesMatching : uint32;
+    union {
+        m_nLobbiesMatching : uint32;
+        LobbiesMatching : uint32;
+    }
 }
 
 LobbyKicked_t :: struct {
     k_iCallback : s32 : 512;
-    m_ulSteamIDLobby : uint64;
-    m_ulSteamIDAdmin : uint64;
-    m_bKickedDueToDisconnect : uint8;
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
+    union {
+        m_ulSteamIDAdmin : uint64;
+        SteamIDAdmin : uint64;
+    }
+    union {
+        m_bKickedDueToDisconnect : uint8;
+        KickedDueToDisconnect : uint8;
+    }
 }
 
 LobbyCreated_t :: struct {
     k_iCallback : s32 : 513;
-    m_eResult : EResult;
-    m_ulSteamIDLobby : uint64;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ulSteamIDLobby : uint64;
+        SteamIDLobby : uint64;
+    }
 }
 
 PSNGameBootInviteResult_t :: struct {
     k_iCallback : s32 : 515;
-    m_bGameBootInviteExists : bool;
-    m_steamIDLobby : CSteamID;
+    union {
+        m_bGameBootInviteExists : bool;
+        GameBootInviteExists : bool;
+    }
+    union {
+        m_steamIDLobby : CSteamID;
+        SteamIDLobby : CSteamID;
+    }
 }
 
 FavoritesListAccountsUpdated_t :: struct {
     k_iCallback : s32 : 516;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 SearchForGameProgressCallback_t :: struct {
     k_iCallback : s32 : 5201;
-    m_ullSearchID : uint64;
-    m_eResult : EResult;
-    m_lobbyID : CSteamID;
-    m_steamIDEndedSearch : CSteamID;
-    m_nSecondsRemainingEstimate : int32;
-    m_cPlayersSearching : int32;
+    union {
+        m_ullSearchID : uint64;
+        SearchID : uint64;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_lobbyID : CSteamID;
+        LobbyID : CSteamID;
+    }
+    union {
+        m_steamIDEndedSearch : CSteamID;
+        SteamIDEndedSearch : CSteamID;
+    }
+    union {
+        m_nSecondsRemainingEstimate : int32;
+        SecondsRemainingEstimate : int32;
+    }
+    union {
+        m_cPlayersSearching : int32;
+        PlayersSearching : int32;
+    }
 }
 
 SearchForGameResultCallback_t :: struct {
     k_iCallback : s32 : 5202;
-    m_ullSearchID : uint64;
-    m_eResult : EResult;
-    m_nCountPlayersInGame : int32;
-    m_nCountAcceptedGame : int32;
-    m_steamIDHost : CSteamID;
-    m_bFinalCallback : bool;
+    union {
+        m_ullSearchID : uint64;
+        SearchID : uint64;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nCountPlayersInGame : int32;
+        CountPlayersInGame : int32;
+    }
+    union {
+        m_nCountAcceptedGame : int32;
+        CountAcceptedGame : int32;
+    }
+    union {
+        m_steamIDHost : CSteamID;
+        SteamIDHost : CSteamID;
+    }
+    union {
+        m_bFinalCallback : bool;
+        FinalCallback : bool;
+    }
 }
 
 RequestPlayersForGameProgressCallback_t :: struct {
     k_iCallback : s32 : 5211;
-    m_eResult : EResult;
-    m_ullSearchID : uint64;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ullSearchID : uint64;
+        SearchID : uint64;
+    }
 }
 
 RequestPlayersForGameResultCallback_t :: struct {
     k_iCallback : s32 : 5212;
-    m_eResult : EResult;
-    m_ullSearchID : uint64;
-    m_SteamIDPlayerFound : CSteamID;
-    m_SteamIDLobby : CSteamID;
-    m_ePlayerAcceptState : PlayerAcceptState_t;
-    m_nPlayerIndex : int32;
-    m_nTotalPlayersFound : int32;
-    m_nTotalPlayersAcceptedGame : int32;
-    m_nSuggestedTeamIndex : int32;
-    m_ullUniqueGameID : uint64;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ullSearchID : uint64;
+        SearchID : uint64;
+    }
+    union {
+        m_SteamIDPlayerFound : CSteamID;
+        SteamIDPlayerFound : CSteamID;
+    }
+    union {
+        m_SteamIDLobby : CSteamID;
+        SteamIDLobby : CSteamID;
+    }
+    union {
+        m_ePlayerAcceptState : PlayerAcceptState_t;
+        PlayerAcceptState : PlayerAcceptState_t;
+    }
+    union {
+        m_nPlayerIndex : int32;
+        PlayerIndex : int32;
+    }
+    union {
+        m_nTotalPlayersFound : int32;
+        TotalPlayersFound : int32;
+    }
+    union {
+        m_nTotalPlayersAcceptedGame : int32;
+        TotalPlayersAcceptedGame : int32;
+    }
+    union {
+        m_nSuggestedTeamIndex : int32;
+        SuggestedTeamIndex : int32;
+    }
+    union {
+        m_ullUniqueGameID : uint64;
+        UniqueGameID : uint64;
+    }
 }
 
 RequestPlayersForGameFinalResultCallback_t :: struct {
     k_iCallback : s32 : 5213;
-    m_eResult : EResult;
-    m_ullSearchID : uint64;
-    m_ullUniqueGameID : uint64;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ullSearchID : uint64;
+        SearchID : uint64;
+    }
+    union {
+        m_ullUniqueGameID : uint64;
+        UniqueGameID : uint64;
+    }
 }
 
 SubmitPlayerResultResultCallback_t :: struct {
     k_iCallback : s32 : 5214;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
     ullUniqueGameID : uint64;
     steamIDPlayer : CSteamID;
 }
 
 EndGameResultCallback_t :: struct {
     k_iCallback : s32 : 5215;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
     ullUniqueGameID : uint64;
 }
 
 JoinPartyCallback_t :: struct {
     k_iCallback : s32 : 5301;
-    m_eResult : EResult;
-    m_ulBeaconID : PartyBeaconID_t;
-    m_SteamIDBeaconOwner : CSteamID;
-    m_rgchConnectString : [256] char ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ulBeaconID : PartyBeaconID_t;
+        BeaconID : PartyBeaconID_t;
+    }
+    union {
+        m_SteamIDBeaconOwner : CSteamID;
+        SteamIDBeaconOwner : CSteamID;
+    }
+    union {
+        m_rgchConnectString : [256] char ;
+        RgchConnectString : [256] char ;
+    }
 }
 
 CreateBeaconCallback_t :: struct {
     k_iCallback : s32 : 5302;
-    m_eResult : EResult;
-    m_ulBeaconID : PartyBeaconID_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ulBeaconID : PartyBeaconID_t;
+        BeaconID : PartyBeaconID_t;
+    }
 }
 
 ReservationNotificationCallback_t :: struct {
     k_iCallback : s32 : 5303;
-    m_ulBeaconID : PartyBeaconID_t;
-    m_steamIDJoiner : CSteamID;
+    union {
+        m_ulBeaconID : PartyBeaconID_t;
+        BeaconID : PartyBeaconID_t;
+    }
+    union {
+        m_steamIDJoiner : CSteamID;
+        SteamIDJoiner : CSteamID;
+    }
 }
 
 ChangeNumOpenSlotsCallback_t :: struct {
     k_iCallback : s32 : 5304;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 AvailableBeaconLocationsUpdated_t :: struct {
@@ -1528,325 +1999,778 @@ ActiveBeaconsUpdated_t :: struct {
 
 RemoteStorageAppSyncedClient_t :: struct {
     k_iCallback : s32 : 1301;
-    m_nAppID : AppId_t;
-    m_eResult : EResult;
-    m_unNumDownloads : s32;
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_unNumDownloads : s32;
+        NumDownloads : s32;
+    }
 }
 
 RemoteStorageAppSyncedServer_t :: struct {
     k_iCallback : s32 : 1302;
-    m_nAppID : AppId_t;
-    m_eResult : EResult;
-    m_unNumUploads : s32;
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_unNumUploads : s32;
+        NumUploads : s32;
+    }
 }
 
 RemoteStorageAppSyncProgress_t :: struct {
     k_iCallback : s32 : 1303;
-    m_rgchCurrentFile : [260] char ;
-    m_nAppID : AppId_t;
-    m_uBytesTransferredThisChunk : uint32;
-    m_dAppPercentComplete : double;
-    m_bUploading : bool;
+    union {
+        m_rgchCurrentFile : [260] char ;
+        RgchCurrentFile : [260] char ;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_uBytesTransferredThisChunk : uint32;
+        BytesTransferredThisChunk : uint32;
+    }
+    union {
+        m_dAppPercentComplete : double;
+        AppPercentComplete : double;
+    }
+    union {
+        m_bUploading : bool;
+        Uploading : bool;
+    }
 }
 
 RemoteStorageAppSyncStatusCheck_t :: struct {
     k_iCallback : s32 : 1305;
-    m_nAppID : AppId_t;
-    m_eResult : EResult;
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 RemoteStorageFileShareResult_t :: struct {
     k_iCallback : s32 : 1307;
-    m_eResult : EResult;
-    m_hFile : UGCHandle_t;
-    m_rgchFilename : [260] char ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_hFile : UGCHandle_t;
+        File : UGCHandle_t;
+    }
+    union {
+        m_rgchFilename : [260] char ;
+        RgchFilename : [260] char ;
+    }
 }
 
 RemoteStoragePublishFileResult_t :: struct {
     k_iCallback : s32 : 1309;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
+        UserNeedsToAcceptWorkshopLegalAgreement : bool;
+    }
 }
 
 RemoteStorageDeletePublishedFileResult_t :: struct {
     k_iCallback : s32 : 1311;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
 }
 
 RemoteStorageEnumerateUserPublishedFilesResult_t :: struct {
     k_iCallback : s32 : 1312;
-    m_eResult : EResult;
-    m_nResultsReturned : int32;
-    m_nTotalResultCount : int32;
-    m_rgPublishedFileId : [50] PublishedFileId_t ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nResultsReturned : int32;
+        ResultsReturned : int32;
+    }
+    union {
+        m_nTotalResultCount : int32;
+        TotalResultCount : int32;
+    }
+    union {
+        m_rgPublishedFileId : [50] PublishedFileId_t ;
+        PublishedFileId : [50] PublishedFileId_t ;
+    }
 }
 
 RemoteStorageSubscribePublishedFileResult_t :: struct {
     k_iCallback : s32 : 1313;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
 }
 
 RemoteStorageEnumerateUserSubscribedFilesResult_t :: struct {
     k_iCallback : s32 : 1314;
-    m_eResult : EResult;
-    m_nResultsReturned : int32;
-    m_nTotalResultCount : int32;
-    m_rgPublishedFileId : [50] PublishedFileId_t ;
-    m_rgRTimeSubscribed : [50] uint32 ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nResultsReturned : int32;
+        ResultsReturned : int32;
+    }
+    union {
+        m_nTotalResultCount : int32;
+        TotalResultCount : int32;
+    }
+    union {
+        m_rgPublishedFileId : [50] PublishedFileId_t ;
+        PublishedFileId : [50] PublishedFileId_t ;
+    }
+    union {
+        m_rgRTimeSubscribed : [50] uint32 ;
+        RTimeSubscribed : [50] uint32 ;
+    }
 }
 
 RemoteStorageUnsubscribePublishedFileResult_t :: struct {
     k_iCallback : s32 : 1315;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
 }
 
 RemoteStorageUpdatePublishedFileResult_t :: struct {
     k_iCallback : s32 : 1316;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
+        UserNeedsToAcceptWorkshopLegalAgreement : bool;
+    }
 }
 
 RemoteStorageDownloadUGCResult_t :: struct {
     k_iCallback : s32 : 1317;
-    m_eResult : EResult;
-    m_hFile : UGCHandle_t;
-    m_nAppID : AppId_t;
-    m_nSizeInBytes : int32;
-    m_pchFileName : [260] char ;
-    m_ulSteamIDOwner : uint64;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_hFile : UGCHandle_t;
+        File : UGCHandle_t;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_nSizeInBytes : int32;
+        SizeInBytes : int32;
+    }
+    union {
+        m_pchFileName : [260] char ;
+        FileName : [260] char ;
+    }
+    union {
+        m_ulSteamIDOwner : uint64;
+        SteamIDOwner : uint64;
+    }
 }
 
 RemoteStorageGetPublishedFileDetailsResult_t :: struct {
     k_iCallback : s32 : 1318;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nCreatorAppID : AppId_t;
-    m_nConsumerAppID : AppId_t;
-    m_rgchTitle : [129] char ;
-    m_rgchDescription : [8000] char ;
-    m_hFile : UGCHandle_t;
-    m_hPreviewFile : UGCHandle_t;
-    m_ulSteamIDOwner : uint64;
-    m_rtimeCreated : uint32;
-    m_rtimeUpdated : uint32;
-    m_eVisibility : ERemoteStoragePublishedFileVisibility;
-    m_bBanned : bool;
-    m_rgchTags : [1025] char ;
-    m_bTagsTruncated : bool;
-    m_pchFileName : [260] char ;
-    m_nFileSize : int32;
-    m_nPreviewFileSize : int32;
-    m_rgchURL : [256] char ;
-    m_eFileType : EWorkshopFileType;
-    m_bAcceptedForUse : bool;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nCreatorAppID : AppId_t;
+        CreatorAppID : AppId_t;
+    }
+    union {
+        m_nConsumerAppID : AppId_t;
+        ConsumerAppID : AppId_t;
+    }
+    union {
+        m_rgchTitle : [129] char ;
+        RgchTitle : [129] char ;
+    }
+    union {
+        m_rgchDescription : [8000] char ;
+        RgchDescription : [8000] char ;
+    }
+    union {
+        m_hFile : UGCHandle_t;
+        File : UGCHandle_t;
+    }
+    union {
+        m_hPreviewFile : UGCHandle_t;
+        PreviewFile : UGCHandle_t;
+    }
+    union {
+        m_ulSteamIDOwner : uint64;
+        SteamIDOwner : uint64;
+    }
+    union {
+        m_rtimeCreated : uint32;
+        RtimeCreated : uint32;
+    }
+    union {
+        m_rtimeUpdated : uint32;
+        RtimeUpdated : uint32;
+    }
+    union {
+        m_eVisibility : ERemoteStoragePublishedFileVisibility;
+        Visibility : ERemoteStoragePublishedFileVisibility;
+    }
+    union {
+        m_bBanned : bool;
+        Banned : bool;
+    }
+    union {
+        m_rgchTags : [1025] char ;
+        RgchTags : [1025] char ;
+    }
+    union {
+        m_bTagsTruncated : bool;
+        TagsTruncated : bool;
+    }
+    union {
+        m_pchFileName : [260] char ;
+        FileName : [260] char ;
+    }
+    union {
+        m_nFileSize : int32;
+        FileSize : int32;
+    }
+    union {
+        m_nPreviewFileSize : int32;
+        PreviewFileSize : int32;
+    }
+    union {
+        m_rgchURL : [256] char ;
+        RgchURL : [256] char ;
+    }
+    union {
+        m_eFileType : EWorkshopFileType;
+        FileType : EWorkshopFileType;
+    }
+    union {
+        m_bAcceptedForUse : bool;
+        AcceptedForUse : bool;
+    }
 }
 
 RemoteStorageEnumerateWorkshopFilesResult_t :: struct {
     k_iCallback : s32 : 1319;
-    m_eResult : EResult;
-    m_nResultsReturned : int32;
-    m_nTotalResultCount : int32;
-    m_rgPublishedFileId : [50] PublishedFileId_t ;
-    m_rgScore : [50] float ;
-    m_nAppId : AppId_t;
-    m_unStartIndex : uint32;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nResultsReturned : int32;
+        ResultsReturned : int32;
+    }
+    union {
+        m_nTotalResultCount : int32;
+        TotalResultCount : int32;
+    }
+    union {
+        m_rgPublishedFileId : [50] PublishedFileId_t ;
+        PublishedFileId : [50] PublishedFileId_t ;
+    }
+    union {
+        m_rgScore : [50] float ;
+        Score : [50] float ;
+    }
+    union {
+        m_nAppId : AppId_t;
+        AppId : AppId_t;
+    }
+    union {
+        m_unStartIndex : uint32;
+        StartIndex : uint32;
+    }
 }
 
 RemoteStorageGetPublishedItemVoteDetailsResult_t :: struct {
     k_iCallback : s32 : 1320;
-    m_eResult : EResult;
-    m_unPublishedFileId : PublishedFileId_t;
-    m_nVotesFor : int32;
-    m_nVotesAgainst : int32;
-    m_nReports : int32;
-    m_fScore : float;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_unPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nVotesFor : int32;
+        VotesFor : int32;
+    }
+    union {
+        m_nVotesAgainst : int32;
+        VotesAgainst : int32;
+    }
+    union {
+        m_nReports : int32;
+        Reports : int32;
+    }
+    union {
+        m_fScore : float;
+        Score : float;
+    }
 }
 
 RemoteStoragePublishedFileSubscribed_t :: struct {
     k_iCallback : s32 : 1321;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nAppID : AppId_t;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 RemoteStoragePublishedFileUnsubscribed_t :: struct {
     k_iCallback : s32 : 1322;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nAppID : AppId_t;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 RemoteStoragePublishedFileDeleted_t :: struct {
     k_iCallback : s32 : 1323;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nAppID : AppId_t;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 RemoteStorageUpdateUserPublishedItemVoteResult_t :: struct {
     k_iCallback : s32 : 1324;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
 }
 
 RemoteStorageUserVoteDetails_t :: struct {
     k_iCallback : s32 : 1325;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_eVote : EWorkshopVote;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_eVote : EWorkshopVote;
+        Vote : EWorkshopVote;
+    }
 }
 
 RemoteStorageEnumerateUserSharedWorkshopFilesResult_t :: struct {
     k_iCallback : s32 : 1326;
-    m_eResult : EResult;
-    m_nResultsReturned : int32;
-    m_nTotalResultCount : int32;
-    m_rgPublishedFileId : [50] PublishedFileId_t ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nResultsReturned : int32;
+        ResultsReturned : int32;
+    }
+    union {
+        m_nTotalResultCount : int32;
+        TotalResultCount : int32;
+    }
+    union {
+        m_rgPublishedFileId : [50] PublishedFileId_t ;
+        PublishedFileId : [50] PublishedFileId_t ;
+    }
 }
 
 RemoteStorageSetUserPublishedFileActionResult_t :: struct {
     k_iCallback : s32 : 1327;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_eAction : EWorkshopFileAction;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_eAction : EWorkshopFileAction;
+        Action : EWorkshopFileAction;
+    }
 }
 
 RemoteStorageEnumeratePublishedFilesByUserActionResult_t :: struct {
     k_iCallback : s32 : 1328;
-    m_eResult : EResult;
-    m_eAction : EWorkshopFileAction;
-    m_nResultsReturned : int32;
-    m_nTotalResultCount : int32;
-    m_rgPublishedFileId : [50] PublishedFileId_t ;
-    m_rgRTimeUpdated : [50] uint32 ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_eAction : EWorkshopFileAction;
+        Action : EWorkshopFileAction;
+    }
+    union {
+        m_nResultsReturned : int32;
+        ResultsReturned : int32;
+    }
+    union {
+        m_nTotalResultCount : int32;
+        TotalResultCount : int32;
+    }
+    union {
+        m_rgPublishedFileId : [50] PublishedFileId_t ;
+        PublishedFileId : [50] PublishedFileId_t ;
+    }
+    union {
+        m_rgRTimeUpdated : [50] uint32 ;
+        RTimeUpdated : [50] uint32 ;
+    }
 }
 
 RemoteStoragePublishFileProgress_t :: struct {
     k_iCallback : s32 : 1329;
-    m_dPercentFile : double;
-    m_bPreview : bool;
+    union {
+        m_dPercentFile : double;
+        PercentFile : double;
+    }
+    union {
+        m_bPreview : bool;
+        Preview : bool;
+    }
 }
 
 RemoteStoragePublishedFileUpdated_t :: struct {
     k_iCallback : s32 : 1330;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nAppID : AppId_t;
-    m_ulUnused : uint64;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_ulUnused : uint64;
+        Unused : uint64;
+    }
 }
 
 RemoteStorageFileWriteAsyncComplete_t :: struct {
     k_iCallback : s32 : 1331;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 RemoteStorageFileReadAsyncComplete_t :: struct {
     k_iCallback : s32 : 1332;
-    m_hFileReadAsync : SteamAPICall_t;
-    m_eResult : EResult;
-    m_nOffset : uint32;
-    m_cubRead : uint32;
+    union {
+        m_hFileReadAsync : SteamAPICall_t;
+        FileReadAsync : SteamAPICall_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nOffset : uint32;
+        Offset : uint32;
+    }
+    union {
+        m_cubRead : uint32;
+        Read : uint32;
+    }
 }
 
 UserStatsReceived_t :: struct {
     k_iCallback : s32 : 1101;
-    m_nGameID : uint64;
-    m_eResult : EResult;
-    m_steamIDUser : CSteamID;
+    union {
+        m_nGameID : uint64;
+        GameID : uint64;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
 }
 
 UserStatsStored_t :: struct {
     k_iCallback : s32 : 1102;
-    m_nGameID : uint64;
-    m_eResult : EResult;
+    union {
+        m_nGameID : uint64;
+        GameID : uint64;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 UserAchievementStored_t :: struct {
     k_iCallback : s32 : 1103;
-    m_nGameID : uint64;
-    m_bGroupAchievement : bool;
-    m_rgchAchievementName : [128] char ;
-    m_nCurProgress : uint32;
-    m_nMaxProgress : uint32;
+    union {
+        m_nGameID : uint64;
+        GameID : uint64;
+    }
+    union {
+        m_bGroupAchievement : bool;
+        GroupAchievement : bool;
+    }
+    union {
+        m_rgchAchievementName : [128] char ;
+        RgchAchievementName : [128] char ;
+    }
+    union {
+        m_nCurProgress : uint32;
+        CurProgress : uint32;
+    }
+    union {
+        m_nMaxProgress : uint32;
+        MaxProgress : uint32;
+    }
 }
 
 LeaderboardFindResult_t :: struct {
     k_iCallback : s32 : 1104;
-    m_hSteamLeaderboard : SteamLeaderboard_t;
-    m_bLeaderboardFound : uint8;
+    union {
+        m_hSteamLeaderboard : SteamLeaderboard_t;
+        SteamLeaderboard : SteamLeaderboard_t;
+    }
+    union {
+        m_bLeaderboardFound : uint8;
+        LeaderboardFound : uint8;
+    }
 }
 
 LeaderboardScoresDownloaded_t :: struct {
     k_iCallback : s32 : 1105;
-    m_hSteamLeaderboard : SteamLeaderboard_t;
-    m_hSteamLeaderboardEntries : SteamLeaderboardEntries_t;
-    m_cEntryCount : s32;
+    union {
+        m_hSteamLeaderboard : SteamLeaderboard_t;
+        SteamLeaderboard : SteamLeaderboard_t;
+    }
+    union {
+        m_hSteamLeaderboardEntries : SteamLeaderboardEntries_t;
+        SteamLeaderboardEntries : SteamLeaderboardEntries_t;
+    }
+    union {
+        m_cEntryCount : s32;
+        EntryCount : s32;
+    }
 }
 
 LeaderboardScoreUploaded_t :: struct {
     k_iCallback : s32 : 1106;
-    m_bSuccess : uint8;
-    m_hSteamLeaderboard : SteamLeaderboard_t;
-    m_nScore : int32;
-    m_bScoreChanged : uint8;
-    m_nGlobalRankNew : s32;
-    m_nGlobalRankPrevious : s32;
+    union {
+        m_bSuccess : uint8;
+        Success : uint8;
+    }
+    union {
+        m_hSteamLeaderboard : SteamLeaderboard_t;
+        SteamLeaderboard : SteamLeaderboard_t;
+    }
+    union {
+        m_nScore : int32;
+        Score : int32;
+    }
+    union {
+        m_bScoreChanged : uint8;
+        ScoreChanged : uint8;
+    }
+    union {
+        m_nGlobalRankNew : s32;
+        GlobalRankNew : s32;
+    }
+    union {
+        m_nGlobalRankPrevious : s32;
+        GlobalRankPrevious : s32;
+    }
 }
 
 NumberOfCurrentPlayers_t :: struct {
     k_iCallback : s32 : 1107;
-    m_bSuccess : uint8;
-    m_cPlayers : int32;
+    union {
+        m_bSuccess : uint8;
+        Success : uint8;
+    }
+    union {
+        m_cPlayers : int32;
+        Players : int32;
+    }
 }
 
 UserStatsUnloaded_t :: struct {
     k_iCallback : s32 : 1108;
-    m_steamIDUser : CSteamID;
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
 }
 
 UserAchievementIconFetched_t :: struct {
     k_iCallback : s32 : 1109;
-    m_nGameID : CGameID;
-    m_rgchAchievementName : [128] char ;
-    m_bAchieved : bool;
-    m_nIconHandle : s32;
+    union {
+        m_nGameID : CGameID;
+        GameID : CGameID;
+    }
+    union {
+        m_rgchAchievementName : [128] char ;
+        RgchAchievementName : [128] char ;
+    }
+    union {
+        m_bAchieved : bool;
+        Achieved : bool;
+    }
+    union {
+        m_nIconHandle : s32;
+        IconHandle : s32;
+    }
 }
 
 GlobalAchievementPercentagesReady_t :: struct {
     k_iCallback : s32 : 1110;
-    m_nGameID : uint64;
-    m_eResult : EResult;
+    union {
+        m_nGameID : uint64;
+        GameID : uint64;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 LeaderboardUGCSet_t :: struct {
     k_iCallback : s32 : 1111;
-    m_eResult : EResult;
-    m_hSteamLeaderboard : SteamLeaderboard_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_hSteamLeaderboard : SteamLeaderboard_t;
+        SteamLeaderboard : SteamLeaderboard_t;
+    }
 }
 
 PS3TrophiesInstalled_t :: struct {
     k_iCallback : s32 : 1112;
-    m_nGameID : uint64;
-    m_eResult : EResult;
-    m_ulRequiredDiskSpace : uint64;
+    union {
+        m_nGameID : uint64;
+        GameID : uint64;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ulRequiredDiskSpace : uint64;
+        RequiredDiskSpace : uint64;
+    }
 }
 
 GlobalStatsReceived_t :: struct {
     k_iCallback : s32 : 1112;
-    m_nGameID : uint64;
-    m_eResult : EResult;
+    union {
+        m_nGameID : uint64;
+        GameID : uint64;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 DlcInstalled_t :: struct {
     k_iCallback : s32 : 1005;
-    m_nAppID : AppId_t;
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 RegisterActivationCodeResponse_t :: struct {
     k_iCallback : s32 : 1008;
-    m_eResult : ERegisterActivationCodeResult;
-    m_unPackageRegistered : uint32;
+    union {
+        m_eResult : ERegisterActivationCodeResult;
+        Result : ERegisterActivationCodeResult;
+    }
+    union {
+        m_unPackageRegistered : uint32;
+        PackageRegistered : uint32;
+    }
 }
 
 NewUrlLaunchParameters_t :: struct {
@@ -1855,51 +2779,114 @@ NewUrlLaunchParameters_t :: struct {
 
 AppProofOfPurchaseKeyResponse_t :: struct {
     k_iCallback : s32 : 1021;
-    m_eResult : EResult;
-    m_nAppID : uint32;
-    m_cchKeyLength : uint32;
-    m_rgchKey : [240] char ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nAppID : uint32;
+        AppID : uint32;
+    }
+    union {
+        m_cchKeyLength : uint32;
+        KeyLength : uint32;
+    }
+    union {
+        m_rgchKey : [240] char ;
+        RgchKey : [240] char ;
+    }
 }
 
 FileDetailsResult_t :: struct {
     k_iCallback : s32 : 1023;
-    m_eResult : EResult;
-    m_ulFileSize : uint64;
-    m_FileSHA : [20] uint8 ;
-    m_unFlags : uint32;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_ulFileSize : uint64;
+        FileSize : uint64;
+    }
+    union {
+        m_FileSHA : [20] uint8 ;
+        FileSHA : [20] uint8 ;
+    }
+    union {
+        m_unFlags : uint32;
+        Flags : uint32;
+    }
 }
 
 TimedTrialStatus_t :: struct {
     k_iCallback : s32 : 1030;
-    m_unAppID : AppId_t;
-    m_bIsOffline : bool;
-    m_unSecondsAllowed : uint32;
-    m_unSecondsPlayed : uint32;
+    union {
+        m_unAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_bIsOffline : bool;
+        IsOffline : bool;
+    }
+    union {
+        m_unSecondsAllowed : uint32;
+        SecondsAllowed : uint32;
+    }
+    union {
+        m_unSecondsPlayed : uint32;
+        SecondsPlayed : uint32;
+    }
 }
 
 P2PSessionRequest_t :: struct {
     k_iCallback : s32 : 1202;
-    m_steamIDRemote : CSteamID;
+    union {
+        m_steamIDRemote : CSteamID;
+        SteamIDRemote : CSteamID;
+    }
 }
 
 P2PSessionConnectFail_t :: struct {
     k_iCallback : s32 : 1203;
-    m_steamIDRemote : CSteamID;
-    m_eP2PSessionError : uint8;
+    union {
+        m_steamIDRemote : CSteamID;
+        SteamIDRemote : CSteamID;
+    }
+    union {
+        m_eP2PSessionError : uint8;
+        P2PSessionError : uint8;
+    }
 }
 
 SocketStatusCallback_t :: struct {
     k_iCallback : s32 : 1201;
-    m_hSocket : SNetSocket_t;
-    m_hListenSocket : SNetListenSocket_t;
-    m_steamIDRemote : CSteamID;
-    m_eSNetSocketState : s32;
+    union {
+        m_hSocket : SNetSocket_t;
+        Socket : SNetSocket_t;
+    }
+    union {
+        m_hListenSocket : SNetListenSocket_t;
+        ListenSocket : SNetListenSocket_t;
+    }
+    union {
+        m_steamIDRemote : CSteamID;
+        SteamIDRemote : CSteamID;
+    }
+    union {
+        m_eSNetSocketState : s32;
+        SNetSocketState : s32;
+    }
 }
 
 ScreenshotReady_t :: struct {
     k_iCallback : s32 : 2301;
-    m_hLocal : ScreenshotHandle;
-    m_eResult : EResult;
+    union {
+        m_hLocal : ScreenshotHandle;
+        Local : ScreenshotHandle;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 ScreenshotRequested_t :: struct {
@@ -1912,7 +2899,10 @@ PlaybackStatusHasChanged_t :: struct {
 
 VolumeHasChanged_t :: struct {
     k_iCallback : s32 : 4002;
-    m_flNewVolume : float;
+    union {
+        m_flNewVolume : float;
+        NewVolume : float;
+    }
 }
 
 MusicPlayerRemoteWillActivate_t :: struct {
@@ -1949,17 +2939,26 @@ MusicPlayerWantsPlayNext_t :: struct {
 
 MusicPlayerWantsShuffled_t :: struct {
     k_iCallback : s32 : 4109;
-    m_bShuffled : bool;
+    union {
+        m_bShuffled : bool;
+        Shuffled : bool;
+    }
 }
 
 MusicPlayerWantsLooped_t :: struct {
     k_iCallback : s32 : 4110;
-    m_bLooped : bool;
+    union {
+        m_bLooped : bool;
+        Looped : bool;
+    }
 }
 
 MusicPlayerWantsVolume_t :: struct {
     k_iCallback : s32 : 4011;
-    m_flNewVolume : float;
+    union {
+        m_flNewVolume : float;
+        NewVolume : float;
+    }
 }
 
 MusicPlayerSelectsQueueEntry_t :: struct {
@@ -1974,159 +2973,348 @@ MusicPlayerSelectsPlaylistEntry_t :: struct {
 
 MusicPlayerWantsPlayingRepeatStatus_t :: struct {
     k_iCallback : s32 : 4114;
-    m_nPlayingRepeatStatus : s32;
+    union {
+        m_nPlayingRepeatStatus : s32;
+        PlayingRepeatStatus : s32;
+    }
 }
 
 HTTPRequestCompleted_t :: struct {
     k_iCallback : s32 : 2101;
-    m_hRequest : HTTPRequestHandle;
-    m_ulContextValue : uint64;
-    m_bRequestSuccessful : bool;
-    m_eStatusCode : EHTTPStatusCode;
-    m_unBodySize : uint32;
+    union {
+        m_hRequest : HTTPRequestHandle;
+        Request : HTTPRequestHandle;
+    }
+    union {
+        m_ulContextValue : uint64;
+        ContextValue : uint64;
+    }
+    union {
+        m_bRequestSuccessful : bool;
+        RequestSuccessful : bool;
+    }
+    union {
+        m_eStatusCode : EHTTPStatusCode;
+        StatusCode : EHTTPStatusCode;
+    }
+    union {
+        m_unBodySize : uint32;
+        BodySize : uint32;
+    }
 }
 
 HTTPRequestHeadersReceived_t :: struct {
     k_iCallback : s32 : 2102;
-    m_hRequest : HTTPRequestHandle;
-    m_ulContextValue : uint64;
+    union {
+        m_hRequest : HTTPRequestHandle;
+        Request : HTTPRequestHandle;
+    }
+    union {
+        m_ulContextValue : uint64;
+        ContextValue : uint64;
+    }
 }
 
 HTTPRequestDataReceived_t :: struct {
     k_iCallback : s32 : 2103;
-    m_hRequest : HTTPRequestHandle;
-    m_ulContextValue : uint64;
-    m_cOffset : uint32;
-    m_cBytesReceived : uint32;
+    union {
+        m_hRequest : HTTPRequestHandle;
+        Request : HTTPRequestHandle;
+    }
+    union {
+        m_ulContextValue : uint64;
+        ContextValue : uint64;
+    }
+    union {
+        m_cOffset : uint32;
+        Offset : uint32;
+    }
+    union {
+        m_cBytesReceived : uint32;
+        BytesReceived : uint32;
+    }
 }
 
 SteamUGCQueryCompleted_t :: struct {
     k_iCallback : s32 : 3401;
     m_handle : UGCQueryHandle_t;
-    m_eResult : EResult;
-    m_unNumResultsReturned : uint32;
-    m_unTotalMatchingResults : uint32;
-    m_bCachedData : bool;
-    m_rgchNextCursor : [256] char ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_unNumResultsReturned : uint32;
+        NumResultsReturned : uint32;
+    }
+    union {
+        m_unTotalMatchingResults : uint32;
+        TotalMatchingResults : uint32;
+    }
+    union {
+        m_bCachedData : bool;
+        CachedData : bool;
+    }
+    union {
+        m_rgchNextCursor : [256] char ;
+        RgchNextCursor : [256] char ;
+    }
 }
 
 SteamUGCRequestUGCDetailsResult_t :: struct {
     k_iCallback : s32 : 3402;
     m_details : SteamUGCDetails_t;
-    m_bCachedData : bool;
+    union {
+        m_bCachedData : bool;
+        CachedData : bool;
+    }
 }
 
 CreateItemResult_t :: struct {
     k_iCallback : s32 : 3403;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
+        UserNeedsToAcceptWorkshopLegalAgreement : bool;
+    }
 }
 
 SubmitItemUpdateResult_t :: struct {
     k_iCallback : s32 : 3404;
-    m_eResult : EResult;
-    m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
-    m_nPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_bUserNeedsToAcceptWorkshopLegalAgreement : bool;
+        UserNeedsToAcceptWorkshopLegalAgreement : bool;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
 }
 
 ItemInstalled_t :: struct {
     k_iCallback : s32 : 3405;
-    m_unAppID : AppId_t;
-    m_nPublishedFileId : PublishedFileId_t;
+    union {
+        m_unAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
 }
 
 DownloadItemResult_t :: struct {
     k_iCallback : s32 : 3406;
-    m_unAppID : AppId_t;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_eResult : EResult;
+    union {
+        m_unAppID : AppId_t;
+        AppID : AppId_t;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 UserFavoriteItemsListChanged_t :: struct {
     k_iCallback : s32 : 3407;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_eResult : EResult;
-    m_bWasAddRequest : bool;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_bWasAddRequest : bool;
+        WasAddRequest : bool;
+    }
 }
 
 SetUserItemVoteResult_t :: struct {
     k_iCallback : s32 : 3408;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_eResult : EResult;
-    m_bVoteUp : bool;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_bVoteUp : bool;
+        VoteUp : bool;
+    }
 }
 
 GetUserItemVoteResult_t :: struct {
     k_iCallback : s32 : 3409;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_eResult : EResult;
-    m_bVotedUp : bool;
-    m_bVotedDown : bool;
-    m_bVoteSkipped : bool;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_bVotedUp : bool;
+        VotedUp : bool;
+    }
+    union {
+        m_bVotedDown : bool;
+        VotedDown : bool;
+    }
+    union {
+        m_bVoteSkipped : bool;
+        VoteSkipped : bool;
+    }
 }
 
 StartPlaytimeTrackingResult_t :: struct {
     k_iCallback : s32 : 3410;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 StopPlaytimeTrackingResult_t :: struct {
     k_iCallback : s32 : 3411;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 AddUGCDependencyResult_t :: struct {
     k_iCallback : s32 : 3412;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nChildPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nChildPublishedFileId : PublishedFileId_t;
+        ChildPublishedFileId : PublishedFileId_t;
+    }
 }
 
 RemoveUGCDependencyResult_t :: struct {
     k_iCallback : s32 : 3413;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nChildPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nChildPublishedFileId : PublishedFileId_t;
+        ChildPublishedFileId : PublishedFileId_t;
+    }
 }
 
 AddAppDependencyResult_t :: struct {
     k_iCallback : s32 : 3414;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nAppID : AppId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 RemoveAppDependencyResult_t :: struct {
     k_iCallback : s32 : 3415;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_nAppID : AppId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 GetAppDependenciesResult_t :: struct {
     k_iCallback : s32 : 3416;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
-    m_rgAppIDs : [32] AppId_t ;
-    m_nNumAppDependencies : uint32;
-    m_nTotalNumAppDependencies : uint32;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_rgAppIDs : [32] AppId_t ;
+        AppIDs : [32] AppId_t ;
+    }
+    union {
+        m_nNumAppDependencies : uint32;
+        NumAppDependencies : uint32;
+    }
+    union {
+        m_nTotalNumAppDependencies : uint32;
+        TotalNumAppDependencies : uint32;
+    }
 }
 
 DeleteItemResult_t :: struct {
     k_iCallback : s32 : 3417;
-    m_eResult : EResult;
-    m_nPublishedFileId : PublishedFileId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
 }
 
 SteamAppInstalled_t :: struct {
     k_iCallback : s32 : 3901;
-    m_nAppID : AppId_t;
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 SteamAppUninstalled_t :: struct {
     k_iCallback : s32 : 3902;
-    m_nAppID : AppId_t;
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
 }
 
 HTML_BrowserReady_t :: struct {
@@ -2320,35 +3508,68 @@ SteamInventoryDefinitionUpdate_t :: struct {
 SteamInventoryEligiblePromoItemDefIDs_t :: struct {
     k_iCallback : s32 : 4703;
     m_result : EResult;
-    m_steamID : CSteamID;
-    m_numEligiblePromoItemDefs : s32;
-    m_bCachedData : bool;
+    union {
+        m_steamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_numEligiblePromoItemDefs : s32;
+        EligiblePromoItemDefs : s32;
+    }
+    union {
+        m_bCachedData : bool;
+        CachedData : bool;
+    }
 }
 
 SteamInventoryStartPurchaseResult_t :: struct {
     k_iCallback : s32 : 4704;
     m_result : EResult;
-    m_ulOrderID : uint64;
-    m_ulTransID : uint64;
+    union {
+        m_ulOrderID : uint64;
+        OrderID : uint64;
+    }
+    union {
+        m_ulTransID : uint64;
+        TransID : uint64;
+    }
 }
 
 SteamInventoryRequestPricesResult_t :: struct {
     k_iCallback : s32 : 4705;
     m_result : EResult;
-    m_rgchCurrency : [4] char ;
+    union {
+        m_rgchCurrency : [4] char ;
+        RgchCurrency : [4] char ;
+    }
 }
 
 GetVideoURLResult_t :: struct {
     k_iCallback : s32 : 4611;
-    m_eResult : EResult;
-    m_unVideoAppID : AppId_t;
-    m_rgchURL : [256] char ;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_unVideoAppID : AppId_t;
+        VideoAppID : AppId_t;
+    }
+    union {
+        m_rgchURL : [256] char ;
+        RgchURL : [256] char ;
+    }
 }
 
 GetOPFSettingsResult_t :: struct {
     k_iCallback : s32 : 4624;
-    m_eResult : EResult;
-    m_unVideoAppID : AppId_t;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_unVideoAppID : AppId_t;
+        VideoAppID : AppId_t;
+    }
 }
 
 SteamParentalSettingsChanged_t :: struct {
@@ -2357,17 +3578,26 @@ SteamParentalSettingsChanged_t :: struct {
 
 SteamRemotePlaySessionConnected_t :: struct {
     k_iCallback : s32 : 5701;
-    m_unSessionID : RemotePlaySessionID_t;
+    union {
+        m_unSessionID : RemotePlaySessionID_t;
+        SessionID : RemotePlaySessionID_t;
+    }
 }
 
 SteamRemotePlaySessionDisconnected_t :: struct {
     k_iCallback : s32 : 5702;
-    m_unSessionID : RemotePlaySessionID_t;
+    union {
+        m_unSessionID : RemotePlaySessionID_t;
+        SessionID : RemotePlaySessionID_t;
+    }
 }
 
 SteamNetworkingMessagesSessionRequest_t :: struct {
     k_iCallback : s32 : 1251;
-    m_identityRemote : SteamNetworkingIdentity;
+    union {
+        m_identityRemote : SteamNetworkingIdentity;
+        IdentityRemote : SteamNetworkingIdentity;
+    }
 }
 
 SteamNetworkingMessagesSessionFailed_t :: struct {
@@ -2377,113 +3607,251 @@ SteamNetworkingMessagesSessionFailed_t :: struct {
 
 SteamNetConnectionStatusChangedCallback_t :: struct {
     k_iCallback : s32 : 1221;
-    m_hConn : HSteamNetConnection;
+    union {
+        m_hConn : HSteamNetConnection;
+        Conn : HSteamNetConnection;
+    }
     m_info : SteamNetConnectionInfo_t;
-    m_eOldState : ESteamNetworkingConnectionState;
+    union {
+        m_eOldState : ESteamNetworkingConnectionState;
+        OldState : ESteamNetworkingConnectionState;
+    }
 }
 
 SteamNetAuthenticationStatus_t :: struct {
     k_iCallback : s32 : 1222;
-    m_eAvail : ESteamNetworkingAvailability;
-    m_debugMsg : [256] char ;
+    union {
+        m_eAvail : ESteamNetworkingAvailability;
+        Avail : ESteamNetworkingAvailability;
+    }
+    union {
+        m_debugMsg : [256] char ;
+        DebugMsg : [256] char ;
+    }
 }
 
 SteamRelayNetworkStatus_t :: struct {
     k_iCallback : s32 : 1281;
-    m_eAvail : ESteamNetworkingAvailability;
-    m_bPingMeasurementInProgress : s32;
-    m_eAvailNetworkConfig : ESteamNetworkingAvailability;
-    m_eAvailAnyRelay : ESteamNetworkingAvailability;
-    m_debugMsg : [256] char ;
+    union {
+        m_eAvail : ESteamNetworkingAvailability;
+        Avail : ESteamNetworkingAvailability;
+    }
+    union {
+        m_bPingMeasurementInProgress : s32;
+        PingMeasurementInProgress : s32;
+    }
+    union {
+        m_eAvailNetworkConfig : ESteamNetworkingAvailability;
+        AvailNetworkConfig : ESteamNetworkingAvailability;
+    }
+    union {
+        m_eAvailAnyRelay : ESteamNetworkingAvailability;
+        AvailAnyRelay : ESteamNetworkingAvailability;
+    }
+    union {
+        m_debugMsg : [256] char ;
+        DebugMsg : [256] char ;
+    }
 }
 
 GSClientApprove_t :: struct {
     k_iCallback : s32 : 201;
-    m_SteamID : CSteamID;
-    m_OwnerSteamID : CSteamID;
+    union {
+        m_SteamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_OwnerSteamID : CSteamID;
+        OwnerSteamID : CSteamID;
+    }
 }
 
 GSClientDeny_t :: struct {
     k_iCallback : s32 : 202;
-    m_SteamID : CSteamID;
-    m_eDenyReason : EDenyReason;
-    m_rgchOptionalText : [128] char ;
+    union {
+        m_SteamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_eDenyReason : EDenyReason;
+        DenyReason : EDenyReason;
+    }
+    union {
+        m_rgchOptionalText : [128] char ;
+        RgchOptionalText : [128] char ;
+    }
 }
 
 GSClientKick_t :: struct {
     k_iCallback : s32 : 203;
-    m_SteamID : CSteamID;
-    m_eDenyReason : EDenyReason;
+    union {
+        m_SteamID : CSteamID;
+        SteamID : CSteamID;
+    }
+    union {
+        m_eDenyReason : EDenyReason;
+        DenyReason : EDenyReason;
+    }
 }
 
 GSClientAchievementStatus_t :: struct {
     k_iCallback : s32 : 206;
-    m_SteamID : uint64;
-    m_pchAchievement : [128] char ;
-    m_bUnlocked : bool;
+    union {
+        m_SteamID : uint64;
+        SteamID : uint64;
+    }
+    union {
+        m_pchAchievement : [128] char ;
+        Achievement : [128] char ;
+    }
+    union {
+        m_bUnlocked : bool;
+        Unlocked : bool;
+    }
 }
 
 GSPolicyResponse_t :: struct {
     k_iCallback : s32 : 115;
-    m_bSecure : uint8;
+    union {
+        m_bSecure : uint8;
+        Secure : uint8;
+    }
 }
 
 GSGameplayStats_t :: struct {
     k_iCallback : s32 : 207;
-    m_eResult : EResult;
-    m_nRank : int32;
-    m_unTotalConnects : uint32;
-    m_unTotalMinutesPlayed : uint32;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_nRank : int32;
+        Rank : int32;
+    }
+    union {
+        m_unTotalConnects : uint32;
+        TotalConnects : uint32;
+    }
+    union {
+        m_unTotalMinutesPlayed : uint32;
+        TotalMinutesPlayed : uint32;
+    }
 }
 
 GSClientGroupStatus_t :: struct {
     k_iCallback : s32 : 208;
-    m_SteamIDUser : CSteamID;
-    m_SteamIDGroup : CSteamID;
-    m_bMember : bool;
-    m_bOfficer : bool;
+    union {
+        m_SteamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
+    union {
+        m_SteamIDGroup : CSteamID;
+        SteamIDGroup : CSteamID;
+    }
+    union {
+        m_bMember : bool;
+        Member : bool;
+    }
+    union {
+        m_bOfficer : bool;
+        Officer : bool;
+    }
 }
 
 GSReputation_t :: struct {
     k_iCallback : s32 : 209;
-    m_eResult : EResult;
-    m_unReputationScore : uint32;
-    m_bBanned : bool;
-    m_unBannedIP : uint32;
-    m_usBannedPort : uint16;
-    m_ulBannedGameID : uint64;
-    m_unBanExpires : uint32;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_unReputationScore : uint32;
+        ReputationScore : uint32;
+    }
+    union {
+        m_bBanned : bool;
+        Banned : bool;
+    }
+    union {
+        m_unBannedIP : uint32;
+        BannedIP : uint32;
+    }
+    union {
+        m_usBannedPort : uint16;
+        BannedPort : uint16;
+    }
+    union {
+        m_ulBannedGameID : uint64;
+        BannedGameID : uint64;
+    }
+    union {
+        m_unBanExpires : uint32;
+        BanExpires : uint32;
+    }
 }
 
 AssociateWithClanResult_t :: struct {
     k_iCallback : s32 : 210;
-    m_eResult : EResult;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
 }
 
 ComputeNewPlayerCompatibilityResult_t :: struct {
     k_iCallback : s32 : 211;
-    m_eResult : EResult;
-    m_cPlayersThatDontLikeCandidate : s32;
-    m_cPlayersThatCandidateDoesntLike : s32;
-    m_cClanPlayersThatDontLikeCandidate : s32;
-    m_SteamIDCandidate : CSteamID;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_cPlayersThatDontLikeCandidate : s32;
+        PlayersThatDontLikeCandidate : s32;
+    }
+    union {
+        m_cPlayersThatCandidateDoesntLike : s32;
+        PlayersThatCandidateDoesntLike : s32;
+    }
+    union {
+        m_cClanPlayersThatDontLikeCandidate : s32;
+        ClanPlayersThatDontLikeCandidate : s32;
+    }
+    union {
+        m_SteamIDCandidate : CSteamID;
+        SteamIDCandidate : CSteamID;
+    }
 }
 
 GSStatsReceived_t :: struct {
     k_iCallback : s32 : 1800;
-    m_eResult : EResult;
-    m_steamIDUser : CSteamID;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
 }
 
 GSStatsStored_t :: struct {
     k_iCallback : s32 : 1801;
-    m_eResult : EResult;
-    m_steamIDUser : CSteamID;
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
 }
 
 GSStatsUnloaded_t :: struct {
     k_iCallback : s32 : 1108;
-    m_steamIDUser : CSteamID;
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
 }
 
 ESteamIPType :: enum s32 {
@@ -2705,7 +4073,7 @@ EAppReleaseState :: enum s32 {
     k_EAppReleaseState_Released :: 4;
 }
 
-EAppOwnershipFlags :: enum s32 {
+EAppOwnershipFlags :: enum_flags u32 {
     k_EAppOwnershipFlags_None :: 0;
     k_EAppOwnershipFlags_OwnsLicense :: 1;
     k_EAppOwnershipFlags_FreeLicense :: 2;
@@ -2731,7 +4099,7 @@ EAppOwnershipFlags :: enum s32 {
     k_EAppOwnershipFlags_TimedTrial :: 2097152;
 }
 
-EAppType :: enum s32 {
+EAppType :: enum_flags u32 {
     k_EAppType_Invalid :: 0;
     k_EAppType_Game :: 1;
     k_EAppType_Application :: 2;
@@ -2751,7 +4119,7 @@ EAppType :: enum s32 {
     k_EAppType_Comic_UNUSED :: 32768;
     k_EAppType_Beta :: 65536;
     k_EAppType_Shortcut :: 1073741824;
-    k_EAppType_DepotOnly_DEPRECATED :: -2147483648;
+    k_EAppType_DepotOnly_DEPRECATED :: 2147483648;
 }
 
 ESteamUserStatType :: enum s32 {
@@ -2794,14 +4162,14 @@ EChatRoomEnterResponse :: enum s32 {
     k_EChatRoomEnterResponseRatelimitExceeded :: 15;
 }
 
-EChatSteamIDInstanceFlags :: enum s32 {
+EChatSteamIDInstanceFlags :: enum_flags u32 {
     k_EChatAccountInstanceMask :: 4095;
     k_EChatInstanceFlagClan :: 524288;
     k_EChatInstanceFlagLobby :: 262144;
     k_EChatInstanceFlagMMSLobby :: 131072;
 }
 
-EMarketingMessageFlags :: enum s32 {
+EMarketingMessageFlags :: enum_flags u32 {
     k_EMarketingMessageFlagsNone :: 0;
     k_EMarketingMessageFlagsHighPriority :: 1;
     k_EMarketingMessageFlagsPlatformWindows :: 2;
@@ -2901,7 +4269,7 @@ EVRHMDType :: enum s32 {
     k_eEVRHmdType_Valve_Index :: 131;
 }
 
-EMarketNotAllowedReasonFlags :: enum s32 {
+EMarketNotAllowedReasonFlags :: enum_flags u32 {
     k_EMarketNotAllowedReason_None :: 0;
     k_EMarketNotAllowedReason_TemporaryFailure :: 1;
     k_EMarketNotAllowedReason_AccountDisabled :: 2;
@@ -3004,7 +4372,7 @@ EPersonaState :: enum s32 {
     k_EPersonaStateMax :: 8;
 }
 
-EFriendFlags :: enum s32 {
+EFriendFlags :: enum_flags u32 {
     k_EFriendFlagNone :: 0;
     k_EFriendFlagBlocked :: 1;
     k_EFriendFlagFriendshipRequested :: 2;
@@ -3019,7 +4387,7 @@ EFriendFlags :: enum s32 {
     k_EFriendFlagAll :: 65535;
 }
 
-EUserRestriction :: enum s32 {
+EUserRestriction :: enum_flags u32 {
     k_nUserRestrictionNone :: 0;
     k_nUserRestrictionUnknown :: 1;
     k_nUserRestrictionAnyChat :: 2;
@@ -3041,7 +4409,7 @@ EActivateGameOverlayToWebPageMode :: enum s32 {
     k_EActivateGameOverlayToWebPageMode_Modal :: 1;
 }
 
-EPersonaChange :: enum s32 {
+EPersonaChange :: enum_flags u32 {
     k_EPersonaChangeName :: 1;
     k_EPersonaChangeStatus :: 2;
     k_EPersonaChangeComeOnline :: 4;
@@ -3122,7 +4490,7 @@ ELobbyDistanceFilter :: enum s32 {
     k_ELobbyDistanceFilterWorldwide :: 3;
 }
 
-EChatMemberStateChange :: enum s32 {
+EChatMemberStateChange :: enum_flags u32 {
     k_EChatMemberStateChangeEntered :: 1;
     k_EChatMemberStateChangeLeft :: 2;
     k_EChatMemberStateChangeDisconnected :: 4;
@@ -3144,7 +4512,7 @@ ESteamPartyBeaconLocationData :: enum s32 {
     k_ESteamPartyBeaconLocationDataIconURLLarge :: 4;
 }
 
-ERemoteStoragePlatform :: enum s32 {
+ERemoteStoragePlatform :: enum_flags u32 {
     k_ERemoteStoragePlatformNone :: 0;
     k_ERemoteStoragePlatformWindows :: 1;
     k_ERemoteStoragePlatformOSX :: 2;
@@ -3153,7 +4521,7 @@ ERemoteStoragePlatform :: enum s32 {
     k_ERemoteStoragePlatformSwitch :: 16;
     k_ERemoteStoragePlatformAndroid :: 32;
     k_ERemoteStoragePlatformIOS :: 64;
-    k_ERemoteStoragePlatformAll :: -1;
+    k_ERemoteStoragePlatformAll :: 4294967295;
 }
 
 ERemoteStoragePublishedFileVisibility :: enum s32 {
@@ -4161,7 +5529,7 @@ EItemUpdateStatus :: enum s32 {
     k_EItemUpdateStatusCommittingChanges :: 5;
 }
 
-EItemState :: enum s32 {
+EItemState :: enum_flags u32 {
     k_EItemStateNone :: 0;
     k_EItemStateSubscribed :: 1;
     k_EItemStateLegacyItem :: 2;
@@ -4590,77 +5958,218 @@ k_cbMaxSteamDatagramGameCoordinatorServerLoginAppData : uint32 : 2048;
 k_cbMaxSteamDatagramGameCoordinatorServerLoginSerialized : uint32 : 4096;
 
 SteamIPAddress_t :: struct {
-    m_rgubIPv6 : [16] uint8 ;
-    m_eType : ESteamIPType;
+    union {
+        m_rgubIPv6 : [16] uint8 ;
+        RgubIPv6 : [16] uint8 ;
+    }
+    union {
+        m_eType : ESteamIPType;
+        Type : ESteamIPType;
+    }
 }
 
 FriendGameInfo_t :: struct {
-    m_gameID : CGameID;
-    m_unGameIP : uint32;
-    m_usGamePort : uint16;
-    m_usQueryPort : uint16;
-    m_steamIDLobby : CSteamID;
+    union {
+        m_gameID : CGameID;
+        GameID : CGameID;
+    }
+    union {
+        m_unGameIP : uint32;
+        GameIP : uint32;
+    }
+    union {
+        m_usGamePort : uint16;
+        GamePort : uint16;
+    }
+    union {
+        m_usQueryPort : uint16;
+        QueryPort : uint16;
+    }
+    union {
+        m_steamIDLobby : CSteamID;
+        SteamIDLobby : CSteamID;
+    }
 }
 
 MatchMakingKeyValuePair_t :: struct {
-    m_szKey : [256] char ;
-    m_szValue : [256] char ;
+    union {
+        m_szKey : [256] char ;
+        Key : [256] char ;
+    }
+    union {
+        m_szValue : [256] char ;
+        Value : [256] char ;
+    }
 }
 
 servernetadr_t :: struct {
-    m_usConnectionPort : uint16;
-    m_usQueryPort : uint16;
-    m_unIP : uint32;
+    union {
+        m_usConnectionPort : uint16;
+        ConnectionPort : uint16;
+    }
+    union {
+        m_usQueryPort : uint16;
+        QueryPort : uint16;
+    }
+    union {
+        m_unIP : uint32;
+        IP : uint32;
+    }
 }
 
 gameserveritem_t :: struct {
-    m_NetAdr : servernetadr_t;
-    m_nPing : s32;
-    m_bHadSuccessfulResponse : bool;
-    m_bDoNotRefresh : bool;
-    m_szGameDir : [32] char ;
-    m_szMap : [32] char ;
-    m_szGameDescription : [64] char ;
-    m_nAppID : uint32;
-    m_nPlayers : s32;
-    m_nMaxPlayers : s32;
-    m_nBotPlayers : s32;
-    m_bPassword : bool;
-    m_bSecure : bool;
-    m_ulTimeLastPlayed : uint32;
-    m_nServerVersion : s32;
-    m_szServerName : [64] char ;
-    m_szGameTags : [128] char ;
-    m_steamID : CSteamID;
+    union {
+        m_NetAdr : servernetadr_t;
+        NetAdr : servernetadr_t;
+    }
+    union {
+        m_nPing : s32;
+        Ping : s32;
+    }
+    union {
+        m_bHadSuccessfulResponse : bool;
+        HadSuccessfulResponse : bool;
+    }
+    union {
+        m_bDoNotRefresh : bool;
+        DoNotRefresh : bool;
+    }
+    union {
+        m_szGameDir : [32] char ;
+        GameDir : [32] char ;
+    }
+    union {
+        m_szMap : [32] char ;
+        Map : [32] char ;
+    }
+    union {
+        m_szGameDescription : [64] char ;
+        GameDescription : [64] char ;
+    }
+    union {
+        m_nAppID : uint32;
+        AppID : uint32;
+    }
+    union {
+        m_nPlayers : s32;
+        Players : s32;
+    }
+    union {
+        m_nMaxPlayers : s32;
+        MaxPlayers : s32;
+    }
+    union {
+        m_nBotPlayers : s32;
+        BotPlayers : s32;
+    }
+    union {
+        m_bPassword : bool;
+        Password : bool;
+    }
+    union {
+        m_bSecure : bool;
+        Secure : bool;
+    }
+    union {
+        m_ulTimeLastPlayed : uint32;
+        TimeLastPlayed : uint32;
+    }
+    union {
+        m_nServerVersion : s32;
+        ServerVersion : s32;
+    }
+    union {
+        m_szServerName : [64] char ;
+        ServerName : [64] char ;
+    }
+    union {
+        m_szGameTags : [128] char ;
+        GameTags : [128] char ;
+    }
+    union {
+        m_steamID : CSteamID;
+        SteamID : CSteamID;
+    }
 }
 
 SteamPartyBeaconLocation_t :: struct {
-    m_eType : ESteamPartyBeaconLocationType;
-    m_ulLocationID : uint64;
+    union {
+        m_eType : ESteamPartyBeaconLocationType;
+        Type : ESteamPartyBeaconLocationType;
+    }
+    union {
+        m_ulLocationID : uint64;
+        LocationID : uint64;
+    }
 }
 
 SteamParamStringArray_t :: struct {
-    m_ppStrings : **char ;
-    m_nNumStrings : int32;
+    union {
+        m_ppStrings : **char ;
+        Strings : **char ;
+    }
+    union {
+        m_nNumStrings : int32;
+        NumStrings : int32;
+    }
 }
 
 LeaderboardEntry_t :: struct {
-    m_steamIDUser : CSteamID;
-    m_nGlobalRank : int32;
-    m_nScore : int32;
-    m_cDetails : int32;
-    m_hUGC : UGCHandle_t;
+    union {
+        m_steamIDUser : CSteamID;
+        SteamIDUser : CSteamID;
+    }
+    union {
+        m_nGlobalRank : int32;
+        GlobalRank : int32;
+    }
+    union {
+        m_nScore : int32;
+        Score : int32;
+    }
+    union {
+        m_cDetails : int32;
+        Details : int32;
+    }
+    union {
+        m_hUGC : UGCHandle_t;
+        UGC : UGCHandle_t;
+    }
 }
 
 P2PSessionState_t :: struct {
-    m_bConnectionActive : uint8;
-    m_bConnecting : uint8;
-    m_eP2PSessionError : uint8;
-    m_bUsingRelay : uint8;
-    m_nBytesQueuedForSend : int32;
-    m_nPacketsQueuedForSend : int32;
-    m_nRemoteIP : uint32;
-    m_nRemotePort : uint16;
+    union {
+        m_bConnectionActive : uint8;
+        ConnectionActive : uint8;
+    }
+    union {
+        m_bConnecting : uint8;
+        Connecting : uint8;
+    }
+    union {
+        m_eP2PSessionError : uint8;
+        P2PSessionError : uint8;
+    }
+    union {
+        m_bUsingRelay : uint8;
+        UsingRelay : uint8;
+    }
+    union {
+        m_nBytesQueuedForSend : int32;
+        BytesQueuedForSend : int32;
+    }
+    union {
+        m_nPacketsQueuedForSend : int32;
+        PacketsQueuedForSend : int32;
+    }
+    union {
+        m_nRemoteIP : uint32;
+        RemoteIP : uint32;
+    }
+    union {
+        m_nRemotePort : uint16;
+        RemotePort : uint16;
+    }
 }
 
 InputAnalogActionData_t :: struct {
@@ -4689,39 +6198,129 @@ InputMotionData_t :: struct {
 }
 
 SteamUGCDetails_t :: struct {
-    m_nPublishedFileId : PublishedFileId_t;
-    m_eResult : EResult;
-    m_eFileType : EWorkshopFileType;
-    m_nCreatorAppID : AppId_t;
-    m_nConsumerAppID : AppId_t;
-    m_rgchTitle : [129] char ;
-    m_rgchDescription : [8000] char ;
-    m_ulSteamIDOwner : uint64;
-    m_rtimeCreated : uint32;
-    m_rtimeUpdated : uint32;
-    m_rtimeAddedToUserList : uint32;
-    m_eVisibility : ERemoteStoragePublishedFileVisibility;
-    m_bBanned : bool;
-    m_bAcceptedForUse : bool;
-    m_bTagsTruncated : bool;
-    m_rgchTags : [1025] char ;
-    m_hFile : UGCHandle_t;
-    m_hPreviewFile : UGCHandle_t;
-    m_pchFileName : [260] char ;
-    m_nFileSize : int32;
-    m_nPreviewFileSize : int32;
-    m_rgchURL : [256] char ;
-    m_unVotesUp : uint32;
-    m_unVotesDown : uint32;
-    m_flScore : float;
-    m_unNumChildren : uint32;
+    union {
+        m_nPublishedFileId : PublishedFileId_t;
+        PublishedFileId : PublishedFileId_t;
+    }
+    union {
+        m_eResult : EResult;
+        Result : EResult;
+    }
+    union {
+        m_eFileType : EWorkshopFileType;
+        FileType : EWorkshopFileType;
+    }
+    union {
+        m_nCreatorAppID : AppId_t;
+        CreatorAppID : AppId_t;
+    }
+    union {
+        m_nConsumerAppID : AppId_t;
+        ConsumerAppID : AppId_t;
+    }
+    union {
+        m_rgchTitle : [129] char ;
+        RgchTitle : [129] char ;
+    }
+    union {
+        m_rgchDescription : [8000] char ;
+        RgchDescription : [8000] char ;
+    }
+    union {
+        m_ulSteamIDOwner : uint64;
+        SteamIDOwner : uint64;
+    }
+    union {
+        m_rtimeCreated : uint32;
+        RtimeCreated : uint32;
+    }
+    union {
+        m_rtimeUpdated : uint32;
+        RtimeUpdated : uint32;
+    }
+    union {
+        m_rtimeAddedToUserList : uint32;
+        RtimeAddedToUserList : uint32;
+    }
+    union {
+        m_eVisibility : ERemoteStoragePublishedFileVisibility;
+        Visibility : ERemoteStoragePublishedFileVisibility;
+    }
+    union {
+        m_bBanned : bool;
+        Banned : bool;
+    }
+    union {
+        m_bAcceptedForUse : bool;
+        AcceptedForUse : bool;
+    }
+    union {
+        m_bTagsTruncated : bool;
+        TagsTruncated : bool;
+    }
+    union {
+        m_rgchTags : [1025] char ;
+        RgchTags : [1025] char ;
+    }
+    union {
+        m_hFile : UGCHandle_t;
+        File : UGCHandle_t;
+    }
+    union {
+        m_hPreviewFile : UGCHandle_t;
+        PreviewFile : UGCHandle_t;
+    }
+    union {
+        m_pchFileName : [260] char ;
+        FileName : [260] char ;
+    }
+    union {
+        m_nFileSize : int32;
+        FileSize : int32;
+    }
+    union {
+        m_nPreviewFileSize : int32;
+        PreviewFileSize : int32;
+    }
+    union {
+        m_rgchURL : [256] char ;
+        RgchURL : [256] char ;
+    }
+    union {
+        m_unVotesUp : uint32;
+        VotesUp : uint32;
+    }
+    union {
+        m_unVotesDown : uint32;
+        VotesDown : uint32;
+    }
+    union {
+        m_flScore : float;
+        Score : float;
+    }
+    union {
+        m_unNumChildren : uint32;
+        NumChildren : uint32;
+    }
 }
 
 SteamItemDetails_t :: struct {
-    m_itemId : SteamItemInstanceID_t;
-    m_iDefinition : SteamItemDef_t;
-    m_unQuantity : uint16;
-    m_unFlags : uint16;
+    union {
+        m_itemId : SteamItemInstanceID_t;
+        ItemId : SteamItemInstanceID_t;
+    }
+    union {
+        m_iDefinition : SteamItemDef_t;
+        Definition : SteamItemDef_t;
+    }
+    union {
+        m_unQuantity : uint16;
+        Quantity : uint16;
+    }
+    union {
+        m_unFlags : uint16;
+        Flags : uint16;
+    }
 }
 
 SteamNetworkingIPAddr :: struct {
@@ -4730,57 +6329,171 @@ SteamNetworkingIPAddr :: struct {
 }
 
 SteamNetworkingIdentity :: struct {
-    m_eType : ESteamNetworkingIdentityType;
-    m_cbSize : s32;
-    m_szUnknownRawString : [128] char ;
+    union {
+        m_eType : ESteamNetworkingIdentityType;
+        Type : ESteamNetworkingIdentityType;
+    }
+    union {
+        m_cbSize : s32;
+        Size : s32;
+    }
+    union {
+        m_szUnknownRawString : [128] char ;
+        UnknownRawString : [128] char ;
+    }
 }
 
 SteamNetConnectionInfo_t :: struct {
-    m_identityRemote : SteamNetworkingIdentity;
-    m_nUserData : int64;
-    m_hListenSocket : HSteamListenSocket;
-    m_addrRemote : SteamNetworkingIPAddr;
+    union {
+        m_identityRemote : SteamNetworkingIdentity;
+        IdentityRemote : SteamNetworkingIdentity;
+    }
+    union {
+        m_nUserData : int64;
+        UserData : int64;
+    }
+    union {
+        m_hListenSocket : HSteamListenSocket;
+        ListenSocket : HSteamListenSocket;
+    }
+    union {
+        m_addrRemote : SteamNetworkingIPAddr;
+        AddrRemote : SteamNetworkingIPAddr;
+    }
     m__pad1 : uint16;
-    m_idPOPRemote : SteamNetworkingPOPID;
-    m_idPOPRelay : SteamNetworkingPOPID;
-    m_eState : ESteamNetworkingConnectionState;
-    m_eEndReason : s32;
-    m_szEndDebug : [128] char ;
-    m_szConnectionDescription : [128] char ;
-    m_eTransportKind : ESteamNetTransportKind;
+    union {
+        m_idPOPRemote : SteamNetworkingPOPID;
+        POPRemote : SteamNetworkingPOPID;
+    }
+    union {
+        m_idPOPRelay : SteamNetworkingPOPID;
+        POPRelay : SteamNetworkingPOPID;
+    }
+    union {
+        m_eState : ESteamNetworkingConnectionState;
+        State : ESteamNetworkingConnectionState;
+    }
+    union {
+        m_eEndReason : s32;
+        EndReason : s32;
+    }
+    union {
+        m_szEndDebug : [128] char ;
+        EndDebug : [128] char ;
+    }
+    union {
+        m_szConnectionDescription : [128] char ;
+        ConnectionDescription : [128] char ;
+    }
+    union {
+        m_eTransportKind : ESteamNetTransportKind;
+        TransportKind : ESteamNetTransportKind;
+    }
     reserved : [63] uint32 ;
 }
 
 SteamNetworkingQuickConnectionStatus :: struct {
-    m_eState : ESteamNetworkingConnectionState;
-    m_nPing : s32;
-    m_flConnectionQualityLocal : float;
-    m_flConnectionQualityRemote : float;
-    m_flOutPacketsPerSec : float;
-    m_flOutBytesPerSec : float;
-    m_flInPacketsPerSec : float;
-    m_flInBytesPerSec : float;
-    m_nSendRateBytesPerSecond : s32;
-    m_cbPendingUnreliable : s32;
-    m_cbPendingReliable : s32;
-    m_cbSentUnackedReliable : s32;
-    m_usecQueueTime : SteamNetworkingMicroseconds;
+    union {
+        m_eState : ESteamNetworkingConnectionState;
+        State : ESteamNetworkingConnectionState;
+    }
+    union {
+        m_nPing : s32;
+        Ping : s32;
+    }
+    union {
+        m_flConnectionQualityLocal : float;
+        ConnectionQualityLocal : float;
+    }
+    union {
+        m_flConnectionQualityRemote : float;
+        ConnectionQualityRemote : float;
+    }
+    union {
+        m_flOutPacketsPerSec : float;
+        OutPacketsPerSec : float;
+    }
+    union {
+        m_flOutBytesPerSec : float;
+        OutBytesPerSec : float;
+    }
+    union {
+        m_flInPacketsPerSec : float;
+        InPacketsPerSec : float;
+    }
+    union {
+        m_flInBytesPerSec : float;
+        InBytesPerSec : float;
+    }
+    union {
+        m_nSendRateBytesPerSecond : s32;
+        SendRateBytesPerSecond : s32;
+    }
+    union {
+        m_cbPendingUnreliable : s32;
+        PendingUnreliable : s32;
+    }
+    union {
+        m_cbPendingReliable : s32;
+        PendingReliable : s32;
+    }
+    union {
+        m_cbSentUnackedReliable : s32;
+        SentUnackedReliable : s32;
+    }
+    union {
+        m_usecQueueTime : SteamNetworkingMicroseconds;
+        UsecQueueTime : SteamNetworkingMicroseconds;
+    }
     reserved : [16] uint32 ;
 }
 
 SteamNetworkingMessage_t :: struct {
-    m_pData : *void ;
-    m_cbSize : s32;
+    union {
+        m_pData : *void ;
+        Data : *void ;
+    }
+    union {
+        m_cbSize : s32;
+        Size : s32;
+    }
     m_conn : HSteamNetConnection;
-    m_identityPeer : SteamNetworkingIdentity;
-    m_nConnUserData : int64;
-    m_usecTimeReceived : SteamNetworkingMicroseconds;
-    m_nMessageNumber : int64;
-    m_pfnFreeData : *void;
-    m_pfnRelease : *void;
-    m_nChannel : s32;
-    m_nFlags : s32;
-    m_nUserData : int64;
+    union {
+        m_identityPeer : SteamNetworkingIdentity;
+        IdentityPeer : SteamNetworkingIdentity;
+    }
+    union {
+        m_nConnUserData : int64;
+        ConnUserData : int64;
+    }
+    union {
+        m_usecTimeReceived : SteamNetworkingMicroseconds;
+        UsecTimeReceived : SteamNetworkingMicroseconds;
+    }
+    union {
+        m_nMessageNumber : int64;
+        MessageNumber : int64;
+    }
+    union {
+        m_pfnFreeData : *void;
+        FreeData : *void;
+    }
+    union {
+        m_pfnRelease : *void;
+        Release : *void;
+    }
+    union {
+        m_nChannel : s32;
+        Channel : s32;
+    }
+    union {
+        m_nFlags : s32;
+        Flags : s32;
+    }
+    union {
+        m_nUserData : int64;
+        UserData : int64;
+    }
 }
 
 SteamNetworkPingLocation_t :: struct {
@@ -4788,8 +6501,14 @@ SteamNetworkPingLocation_t :: struct {
 }
 
 SteamNetworkingConfigValue_t :: struct {
-    m_eValue : ESteamNetworkingConfigValue;
-    m_eDataType : ESteamNetworkingConfigDataType;
+    union {
+        m_eValue : ESteamNetworkingConfigValue;
+        Value : ESteamNetworkingConfigValue;
+    }
+    union {
+        m_eDataType : ESteamNetworkingConfigDataType;
+        DataType : ESteamNetworkingConfigDataType;
+    }
     m_int64 : int64_t;
 }
 
@@ -4806,17 +6525,29 @@ SteamNetworkingIPAddrRender :: struct {
 }
 
 SteamDatagramHostedAddress :: struct {
-    m_cbSize : s32;
+    union {
+        m_cbSize : s32;
+        Size : s32;
+    }
     m_data : [128] char ;
 }
 
 SteamDatagramGameCoordinatorServerLogin :: struct {
     m_identity : SteamNetworkingIdentity;
     m_routing : SteamDatagramHostedAddress;
-    m_nAppID : AppId_t;
+    union {
+        m_nAppID : AppId_t;
+        AppID : AppId_t;
+    }
     m_rtime : RTime32;
-    m_cbAppData : s32;
-    m_appData : [2048] char ;
+    union {
+        m_cbAppData : s32;
+        AppData : s32;
+    }
+    union {
+        m_appData : [2048] char ;
+        Data : [2048] char ;
+    }
 }
 ISteamClient :: struct {};
 ISteamUser :: struct {};
@@ -4894,7 +6625,7 @@ EMouseCursor :: enum s32 {
     dc_last :: 41;
 }
 
-EHTMLKeyModifiers :: enum s32 {
+EHTMLKeyModifiers :: enum_flags u32 {
     k_eHTMLKeyModifier_None :: 0;
     k_eHTMLKeyModifier_AltDown :: 1;
     k_eHTMLKeyModifier_CtrlDown :: 2;
@@ -5221,6 +6952,10 @@ ValvePackingSentinel_t :: struct {
     m_u64 : uint64;
     m_u16 : uint16;
     m_d : double;
+}
+
+IsValid :: (steam_id: CSteamID) -> bool {
+	return steam_id != 0; // @TODO @Urgent this is not right
 }
 
 

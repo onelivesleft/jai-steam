@@ -5,8 +5,7 @@ call :setESC
 
 cls
 
-c:
-c:\jai\bin\jai.exe build.jai
+jai.exe build.jai -import_dir ../../
 
 if NOT ["%errorlevel%"]==["0"] goto norun
 echo.

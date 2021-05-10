@@ -63,6 +63,29 @@ is_upper :: inline (c: u8) -> bool {
 }
 
 
+sane_name :: inline (name: string) -> string #must {
+    if name.count < 3 || !is_lower(name[0]) || name[1] != #char "_"
+        return name;
+    result := name;
+    for i: 2 .. result.count - 1 {
+        if is_upper(result[i]) {
+            result.data += i;
+            result.count -= i;
+            break;
+        }
+    }
+    if result != name {
+        if result.count < name.count - 5 { // prefix is an actual type, not just gibberish
+            result.data = name.data + 2;
+            result.count = name.count - 2;
+            result = copy_string(result);
+            result[0] = to_upper(result[0]);
+        }
+    }
+    return result;
+}
+
+
 snake_from_camel :: inline (str: string, preserve_caps := false) -> string #must {
     if str == ""  return "";
 

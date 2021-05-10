@@ -69,9 +69,6 @@ shots : [MAX_SHOTS] Shot;
 MAX_SHOTS :: 1024;
 next_shot_index := 0;
 
-
-prev_raw_time : float64;
-raw_time : float64;
 now : float64;
 dt : float32;
 
@@ -89,38 +86,30 @@ debug_triangles : [1] Triangle = .[Triangle.{ // @TODO remove
 
 
 main :: () {
-    { // @Steam
-        init_steam := InitSteam();
-        if !init_steam {
-            log_error("Failed to initialize Steam");
-            exit(1);
-        }
+    if !InitSteam() {  // @Steam
+        log_error("Failed to initialize Steam");
+        exit(1);
     }
 
     init();
 
     while !quit {
-        prev_raw_time = raw_time;
-        raw_time = get_time();
-        dt = cast(float32) (raw_time - prev_raw_time);
-        now = raw_time - paused_delta;
-
-        was_paused := paused;
+        prev_time := now;
+        now = get_time();
+        dt = cast(float32) (now - prev_time);
 
         RunCallbacks();  // @Steam
         handle_window_events();
         handle_steam_input();
         run_scheduled_tasks();
 
-        if was_paused
-            one_menu_tick();
-        else
-            one_game_tick();
+        one_game_tick();
+        if in_menu  one_menu_tick();
 
         draw_one_frame();
 
         reset_temporary_storage();
-        sleep_milliseconds(10);
+        sleep_milliseconds(cast,trunc(s32)(max(1.0, 10 - dt / 1000)));
     }
 
     run_scheduled_tasks(force = true);
@@ -138,7 +127,10 @@ init :: () {
     init_fonts();
 
     me = *players[0];
-    make_player(me, GetSteamID(), GetPersonaName(), .{width / 4, height / 2}, .{1, 0.5, 0, 0});
+    handle := GetSteamID();  // @Steam
+    name   := GetPersonaName(); // @Steam
+    make_player(me, handle, name, .{width / 4, height / 2}, .{1, 0.5, 0, 0});
+    respawn_player(me);
     load_settings();
 
     register_steam_input();
@@ -184,7 +176,7 @@ randomize_player_color :: () {
         hue = random_get_zero_to_one();
     current_hue = hue;
     set_player_color(me, rgb_from_hsl(hue, 1.0, 0.6));
-    player_color_randomized_at = raw_time;
+    player_color_randomized_at = now;
 }
 
 
@@ -194,9 +186,26 @@ set_player_color :: (player: *Player, color: Vector4) {
 }
 
 
-kill :: (player: *Player, culprit: *Player) {
-    player.position = .{width / 4, height / 2};
-    player.velocity = .{0, 0};
+kill_player :: (player: *Player, culprit: *Player) {
+    //if player == culprit:
+    //    reduce_score(player);
+    //else:
+    //    increase_score(culprit);
+    respawn_player(player);
+}
+
+
+respawn_player :: (player: *Player) {
+    // @TODO find position far from others
+    initial_velocity :: 0.75;
+    if random_get() % 2 {
+        player.position = .{width / 4, height / 2};
+        player.velocity = .{0, +initial_velocity};
+    }
+    else {
+        player.position = .{width - width / 4, height / 2};
+        player.velocity = .{0, -initial_velocity};
+    }
 }
 
 
@@ -214,7 +223,6 @@ handle_window_events :: () {
             case .KEYBOARD;
             if event.key_pressed {
                 if event.key_code == {
-                    case .SPACEBAR; // @TODO remove
                     case .F6; // @TODO remove
                     quit = true;
 
@@ -222,14 +230,14 @@ handle_window_events :: () {
                     randomize_debug_triangle();
 
                     case .ESCAPE;
-                    if paused  menu_cancel();
-                    else       set_pause(true, .USER);
+                    if in_menu  menu_cancel();
+                    else        set_menu(true);
                 }
             }
 
             check_input :: (key_code: Key_Code, proc: () -> (), key: *bool) #expand {
                 if `event.key_code == key_code {
-                    if paused {
+                    if in_menu {
                         if `event.key_pressed  proc();
                     }
                     else
@@ -252,7 +260,7 @@ run_scheduled_tasks :: (force := false) {
         setting_load_interval :: 0.5;
         load_settings_attempts -= 1;
         if load_settings_attempts {
-            if force || raw_time > failed_load_settings_at + setting_load_interval {
+            if force || now > failed_load_settings_at + setting_load_interval {
                 load_settings();
             }
         }
@@ -264,7 +272,7 @@ run_scheduled_tasks :: (force := false) {
 
     if player_color_randomized_at {
         setting_store_interval :: 5.0;
-        if force || raw_time > player_color_randomized_at + setting_store_interval {
+        if force || now > player_color_randomized_at + setting_store_interval {
             store_settings();
             player_color_randomized_at = 0;
         }
@@ -289,7 +297,7 @@ one_game_tick :: () {
         position += velocity;
 
         if player_inside_planet(player)
-            kill(player, player);
+            kill_player(player, player);
 
         wrap_object(player);
 
@@ -331,7 +339,7 @@ one_game_tick :: () {
                 if now > fired_at + ARMING_DELAY {
                     for * player: active_players {
                         if line_segment_inside_player(old_position, shot.position, player) {
-                            kill(player, shot.player);
+                            kill_player(player, shot.player);
                             break;
                         }
                     }
@@ -388,9 +396,6 @@ attract :: (planet: Planet, object: *Object) {
     c := cos(theta);
     s := sin(theta);
 
-    dp := abs(dot_product(d, object.velocity));
-    dp = sqrt(dp);
-
     object.velocity.x = object.velocity.x + c * f;
     object.velocity.y = object.velocity.y + s * f;
 }
@@ -402,8 +407,8 @@ attract :: (planet: Planet, object: *Object) {
 
 
 ship : Ship(ship_length, ship_width, ship_cut);
-menu_factor :: 3;
-ship_menu : Ship(ship_length * menu_factor, ship_width * menu_factor, ship_cut);
+menu_scale :: 3;
+ship_menu : Ship(ship_length * menu_scale, ship_width * menu_scale, ship_cut);
 laser_bolt : Ship(ship_length / 5, ship_length / 5, 1);
 the_planet :: Planet.{position = .{x = width / 2, y = height / 2}, radius = width / 20, gravity = 0.00025};
 
@@ -434,7 +439,7 @@ Player :: struct {
     buffer     : [MAX_NAME_LENGTH] u8;  // @TODO move to player_buffer
     name       : string;
     label      : Label;
-    handle     : CSteamID;
+    handle     : CSteamID;  // @Steam
     color      : Vector4;
     shot_color : Vector4;
     score      : int;
@@ -507,28 +512,20 @@ keys : struct {
 
 
 
-paused : enum_flags u8 {
-    USER  :: 1;
-    STEAM :: 2;
-} = .USER;
+in_menu : bool = true;
+steam_overlay_is_active : bool;
 
 
-paused_at : float64;
-paused_delta : float64;
-
-
-set_pause :: (should_pause: bool, pause_type: type_of(paused)) {
-    if should_pause {
-        if !paused {
-            paused_at = raw_time;
+set_menu :: (menu_should_be_active: bool) {
+    if menu_should_be_active {
+        if !in_menu {
+            in_menu = true;
             current_menu = .MAIN;
             menu_current_index[Menu.MAIN] = 0;
         }
-        paused |= pause_type;
     }
     else {
-        paused &= ~pause_type;
-        if !paused  paused_delta += raw_time - paused_at;
+        in_menu = false;
     }
 }
 
@@ -630,7 +627,7 @@ menu_select :: () {
         menu_item := main_menu[menu_current_index[current_menu]];
         if menu_item == {
             case .PLAY;
-            set_pause(false, .USER);
+            set_menu(false);
 
             case .COLOR;
             randomize_player_color();
@@ -655,16 +652,16 @@ menu_select :: () {
                 // @TODO kick(menu_item)
             }
             else { // lobby list
-                // @TODO join_lobby(menu_item + lobby_offset)
+                lobby, ok := lobby_from_menu_index(menu_index);
+                if ok  join_lobby(lobby.handle);
             }
-
         }
     }
 }
 
 
 menu_cancel :: () {
-    set_pause(false, .USER);
+    set_menu(false);
 }
 
 
@@ -716,7 +713,7 @@ get_menu_label :: (menu_item: Menu_Item) -> string {
     return menu_item.label;
 }
 
-/*
+/*  // @TODO remove or use
 find_index :: (index: Menu_ID, menu: [] Menu_ID) -> int {
     for menu  if it == index  return it_index;
     return 0; // never happens
@@ -747,32 +744,34 @@ color_menu_label          :: Vector4.{0.5, 0.5, 0.5, 1};
 draw_one_frame :: () {
     Simp.update_window(window, window_width, window_height, render_width, render_height);
 
-    Simp.set_shader_for_color();
-    if !paused {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        Simp.immediate_quad(0, 0, width, height, color_background);
-    }
+    if !steam_overlay_is_active {
+        Simp.set_shader_for_color();
+        if !in_menu {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            Simp.immediate_quad(0, 0, width, height, color_background);
+        }
 
-    for player: active_players
-        draw_player(player);
-
-    for shot: shots
-        if shot.fired_at
-            draw_shot(shot);
-
-    draw_planet(the_planet);
-
-
-    if paused {
-        draw_menu();
-    }
-    else {
         for player: active_players
-            draw_player_name(player);
-    }
+            draw_player(player);
 
-    //draw_debug_info();
+        for shot: shots
+            if shot.fired_at
+                draw_shot(shot);
+
+        draw_planet(the_planet);
+
+
+        if in_menu {
+            draw_menu();
+        }
+        else {
+            for player: active_players
+                draw_player_name(player);
+        }
+
+        //draw_debug_info();
+    }
 
     Simp.swap_buffers(window);
 }
@@ -863,7 +862,7 @@ draw_menu :: () {
     }
 
 
-    //  menu text
+    //  menu text (draw all text after all triangles, so as to only swap shaders once)
 
     x = left;
     y = top;
@@ -953,7 +952,7 @@ draw_menu :: () {
         }
     }
 
-    if menu_list_page_last_index > 0 {
+    if menu_list_page_last_index >= 0 {
         y = height - top - (font_height_list + spacing);
         page := ifx menu_list_page >= 0 then tprint("%/%", menu_list_page + 1, menu_list_page_last_index + 1)
                                         else "Lobbies >";
@@ -994,7 +993,7 @@ draw_shot :: (shot: Shot) {
 
 draw_arrow :: (x: float, y: float, pointing_right: bool, color := color_menu_text) {
     length :: ship_length;
-    half_height :: ship_length; //(font_height_list + font_height_menu / 4) * list_per_page / 4;
+    half_height :: ship_length;
     t :: Triangle.[
         .{.{length * 0.5, 0, 0}, Vector3.{-length * 0.5, -half_height, 0}, Vector3.{-length * 0.125, 0, 0}},
         .{.{length * 0.5, 0, 0}, Vector3.{-length * 0.5, +half_height, 0}, Vector3.{-length * 0.125, 0, 0}},
@@ -1002,7 +1001,7 @@ draw_arrow :: (x: float, y: float, pointing_right: bool, color := color_menu_tex
 
     r := ifx pointing_right then 0 else PI;
     c := color;
-    c.w = abs(sin(cast(float32) raw_time));
+    c.w = abs(sin(cast(float32) now));
     draw_triangles(v2(x, y), r, t, c);
 }
 
@@ -1478,7 +1477,7 @@ handle_steam_input :: () {
             player.controller = controller;
         if controller != player.controller  continue;
 
-        if paused {
+        if in_menu {
             ActivateActionSet(controller, menu_action_set);
 
             check_input :: (action: InputAnalogActionHandle_t, menu_input: type_of(menu_input_state), proc: () -> ()) #expand {
@@ -1527,7 +1526,7 @@ handle_steam_input :: () {
 
             if GetDigitalActionData(controller, action_pause_menu).bState {
                 if !player.pausing {
-                    set_pause(!paused, .USER);
+                    set_menu(!in_menu);
                     player.pausing = true;
                 }
             }
@@ -1561,7 +1560,7 @@ lobby_buffer_cursor := 0;
 current_lobby : Lobby;
 
 Lobby :: struct {
-    handle : CSteamID;
+    handle       : CSteamID;
     host_name    : string;
     player_count : int;
 }
@@ -1607,15 +1606,15 @@ stash_lobby_name_string :: (s: string) -> result: string {
 create_lobby :: () {
     log("Attempting to create lobby...");
     hosted_lobby = 0;
-    last_lobby_creation_attempt = raw_time;
+    last_lobby_creation_attempt = now;
 
     CreateLobby(lobby_type(hosted_lobby_is_public), MAX_PLAYERS, #code {
-        if result.m_eResult != .k_EResultOK {
+        if result.Result != .k_EResultOK {
             log_error("Failed to create lobby");
-            return;
+            return 0;
         }
 
-        `hosted_lobby = result.m_ulSteamIDLobby;
+        `hosted_lobby = result.SteamIDLobby;
         SetLobbyData(`hosted_lobby, "Language", "Jai");
         SetLobbyData(`hosted_lobby, "HostName", to_c_string(`me.name));
         SetLobbyData(`hosted_lobby, "PlayerCount", "1");
@@ -1632,12 +1631,13 @@ create_lobby :: () {
 
 
 join_lobby :: (lobby_id: CSteamID) {
+    leave_current_lobby();
     JoinLobby(lobby_id);
 }
 
 
-lobby_joined :: (result: LobbyEnter_t) {
-    joined_lobby = result.m_ulSteamIDLobby;
+lobby_joined :: (lobby_enter: LobbyEnter_t) {
+    joined_lobby = lobby_enter.SteamIDLobby;
     if hosted_lobby != joined_lobby  hosted_lobby = 0;
     update_current_lobby_info();
 
@@ -1645,9 +1645,16 @@ lobby_joined :: (result: LobbyEnter_t) {
 } @SteamCallback
 
 
-lobby_chat_update :: (result: LobbyChatUpdate_t) {
+lobby_chat_update :: (update: LobbyChatUpdate_t) {
+    if joined_lobby != hosted_lobby
+    || update.SteamIDLobby != hosted_lobby
+    || update.SteamIDUserChanged == me.handle
+        return;
 
-}
+    //if update.ChatMemberStateChange & EChatMemberStateChange.k_EChatMemberStateChangeLeft {
+        // remove_player(update.SteamIDUserChanged);
+    //}
+} @SteamCallback
 
 
 lobby_type :: inline (is_public: bool) -> ELobbyType {
@@ -1697,10 +1704,10 @@ request_lobbies :: () {
         AddRequestLobbyListStringFilter("Language", "Jai", .k_ELobbyComparisonEqual);
 
         RequestLobbyList(#code {
-            if !`hosted_lobby_is_public  return;  // We're in friends-only mode, so ignore these public lobbies
+            if !`hosted_lobby_is_public  return 0;  // We're in friends-only mode, so ignore these public lobbies
 
             array_reset(*`lobby_list);
-            lobby_count : int = result.m_nLobbiesMatching;  // needs explicit type to avoid unsigned wrap-around in for loop
+            lobby_count : int = result.LobbiesMatching;  // needs explicit type to avoid unsigned wrap-around in for loop
             #if verbose  log("Found lobbies: %", lobby_count);
             for lobby_index: 0 .. lobby_count - 1 {
                 handle := GetLobbyByIndex(xx lobby_index);
@@ -1732,12 +1739,12 @@ request_lobbies :: () {
             friend_handle := GetFriendByIndex(i, .k_EFriendFlagImmediate);
             game_info : FriendGameInfo_t = ---;
 
-            if GetFriendGamePlayed(friend_handle, *game_info) && game_info.m_gameID == steam_appid {
+            if GetFriendGamePlayed(friend_handle, *game_info) && game_info.GameID == steam_appid {
                 log("%", game_info);
             }
-            if GetFriendGamePlayed(friend_handle, *game_info) && IsValid(game_info.m_steamIDLobby) {
+            if GetFriendGamePlayed(friend_handle, *game_info) && IsValid(game_info.SteamIDLobby) {
                 lobby_count += 1;
-                lobby_handle := game_info.m_steamIDLobby;
+                lobby_handle := game_info.SteamIDLobby;
                 RequestLobbyData(lobby_handle);
                 add_lobby(lobby_handle, GetFriendPersonaName(friend_handle), "1");
             }
@@ -1748,12 +1755,11 @@ request_lobbies :: () {
 
 
 lobby_data_update :: (result: LobbyDataUpdate_t) {
-    handle := result.m_ulSteamIDLobby;
+    handle := result.SteamIDLobby;
     for * lobby, lobby_index: lobby_list {
         if lobby.handle == handle {
             if GetLobbyData(handle, "Language") == "Jai" {
                 lobby.host_name = stash_lobby_name_string(GetLobbyData(handle, "HostName"));
-
                 player_count, ok := parse_int(*GetLobbyData(handle, "PlayerCount"));
                 lobby.player_count = ifx ok then player_count else 0;
             }
@@ -1828,7 +1834,7 @@ load_settings :: () {
     if handle
         failed_load_settings_at = 0;
     else {
-        failed_load_settings_at = raw_time;
+        failed_load_settings_at = now;
         log_error("FileReadAsync failure");
     }
 }
@@ -1840,5 +1846,5 @@ load_settings :: () {
 
 
 overlay_activated :: (info: GameOverlayActivated_t) {
-    set_pause(cast(bool) info.m_bActive, .STEAM);
+    steam_overlay_is_active = cast(bool) info.m_bActive;
 } @SteamCallback

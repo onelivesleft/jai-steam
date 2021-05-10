@@ -117,6 +117,23 @@ const_val_replacements :: Replacement.[
     .{"( SteamItemInstanceID_t )", "cast(SteamItemInstanceID_t)"},
 ];
 
+enums_which_are_flags :: string.[
+    "EAppOwnershipFlags",
+    "EAppType",
+    "EMarketingMessageFlags",
+    "EChatSteamIDInstanceFlags",
+    "EMarketNotAllowedReasonFlags",
+    "EFriendFlags",
+    "EUserRestriction",
+    "ERemoteStoragePlatform",
+    "EItemState",
+    "EHTMLKeyModifiers",
+    "EChatMemberStateChange",
+    "EPersonaChange",
+];
+
+enum_type_from_sane_name : Table(string, string);
+
 
 procs_builder          : String_Builder;
 types_builder          : String_Builder;
@@ -414,6 +431,59 @@ convert_steam_api_json :: (file_data: string) {
 
     out :: types_out;
 
+    output_struct :: (bracket: int, field_name: string, old_field_type: string) {
+        sane_field_name := sane_name(field_name);
+        field_type := old_field_type;
+        if sane_field_name != field_name {
+
+            if bracket == -1 {
+                out("    union {\n");
+                out("        % : %;\n", field_name, field_type);
+                out("        % : %;\n", sane_name(field_name), field_type);
+                out("    }\n");
+            }
+            else {
+                out("    union {\n");
+                out("        % : % %;\n", field_name,
+                                        slice(field_type, bracket, field_type.count - bracket),
+                                        slice(field_type, 0, bracket));
+                out("        % : % %;\n", sane_name(field_name),
+                                        slice(field_type, bracket, field_type.count - bracket),
+                                        slice(field_type, 0, bracket));
+                out("    }\n");
+            }
+        }
+        else {
+            if bracket == -1 {
+                out("    % : %;\n", field_name, field_type);
+            }
+            else {
+                out("    % : % %;\n", field_name,
+                                        slice(field_type, bracket, field_type.count - bracket),
+                                        slice(field_type, 0, bracket));
+            }
+        }
+    }
+
+    gather_enums  :: (key: string, node: JSON_Value, depth: int = 0) {
+        if node.type == .ARRAY {
+            for node.value.array {
+                gather_enums(key, it, depth + 1);
+            }
+            if key =="enums" {
+                for node.value.array {
+                    object := it.value.object;
+                    enum_name := get_str(object, "enumname");
+                    table_set(*enum_type_from_sane_name, mid(enum_name, 1), enum_name);
+                }
+            }
+        }
+        else if node.type == .OBJECT {
+            for node.value.object {
+                gather_enums(it_index, it, depth + 1);
+            }
+        }
+    }
 
     traverse_node :: (key: string, node: JSON_Value, depth: int = 0) {
         const_name : JSON_Value;
@@ -482,11 +552,22 @@ convert_steam_api_json :: (file_data: string) {
                         enum_values := get_array(object, "values");
                         //print("%\n", enum_values);
                         //print("A");
-                        out("\n% :: enum s32 {\n", enum_name);
+                        is_flags := contains(enums_which_are_flags, enum_name);
+                        if is_flags
+                            out("\n% :: enum_flags u32 {\n", enum_name);
+                        else
+                            out("\n% :: enum s32 {\n", enum_name);
                         for enum_values {
                             object := it.value.object;
                             name := get_str(object, "name");
                             value := get_str(object, "value");
+                            if is_flags {
+                                number := value;
+                                i, is_num := parse_int(*number);
+                                if is_num && i < 0 {
+                                    value = sprint("%", cast,no_check(u32)i);
+                                }
+                            }
                             out("    % :: %;\n", name, value);
                         }
                         out("}\n");
@@ -512,12 +593,7 @@ convert_steam_api_json :: (file_data: string) {
                             else if contains(field_type, "(*)")
                                 field_type = "*void";
                             bracket := index_of_string(field_type, "[");
-                            if bracket == -1
-                                out("    % : %;\n", field_name, field_type);
-                            else
-                                out("    % : % %;\n", field_name,
-                                                        slice(field_type, bracket, field_type.count - bracket),
-                                                        slice(field_type, 0, bracket));
+                            output_struct(bracket, field_name, field_type);
                         }
                         out("}\n");
                     }
@@ -561,12 +637,7 @@ convert_steam_api_json :: (file_data: string) {
                             else if contains(field_type, "(*)")
                                 field_type = "*void";
                             bracket := index_of_string(field_type, "[");
-                            if bracket == -1
-                                out("    % : %;\n", field_name, field_type);
-                            else
-                                out("    % : % %;\n", field_name,
-                                                        slice(field_type, bracket, field_type.count - bracket),
-                                                        slice(field_type, 0, bracket));
+                            output_struct(bracket, field_name, field_type);
                         }
                         out("}\n");
                     }
@@ -577,6 +648,7 @@ convert_steam_api_json :: (file_data: string) {
 
 
     root_value : JSON_Value;
+    gather_enums("", root);
     traverse_node("", root);
 
     for kludges  out("% :: struct {}\n", it);
