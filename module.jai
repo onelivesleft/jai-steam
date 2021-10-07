@@ -21,7 +21,7 @@ STEAMCLIENT_INTERFACE_VERSION :: "SteamClient020";
     building := false,             // Set to true when importing in your build file, then call `steam_build_step(message)`
                                    // for every compiler message.  See example build script below.
 
-    has_build_script := true,     // If you're not using the flat api then you need to use a build script to
+    has_build_script := true,      // If you're not using the flat api then you need to use a build script to
                                    // compile (see `building` above).  If you do not wish to do that then you need to
                                    // set this to false so that the module knows it can skip inserting the callback
                                    // code it is not able to generate.

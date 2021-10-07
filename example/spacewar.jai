@@ -5,7 +5,7 @@ verbose :: true;
 
 Simp  :: #import "Simp";
 #import "Input";
-#import "GL"; // For glBlend
+#import "GL" ; // For glBlend
 
 #import "Basic";
 #import "Compiler";
@@ -1611,7 +1611,7 @@ create_lobby :: () {
     CreateLobby(lobby_type(hosted_lobby_is_public), MAX_PLAYERS, #code {
         if result.Result != .k_EResultOK {
             log_error("Failed to create lobby");
-            return 0;
+            return;
         }
 
         `hosted_lobby = result.SteamIDLobby;
@@ -1704,7 +1704,7 @@ request_lobbies :: () {
         AddRequestLobbyListStringFilter("Language", "Jai", .k_ELobbyComparisonEqual);
 
         RequestLobbyList(#code {
-            if !`hosted_lobby_is_public  return 0;  // We're in friends-only mode, so ignore these public lobbies
+            if !`hosted_lobby_is_public  return;  // We're in friends-only mode, so ignore these public lobbies
 
             array_reset(*`lobby_list);
             lobby_count : int = result.LobbiesMatching;  // needs explicit type to avoid unsigned wrap-around in for loop

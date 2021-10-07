@@ -1236,7 +1236,7 @@ CallResults : struct {
 }
 
 StoreAuthURLResponse_t_Callback :: #type(StoreAuthURLResponse_t);
-RemoteStorageSubscribePublishedFileResult_t_Callback :: #type(RemoteStorageSubscribePublishedFileResult_t);
+RemoteStorageSubscribePublishedFileResult_t_Callback :: (RemoteStorageSubscribePublishedFileResult_t);
 SteamServerConnectFailure_t_Callback :: #type(SteamServerConnectFailure_t);
 EncryptedAppTicketResponse_t_Callback :: #type(EncryptedAppTicketResponse_t);
 HTML_OpenLinkInNewTab_t_Callback :: #type(HTML_OpenLinkInNewTab_t);
@@ -3706,4 +3706,3 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardUGCSet_t_C
         table_remove(*callbacks, call_id);
     }
 }
-

@@ -674,7 +674,7 @@ convert_steam_api_json :: (file_data: string) {
         if struct_name != "GSStatsUnloaded_t" && struct_name != "PS3TrophiesInstalled_t"
             output(*callbacks_enum, "    % :: %;\n", struct_name, callback_id);
         output(*callbacks_struct, "    %1 : [..] %1_Callback;\n", struct_name);
-        output(*callbacks_types, "%1_Callback :: #type(%1);\n", struct_name);
+        output(*callbacks_types, "%1_Callback :: #type (%1);\n", struct_name);
         output(*callbacks_procs, #string ___JAI
 RegisterCallback :: (callback: (%1) -> ()) {
 	array_add(*Callbacks.%1, callback);
@@ -696,7 +696,7 @@ RegisterCallback :: (callback: (%1) -> ()) {
         output(*callbacks_awaiting_callresults_count, "    for CallResults.%1  result += 1;\n", struct_name);
         output(*callbacks_enum, "    % :: %;\n", struct_name, call_result_id);
         output(*callbacks_struct, "    %1 : Table(SteamAPICall_t, [..] %1_CallResult);\n", struct_name);
-        output(*callbacks_types, "%1_CallResult :: #type(%1, bool);\n", struct_name);
+        output(*callbacks_types, "%1_CallResult :: #type (%1, bool);\n", struct_name);
 
         output(*callbacks_procs, #string ___JAI
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (%1, bool) -> ()) {

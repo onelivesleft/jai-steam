@@ -19,20 +19,19 @@ steam_build_step :: (message: *Message) {
 //            if decl.enclosing_load && decl.enclosing_load.enclosing_import.module_type != .MAIN_PROGRAM
 //                continue;
 
-            if decl.kind == .DECLARATION {
-                table_set(*processed_decls, xx decl, true);
+            table_set(*processed_decls, xx decl.expression, true);
 
-                if has_note(decl.notes, "SteamCallback") {
-                    declaration := cast(*Code_Declaration) decl;
-                    if declaration.type.type == .PROCEDURE {
-                        if declaration.name {
-                            table_set(*callback_procs, declaration.name, true);
-                            if verbose  print("Steam: Found callback: %\n", declaration.name);
-                        }
+            expr := decl.expression;
+            if has_note(expr.notes, "SteamCallback") {
+                declaration := cast(*Code_Declaration) expr;
+                if declaration.type.type == .PROCEDURE {
+                    if declaration.name {
+                        table_set(*callback_procs, declaration.name, true);
+                        if verbose  print("Steam: Found callback: %\n", declaration.name);
                     }
-                    else {
-                        compiler_report("You may only tag procedures with @SteamCallback!", make_location(declaration));
-                    }
+                }
+                else {
+                    compiler_report("You may only tag procedures with @SteamCallback!", make_location(declaration));
                 }
             }
         }

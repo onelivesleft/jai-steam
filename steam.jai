@@ -9,7 +9,7 @@
 // `InitSteam` must be called before using any other API functions. If it fails, an
 // error message will be output to the debugger (or stderr) with further information.
 // If you are not using a build script (which is required to automate registering callbacks)
-// then you must import this module with `has_built_script = false`, or it will be unable to find
+// then you must import this module with `has_build_script = false`, or it will be unable to find
 // the generated string code block.
 
 InitSteam :: () -> success: bool #expand {
@@ -51,7 +51,7 @@ ShutdownSteam :: (timeout : float64 = 0) -> clean: bool{
 
 // You may designate callback procs with the `@SteamCallback` annotation: to enable this feature you must
 // do two things:
-// 		1) In your buld script, import this module with the `building` module parameter enabled, and
+// 		1) In your build script, import this module with the `building` module parameter enabled, and
 // 		   then call `steam_build_step(message)` for every compiler message.
 //      2) Add `#insert SteamCallbacks` after your call to `InitSteam`.
 // See `module.jai` for details.

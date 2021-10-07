@@ -145,8 +145,8 @@ for message, is_call_result: SteamAPI_Callbacks {
 		if message.call_result_id == {
 			case .NumberOfCurrentPlayers_t;
 			if !message.io_failure {
-				number_of_current_players := << cast(*NumberOfCurrentPlayers_t) messa`ge.data;
-				if number_of_current_players.m_bSuccess`
+				number_of_current_players := << cast(*NumberOfCurrentPlayers_t) message.data;
+				if number_of_current_players.m_bSuccess
 					print("Num Players: %\n", number_of_current_players.m_cPlayers);
 				else
 					print("Failed to get Num Players\n");
@@ -159,8 +159,8 @@ for message, is_call_result: SteamAPI_Callbacks {
 	else {
 		if message.callback_id == {
 			case .GameOverlayActivated_t;
-			info := cast(*GameOverlayActivated_t) messa`ge.data;
-			print("\n---\nOverlay active: %\n", cast(bo`ol) info.m_bActive);
+			info := cast(*GameOverlayActivated_t) message.data;
+			print("\n---\nOverlay active: %\n", cast(bool) info.m_bActive);
 			steam_userstats := SteamAPI_SteamUserStats_v012();
 			handle := SteamAPI_ISteamUserStats_GetNumberOfCurrentPlayers(steam_userstats);
 			print("Requesting #players, handle = %\n", formatInt(handle, base=16));
