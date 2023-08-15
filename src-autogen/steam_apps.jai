@@ -147,7 +147,7 @@ GetFileDetails :: (pszFileName: *char, code: Code) -> SteamAPICall_t #expand {
         RegisterCallResult(
             call_result_id,
             (result: FileDetailsResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

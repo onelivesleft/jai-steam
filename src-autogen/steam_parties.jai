@@ -37,7 +37,7 @@ JoinParty :: (ulBeaconID: PartyBeaconID_t, code: Code) -> SteamAPICall_t #expand
         RegisterCallResult(
             call_result_id,
             (result: JoinPartyCallback_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -76,7 +76,7 @@ CreateBeacon :: (unOpenSlots: uint32, pBeaconLocation: *SteamPartyBeaconLocation
         RegisterCallResult(
             call_result_id,
             (result: CreateBeaconCallback_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -115,7 +115,7 @@ ChangeNumOpenSlots :: (ulBeacon: PartyBeaconID_t, unOpenSlots: uint32, code: Cod
         RegisterCallResult(
             call_result_id,
             (result: ChangeNumOpenSlotsCallback_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

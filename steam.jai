@@ -192,11 +192,11 @@ Failed to init steam, this could be for one of the following reasons:
 
 
 #if OS == .WINDOWS {
-    steam :: #foreign_library "lib/win/steam_api64";
+    steam :: #library "lib/win/steam_api64";
 } else #if OS == .MACOS {
-    steam :: #foreign_library "lib/mac/libsteam_api";
+    steam :: #library "lib/mac/libsteam_api";
 } else #if OS == .LINUX {
-    steam :: #foreign_library "lib/linux/libsteam_api";
+    steam :: #library "lib/linux/libsteam_api";
 }
 
 

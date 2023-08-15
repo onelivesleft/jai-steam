@@ -1236,7 +1236,7 @@ CallResults : struct {
 }
 
 StoreAuthURLResponse_t_Callback :: #type(StoreAuthURLResponse_t);
-RemoteStorageSubscribePublishedFileResult_t_Callback :: (RemoteStorageSubscribePublishedFileResult_t);
+RemoteStorageSubscribePublishedFileResult_t_Callback :: #type(RemoteStorageSubscribePublishedFileResult_t);
 SteamServerConnectFailure_t_Callback :: #type(SteamServerConnectFailure_t);
 EncryptedAppTicketResponse_t_Callback :: #type(EncryptedAppTicketResponse_t);
 HTML_OpenLinkInNewTab_t_Callback :: #type(HTML_OpenLinkInNewTab_t);
@@ -2344,7 +2344,7 @@ RegisterCallback :: (callback: (GSClientKick_t) -> ()) {
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StoreAuthURLResponse_t, bool) -> ()) {
-    procs, found := table_find(CallResults.StoreAuthURLResponse_t, call_result_id);
+    procs, found := table_find(*CallResults.StoreAuthURLResponse_t, call_result_id);
     if !found {
         array : [..] StoreAuthURLResponse_t_CallResult;
         procs = array;
@@ -2355,7 +2355,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StoreAuthURLRe
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageDeletePublishedFileResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageDeletePublishedFileResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageDeletePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageDeletePublishedFileResult_t_CallResult;
         procs = array;
@@ -2366,7 +2366,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageD
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageSubscribePublishedFileResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageSubscribePublishedFileResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageSubscribePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageSubscribePublishedFileResult_t_CallResult;
         procs = array;
@@ -2377,7 +2377,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageS
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (EncryptedAppTicketResponse_t, bool) -> ()) {
-    procs, found := table_find(CallResults.EncryptedAppTicketResponse_t, call_result_id);
+    procs, found := table_find(*CallResults.EncryptedAppTicketResponse_t, call_result_id);
     if !found {
         array : [..] EncryptedAppTicketResponse_t_CallResult;
         procs = array;
@@ -2388,7 +2388,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (EncryptedAppTi
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateItemResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.CreateItemResult_t, call_result_id);
+    procs, found := table_find(*CallResults.CreateItemResult_t, call_result_id);
     if !found {
         array : [..] CreateItemResult_t_CallResult;
         procs = array;
@@ -2399,7 +2399,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateItemResu
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyMatchList_t, bool) -> ()) {
-    procs, found := table_find(CallResults.LobbyMatchList_t, call_result_id);
+    procs, found := table_find(*CallResults.LobbyMatchList_t, call_result_id);
     if !found {
         array : [..] LobbyMatchList_t_CallResult;
         procs = array;
@@ -2410,7 +2410,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyMatchList
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DownloadClanActivityCountsResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.DownloadClanActivityCountsResult_t, call_result_id);
+    procs, found := table_find(*CallResults.DownloadClanActivityCountsResult_t, call_result_id);
     if !found {
         array : [..] DownloadClanActivityCountsResult_t_CallResult;
         procs = array;
@@ -2421,7 +2421,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DownloadClanAc
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileReadAsyncComplete_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageFileReadAsyncComplete_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageFileReadAsyncComplete_t, call_result_id);
     if !found {
         array : [..] RemoteStorageFileReadAsyncComplete_t_CallResult;
         procs = array;
@@ -2432,7 +2432,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageF
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumeratePublishedFilesByUserActionResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageEnumeratePublishedFilesByUserActionResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageEnumeratePublishedFilesByUserActionResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumeratePublishedFilesByUserActionResult_t_CallResult;
         procs = array;
@@ -2443,7 +2443,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyCreated_t, bool) -> ()) {
-    procs, found := table_find(CallResults.LobbyCreated_t, call_result_id);
+    procs, found := table_find(*CallResults.LobbyCreated_t, call_result_id);
     if !found {
         array : [..] LobbyCreated_t_CallResult;
         procs = array;
@@ -2454,7 +2454,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyCreated_t
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalStatsReceived_t, bool) -> ()) {
-    procs, found := table_find(CallResults.GlobalStatsReceived_t, call_result_id);
+    procs, found := table_find(*CallResults.GlobalStatsReceived_t, call_result_id);
     if !found {
         array : [..] GlobalStatsReceived_t_CallResult;
         procs = array;
@@ -2465,7 +2465,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalStatsRec
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateWorkshopFilesResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageEnumerateWorkshopFilesResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageEnumerateWorkshopFilesResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumerateWorkshopFilesResult_t_CallResult;
         procs = array;
@@ -2476,7 +2476,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetPersonaNameResponse_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SetPersonaNameResponse_t, call_result_id);
+    procs, found := table_find(*CallResults.SetPersonaNameResponse_t, call_result_id);
     if !found {
         array : [..] SetPersonaNameResponse_t_CallResult;
         procs = array;
@@ -2487,7 +2487,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetPersonaName
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StopPlaytimeTrackingResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.StopPlaytimeTrackingResult_t, call_result_id);
+    procs, found := table_find(*CallResults.StopPlaytimeTrackingResult_t, call_result_id);
     if !found {
         array : [..] StopPlaytimeTrackingResult_t_CallResult;
         procs = array;
@@ -2498,7 +2498,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StopPlaytimeTr
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (NumberOfCurrentPlayers_t, bool) -> ()) {
-    procs, found := table_find(CallResults.NumberOfCurrentPlayers_t, call_result_id);
+    procs, found := table_find(*CallResults.NumberOfCurrentPlayers_t, call_result_id);
     if !found {
         array : [..] NumberOfCurrentPlayers_t_CallResult;
         procs = array;
@@ -2509,7 +2509,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (NumberOfCurren
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ChangeNumOpenSlotsCallback_t, bool) -> ()) {
-    procs, found := table_find(CallResults.ChangeNumOpenSlotsCallback_t, call_result_id);
+    procs, found := table_find(*CallResults.ChangeNumOpenSlotsCallback_t, call_result_id);
     if !found {
         array : [..] ChangeNumOpenSlotsCallback_t_CallResult;
         procs = array;
@@ -2520,7 +2520,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ChangeNumOpenS
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveAppDependencyResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoveAppDependencyResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoveAppDependencyResult_t, call_result_id);
     if !found {
         array : [..] RemoveAppDependencyResult_t_CallResult;
         procs = array;
@@ -2531,7 +2531,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveAppDepen
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserFavoriteItemsListChanged_t, bool) -> ()) {
-    procs, found := table_find(CallResults.UserFavoriteItemsListChanged_t, call_result_id);
+    procs, found := table_find(*CallResults.UserFavoriteItemsListChanged_t, call_result_id);
     if !found {
         array : [..] UserFavoriteItemsListChanged_t_CallResult;
         procs = array;
@@ -2542,7 +2542,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserFavoriteIt
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryRequestPricesResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SteamInventoryRequestPricesResult_t, call_result_id);
+    procs, found := table_find(*CallResults.SteamInventoryRequestPricesResult_t, call_result_id);
     if !found {
         array : [..] SteamInventoryRequestPricesResult_t_CallResult;
         procs = array;
@@ -2553,7 +2553,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventory
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddAppDependencyResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.AddAppDependencyResult_t, call_result_id);
+    procs, found := table_find(*CallResults.AddAppDependencyResult_t, call_result_id);
     if !found {
         array : [..] AddAppDependencyResult_t_CallResult;
         procs = array;
@@ -2564,7 +2564,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddAppDependen
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardFindResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.LeaderboardFindResult_t, call_result_id);
+    procs, found := table_find(*CallResults.LeaderboardFindResult_t, call_result_id);
     if !found {
         array : [..] LeaderboardFindResult_t_CallResult;
         procs = array;
@@ -2575,7 +2575,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardFin
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageDownloadUGCResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageDownloadUGCResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageDownloadUGCResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageDownloadUGCResult_t_CallResult;
         procs = array;
@@ -2586,7 +2586,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageD
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CheckFileSignature_t, bool) -> ()) {
-    procs, found := table_find(CallResults.CheckFileSignature_t, call_result_id);
+    procs, found := table_find(*CallResults.CheckFileSignature_t, call_result_id);
     if !found {
         array : [..] CheckFileSignature_t_CallResult;
         procs = array;
@@ -2597,7 +2597,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CheckFileSigna
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageGetPublishedFileDetailsResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageGetPublishedFileDetailsResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageGetPublishedFileDetailsResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageGetPublishedFileDetailsResult_t_CallResult;
         procs = array;
@@ -2608,7 +2608,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageG
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FileDetailsResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.FileDetailsResult_t, call_result_id);
+    procs, found := table_find(*CallResults.FileDetailsResult_t, call_result_id);
     if !found {
         array : [..] FileDetailsResult_t_CallResult;
         procs = array;
@@ -2619,7 +2619,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FileDetailsRes
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ComputeNewPlayerCompatibilityResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.ComputeNewPlayerCompatibilityResult_t, call_result_id);
+    procs, found := table_find(*CallResults.ComputeNewPlayerCompatibilityResult_t, call_result_id);
     if !found {
         array : [..] ComputeNewPlayerCompatibilityResult_t_CallResult;
         procs = array;
@@ -2630,7 +2630,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ComputeNewPlay
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageSetUserPublishedFileActionResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageSetUserPublishedFileActionResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageSetUserPublishedFileActionResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageSetUserPublishedFileActionResult_t_CallResult;
         procs = array;
@@ -2641,7 +2641,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageS
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateUserPublishedFilesResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageEnumerateUserPublishedFilesResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageEnumerateUserPublishedFilesResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumerateUserPublishedFilesResult_t_CallResult;
         procs = array;
@@ -2652,7 +2652,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUnsubscribePublishedFileResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageUnsubscribePublishedFileResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageUnsubscribePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageUnsubscribePublishedFileResult_t_CallResult;
         procs = array;
@@ -2663,7 +2663,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageU
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStoragePublishFileProgress_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStoragePublishFileProgress_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStoragePublishFileProgress_t, call_result_id);
     if !found {
         array : [..] RemoteStoragePublishFileProgress_t_CallResult;
         procs = array;
@@ -2674,7 +2674,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageP
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateBeaconCallback_t, bool) -> ()) {
-    procs, found := table_find(CallResults.CreateBeaconCallback_t, call_result_id);
+    procs, found := table_find(*CallResults.CreateBeaconCallback_t, call_result_id);
     if !found {
         array : [..] CreateBeaconCallback_t_CallResult;
         procs = array;
@@ -2685,7 +2685,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (CreateBeaconCa
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (HTML_BrowserReady_t, bool) -> ()) {
-    procs, found := table_find(CallResults.HTML_BrowserReady_t, call_result_id);
+    procs, found := table_find(*CallResults.HTML_BrowserReady_t, call_result_id);
     if !found {
         array : [..] HTML_BrowserReady_t_CallResult;
         procs = array;
@@ -2696,7 +2696,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (HTML_BrowserRe
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (MarketEligibilityResponse_t, bool) -> ()) {
-    procs, found := table_find(CallResults.MarketEligibilityResponse_t, call_result_id);
+    procs, found := table_find(*CallResults.MarketEligibilityResponse_t, call_result_id);
     if !found {
         array : [..] MarketEligibilityResponse_t_CallResult;
         procs = array;
@@ -2707,7 +2707,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (MarketEligibil
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUpdatePublishedFileResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageUpdatePublishedFileResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageUpdatePublishedFileResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageUpdatePublishedFileResult_t_CallResult;
         procs = array;
@@ -2718,7 +2718,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageU
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserStatsReceived_t, bool) -> ()) {
-    procs, found := table_find(CallResults.UserStatsReceived_t, call_result_id);
+    procs, found := table_find(*CallResults.UserStatsReceived_t, call_result_id);
     if !found {
         array : [..] UserStatsReceived_t_CallResult;
         procs = array;
@@ -2729,7 +2729,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (UserStatsRecei
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinClanChatRoomCompletionResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.JoinClanChatRoomCompletionResult_t, call_result_id);
+    procs, found := table_find(*CallResults.JoinClanChatRoomCompletionResult_t, call_result_id);
     if !found {
         array : [..] JoinClanChatRoomCompletionResult_t_CallResult;
         procs = array;
@@ -2740,7 +2740,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinClanChatRo
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalAchievementPercentagesReady_t, bool) -> ()) {
-    procs, found := table_find(CallResults.GlobalAchievementPercentagesReady_t, call_result_id);
+    procs, found := table_find(*CallResults.GlobalAchievementPercentagesReady_t, call_result_id);
     if !found {
         array : [..] GlobalAchievementPercentagesReady_t_CallResult;
         procs = array;
@@ -2751,7 +2751,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GlobalAchievem
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AssociateWithClanResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.AssociateWithClanResult_t, call_result_id);
+    procs, found := table_find(*CallResults.AssociateWithClanResult_t, call_result_id);
     if !found {
         array : [..] AssociateWithClanResult_t_CallResult;
         procs = array;
@@ -2762,7 +2762,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AssociateWithC
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetAppDependenciesResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.GetAppDependenciesResult_t, call_result_id);
+    procs, found := table_find(*CallResults.GetAppDependenciesResult_t, call_result_id);
     if !found {
         array : [..] GetAppDependenciesResult_t_CallResult;
         procs = array;
@@ -2773,7 +2773,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetAppDependen
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsIsFollowing_t, bool) -> ()) {
-    procs, found := table_find(CallResults.FriendsIsFollowing_t, call_result_id);
+    procs, found := table_find(*CallResults.FriendsIsFollowing_t, call_result_id);
     if !found {
         array : [..] FriendsIsFollowing_t_CallResult;
         procs = array;
@@ -2784,7 +2784,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsIsFollo
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCRequestUGCDetailsResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SteamUGCRequestUGCDetailsResult_t, call_result_id);
+    procs, found := table_find(*CallResults.SteamUGCRequestUGCDetailsResult_t, call_result_id);
     if !found {
         array : [..] SteamUGCRequestUGCDetailsResult_t_CallResult;
         procs = array;
@@ -2795,7 +2795,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCReques
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ClanOfficerListResponse_t, bool) -> ()) {
-    procs, found := table_find(CallResults.ClanOfficerListResponse_t, call_result_id);
+    procs, found := table_find(*CallResults.ClanOfficerListResponse_t, call_result_id);
     if !found {
         array : [..] ClanOfficerListResponse_t_CallResult;
         procs = array;
@@ -2806,7 +2806,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (ClanOfficerLis
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsEnumerateFollowingList_t, bool) -> ()) {
-    procs, found := table_find(CallResults.FriendsEnumerateFollowingList_t, call_result_id);
+    procs, found := table_find(*CallResults.FriendsEnumerateFollowingList_t, call_result_id);
     if !found {
         array : [..] FriendsEnumerateFollowingList_t_CallResult;
         procs = array;
@@ -2817,7 +2817,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsEnumera
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageGetPublishedItemVoteDetailsResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageGetPublishedItemVoteDetailsResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageGetPublishedItemVoteDetailsResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageGetPublishedItemVoteDetailsResult_t_CallResult;
         procs = array;
@@ -2828,7 +2828,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageG
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyEnter_t, bool) -> ()) {
-    procs, found := table_find(CallResults.LobbyEnter_t, call_result_id);
+    procs, found := table_find(*CallResults.LobbyEnter_t, call_result_id);
     if !found {
         array : [..] LobbyEnter_t_CallResult;
         procs = array;
@@ -2839,7 +2839,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LobbyEnter_t, 
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCQueryCompleted_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SteamUGCQueryCompleted_t, call_result_id);
+    procs, found := table_find(*CallResults.SteamUGCQueryCompleted_t, call_result_id);
     if !found {
         array : [..] SteamUGCQueryCompleted_t_CallResult;
         procs = array;
@@ -2850,7 +2850,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamUGCQueryC
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSReputation_t, bool) -> ()) {
-    procs, found := table_find(CallResults.GSReputation_t, call_result_id);
+    procs, found := table_find(*CallResults.GSReputation_t, call_result_id);
     if !found {
         array : [..] GSReputation_t_CallResult;
         procs = array;
@@ -2861,7 +2861,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSReputation_t
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsGetFollowerCount_t, bool) -> ()) {
-    procs, found := table_find(CallResults.FriendsGetFollowerCount_t, call_result_id);
+    procs, found := table_find(*CallResults.FriendsGetFollowerCount_t, call_result_id);
     if !found {
         array : [..] FriendsGetFollowerCount_t_CallResult;
         procs = array;
@@ -2872,7 +2872,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (FriendsGetFoll
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryEligiblePromoItemDefIDs_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SteamInventoryEligiblePromoItemDefIDs_t, call_result_id);
+    procs, found := table_find(*CallResults.SteamInventoryEligiblePromoItemDefIDs_t, call_result_id);
     if !found {
         array : [..] SteamInventoryEligiblePromoItemDefIDs_t_CallResult;
         procs = array;
@@ -2883,7 +2883,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventory
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventoryStartPurchaseResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SteamInventoryStartPurchaseResult_t, call_result_id);
+    procs, found := table_find(*CallResults.SteamInventoryStartPurchaseResult_t, call_result_id);
     if !found {
         array : [..] SteamInventoryStartPurchaseResult_t_CallResult;
         procs = array;
@@ -2894,7 +2894,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SteamInventory
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileShareResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageFileShareResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageFileShareResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageFileShareResult_t_CallResult;
         procs = array;
@@ -2905,7 +2905,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageF
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveUGCDependencyResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoveUGCDependencyResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoveUGCDependencyResult_t, call_result_id);
     if !found {
         array : [..] RemoveUGCDependencyResult_t_CallResult;
         procs = array;
@@ -2916,7 +2916,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoveUGCDepen
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StartPlaytimeTrackingResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.StartPlaytimeTrackingResult_t, call_result_id);
+    procs, found := table_find(*CallResults.StartPlaytimeTrackingResult_t, call_result_id);
     if !found {
         array : [..] StartPlaytimeTrackingResult_t_CallResult;
         procs = array;
@@ -2927,7 +2927,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (StartPlaytimeT
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsReceived_t, bool) -> ()) {
-    procs, found := table_find(CallResults.GSStatsReceived_t, call_result_id);
+    procs, found := table_find(*CallResults.GSStatsReceived_t, call_result_id);
     if !found {
         array : [..] GSStatsReceived_t_CallResult;
         procs = array;
@@ -2938,7 +2938,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsReceive
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsStored_t, bool) -> ()) {
-    procs, found := table_find(CallResults.GSStatsStored_t, call_result_id);
+    procs, found := table_find(*CallResults.GSStatsStored_t, call_result_id);
     if !found {
         array : [..] GSStatsStored_t_CallResult;
         procs = array;
@@ -2949,7 +2949,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GSStatsStored_
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SubmitItemUpdateResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SubmitItemUpdateResult_t, call_result_id);
+    procs, found := table_find(*CallResults.SubmitItemUpdateResult_t, call_result_id);
     if !found {
         array : [..] SubmitItemUpdateResult_t_CallResult;
         procs = array;
@@ -2960,7 +2960,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SubmitItemUpda
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetUserItemVoteResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.GetUserItemVoteResult_t, call_result_id);
+    procs, found := table_find(*CallResults.GetUserItemVoteResult_t, call_result_id);
     if !found {
         array : [..] GetUserItemVoteResult_t_CallResult;
         procs = array;
@@ -2971,7 +2971,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (GetUserItemVot
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardScoreUploaded_t, bool) -> ()) {
-    procs, found := table_find(CallResults.LeaderboardScoreUploaded_t, call_result_id);
+    procs, found := table_find(*CallResults.LeaderboardScoreUploaded_t, call_result_id);
     if !found {
         array : [..] LeaderboardScoreUploaded_t_CallResult;
         procs = array;
@@ -2982,7 +2982,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardSco
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageEnumerateUserSubscribedFilesResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageEnumerateUserSubscribedFilesResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageEnumerateUserSubscribedFilesResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageEnumerateUserSubscribedFilesResult_t_CallResult;
         procs = array;
@@ -2993,7 +2993,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageE
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinPartyCallback_t, bool) -> ()) {
-    procs, found := table_find(CallResults.JoinPartyCallback_t, call_result_id);
+    procs, found := table_find(*CallResults.JoinPartyCallback_t, call_result_id);
     if !found {
         array : [..] JoinPartyCallback_t_CallResult;
         procs = array;
@@ -3004,7 +3004,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (JoinPartyCallb
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddUGCDependencyResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.AddUGCDependencyResult_t, call_result_id);
+    procs, found := table_find(*CallResults.AddUGCDependencyResult_t, call_result_id);
     if !found {
         array : [..] AddUGCDependencyResult_t_CallResult;
         procs = array;
@@ -3015,7 +3015,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (AddUGCDependen
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardScoresDownloaded_t, bool) -> ()) {
-    procs, found := table_find(CallResults.LeaderboardScoresDownloaded_t, call_result_id);
+    procs, found := table_find(*CallResults.LeaderboardScoresDownloaded_t, call_result_id);
     if !found {
         array : [..] LeaderboardScoresDownloaded_t_CallResult;
         procs = array;
@@ -3026,7 +3026,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardSco
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DeleteItemResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.DeleteItemResult_t, call_result_id);
+    procs, found := table_find(*CallResults.DeleteItemResult_t, call_result_id);
     if !found {
         array : [..] DeleteItemResult_t_CallResult;
         procs = array;
@@ -3037,7 +3037,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DeleteItemResu
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageFileWriteAsyncComplete_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageFileWriteAsyncComplete_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageFileWriteAsyncComplete_t, call_result_id);
     if !found {
         array : [..] RemoteStorageFileWriteAsyncComplete_t_CallResult;
         procs = array;
@@ -3048,7 +3048,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageF
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetUserItemVoteResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.SetUserItemVoteResult_t, call_result_id);
+    procs, found := table_find(*CallResults.SetUserItemVoteResult_t, call_result_id);
     if !found {
         array : [..] SetUserItemVoteResult_t_CallResult;
         procs = array;
@@ -3059,7 +3059,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (SetUserItemVot
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DurationControl_t, bool) -> ()) {
-    procs, found := table_find(CallResults.DurationControl_t, call_result_id);
+    procs, found := table_find(*CallResults.DurationControl_t, call_result_id);
     if !found {
         array : [..] DurationControl_t_CallResult;
         procs = array;
@@ -3070,7 +3070,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (DurationContro
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageUpdateUserPublishedItemVoteResult_t, bool) -> ()) {
-    procs, found := table_find(CallResults.RemoteStorageUpdateUserPublishedItemVoteResult_t, call_result_id);
+    procs, found := table_find(*CallResults.RemoteStorageUpdateUserPublishedItemVoteResult_t, call_result_id);
     if !found {
         array : [..] RemoteStorageUpdateUserPublishedItemVoteResult_t_CallResult;
         procs = array;
@@ -3081,7 +3081,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (RemoteStorageU
 }
 
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardUGCSet_t, bool) -> ()) {
-    procs, found := table_find(CallResults.LeaderboardUGCSet_t, call_result_id);
+    procs, found := table_find(*CallResults.LeaderboardUGCSet_t, call_result_id);
     if !found {
         array : [..] LeaderboardUGCSet_t_CallResult;
         procs = array;
@@ -3096,7 +3096,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (LeaderboardUGC
 
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] StoreAuthURLResponse_t_CallResult), call_id: SteamAPICall_t, call_result: *StoreAuthURLResponse_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3105,7 +3105,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] StoreAuthURLResponse_
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageDeletePublishedFileResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageDeletePublishedFileResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3114,7 +3114,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageDeletePu
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageSubscribePublishedFileResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3123,7 +3123,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageSubscrib
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] EncryptedAppTicketResponse_t_CallResult), call_id: SteamAPICall_t, call_result: *EncryptedAppTicketResponse_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3132,7 +3132,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] EncryptedAppTicketRes
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] CreateItemResult_t_CallResult), call_id: SteamAPICall_t, call_result: *CreateItemResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3141,7 +3141,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] CreateItemResult_t_Ca
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LobbyMatchList_t_CallResult), call_id: SteamAPICall_t, call_result: *LobbyMatchList_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3150,7 +3150,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LobbyMatchList_t_Call
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] DownloadClanActivityCountsResult_t_CallResult), call_id: SteamAPICall_t, call_result: *DownloadClanActivityCountsResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3159,7 +3159,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] DownloadClanActivityC
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageFileReadAsyncComplete_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageFileReadAsyncComplete_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3168,7 +3168,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageFileRead
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumeratePublishedFilesByUserActionResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageEnumeratePublishedFilesByUserActionResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3177,7 +3177,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumerat
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LobbyCreated_t_CallResult), call_id: SteamAPICall_t, call_result: *LobbyCreated_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3186,7 +3186,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LobbyCreated_t_CallRe
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GlobalStatsReceived_t_CallResult), call_id: SteamAPICall_t, call_result: *GlobalStatsReceived_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3195,7 +3195,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GlobalStatsReceived_t
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumerateWorkshopFilesResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageEnumerateWorkshopFilesResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3204,7 +3204,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumerat
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SetPersonaNameResponse_t_CallResult), call_id: SteamAPICall_t, call_result: *SetPersonaNameResponse_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3213,7 +3213,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SetPersonaNameRespons
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] StopPlaytimeTrackingResult_t_CallResult), call_id: SteamAPICall_t, call_result: *StopPlaytimeTrackingResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3222,7 +3222,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] StopPlaytimeTrackingR
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] NumberOfCurrentPlayers_t_CallResult), call_id: SteamAPICall_t, call_result: *NumberOfCurrentPlayers_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3231,7 +3231,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] NumberOfCurrentPlayer
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] ChangeNumOpenSlotsCallback_t_CallResult), call_id: SteamAPICall_t, call_result: *ChangeNumOpenSlotsCallback_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3240,7 +3240,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] ChangeNumOpenSlotsCal
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoveAppDependencyResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoveAppDependencyResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3249,7 +3249,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoveAppDependencyRe
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] UserFavoriteItemsListChanged_t_CallResult), call_id: SteamAPICall_t, call_result: *UserFavoriteItemsListChanged_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3258,7 +3258,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] UserFavoriteItemsList
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamInventoryRequestPricesResult_t_CallResult), call_id: SteamAPICall_t, call_result: *SteamInventoryRequestPricesResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3267,7 +3267,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamInventoryRequest
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] AddAppDependencyResult_t_CallResult), call_id: SteamAPICall_t, call_result: *AddAppDependencyResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3276,7 +3276,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] AddAppDependencyResul
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardFindResult_t_CallResult), call_id: SteamAPICall_t, call_result: *LeaderboardFindResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3285,7 +3285,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardFindResult
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageDownloadUGCResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageDownloadUGCResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3294,7 +3294,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageDownload
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] CheckFileSignature_t_CallResult), call_id: SteamAPICall_t, call_result: *CheckFileSignature_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3303,7 +3303,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] CheckFileSignature_t_
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageGetPublishedFileDetailsResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageGetPublishedFileDetailsResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3312,7 +3312,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageGetPubli
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FileDetailsResult_t_CallResult), call_id: SteamAPICall_t, call_result: *FileDetailsResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3321,7 +3321,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FileDetailsResult_t_C
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] ComputeNewPlayerCompatibilityResult_t_CallResult), call_id: SteamAPICall_t, call_result: *ComputeNewPlayerCompatibilityResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3330,7 +3330,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] ComputeNewPlayerCompa
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageSetUserPublishedFileActionResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageSetUserPublishedFileActionResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3339,7 +3339,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageSetUserP
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumerateUserPublishedFilesResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageEnumerateUserPublishedFilesResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3348,7 +3348,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumerat
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageUnsubscribePublishedFileResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3357,7 +3357,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageUnsubscr
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStoragePublishFileProgress_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStoragePublishFileProgress_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3366,7 +3366,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStoragePublishF
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] CreateBeaconCallback_t_CallResult), call_id: SteamAPICall_t, call_result: *CreateBeaconCallback_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3375,7 +3375,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] CreateBeaconCallback_
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] HTML_BrowserReady_t_CallResult), call_id: SteamAPICall_t, call_result: *HTML_BrowserReady_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3384,7 +3384,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] HTML_BrowserReady_t_C
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] MarketEligibilityResponse_t_CallResult), call_id: SteamAPICall_t, call_result: *MarketEligibilityResponse_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3393,7 +3393,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] MarketEligibilityResp
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageUpdatePublishedFileResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageUpdatePublishedFileResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3402,7 +3402,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageUpdatePu
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] UserStatsReceived_t_CallResult), call_id: SteamAPICall_t, call_result: *UserStatsReceived_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3411,7 +3411,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] UserStatsReceived_t_C
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] JoinClanChatRoomCompletionResult_t_CallResult), call_id: SteamAPICall_t, call_result: *JoinClanChatRoomCompletionResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3420,7 +3420,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] JoinClanChatRoomCompl
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GlobalAchievementPercentagesReady_t_CallResult), call_id: SteamAPICall_t, call_result: *GlobalAchievementPercentagesReady_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3429,7 +3429,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GlobalAchievementPerc
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] AssociateWithClanResult_t_CallResult), call_id: SteamAPICall_t, call_result: *AssociateWithClanResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3438,7 +3438,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] AssociateWithClanResu
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GetAppDependenciesResult_t_CallResult), call_id: SteamAPICall_t, call_result: *GetAppDependenciesResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3447,7 +3447,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GetAppDependenciesRes
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FriendsIsFollowing_t_CallResult), call_id: SteamAPICall_t, call_result: *FriendsIsFollowing_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3456,7 +3456,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FriendsIsFollowing_t_
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamUGCRequestUGCDetailsResult_t_CallResult), call_id: SteamAPICall_t, call_result: *SteamUGCRequestUGCDetailsResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3465,7 +3465,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamUGCRequestUGCDet
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] ClanOfficerListResponse_t_CallResult), call_id: SteamAPICall_t, call_result: *ClanOfficerListResponse_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3474,7 +3474,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] ClanOfficerListRespon
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FriendsEnumerateFollowingList_t_CallResult), call_id: SteamAPICall_t, call_result: *FriendsEnumerateFollowingList_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3483,7 +3483,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FriendsEnumerateFollo
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageGetPublishedItemVoteDetailsResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageGetPublishedItemVoteDetailsResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3492,7 +3492,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageGetPubli
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LobbyEnter_t_CallResult), call_id: SteamAPICall_t, call_result: *LobbyEnter_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3501,7 +3501,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LobbyEnter_t_CallResu
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamUGCQueryCompleted_t_CallResult), call_id: SteamAPICall_t, call_result: *SteamUGCQueryCompleted_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3510,7 +3510,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamUGCQueryComplete
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GSReputation_t_CallResult), call_id: SteamAPICall_t, call_result: *GSReputation_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3519,7 +3519,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GSReputation_t_CallRe
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FriendsGetFollowerCount_t_CallResult), call_id: SteamAPICall_t, call_result: *FriendsGetFollowerCount_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3528,7 +3528,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] FriendsGetFollowerCou
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamInventoryEligiblePromoItemDefIDs_t_CallResult), call_id: SteamAPICall_t, call_result: *SteamInventoryEligiblePromoItemDefIDs_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3537,7 +3537,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamInventoryEligibl
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamInventoryStartPurchaseResult_t_CallResult), call_id: SteamAPICall_t, call_result: *SteamInventoryStartPurchaseResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3546,7 +3546,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SteamInventoryStartPu
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageFileShareResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageFileShareResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3555,7 +3555,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageFileShar
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoveUGCDependencyResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoveUGCDependencyResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3564,7 +3564,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoveUGCDependencyRe
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] StartPlaytimeTrackingResult_t_CallResult), call_id: SteamAPICall_t, call_result: *StartPlaytimeTrackingResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3573,7 +3573,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] StartPlaytimeTracking
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GSStatsReceived_t_CallResult), call_id: SteamAPICall_t, call_result: *GSStatsReceived_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3582,7 +3582,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GSStatsReceived_t_Cal
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GSStatsStored_t_CallResult), call_id: SteamAPICall_t, call_result: *GSStatsStored_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3591,7 +3591,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GSStatsStored_t_CallR
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SubmitItemUpdateResult_t_CallResult), call_id: SteamAPICall_t, call_result: *SubmitItemUpdateResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3600,7 +3600,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SubmitItemUpdateResul
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GetUserItemVoteResult_t_CallResult), call_id: SteamAPICall_t, call_result: *GetUserItemVoteResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3609,7 +3609,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] GetUserItemVoteResult
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardScoreUploaded_t_CallResult), call_id: SteamAPICall_t, call_result: *LeaderboardScoreUploaded_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3618,7 +3618,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardScoreUploa
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumerateUserSubscribedFilesResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageEnumerateUserSubscribedFilesResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3627,7 +3627,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageEnumerat
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] JoinPartyCallback_t_CallResult), call_id: SteamAPICall_t, call_result: *JoinPartyCallback_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3636,7 +3636,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] JoinPartyCallback_t_C
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] AddUGCDependencyResult_t_CallResult), call_id: SteamAPICall_t, call_result: *AddUGCDependencyResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3645,7 +3645,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] AddUGCDependencyResul
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardScoresDownloaded_t_CallResult), call_id: SteamAPICall_t, call_result: *LeaderboardScoresDownloaded_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3654,7 +3654,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardScoresDown
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] DeleteItemResult_t_CallResult), call_id: SteamAPICall_t, call_result: *DeleteItemResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3663,7 +3663,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] DeleteItemResult_t_Ca
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageFileWriteAsyncComplete_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageFileWriteAsyncComplete_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3672,7 +3672,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageFileWrit
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SetUserItemVoteResult_t_CallResult), call_id: SteamAPICall_t, call_result: *SetUserItemVoteResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3681,7 +3681,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] SetUserItemVoteResult
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] DurationControl_t_CallResult), call_id: SteamAPICall_t, call_result: *DurationControl_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3690,7 +3690,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] DurationControl_t_Cal
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageUpdateUserPublishedItemVoteResult_t_CallResult), call_id: SteamAPICall_t, call_result: *RemoteStorageUpdateUserPublishedItemVoteResult_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -3699,7 +3699,7 @@ run_call_results :: (callbacks: Table(SteamAPICall_t, [..] RemoteStorageUpdateUs
 }
 
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] LeaderboardUGCSet_t_CallResult), call_id: SteamAPICall_t, call_result: *LeaderboardUGCSet_t, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);

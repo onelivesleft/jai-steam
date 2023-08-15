@@ -32,7 +32,7 @@ CreateBrowser :: (pchUserAgent: *char, pchUserCSS: *char, code: Code) -> SteamAP
         RegisterCallResult(
             call_result_id,
             (result: HTML_BrowserReady_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

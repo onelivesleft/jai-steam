@@ -42,7 +42,7 @@ SendQueryUGCRequest :: (handle: UGCQueryHandle_t, code: Code) -> SteamAPICall_t 
         RegisterCallResult(
             call_result_id,
             (result: SteamUGCQueryCompleted_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -231,7 +231,7 @@ RequestUGCDetails :: (nPublishedFileID: PublishedFileId_t, unMaxAgeSeconds: uint
         RegisterCallResult(
             call_result_id,
             (result: SteamUGCRequestUGCDetailsResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -260,7 +260,7 @@ CreateItem :: (nConsumerAppId: AppId_t, eFileType: EWorkshopFileType, code: Code
         RegisterCallResult(
             call_result_id,
             (result: CreateItemResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -379,7 +379,7 @@ SubmitItemUpdate :: (handle: UGCUpdateHandle_t, pchChangeNote: *char, code: Code
         RegisterCallResult(
             call_result_id,
             (result: SubmitItemUpdateResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -413,7 +413,7 @@ SetUserItemVote :: (nPublishedFileID: PublishedFileId_t, bVoteUp: bool, code: Co
         RegisterCallResult(
             call_result_id,
             (result: SetUserItemVoteResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -442,7 +442,7 @@ GetUserItemVote :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPI
         RegisterCallResult(
             call_result_id,
             (result: GetUserItemVoteResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -471,7 +471,7 @@ AddItemToFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t, cod
         RegisterCallResult(
             call_result_id,
             (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -500,7 +500,7 @@ RemoveItemFromFavorites :: (nAppId: AppId_t, nPublishedFileID: PublishedFileId_t
         RegisterCallResult(
             call_result_id,
             (result: UserFavoriteItemsListChanged_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -529,7 +529,7 @@ SubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICa
         RegisterCallResult(
             call_result_id,
             (result: RemoteStorageSubscribePublishedFileResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -558,7 +558,7 @@ UnsubscribeItem :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPI
         RegisterCallResult(
             call_result_id,
             (result: RemoteStorageUnsubscribePublishedFileResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -627,7 +627,7 @@ StartPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublishe
         RegisterCallResult(
             call_result_id,
             (result: StartPlaytimeTrackingResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -656,7 +656,7 @@ StopPlaytimeTracking :: (pvecPublishedFileID: *PublishedFileId_t, unNumPublished
         RegisterCallResult(
             call_result_id,
             (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -685,7 +685,7 @@ StopPlaytimeTrackingForAllItems :: (code: Code) -> SteamAPICall_t #expand {
         RegisterCallResult(
             call_result_id,
             (result: StopPlaytimeTrackingResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -714,7 +714,7 @@ AddDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedFile
         RegisterCallResult(
             call_result_id,
             (result: AddUGCDependencyResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -743,7 +743,7 @@ RemoveDependency :: (nParentPublishedFileID: PublishedFileId_t, nChildPublishedF
         RegisterCallResult(
             call_result_id,
             (result: RemoveUGCDependencyResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -772,7 +772,7 @@ AddAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, code:
         RegisterCallResult(
             call_result_id,
             (result: AddAppDependencyResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -801,7 +801,7 @@ RemoveAppDependency :: (nPublishedFileID: PublishedFileId_t, nAppID: AppId_t, co
         RegisterCallResult(
             call_result_id,
             (result: RemoveAppDependencyResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -830,7 +830,7 @@ GetAppDependencies :: (nPublishedFileID: PublishedFileId_t, code: Code) -> Steam
         RegisterCallResult(
             call_result_id,
             (result: GetAppDependenciesResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -859,7 +859,7 @@ DeleteItem :: (nPublishedFileID: PublishedFileId_t, code: Code) -> SteamAPICall_
         RegisterCallResult(
             call_result_id,
             (result: DeleteItemResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

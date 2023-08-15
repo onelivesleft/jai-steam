@@ -5,13 +5,14 @@ verbose :: true;
 
 Simp  :: #import "Simp";
 #import "Input";
-#import "GL" ; // For glBlend
 
 #import "Basic";
 #import "Compiler";
 #import "Math";
 #import "Random";
+#import "Sound_Player";
 #import "String";
+#import "Thread";
 #import "Window_Creation";
 
 #load "random_names.jai";  // @TODO remove
@@ -84,7 +85,6 @@ debug_triangles : [1] Triangle = .[Triangle.{ // @TODO remove
 }];
 
 
-
 main :: () {
     if !InitSteam() {  // @Steam
         log_error("Failed to initialize Steam");
@@ -107,6 +107,7 @@ main :: () {
         if in_menu  one_menu_tick();
 
         draw_one_frame();
+        update_sound_player(dt);
 
         reset_temporary_storage();
         sleep_milliseconds(cast,trunc(s32)(max(1.0, 10 - dt / 1000)));
@@ -121,10 +122,11 @@ main :: () {
 
 init :: () {
     window = create_window(window_width, window_height, "Spacewar");
-    Simp.simp_init(window, window_width, window_height, render_width, render_height);
+    Simp.set_render_target(window);
 
-    random_seed(xx get_time());
+    random_seed(current_time_consensus().low);
     init_fonts();
+    init_sounds();
 
     me = *players[0];
     handle := GetSteamID();  // @Steam
@@ -148,7 +150,7 @@ make_player :: (player: *Player, handle: CSteamID, name: string, position: Vecto
     player.name.data = *player.buffer[0];
     player.name.count = min(name.count, Player.MAX_NAME_LENGTH);
 
-    player.label.width = Simp.get_string_width_in_pixels(font_game, player.name);
+    player.label.width = Simp.prepare_text(font_game, player.name);
 
     player_count += 1;
 }
@@ -288,7 +290,21 @@ one_game_tick :: () {
         s := sin(rotation);
 
         acceleration : Vector2 = ---;
-        k := dt * ifx thrusting > 0 then FORWARD_THRUST * thrusting else REVERSE_THRUST * thrusting;
+        k : float = ---;
+        engine_volume : float = ---;
+        if thrusting == 0 {
+            k = 0;
+            engine_volume = 0;
+        }
+        else if thrusting > 0 {
+            engine_volume = FORWARD_THRUST * thrusting;
+            k = engine_volume * dt;
+        }
+        else {
+            k = REVERSE_THRUST * thrusting;
+            engine_volume = -k;
+            k *= dt;
+        }
         acceleration.x = k * c;
         acceleration.y = k * s;
 
@@ -301,7 +317,12 @@ one_game_tick :: () {
 
         wrap_object(player);
 
-        rotation = cast(float) fmod(rotation - dt * turning * TURN_RATE, TAU);
+        rotation = cast(float) fmod_cycling(rotation - dt * turning * TURN_RATE, TAU);
+
+        if turning != 0 && engine_volume < TURN_ENGINE_VOLUME {
+            engine_volume = TURN_ENGINE_VOLUME;
+        }
+        if engine_volume > 0  play_sound(sfx_engine, engine_volume);
 
         label.actual_position = lerp(label.actual_position, position, dt * 2);
         end := label.actual_position;
@@ -370,6 +391,7 @@ fire_shot :: (using player: *Player) {
     if last_fired_at + LASER_COOLDOWN > now  return;
 
     last_fired_at = now;
+    play_sound(sfx_shot);
 
     c := cos(rotation);
     s := sin(rotation);
@@ -380,7 +402,6 @@ fire_shot :: (using player: *Player) {
     shots[next_shot_index].velocity.y = velocity.y + s * Shot.MUZZLE_VELOCITY;
     shots[next_shot_index].player = player;
     shots[next_shot_index].fired_at = now;
-
 
     next_shot_index = (next_shot_index + 1) % MAX_SHOTS;
 }
@@ -428,7 +449,7 @@ Ship :: struct(length: float, width: float, cut: float) {
 
 
 Player :: struct {
-    using base: Object;
+    #as using base: Object;
 
     FORWARD_THRUST : float : 0.5;
     REVERSE_THRUST : float : 0.2;
@@ -462,7 +483,7 @@ is_me :: (player: *Player) -> bool {
 
 
 Shot :: struct {
-    using base: Object;
+    #as using base: Object;
 
     MUZZLE_VELOCITY :: 2.0;
     ARMING_DELAY    :: 0.5;
@@ -474,7 +495,7 @@ Shot :: struct {
 
 
 Planet :: struct {
-    using base: Object;
+    #as using base: Object;
 
     gravity : float;
     radius : float;
@@ -742,15 +763,12 @@ color_menu_selected_fill  :: Vector4.{1, 1, 1, 1};
 color_menu_label          :: Vector4.{0.5, 0.5, 0.5, 1};
 
 draw_one_frame :: () {
-    Simp.update_window(window, window_width, window_height, render_width, render_height);
+    Simp.update_window(window);//, window_width, window_height, render_width, render_height);
 
     if !steam_overlay_is_active {
         Simp.set_shader_for_color();
-        if !in_menu {
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        if !in_menu
             Simp.immediate_quad(0, 0, width, height, color_background);
-        }
 
         for player: active_players
             draw_player(player);
@@ -792,9 +810,6 @@ draw_menu :: () {
     list_left  :: right - list_width;
     list_header_gap :: font_height_list * 2;
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     Simp.immediate_quad(0, 0, width, height, .{0, 0, 0, 0.51});
 
     x := left;
@@ -817,7 +832,7 @@ draw_menu :: () {
             if menu_item.y != 0  y = menu_item.y;
             if menu_index == menu_current_index[Menu.MAIN] {
                 label := get_menu_label(menu_item);
-                w := Simp.get_string_width_in_pixels(font_menu, label);
+                w := Simp.prepare_text(font_menu, label);
                 x0 := cast(float)(x - padding);
                 y0 := cast(float)(y - padding);
                 x1 := cast(float)(x + w + padding + font_width_offset);
@@ -887,7 +902,7 @@ draw_menu :: () {
     if hosted_lobby {
         draw_list_text("Hosting", x, y, color);
         lobby_type_text := ifx hosted_lobby_is_public then "Public" else "Friends";
-        width := Simp.get_string_width_in_pixels(font_list, lobby_type_text);
+        width := Simp.prepare_text(font_list, lobby_type_text);
         draw_list_text(lobby_type_text, x + list_width - width, y, color);
     }
     else if header_selected {
@@ -895,7 +910,7 @@ draw_menu :: () {
     }
     else {
         draw_list_text("Joined:", x, y, color);
-        width := Simp.get_string_width_in_pixels(font_list, current_lobby.host_name);
+        width := Simp.prepare_text(font_list, current_lobby.host_name);
         draw_list_text(current_lobby.host_name, x + list_width - width, y, color);
     }
 
@@ -903,7 +918,7 @@ draw_menu :: () {
     if menu_list_page == scoreboard_page {
         draw_list_text("Player", x, y, color_menu_label);
         score_text :: "Score";
-        width := Simp.get_string_width_in_pixels(font_list, score_text);
+        width := Simp.prepare_text(font_list, score_text);
         draw_list_text(score_text, x + list_width - width, y, color_menu_label);
     }
     else {
@@ -915,7 +930,7 @@ draw_menu :: () {
     draw_lobby_entry :: (lobby: Lobby, x: int, y: int, color := color_menu_text) {
         draw_list_text(lobby.host_name, x, y, color);
         player_count := tprint("%/%", lobby.player_count, MAX_PLAYERS);
-        width := Simp.get_string_width_in_pixels(font_list, player_count);
+        width := Simp.prepare_text(font_list, player_count);
         draw_list_text(player_count, right - width, y, color);
         // @TODO ping
     }
@@ -925,7 +940,7 @@ draw_menu :: () {
         draw_list_text(player.name, x, y, color);
         right_text := ifx hosted_lobby && selected && !is_me(player)
                       then "Kick" else tprint("%", player.score);
-        width := Simp.get_string_width_in_pixels(font_list, right_text);
+        width := Simp.prepare_text(font_list, right_text);
         draw_list_text(right_text, right - width, y, color);
     }
 
@@ -956,7 +971,7 @@ draw_menu :: () {
         y = height - top - (font_height_list + spacing);
         page := ifx menu_list_page >= 0 then tprint("%/%", menu_list_page + 1, menu_list_page_last_index + 1)
                                         else "Lobbies >";
-        w := Simp.get_string_width_in_pixels(font_list, page);
+        w := Simp.prepare_text(font_list, page);
         x = list_left + list_width / 2 - w / 2;
         draw_list_text(page, x, y, color_menu_label);
     }
@@ -1028,7 +1043,7 @@ draw_planet :: (planet: Planet) {
 
 
 immediate_triangle :: inline (triangle: Triangle, color: Vector4) {
-    Simp.immediate_triangle(triangle.p0, triangle.p1, triangle.p2, color);
+    Simp.immediate_triangle(triangle.p0, triangle.p1, triangle.p2, color, color, color);
 }
 
 
@@ -1261,6 +1276,80 @@ line_segments_intersect :: (a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> b
 
 
 
+// :sound
+
+
+sfx_engine : *Mixer_Sound_Data;
+sfx_shot : *Mixer_Sound_Data;
+sound_player : *Sound_Player;
+
+TURN_ENGINE_VOLUME :: 0.1;
+
+
+init_sounds :: () {
+    sound_player = New(Sound_Player);
+    sound_player.update_history = true;
+    success := init(sound_player, xx window, true, true);
+    assert(success);
+
+    pc : *void = cast,no_check(*void)main;
+
+    sfx_engine = New(Mixer_Sound_Data);
+    {
+        using sfx_engine;
+        name = "Ship Engine";
+        type = .LINEAR_SAMPLE_ARRAY;
+        nchannels = 1;
+        nsamples_times_nchannels = 22848 / 8;
+        sampling_rate = 22050;
+        samples = pc;
+    }
+
+    sfx_shot = New(Mixer_Sound_Data);
+    {
+        using sfx_shot;
+        name = "Ship Gun";
+        type = .LINEAR_SAMPLE_ARRAY;
+        nchannels = 1;
+        nsamples_times_nchannels = 22848 / 8;
+        sampling_rate = 44100;
+        samples = xx __command_line_arguments[0];
+    }
+}
+
+
+update_sound_player :: (dt: float) {
+    lock(*sound_player.sound_mutex);
+    defer unlock(*sound_player.sound_mutex);
+
+    pre_entity_update(sound_player);
+
+    for sound_player.streams
+        it.marked = true;
+
+    post_entity_update(sound_player, dt);
+}
+
+
+play_sound :: (data: *Mixer_Sound_Data, volume := 1.0, perturb := true) -> *Sound_Stream {
+    stream := make_stream(sound_player, data);
+
+    if stream
+        stream.sound_data = data;
+
+    if perturb && stream {
+        stream.user_volume_scale = random_get_within_range(0.7, 1);
+        stream.desired_rate = random_get_within_range(0.7, 1.22);
+    }
+
+    stream.user_volume_scale *= volume;
+    stream.repeat_end_position = cast(int)(data.sampling_rate * 234.475);
+
+    return stream;
+}
+
+
+
 // :fonts
 
 
@@ -1271,13 +1360,13 @@ font_list: *Simp.Dynamic_Font;
 
 
 init_fonts :: () {
-    font_game = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_game);
+    font_game = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", font_height_game);
     assert(font_game != null);
 
-    font_menu = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_menu);
+    font_menu = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", font_height_menu);
     assert(font_menu != null);
 
-    font_list = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", "", font_height_list);
+    font_list = Simp.get_font_at_size(".", "FalstinRegular-XOr2.ttf", font_height_list);
     assert(font_list != null);
 }
 

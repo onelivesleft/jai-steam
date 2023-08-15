@@ -194,14 +194,14 @@ SteamGameServer_GetHSteamPipe :: ()  -> HSteamPipe #foreign steam;
 SteamAPI_Callbacks : struct {};
 for_expansion :: (_: *type_of(SteamAPI_Callbacks), body: Code, flags: For_Flags) #expand {
 	steam_pipe := SteamAPI_GetHSteamPipe();
-	#insert_internal for_expansion_message_loop;
+	#insert,scope() for_expansion_message_loop;
 }
 
 
 SteamGameServer_Callbacks : struct {};
 for_expansion :: (_: *type_of(SteamGameServer_Callbacks), body: Code, flags: For_Flags) #expand {
 	steam_pipe := SteamGameServer_GetHSteamPipe();
-	#insert_internal for_expansion_message_loop;
+	#insert,scope() for_expansion_message_loop;
 }
 
 
@@ -268,11 +268,11 @@ SteamAPI_Init_Internal :: () -> bool #foreign steam "SteamAPI_Init";
 
 
 #if OS == .WINDOWS {
-    steam :: #foreign_library "lib/win/steam_api64";
+    steam :: #library "lib/win/steam_api64";
 } else #if OS == .MACOS {
-    steam :: #foreign_library "lib/mac/libsteam_api";
+    steam :: #library "lib/mac/libsteam_api";
 } else #if OS == .LINUX {
-    steam :: #foreign_library "lib/linux/libsteam_api";
+    steam :: #library "lib/linux/libsteam_api";
 }
 
 #import "Basic";

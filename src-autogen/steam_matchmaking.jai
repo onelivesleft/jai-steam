@@ -42,7 +42,7 @@ RequestLobbyList :: (code: Code) -> SteamAPICall_t #expand {
         RegisterCallResult(
             call_result_id,
             (result: LobbyMatchList_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -111,7 +111,7 @@ CreateLobby :: (eLobbyType: ELobbyType, cMaxMembers: s32, code: Code) -> SteamAP
         RegisterCallResult(
             call_result_id,
             (result: LobbyCreated_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -140,7 +140,7 @@ JoinLobby :: (steamIDLobby: uint64_steamid, code: Code) -> SteamAPICall_t #expan
         RegisterCallResult(
             call_result_id,
             (result: LobbyEnter_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

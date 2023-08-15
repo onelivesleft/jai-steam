@@ -662,7 +662,7 @@ convert_steam_api_json :: (file_data: string) {
         //       well... this is not the case: sometimes a thing can be both.
         //       @TODO Find a way to remove things which are only CallResults from the Callbacks list.
 
-        //_, found := table_find(callresult_structnames, struct_name);
+        //_, found := table_find(*callresult_structnames, struct_name);
         //if found  continue;
 
         // @Note We special case UserStatsUnloaded_t / GSStatsUnloaded_t because they share their enum ID.
@@ -690,7 +690,7 @@ RegisterCallback :: (callback: (%1) -> ()) {
     append(*callresult_internal_procs, "\n#scope_module\n\n\n");
 
     for callback_id, struct_name: callresult_structnames {
-        call_result_id, found := table_find(callback_structnames, struct_name);
+        call_result_id, found := table_find(*callback_structnames, struct_name);
         assert(found, sprint("Can't find callback ID for %", struct_name));
         output(*callbacks_callresults, "                    case .%1;  run_call_results(CallResults.%1, completed_call_result.m_hAsyncCall, cast(*%1) call_result, io_failure);\n", struct_name);
         output(*callbacks_awaiting_callresults_count, "    for CallResults.%1  result += 1;\n", struct_name);
@@ -700,7 +700,7 @@ RegisterCallback :: (callback: (%1) -> ()) {
 
         output(*callbacks_procs, #string ___JAI
 RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (%1, bool) -> ()) {
-    procs, found := table_find(CallResults.%1, call_result_id);
+    procs, found := table_find(*CallResults.%1, call_result_id);
     if !found {
         array : [..] %1_CallResult;
         procs = array;
@@ -714,7 +714,7 @@ RegisterCallResult :: (call_result_id: SteamAPICall_t, callback: (%1, bool) -> (
 
         output(*callresult_internal_procs, #string ___JAI
 run_call_results :: (callbacks: Table(SteamAPICall_t, [..] %1_CallResult), call_id: SteamAPICall_t, call_result: *%1, io_failure: bool) {
-    procs, found := table_find(callbacks, call_id);
+    procs, found := table_find(*callbacks, call_id);
     if found {
         for procs  it(<<call_result, io_failure);
         array_reset(*procs);
@@ -806,14 +806,14 @@ ___JAI
 
 
 get_str :: (object: *JSON_Object, key: string) -> string {
-    value, success := table_find(<<object, key);
+    value, success := table_find(object, key);
     if success  return value.value.str;
     else        return "";
 }
 
 
 get_str :: (object: *JSON_Object, key: string, replacements: [] Replacement) -> string {
-    value, success := table_find(<<object, key);
+    value, success := table_find(object, key);
     if success  {
         s := value.value.str;
         for replacements  s = replace(s, it.before, it.after);
@@ -825,21 +825,21 @@ get_str :: (object: *JSON_Object, key: string, replacements: [] Replacement) -> 
 
 
 get_int :: (object: *JSON_Object, key: string) -> int {
-    value, success := table_find(<<object, key);
+    value, success := table_find(object, key);
     if success  return cast(int) value.value.number;
     else        return 0;
 }
 
 
 get_obj :: (object: *JSON_Object, key: string) -> *JSON_Object {
-    value, success := table_find(<<object, key);
+    value, success := table_find(object, key);
     if success  return value.value.object;
     else        return null;
 }
 
 
 get_array :: (object: *JSON_Object, key: string) -> [..]JSON_Value {
-    value, success := table_find(<<object, key);
+    value, success := table_find(object, key);
     return value.value.array;
 }
 
@@ -974,7 +974,7 @@ generate_classes :: (file_data: string) {
                 }
                 singleton_out("}\n");
 
-                struct_name, found := table_find(callresult_procnames, long_name);
+                struct_name, found := table_find(*callresult_procnames, long_name);
                 if found {
                     singleton_out(#string ___JAI
 
@@ -995,7 +995,7 @@ generate_classes :: (file_data: string) {
         RegisterCallResult(
             call_result_id,
             (result: %6, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

@@ -137,7 +137,7 @@ ServerRequestEligiblePromoItemDefinitionsIDs :: (steamID: uint64_steamid, code: 
         RegisterCallResult(
             call_result_id,
             (result: SteamInventoryEligiblePromoItemDefIDs_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -171,7 +171,7 @@ ServerStartPurchase :: (pArrayItemDefs: *SteamItemDef_t, punArrayQuantity: *uint
         RegisterCallResult(
             call_result_id,
             (result: SteamInventoryStartPurchaseResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -200,7 +200,7 @@ ServerRequestPrices :: (code: Code) -> SteamAPICall_t #expand {
         RegisterCallResult(
             call_result_id,
             (result: SteamInventoryRequestPricesResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

@@ -2,13 +2,12 @@
 #import "Compiler";
 
 src :: "spacewar.jai";
-exe :: "spacewar.exe";
+exe :: "spacewar";
 path_to_exe :: "./";
 
 #run {
     build_options := get_build_options();
-    build_options.output_type = .NO_OUTPUT;
-    set_build_options(build_options);
+    set_build_options_dc(.{do_output=false});
 
     build_options.output_type = .EXECUTABLE;
     build_options.output_executable_name = exe;

@@ -22,7 +22,7 @@ ServerRequestUserStats :: (steamIDUser: uint64_steamid, code: Code) -> SteamAPIC
         RegisterCallResult(
             call_result_id,
             (result: GSStatsReceived_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -91,7 +91,7 @@ ServerStoreUserStats :: (steamIDUser: uint64_steamid, code: Code) -> SteamAPICal
         RegisterCallResult(
             call_result_id,
             (result: GSStatsStored_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

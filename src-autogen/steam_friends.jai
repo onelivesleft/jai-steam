@@ -27,7 +27,7 @@ SetPersonaName :: (pchPersonaName: *char, code: Code) -> SteamAPICall_t #expand 
         RegisterCallResult(
             call_result_id,
             (result: SetPersonaNameResponse_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -161,7 +161,7 @@ DownloadClanActivityCounts :: (psteamIDClans: *CSteamID, cClansToRequest: s32, c
         RegisterCallResult(
             call_result_id,
             (result: DownloadClanActivityCountsResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -260,7 +260,7 @@ RequestClanOfficerList :: (steamIDClan: uint64_steamid, code: Code) -> SteamAPIC
         RegisterCallResult(
             call_result_id,
             (result: ClanOfficerListResponse_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -364,7 +364,7 @@ JoinClanChatRoom :: (steamIDClan: uint64_steamid, code: Code) -> SteamAPICall_t 
         RegisterCallResult(
             call_result_id,
             (result: JoinClanChatRoomCompletionResult_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -453,7 +453,7 @@ GetFollowerCount :: (steamID: uint64_steamid, code: Code) -> SteamAPICall_t #exp
         RegisterCallResult(
             call_result_id,
             (result: FriendsGetFollowerCount_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -482,7 +482,7 @@ IsFollowing :: (steamID: uint64_steamid, code: Code) -> SteamAPICall_t #expand {
         RegisterCallResult(
             call_result_id,
             (result: FriendsIsFollowing_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -511,7 +511,7 @@ EnumerateFollowingList :: (unStartIndex: uint32, code: Code) -> SteamAPICall_t #
         RegisterCallResult(
             call_result_id,
             (result: FriendsEnumerateFollowingList_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

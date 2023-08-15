@@ -122,7 +122,7 @@ RequestEncryptedAppTicket :: (pDataToInclude: *void, cbDataToInclude: s32, code:
         RegisterCallResult(
             call_result_id,
             (result: EncryptedAppTicketResponse_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -166,7 +166,7 @@ RequestStoreAuthURL :: (pchRedirectURL: *char, code: Code) -> SteamAPICall_t #ex
         RegisterCallResult(
             call_result_id,
             (result: StoreAuthURLResponse_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -215,7 +215,7 @@ GetMarketEligibility :: (code: Code) -> SteamAPICall_t #expand {
         RegisterCallResult(
             call_result_id,
             (result: MarketEligibilityResponse_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
@@ -244,7 +244,7 @@ GetDurationControl :: (code: Code) -> SteamAPICall_t #expand {
         RegisterCallResult(
             call_result_id,
             (result: DurationControl_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }

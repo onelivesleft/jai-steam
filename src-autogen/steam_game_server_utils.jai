@@ -107,7 +107,7 @@ ServerCheckFileSignature :: (szFileName: *char, code: Code) -> SteamAPICall_t #e
         RegisterCallResult(
             call_result_id,
             (result: CheckFileSignature_t, io_failure: bool) -> () {
-                #insert_internal code;
+                #insert,scope() code;
             }
         );
     }
