@@ -1,4 +1,3 @@
-/**
 # Jai-Steam v1.51.0
 
 ## Jai Wrapper for Steamworks SDK v1.51
@@ -235,4 +234,3 @@ Doing this will enable:
 
 
 
-*/

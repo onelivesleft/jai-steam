@@ -220,7 +220,8 @@ main :: () {
     convert_steam_api_json(file_data);
 
     reset(*file_builder);
-    append(*file_builder, builder_to_string(*types_builder));
+    types_string := builder_to_string(*types_builder);
+    append(*file_builder, types_string);
     write_entire_file(types_filename, builder_to_string(*file_builder));
 
 
@@ -288,7 +289,7 @@ ___JAI);
             append(*file_builder, row);
         append(*file_builder, "\n");
     }
-    append(*file_builder, builder_to_string(*types_builder));
+    append(*file_builder, types_string);
     output(*file_builder, "\n%\n\n", builder_to_string(*callbacks_enum));
     for files_appended_to_flat {
         file_data, success := read_entire_file(it);
@@ -389,27 +390,29 @@ convert_steam_api_flat :: (file_data: string) {
 
             out("% :: (", proc_name);
 
-            for parameter, index: parameters {
-                if index != 0  out(", ");
-                parts := split(strip(parameter), " ");
-                parameter_type := parts[0];
-                parameter_name := parts[parts.count-1];
-                pointer_char := "";
-                if ends_with(parameter_type, "*") {
-                    parameter_type = slice(parameter_type, 0, parameter_type.count-1);
-                    pointer_char = "*";
-                }
-                else if parts.count == 3 {
-                    if parts[1] == "*" || parts[1] == "&"
+            if parameters.count > 1 || parameters[0] != "" {
+                for parameter, index: parameters {
+                    if index != 0  out(", ");
+                    parts := split(strip(parameter), " ");
+                    parameter_type := parts[0];
+                    parameter_name := parts[parts.count-1];
+                    pointer_char := "";
+                    if ends_with(parameter_type, "*") {
+                        parameter_type = slice(parameter_type, 0, parameter_type.count-1);
                         pointer_char = "*";
-                    else if parts[1] == "**"
-                        pointer_char = "**";
-                    else
-                        print("WTF on line %\n", line_number);
-                }
-                if parameter_type == "int"  parameter_type = "s32";
+                    }
+                    else if parts.count == 3 {
+                        if parts[1] == "*" || parts[1] == "&"
+                            pointer_char = "*";
+                        else if parts[1] == "**"
+                            pointer_char = "**";
+                        else
+                            print("WTF on line %\n", line_number);
+                    }
+                    if parameter_type == "int"  parameter_type = "s32";
 
-                out("%1: %2%3", parameter_name, pointer_char, parameter_type);
+                    out("%1: %2%3", parameter_name, pointer_char, parameter_type);
+                }
             }
 
             if return_type == "void"
@@ -1180,6 +1183,9 @@ singleton_parts_from_flat :: (row: string) -> short_name: string, long_name: str
 }
 
 
+index_of_string :: find_index_from_left;
+last_index_of_string :: find_index_from_right;
+
 steam_api_parts_from_flat :: (row: string) -> method_name: string, type_name: string, flat_name: string, parameters: string, returns: string, return_is_string: bool {
     return_is_string := false;
 
@@ -1237,7 +1243,7 @@ steam_api_parts_from_flat :: (row: string) -> method_name: string, type_name: st
     if ends_with(long_name, "_c_str")
         last_underscore = long_name.count - 6;
     else
-        last_underscore = last_index_of_char(long_name, #char "_");
+        last_underscore = last_index_of_string(long_name, "_");
     type_name := slice(long_name, 0, last_underscore);
     method_name := slice(long_name, last_underscore + 1, long_name.count - (last_underscore + 1));
 

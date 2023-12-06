@@ -84,7 +84,6 @@ else
 
 
 // TODO
-// [ ] #must on functions?
 // [ ] reverse callbackID lookup
 // [.] Example game
 // [.] Documentation

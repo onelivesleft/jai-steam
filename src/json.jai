@@ -158,7 +158,7 @@ parse_object :: (str: string) -> result: JSON_Object, remainder: string, success
         key, remainder, success = parse_string(remainder);
         if !success  return result, remainder, false;
 
-        existing := table_find_pointer(result, key);
+        existing := table_find_pointer(*result, key);
         if existing  return result, remainder, false;
 
         remainder = lstrip(remainder);
@@ -169,7 +169,7 @@ parse_object :: (str: string) -> result: JSON_Object, remainder: string, success
         value, remainder, success = parse_value(remainder);
         if !success  return result, remainder, false;
 
-        table_add(*result, key, value);
+        table_set(*result, key, value);
 
         remainder = lstrip(remainder);
         if remainder[0] != #char ","  break;

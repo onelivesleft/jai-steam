@@ -4,3 +4,4 @@ sdk/tools/
 .build/
 example/.build
 *.pdb
+generate_files.exe

@@ -1,7 +1,7 @@
-// @Steam tags denote example API usage
+// #Steam comment tags denote example API usage
 
 verbose :: true;
-#import "Steam"(verbose = verbose);  // @Steam
+#import "Steam"(verbose = verbose);  // #Steam
 
 Simp  :: #import "Simp";
 #import "Input";
@@ -86,7 +86,7 @@ debug_triangles : [1] Triangle = .[Triangle.{ // @TODO remove
 
 
 main :: () {
-    if !InitSteam() {  // @Steam
+    if !InitSteam() {  // #Steam
         log_error("Failed to initialize Steam");
         exit(1);
     }
@@ -98,7 +98,7 @@ main :: () {
         now = get_time();
         dt = cast(float32) (now - prev_time);
 
-        RunCallbacks();  // @Steam
+        RunCallbacks();  // #Steam
         handle_window_events();
         handle_steam_input();
         run_scheduled_tasks();
@@ -115,7 +115,7 @@ main :: () {
 
     run_scheduled_tasks(force = true);
 
-    clean := ShutdownSteam(timeout = 5.0); // @Steam
+    clean := ShutdownSteam(timeout = 5.0); // #Steam
     if !clean  log_error("Steam did not shut down cleanly!");
 }
 
@@ -129,8 +129,8 @@ init :: () {
     init_sounds();
 
     me = *players[0];
-    handle := GetSteamID();  // @Steam
-    name   := GetPersonaName(); // @Steam
+    handle := GetSteamID();  // #Steam
+    name   := GetPersonaName(); // #Steam
     make_player(me, handle, name, .{width / 4, height / 2}, .{1, 0.5, 0, 0});
     respawn_player(me);
     load_settings();
@@ -460,7 +460,7 @@ Player :: struct {
     buffer     : [MAX_NAME_LENGTH] u8;  // @TODO move to player_buffer
     name       : string;
     label      : Label;
-    handle     : CSteamID;  // @Steam
+    handle     : CSteamID;  // #Steam
     color      : Vector4;
     shot_color : Vector4;
     score      : int;
@@ -473,7 +473,7 @@ Player :: struct {
     thrusting : float;
     pausing : bool;
 
-    controller : InputHandle_t;  // @Steam
+    controller : InputHandle_t;  // #Steam
 }
 
 
@@ -1489,7 +1489,7 @@ for_expansion :: (_: *type_of(active_players), body: Code, flags: For_Flags) #ex
 
 
 
-// It's all @Steam below this!
+// It's all #Steam below this!
 
 
 
